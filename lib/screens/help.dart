@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 
-class QRCode extends StatelessWidget {
+class Help extends StatelessWidget {
   @override
   Widget build (BuildContext context) => new Scaffold(
 
@@ -23,7 +23,7 @@ class QRCode extends StatelessWidget {
         new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text('QR Code page content')
+            new Text('Help page content')
           ],
         )
       ],

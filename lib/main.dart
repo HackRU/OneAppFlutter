@@ -7,7 +7,7 @@ import 'package:hidden_drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
 import 'package:HackRU/screens/tabs.dart';
 import 'package:HackRU/screens/about.dart';
 import 'package:HackRU/screens/map.dart';
-import 'package:HackRU/screens/qrcode.dart';
+import 'package:HackRU/screens/help.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
@@ -58,11 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
-          name: "QR Code",
+          name: "Help",
           colorTextUnSelected: white.withOpacity(0.5),
           colorLineSelected: mintgreen_dark,
         ),
-        QRCode()));
+        Help()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return HiddenDrawerMenu(
       backgroundColorMenu: bluegrey_dark,
       backgroundColorAppBar: bluegrey_dark,
-      elevationAppBar: 0.4,
+      elevationAppBar: 0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
     );

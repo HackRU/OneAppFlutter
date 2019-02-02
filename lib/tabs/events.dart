@@ -1,32 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:HackRU/colors.dart';
+import 'package:HackRU/tabs/sat_events.dart';
+import 'package:HackRU/tabs/sun_events.dart';
 
-class Events extends StatelessWidget {
+class Events extends StatefulWidget{
   @override
-  Widget build (BuildContext context) => new Scaffold(
+  EventsState createState() => EventsState();
+}
 
-    //App Bar
-//    appBar: new AppBar(
-//      backgroundColor: bluegrey,
-//      title: new Text(
-//        'About HackRU',
-//        style: new TextStyle(
-//          fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 17.0 : 20.0,
-//        ),
-//      ),
-//      elevation: 0.3,
-//    ),
+class EventsState extends State<Events>
+    with SingleTickerProviderStateMixin{
+  TabController controller;
 
-    //Content of tabs
-    body: new PageView(
-      children: <Widget>[
-        new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text('Events page content')
-          ],
-        )
-      ],
-    ),
-  );
+  @override
+  void initState() {
+    super.initState();
+    controller = new TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  var saturday = new Text('Saturday',
+    textAlign: TextAlign.center,
+    style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),);
+  var sunday = new Text('Sunday',
+    textAlign: TextAlign.center,
+    style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),);
+
+  TabBar getTabBar() {
+    return new TabBar(
+        tabs: <Tab>[
+          new Tab(text: 'SATURDAY',),
+          new Tab(text: 'SUNDAY'),],
+        indicatorColor: mintgreen_light,
+        indicatorSize: TabBarIndicatorSize.tab,
+        controller: controller
+    );
+  }
+
+  TabBarView getTabBarView(var tabs) {
+    return new TabBarView(
+        children: tabs, controller: controller);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        appBar: new AppBar(
+            title: getTabBar(),
+            backgroundColor: bluegrey_dark,
+            elevation: 1.5),
+        body: getTabBarView(<Widget>[
+          new SatEvents(), new SunEvents()])
+    );
+  }
 }

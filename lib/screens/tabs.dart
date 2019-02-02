@@ -51,9 +51,9 @@ class TabsState extends State<Tabs> {
           );
         },
         tooltip: 'QR Code',
-        child: Icon(GroovinMaterialIcons.qrcode),
+        child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
         foregroundColor: mintgreen_light,
-        backgroundColor: bluegrey_dark,
+        backgroundColor: bluegrey,
       ),
 
     //Tabs

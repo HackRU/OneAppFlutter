@@ -18,6 +18,7 @@ dependencies:
   groovin_material_icons: ^1.1.6
   hidden_drawer_menu: ^0.5.0
   pinch_zoom_image: ^0.2.5
+  folding_cell: ^0.1.0
 
 
 dev_dependencies:
