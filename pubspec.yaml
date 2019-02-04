@@ -20,6 +20,10 @@ dependencies:
   pinch_zoom_image: ^0.2.5
   qrcode_reader: ^0.4.4
   qr_flutter: ^1.1.6
+  http: ^0.12.0+1
+  flutter_linkify: ^1.0.3
+  url_launcher: ^5.0.0
+  flutter_webview_plugin: ^0.3.0+2
 
 
 dev_dependencies:
