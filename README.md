@@ -48,6 +48,10 @@ List of resource files goes here...
 ## TO-DO List
 
 - To make this app running :)
+COMING SOON.....
+- Announcements, Timer, and Events by tonight or tomorrow morning.
+- QR Scanner and Generator by Sunday
+-Also, Login/Sign Up backend will be working by Sunday as well. 
 
 ## Links to Further docs
 TBA
