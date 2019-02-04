@@ -1,3 +1,4 @@
+import 'package:HackRU/screens/scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'colors.dart';
@@ -55,6 +56,14 @@ class _MyHomePageState extends State<MyHomePage> {
           colorLineSelected: pink_light,
         ),
         Map()));
+
+    items.add(new ScreenHiddenDrawer(
+        new ItemHiddenMenu(
+          name: "QR Scanner",
+          colorTextUnSelected: white.withOpacity(0.5),
+          colorLineSelected: mintgreen_dark,
+        ),
+        QRScanner()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(

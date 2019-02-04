@@ -8,26 +8,41 @@ import 'package:pinch_zoom_image/pinch_zoom_image.dart';
 class SunEvents extends StatelessWidget {
   _event() {
     return <EventStruct>[
-      const EventStruct(
+      EventStruct(
           eventTime:  '12:00 AM',
+          eventTitle: 'Midnight Surprise',
+          eventLocation:  "It's a surprise",
+          map: Image.asset('assets/images/map/stageArea.png')),
+      EventStruct(
+          eventTime:  '02:00 AM',
           eventTitle: 'Midnight Snacks',
-          eventInfo:  'You must be hungry now if you are still hacking!'),
-      const EventStruct(
-          eventTime:  '07:00 AM',
+          eventLocation:  "Food Area",
+          map: Image.asset('assets/images/map/foodArea.png')),
+      EventStruct(
+          eventTime:  '07:30 AM',
           eventTitle: 'Breakfast',
-          eventInfo:  'Good Morning! Breakfast is ready!'),
-      const EventStruct(
+          eventLocation:  'Food Area',
+          map: Image.asset('assets/images/map/foodArea.png')),
+      EventStruct(
           eventTime:  '11:30 AM',
-          eventTitle: 'Hacking Ends!',
-          eventInfo:  'Its time to show off your work!'),
-      const EventStruct(
-          eventTime:  '12:00 PM',
+          eventTitle: 'Hacking Ends',
+          eventLocation:  'Hacking Area',
+          map: Image.asset('assets/images/map/hackingArea.png')),
+      EventStruct(
+          eventTime:  '11:30 AM',
           eventTitle: 'Lunch',
-          eventInfo:  'Enjoy yummy foods!'),
-      const EventStruct(
-          eventTime:  '03:00 PM',
-          eventTitle: 'Closing Ceremony',
-          eventInfo:  'Thanks for coming! We will see you next semester!'),
+          eventLocation:  'Food Area',
+          map: Image.asset('assets/images/map/foodArea.png')),
+      EventStruct(
+          eventTime:  '12:00 PM',
+          eventTitle: 'Demos Begin',
+          eventLocation:  'Hacking Area',
+          map: Image.asset('assets/images/map/hackingArea.png')),
+      EventStruct(
+          eventTime:  '02:00 PM',
+          eventTitle: 'Closing Ceremonies',
+          eventLocation:  'Main Stage',
+          map: Image.asset('assets/images/map/stageArea.png')),
     ];
   }
 
@@ -39,11 +54,12 @@ class SunEvents extends StatelessWidget {
 
 class EventStruct {
   final String eventTitle;
-  final String eventInfo;
+  final String eventLocation;
   final String eventTime;
+  final Widget map;
 
-  const EventStruct({
-    this.eventTitle, this.eventInfo, this.eventTime
+  EventStruct({
+    this.eventTitle, this.eventLocation, this.eventTime,this.map,
   });
 }
 
@@ -77,7 +93,7 @@ class EventListItem extends StatelessWidget{
           new Container(
             padding: EdgeInsets.all(16.0),
             child: PinchZoomImage(
-              image: Image.asset('assets/images/event_map.png'),
+              image: _eventStruct.map,
               zoomedBackgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
               hideStatusBarWhileZooming: false,
               onZoomStart: () {},

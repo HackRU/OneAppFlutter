@@ -7,30 +7,32 @@ import 'package:pinch_zoom_image/pinch_zoom_image.dart';
 class SatEvents extends StatelessWidget {
   _event() {
     return <EventStruct>[
-      const EventStruct(
+      EventStruct(
           eventTime:  '10:00 AM',
-          eventTitle: 'Registration Opens',
-          eventInfo:  'Be on time!'),
-      const EventStruct(
+          eventTitle: 'Check-In',
+          eventLocation:  'Main Lobby',
+          map: Image.asset('assets/images/map/registration.png')),
+      EventStruct(
           eventTime:  '11:00 AM',
           eventTitle: 'Lunch',
-          eventInfo:  'Variety of foods before hackinG!'),
-      const EventStruct(
+          eventLocation:  'Food Area',
+          map: Image.asset('assets/images/map/foodArea.png')),
+      EventStruct(
           eventTime:  '11:30 AM',
-          eventTitle: 'Opening Ceremony',
-          eventInfo:  'Sponsors will announce special prices!'),
-      const EventStruct(
+          eventTitle: 'Opening Ceremonies',
+          eventLocation:  'Main Stage',
+          map: Image.asset('assets/images/map/stageArea.png')),
+
+    EventStruct(
           eventTime:  '01:00 PM',
           eventTitle: 'Hacking Commences',
-          eventInfo:  'Here you go!'),
-      const EventStruct(
+          eventLocation:  'Hacking Area',
+          map: Image.asset('assets/images/map/hackingArea.png')),
+      EventStruct(
           eventTime:  '06:00 PM',
           eventTitle: 'Dinner',
-          eventInfo:  'Yeah! Its a moment you have been waiting for!'),
-      const EventStruct(
-          eventTime:  '10:00 PM',
-          eventTitle: 'Coffee',
-          eventInfo:  'Break time!'),
+          eventLocation:  'Food Area',
+          map: Image.asset('assets/images/map/foodArea.png')),
     ];
   }
 
@@ -42,11 +44,12 @@ class SatEvents extends StatelessWidget {
 
 class EventStruct {
   final String eventTitle;
-  final String eventInfo;
+  final String eventLocation;
   final String eventTime;
+  final Widget map;
 
-  const EventStruct({
-    this.eventTitle, this.eventInfo, this.eventTime
+  EventStruct({
+    this.eventTitle, this.eventLocation, this.eventTime, this.map,
   });
 }
 
@@ -80,7 +83,7 @@ class EventListItem extends StatelessWidget{
           new Container(
             padding: EdgeInsets.all(16.0),
             child: PinchZoomImage(
-              image: Image.asset('assets/images/event_map.png'),
+              image: _eventStruct.map,
               zoomedBackgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
               hideStatusBarWhileZooming: false,
               onZoomStart: () {},
