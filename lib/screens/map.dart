@@ -12,7 +12,7 @@ class _MapState extends State<Map> {
     return Container(
         padding: EdgeInsets.all(16.0),
         child: PinchZoomImage(
-          image: Image.asset('assets/images/event_map.png'),
+          image: Image.asset('assets/images/map/event_map.png'),
           zoomedBackgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
           hideStatusBarWhileZooming: false,
           onZoomStart: () {},

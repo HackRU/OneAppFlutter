@@ -1,3 +1,4 @@
+import 'package:HackRU/screens/qrcode.dart';
 import 'package:HackRU/screens/scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,11 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
-          name: "QR Scanner",
+          name: "Scanner",
           colorTextUnSelected: white.withOpacity(0.5),
           colorLineSelected: mintgreen_dark,
         ),
         QRScanner()));
+
+    items.add(new ScreenHiddenDrawer(
+        new ItemHiddenMenu(
+          name: "QR Code",
+          colorTextUnSelected: white.withOpacity(0.5),
+          colorLineSelected: mintgreen_dark,
+        ),
+        QRCode()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(

@@ -53,6 +53,7 @@ class _SignUpState extends State<SignUp> {
               child: TextField(
                 style: TextStyle(fontSize: 20, color: bluegrey),
                 controller: _passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   fillColor: bluegrey,
@@ -68,6 +69,7 @@ class _SignUpState extends State<SignUp> {
               child: TextField(
                 style: TextStyle(fontSize: 20, color: bluegrey),
                 controller: _passwordController2,
+                obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Re-enter Password',
                   fillColor: bluegrey,

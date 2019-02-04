@@ -1,113 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-
-class QRScanner extends StatefulWidget {
-  @override
-  _QRScannerState createState() => _QRScannerState();
-}
-
-class _QRScannerState extends State<QRScanner> {
-  static const double _topSectionTopPadding = 50.0;
-  static const double _topSectionBottomPadding = 20.0;
-  static const double _topSectionHeight = 50.0;
-
-  String _dataString = 'Hello from this QR code!';
-  String _inputErrorText;
-  final TextEditingController _textController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _contentWidget(),
-      resizeToAvoidBottomPadding: true,
-    );
-  }
-
-  @override
-  void didUpdateWidget(QRScanner oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    setState(() {});
-  }
-
-  Widget _contentWidget() {
-    return Container(
-      color: const Color(0xFFFFFFFF),
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(
-              top: _topSectionTopPadding,
-              left: 30.0,
-              right: 20.0,
-              bottom: _topSectionBottomPadding,
-            ),
-            child: Container(
-              height: _topSectionHeight,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      controller: _textController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter a custom message',
-                        errorText: _inputErrorText,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: FlatButton(
-                      child: const Text('SUBMIT'),
-                      onPressed: () {
-                        setState(() {
-                          _dataString = _textController.text;
-                          _inputErrorText = null;
-                        });
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: QrImage(
-                  data: _dataString,
-                  gapless: false,
-                  foregroundColor: const Color(0xFF111111),
-                  onError: (dynamic ex) {
-                    print('[QR] ERROR - $ex');
-                    setState(() {
-                      _inputErrorText =
-                      'Error! Maybe your input value is too long?';
-                    });
-                  },
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 //import 'dart:async';
 //import 'package:flutter/material.dart';
 //import 'package:qrcode_reader/qrcode_reader.dart';
+//import 'package:HackRU/colors.dart';
 //
 //class QRScanner extends StatefulWidget {
 //  QRScanner({Key key, this.title}) : super(key: key);
-//
 //  final String title;
-//
-//  final Map<String, dynamic> pluginParameters = {
-//  };
+//  final Map<String, dynamic> pluginParameters = {};
 //
 //  @override
 //  _QRScannerState createState() => new _QRScannerState();
@@ -119,9 +18,6 @@ class _QRScannerState extends State<QRScanner> {
 //  @override
 //  Widget build(BuildContext context) {
 //    return new Scaffold(
-//      appBar: new AppBar(
-//        title: const Text('QRCode Reader Example'),
-//      ),
 //      body: new Center(
 //          child: new FutureBuilder<String>(
 //              future: _barcodeString,
@@ -129,6 +25,7 @@ class _QRScannerState extends State<QRScanner> {
 //                return new Text(snapshot.data != null ? snapshot.data : '');
 //              })),
 //      floatingActionButton: new FloatingActionButton(
+//        backgroundColor: bluegrey_dark,
 //        onPressed: () {
 //          setState(() {
 //            _barcodeString = new QRCodeReader()
@@ -146,3 +43,74 @@ class _QRScannerState extends State<QRScanner> {
 //    );
 //  }
 //}
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:qr_mobile_vision/qr_camera.dart';
+import 'package:HackRU/colors.dart';
+
+class QRScanner extends StatefulWidget {
+  @override
+  _QRScannerState createState() => new _QRScannerState();
+}
+
+class _QRScannerState extends State<QRScanner> {
+  String qr;
+  bool camState = false;
+
+  @override
+  initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      body: new Center(
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Expanded(
+                child: camState
+                    ? new Center(
+                  child: new SizedBox(
+                    width: 400.0,
+                    height: 550.0,
+                    child: new QrCamera(
+                      onError: (context, error) => Text(
+                        error.toString(),
+                        style: TextStyle(color: Colors.redAccent, fontSize: 5),
+                      ),
+                      qrCodeCallback: (code) {
+                        setState(() {
+                          qr = code;
+                        });
+                      },
+                      child: new Container(
+                        decoration: new BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.orange, width: 10.0, style: BorderStyle.solid),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                    : new Center(child: new Text("Camera Inactive!", style: TextStyle(fontSize: 25),))
+            ),
+            new Text("QRCODE: $qr"),
+          ],
+        ),
+      ),
+      floatingActionButton: new FloatingActionButton(
+          backgroundColor: bluegrey_dark,
+          foregroundColor: mintgreen_light,
+          child: new Icon(FontAwesomeIcons.camera),
+          onPressed: () {
+            setState(() {
+              camState = !camState;
+            });
+          }),
+    );
+  }
+}
