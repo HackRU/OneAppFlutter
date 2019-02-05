@@ -48,10 +48,16 @@ List of resource files goes here...
 ## TO-DO List
 
 - To make this app running :)
-COMING SOON.....
-- Announcements, Timer, and Events by tonight or tomorrow morning.
-- QR Scanner and Generator by Sunday
--Also, Login/Sign Up backend will be working by Sunday as well. 
+# DONE
+- Basic App Layout, Login/Signup UI, Announcements, Timer, Events, and Floor Map
+
+# NEEDS TO BE FIXED
+1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
+2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS)
+2) QR Code Gen UI is working, but need to connect with BackEnd (LCS)
+3) LogIn/SignUp UI is working but need to connect with BackEnd (LCS)
+4) "About Page" (which will include Flutter App Dev Team Members, HackRU Rnd Reference, and about the app)
+5) "Help/Tool Page" (hoping to add buttons which will redirect to inApp webview for "HelpQ", "HackRU Website", "Team Builder", and whatever hackers need in one click)
 
 ## Links to Further docs
 TBA
