@@ -60,6 +60,7 @@ class AnnouncementsState extends State<Announcements> {
 //                          ),
                           padding: const EdgeInsets.all(15.0),
                         ),
+                        elevation: 5.0,
                       )
                     ],
                   )

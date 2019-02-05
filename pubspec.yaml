@@ -20,7 +20,6 @@ dependencies:
   pinch_zoom_image: ^0.2.5
   qrcode_reader: ^0.4.4
   qr_mobile_vision: ^0.1.0
-
   qr_flutter: ^1.1.6
   http: ^0.12.0+1
   flutter_linkify: ^1.0.3
@@ -30,6 +29,7 @@ dependencies:
   bloc: ^0.8.2
   equatable: ^0.1.10
   meta: ^1.1.6
+  flip_panel: ^0.0.9
 
 
 dev_dependencies:
@@ -50,6 +50,7 @@ flutter:
   - assets/images/hackru_pink_logo.png
   - assets/images/hackru_white_logo.png
   - assets/images/drawer_bg.png
+  - assets/images/cover_image.png
   - assets/images/map/event_map.png
   - assets/images/map/foodArea.png
   - assets/images/map/hackingArea.png

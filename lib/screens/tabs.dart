@@ -116,7 +116,7 @@ class TabItem {
 }
 
 const List<TabItem> TabItems = const <TabItem>[
-  const TabItem(title: 'Announcements', icon: FontAwesomeIcons.slackHash,),
+  const TabItem(title: 'Announcements', icon: GroovinMaterialIcons.message_alert,),
   const TabItem(title: 'Timer', icon: GroovinMaterialIcons.timer,),
   const TabItem(title: 'Events', icon: GroovinMaterialIcons.calendar_today,),
 ];
