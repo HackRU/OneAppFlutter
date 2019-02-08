@@ -19,8 +19,7 @@ class AnnouncementsState extends State<Announcements> {
   List data;
 
   Future<String> getJSONData() async {
-    var response = await http.get(
-        Uri.encodeFull(url),
+    var response = await http.get(Uri.encodeFull(url),
         headers: {"Accept": "application/json"});
     print(response.body);
 
