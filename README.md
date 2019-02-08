@@ -1,6 +1,7 @@
 # One App Flutter
 
 The Official HackRU Flutter App
+
 <img align="center" src="./screenshots/appIcon.png" height="200">
 
 ## Description
