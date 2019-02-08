@@ -52,10 +52,10 @@ List of resource files goes here...
 ## TO-DO List
 
 - To make this app running :)
-# DONE
+## DONE
 - Basic App Layout, Login/Signup UI, Announcements, Timer, Events, and Floor Map
 
-# NEEDS TO BE DONE
+## NEEDS TO BE DONE
 1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
 2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS)
 2) QR Code Gen UI is working, but need to connect with BackEnd (LCS)
