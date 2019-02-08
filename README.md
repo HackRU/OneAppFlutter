@@ -20,7 +20,7 @@ We had started using an inhouse hybrid mobile application to keep track of analy
 2. Open the folder you created (which is called `OneAppFlutter`) in your desired IDE (Android Studio, Visual Studio Code, Intellij, etc.)
 3. Now, run the app by doing `flutter run`
 
-# Contributors:
+### Want to Contribute?:
 - Creat a new `branch` and then make a pull request.
 
 To learn about Flutter App Development:
