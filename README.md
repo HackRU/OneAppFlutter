@@ -44,12 +44,10 @@ List of features goes here...
 
 ## To-Do List
 
-- To make this app running :)
-
-## Done
+### Done
 - Basic App Layout, Login/Signup UI, Announcements, Timer, Events, and Floor Map
 
-## Needs To Be Done
+### Needs To Be Done
 1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
 2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS)
 2) QR Code Gen UI is working, but need to connect with BackEnd (LCS)
