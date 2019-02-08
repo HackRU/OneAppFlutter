@@ -18,8 +18,11 @@ We had started using an inhouse hybrid mobile application to keep track of analy
 ### For Architects
 
 1. Clone the repository by doing `git clone https://github.com/HackRU/OneAppFlutter.git`
-2. Open the folder you created (which is called `OneAppFlutter`) in your desired IDE
+2. Open the folder you created (which is called `OneAppFlutter`) in your desired IDE (Android Studio, Visual Studio Code, Intellij, etc.)
 3. Now, run the app by doing `flutter run`
+
+### Want to Contribute?:
+- Creat a new `branch` and then make a pull request.
 
 To learn about Flutter App Development:
 
@@ -52,7 +55,7 @@ List of resource files goes here...
 # DONE
 - Basic App Layout, Login/Signup UI, Announcements, Timer, Events, and Floor Map
 
-# NEEDS TO BE FIXED
+# NEEDS TO BE DONE
 1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
 2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS)
 2) QR Code Gen UI is working, but need to connect with BackEnd (LCS)
