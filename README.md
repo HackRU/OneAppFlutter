@@ -23,6 +23,7 @@ We had started using an inhouse hybrid mobile application to keep track of analy
 
 ### Want to Contribute?:
 - Creat a new `branch` and then make a pull request.
+- Contributors should follow our [Git Style Guide](https://github.com/agis/git-style-guide)
 
 To learn about Flutter App Development:
 
@@ -41,17 +42,10 @@ Will be available on Play Store and App Store
 
 List of features goes here...
 
-## Style Guide
-#### General
-* Contributors should follow our [Git Style Guide](https://github.com/agis/git-style-guide)
-
-#### Resource Files
-
-List of resource files goes here...
-
 ## To-Do List
 
 - To make this app running :)
+
 ## Done
 - Basic App Layout, Login/Signup UI, Announcements, Timer, Events, and Floor Map
 
