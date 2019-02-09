@@ -1,7 +1,7 @@
 # One App Flutter
 
 The Official HackRU Flutter App
-<img align="right" src="./screenshots/appicon.png" height="200">
+<img align="right" src="./screenshots/appIconImage.png" height="200">
 
 ## Description
 *What is the purpose of this project?*
@@ -23,6 +23,7 @@ We had started using an inhouse hybrid mobile application to keep track of analy
 
 ### Want to Contribute?:
 - Creat a new `branch` and then make a pull request.
+- Contributors should follow our [Git Style Guide](https://github.com/agis/git-style-guide)
 
 To learn about Flutter App Development:
 
@@ -41,21 +42,12 @@ Will be available on Play Store and App Store
 
 List of features goes here...
 
-## Style Guide
-#### General
-* Contributors should follow our [Git Style Guide](https://github.com/agis/git-style-guide)
+## To-Do List
 
-#### Resource Files
-
-List of resource files goes here...
-
-## TO-DO List
-
-- To make this app running :)
-# DONE
+### Done
 - Basic App Layout, Login/Signup UI, Announcements, Timer, Events, and Floor Map
 
-# NEEDS TO BE DONE
+### Needs To Be Done
 1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
 2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS)
 2) QR Code Gen UI is working, but need to connect with BackEnd (LCS)
