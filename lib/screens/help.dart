@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Help extends StatelessWidget {
+  void _launchHelp () async {
+    const helpqUrl = 'https://hackru-helpq.herokuapp.com';
+    if (await canLaunch(helpqUrl)) {
+      await launch(helpqUrl);
+    } else {
+      print("failed to launch url");
+    }
+  }
   @override
   Widget build (BuildContext context) => new Scaffold(
 
@@ -23,7 +32,17 @@ class Help extends StatelessWidget {
         new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text('Help page content')
+            new RaisedButton(
+              child: Text("Get Help!"),
+              color: pink_dark,
+              textColor: white,
+              textTheme: ButtonTextTheme.normal,
+              elevation: 6.0,
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(3.0)),
+              ),
+              onPressed: this._launchHelp
+            ),
           ],
         )
       ],
