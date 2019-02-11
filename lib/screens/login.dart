@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/main.dart';
@@ -121,10 +122,21 @@ class _LoginState extends State<Login> {
   var client = new http.Client();
   var url = "https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test/authorize";
   postData() async {
-    var response = await client.post(url, body: {"email": "f@f.com", "password": "f"});
-    print("Response Status: ${response.statusCode}");
-    print("Response body: ${response.body}");
-//    client.close();
+    Map map = {
+      'email': 'f@f.com', 'password': 'f',
+    };
+    print(await apiRequest(url, map));
+  }
+
+  Future<String> apiRequest(String url, Map jsonMap) async {
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(utf8.encode(json.encode(jsonMap)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(utf8.decoder).join();
+    httpClient.close();
+    return reply;
   }
 
 }
