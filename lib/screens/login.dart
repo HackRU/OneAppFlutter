@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/main.dart';
 import 'package:HackRU/screens/signup.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   @override
@@ -15,6 +19,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    String email, password;
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -96,9 +101,30 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
+            RaisedButton(
+              child: Text('TEST LCS'),
+              color: pink_dark,
+              textColor: white,
+              textTheme: ButtonTextTheme.normal,
+              elevation: 6.0,
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(3.0)),
+              ),
+              onPressed: (){this.postData();},
+            ),
           ],
         ),
       ),
     );
   }
+
+  var client = new http.Client();
+  var url = "https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test/authorize";
+  postData() async {
+    var response = await client.post(url, body: {"email": "f@f.com", "password": "f"});
+    print("Response Status: ${response.statusCode}");
+    print("Response body: ${response.body}");
+//    client.close();
+  }
+
 }
