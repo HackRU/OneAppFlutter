@@ -1,91 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:HackRU/hackru_service.dart';
 
-class Help extends StatelessWidget {
-   void _launchHelp () async {
-    const helpqUrl = 'https://hackru-helpq.herokuapp.com';
-    if (await canLaunch(helpqUrl)) {
-      await launch(helpqUrl);
+class HelpButton extends StatelessWidget {
+  HelpButton({@required this.resource});
+  final HelpResource resource;
+  
+  void _open() async {
+    if (await canLaunch(resource.url)) {
+      await launch(resource.url);
     } else {
       print("failed to launch url");
     }
   }
+  
+  Widget build (BuildContext context) => new Card(
+    color: pink_dark,
+    margin: EdgeInsets.all(10.0),
+    elevation: 0.0,
+    child: Container(
+      height: 80.0,
+      child: InkWell(
+        splashColor: white,
+        onTap: _open,
+        child: new Row (
+          children: <Widget> [
+            Expanded(
+              child: new Text(
+                resource.name,
+                style: TextStyle(fontWeight: FontWeight.bold, color: white, fontSize: 25,),
+                textAlign: TextAlign.center
+              )
+            )
+          ]
+        )
+      )
+    )
+  );
+}
+
+class Help extends StatelessWidget {
   @override
   Widget build (BuildContext context) => new Scaffold(
-
-    //Content of tabs
-    body: new ListView(
-      children: <Widget>[
-        new Column(
-          children: <Widget>[
-            Card(
-              color: pink_dark,
-              margin: EdgeInsets.all(10.0),
-              elevation: 0.0,
-              child: Container(
-                height: 80.0,
-                child: InkWell(
-                  splashColor: white,
-                  onTap: (){this._launchHelp();},
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text('Get Help!',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: white, fontSize: 25,),
-                          textAlign: TextAlign.center,),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Card(
-              color: mintgreen_dark,
-              margin: EdgeInsets.all(10.0),
-              elevation: 0.0,
-              child: Container(
-                height: 80.0,
-                child: InkWell(
-                  splashColor: white,
-                  onTap: (){},
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text('Team Builder',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: white, fontSize: 25,),
-                          textAlign: TextAlign.center,),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Card(
-              color: bluegrey,
-              margin: EdgeInsets.all(10.0),
-              elevation: 0.0,
-              child: Container(
-                height: 80.0,
-                child: InkWell(
-                  splashColor: white,
-                  onTap: (){},
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text('Devpost',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: white, fontSize: 25,),
-                          textAlign: TextAlign.center,),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-          ],
-        )
-      ],
-    ),
+    body: new FutureBuilder<List<HelpResource>>(
+      future: helpResources(),
+      builder: (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+          return new Text('loading');
+          default:
+          print(snapshot.hasError);
+          var resources = snapshot.data;
+          print(resources);
+          return new Container(
+            child: new ListView.builder(
+              itemCount: resources.length,
+              itemBuilder: (BuildContext context, int index) {
+                return new HelpButton(resource: resources[index]);
+              }
+            )
+          );
+        }
+      }
+    )
   );
 }

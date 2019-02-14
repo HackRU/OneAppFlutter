@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/main.dart';
 import 'package:HackRU/screens/signup.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   @override
@@ -15,6 +20,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    String email, password;
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -96,9 +102,41 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
+            RaisedButton(
+              child: Text('TEST LCS'),
+              color: pink_dark,
+              textColor: white,
+              textTheme: ButtonTextTheme.normal,
+              elevation: 6.0,
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(3.0)),
+              ),
+              onPressed: (){this.postData();},
+            ),
           ],
         ),
       ),
     );
   }
+
+  var client = new http.Client();
+  var url = "https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test/authorize";
+  postData() async {
+    Map map = {
+      'email': 'f@f.com', 'password': 'f',
+    };
+    print(await apiRequest(url, map));
+  }
+
+  Future<String> apiRequest(String url, Map jsonMap) async {
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(utf8.encode(json.encode(jsonMap)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(utf8.decoder).join();
+    httpClient.close();
+    return reply;
+  }
+
 }
