@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
 const _lcsUrl = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test';
@@ -11,6 +10,19 @@ Future<http.Response> getMisc(String endpoint) {
   return client.get(_miscUrl + endpoint);
 }
 
+Future<http.Response> getLcs(String endpoint) {
+  return client.get(_lcsUrl + endpoint);
+}
+
+Future<http.Response> postLcs(String endpoint, dynamic body) {
+  var encodedBody = jsonEncode(body);
+  return client.post(_lcsUrl + endpoint,
+    headers: {"content-Type": "applicationi/json"},
+    body: encodedBody
+  );
+}
+
+// misc functions
 Future<List<String>> sitemap() async {
   var response = await getMisc("/");
   return await response.body.split("\n");
@@ -18,7 +30,6 @@ Future<List<String>> sitemap() async {
 
 class HelpResource {
   final String name;
-  @JsonKey(name: 'desc')
   final String description;
   final String url;
 
@@ -38,4 +49,4 @@ Future<List<HelpResource>> helpResources() async {
   ).toList();
 }
 
-
+// lcs functions
