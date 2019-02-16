@@ -13,6 +13,10 @@ This project is a mobile application for hackers, organizers, mentors, sponsors 
 
 We had started using an inhouse hybrid mobile application to keep track of analytics to get a better idea of how certain aspects of the hackathon were running such as food consumption and optimization for checkin. This project expanded into a public native mobile application so hackers had easier access to their QR code as well as organizers with their scanners. Additional information of the hackathon were incorporated so that everyone would be able to stay up to date on events that are happeneing wherever they may be in the venue.
 
+## Style Guide
+Coming Soon...
+We'll be using LINTER for Dart (https://github.com/dart-lang/linter)
+
 ## Installation Guide
 
 ### For Architects
