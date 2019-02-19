@@ -65,7 +65,8 @@ class AnnouncementsState extends State<Announcements> {
                   )
               ),
             );
-          }),
+          }
+      ),
     );
   }
 

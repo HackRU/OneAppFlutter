@@ -6,12 +6,11 @@ import 'colors.dart';
 import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
 import 'package:hidden_drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
-import 'package:HackRU/screens/tabs.dart';
 import 'package:HackRU/screens/about.dart';
 import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/help.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:HackRU/screens/home.dart';
 
 void main() => runApp(Main());
 
@@ -48,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           colorTextUnSelected: white.withOpacity(0.5),
           colorLineSelected: mintgreen_light,
         ),
-        Tabs()));
+        Home()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
