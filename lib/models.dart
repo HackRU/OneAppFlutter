@@ -1,3 +1,6 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 class LcsCredential {
   final String email;
   final String token;
@@ -45,14 +48,16 @@ class HelpResource {
 class User {
   final String name;
   final String email;
+  final Map<String, dynamic> role; // role.director, admin, organizer
   final Map<String, dynamic> dayOf; // this should always be a bool really
   
-  User(this.name, this.email, this.dayOf);
+  User(this.name, this.email, this.dayOf, this.role);
 
   @override
   String toString() {
     return "User{name: ${this.name}, "
     + "email: ${this.email}, "
+    + "role: ${this.role}, "
     + "dayOf: ${this.dayOf}";
   }
 
@@ -68,17 +73,50 @@ class User {
   User.fromJson(Map<String, dynamic> json)
   : name = (json["first_name"] ?? "") + " " + (json["last_name"] ?? ""),
     email = json["email"],
-    dayOf = json["day_of"];
+    dayOf = json["day_of"],
+    role = json["role"];
 }
 
 class LcsError implements Exception {
-  String errorMessage() => "There was an issue trying to use lcs";
+  String lcsError;
+  int code;
+  LcsError(http.Response res) {
+    this.code = res.statusCode;
+    if (res.statusCode >= 500) {
+      this.lcsError = "internal error with lcs";
+    } else {
+      var body = jsonDecode(res.body);
+      this.code = body["statusCode"];
+      this.lcsError = body["body"];
+    }
+  }
+  String errorMessage() => "LCS error $code: $lcsError";
+  String toString() => errorMessage();
 }
 
 class LcsLoginFailed implements Exception {
   String errorMessage() => "bad username or password";
+  String toString() => errorMessage();
 }
 
 class CredentialExpired implements Exception {
   String errorMessage() => "credential expired user must log in";
+  String toString() => errorMessage();
+}
+
+class NoSuchUser implements Exception {
+  String errorMessage() => "no user with that email";
+  String toString() => errorMessage();
+}
+
+class PermissionError implements Exception {
+  String errorMessage() => "you don't have permission to do that";
+  String toString() => errorMessage();
+}
+
+class UpdateError implements Exception {
+  final String lcsMessage;
+  UpdateError(this.lcsMessage);
+  String errorMessage() => "Failed to update user: $lcsMessage";
+  String toString() => errorMessage();
 }
