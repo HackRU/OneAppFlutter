@@ -46,6 +46,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 import 'package:HackRU/colors.dart';
 
@@ -66,6 +67,7 @@ class _QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: bluegrey_dark,
       body: new Center(
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,21 +98,52 @@ class _QRScannerState extends State<QRScanner> {
                     ),
                   ),
                 )
-                    : new Center(child: new Text("Camera Inactive!", style: TextStyle(fontSize: 25),))
+                    : new Center(child: new Text("Camera Inactive!", style: TextStyle(fontSize: 25, color:  white),))
             ),
-            new Text("QRCODE: $qr"),
+            new Text("QRCODE: $qr", style: TextStyle(color: white, fontSize: 15),),
           ],
         ),
       ),
       floatingActionButton: new FloatingActionButton(
-          backgroundColor: bluegrey_dark,
+          backgroundColor: bluegrey,
           foregroundColor: mintgreen_light,
           child: new Icon(FontAwesomeIcons.camera),
           onPressed: () {
-            setState(() {
-              camState = !camState;
-            });
+            showModalBottomSheet<Null>(
+              context: context,
+              builder: (BuildContext context) => _getDemoDrawer(),
+            );
+//            setState(() {
+//              camState = !camState;
+//            });
           }),
     );
   }
+
+  Widget _getDemoDrawer() {
+    return Drawer(
+      child: ListView(
+      children: <Widget>[
+        SizedBox(height: 10,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.check_circle, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('Check-In', style: TextStyle(fontWeight: FontWeight.bold, color: mintgreen_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.food_fork_drink, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('Lunch-1', style: TextStyle(fontWeight: FontWeight.bold, color: pink_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.food_fork_drink, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('Dinner', style: TextStyle(fontWeight: FontWeight.bold, color: mintgreen_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.tshirt_crew, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('T-Shirts', style: TextStyle(fontWeight: FontWeight.bold, color: pink_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.food, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('Midnight-Meal', style: TextStyle(fontWeight: FontWeight.bold, color: mintgreen_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.star, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('Midnight-Surprise', style: TextStyle(fontWeight: FontWeight.bold, color: pink_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.food, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('Breakfast', style: TextStyle(fontWeight: FontWeight.bold, color: mintgreen_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+        Container(height: 60.0, color: bluegrey_dark, child: InkWell(splashColor: white, onTap: _open, child: new Row (children: <Widget> [Expanded(child: Row(children: <Widget>[Padding(padding: const EdgeInsets.all(8.0), child: new Icon(GroovinMaterialIcons.food_fork_drink, color: white,),), Padding(padding: const EdgeInsets.all(8.0), child: new Text('Lunch-2', style: TextStyle(fontWeight: FontWeight.bold, color: pink_light, fontSize: 25,),textAlign: TextAlign.center,),),],))]))), SizedBox(height: 5.0,),
+
+      ],
+      ),
+    );
+  }
+
+  void _open() async {
+    setState(() {
+      camState = !camState;
+    });
+    Navigator.pop(context);
+  }
+
 }
