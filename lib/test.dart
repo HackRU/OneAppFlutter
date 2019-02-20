@@ -64,6 +64,39 @@ void testGetUser() async {
   print("test get user");
   print(user);
 }
+void testOtherUser() async {
+  var cred = await login(env["LCS_USER"], env["LCS_PASSWORD"]);
+  var user = await getUser(cred, "test1@regist.er");
+  try {
+    var baduser = await getUser(cred, "fail@email.com");
+    assert(false);
+  } on NoSuchUser catch(error) {
+    print("successfuly caught attempt to get nonexistent user");
+  }
+  print("test get a different user");
+  print(user);
+}
+
+void testUpdateDayOf() async {
+  var cred = await login(env["LCS_USER"], env["LCS_PASSWORD"]);
+  var user = await getUser(cred, env["LCS_USER2"]);
+  await updateUserDayOf(cred, user, "fake_event${DateTime.now().millisecondsSinceEpoch}");
+  var user2 = await getUser(cred, env["LCS_USER2"]);
+  print("test update user day_of");
+  print(user);
+  print(user2);
+}
+/*
+// !%$#@*&!!!!
+void testUpdateDayOfPerm() async {
+  var cred = await login(env["LCS_USER2"], env["LCS_PASSWORD2"]);
+  var user = await getUser(cred, "LCS_USER");
+  await updateUserDayOf(cred, user, "fake_event${DateTime.now().millisecondsSinceEpoch}");
+  var user2 = await getUser(cred, "LCS_USER");
+  print("test update user day_of");
+  print(user);
+  print(user2);
+}*/
 
 void main() async {
   testHelpResources();
@@ -74,4 +107,6 @@ void main() async {
   testLogin();
   testPostLcsExpired();
   testGetUser();
+  testOtherUser();
+  testUpdateDayOf();
 }
