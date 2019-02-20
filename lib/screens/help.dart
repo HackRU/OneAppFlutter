@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:HackRU/hackru_service.dart';
+import 'package:HackRU/models.dart';
 
 class HelpButton extends StatelessWidget {
   HelpButton({@required this.resource});

@@ -13,6 +13,10 @@ This project is a mobile application for hackers, organizers, mentors, sponsors 
 
 We had started using an inhouse hybrid mobile application to keep track of analytics to get a better idea of how certain aspects of the hackathon were running such as food consumption and optimization for checkin. This project expanded into a public native mobile application so hackers had easier access to their QR code as well as organizers with their scanners. Additional information of the hackathon were incorporated so that everyone would be able to stay up to date on events that are happeneing wherever they may be in the venue.
 
+## Style Guide
+Coming Soon...
+We'll be using LINTER for Dart (https://github.com/dart-lang/linter)
+
 ## Installation Guide
 
 ### For Architects
@@ -33,6 +37,13 @@ To learn about Flutter App Development:
 - [Online documentation: (https://flutter.io/docs], which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+### Running tests
+1. also have command line dart installed
+2. setup test users and use the test endpoint in hackru-service
+3. `export LCS_USER="<username>"` for LCS_USER, LCS_PASSWORD, LCS_USER2, LCS_PASSWORD2
+  - lcs user should have the director role
+4. `cd lib && dart test.dart`
+
 ### For Users
 
 Coming Soon...
@@ -49,11 +60,10 @@ List of features goes here...
 
 ### Needs To Be Done
 1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
-2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS)
-2) QR Code Gen UI is working, but need to connect with BackEnd (LCS)
-3) LogIn/SignUp UI is working but need to connect with BackEnd (LCS)
+2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS) (Code Exists)
+2) QR Code Gen UI is working, but need to connect with BackEnd (LCS) (Code Exists)
+3) LogIn/SignUp UI is working but need to connect with BackEnd (LCS) (Code Exists)
 4) "About Page" (which will include Flutter App Dev Team Members, HackRU Rnd Reference, and about the app)
-5) "Help/Tool Page" (hoping to add buttons which will redirect to inApp webview for "HelpQ", "HackRU Website", "Team Builder", and whatever hackers need in one click)
 
 ## Links to Further docs
 TBA
