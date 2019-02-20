@@ -105,7 +105,26 @@ class _HomeState extends State<Home>
     );
   }
 
+
+  Future<Null> _qrcode() async {
+    switch(await showDialog(
+        context: context,
+        builder: (BuildContext) {
+          new SimpleDialog(
+            title: new Text('Username'),
+            children: <Widget>[
+              new Image.asset('assets/images/hackru_qrcode.png',
+                fit: BoxFit.fill,
+              )
+            ],
+          );
+        })
+    ){}
+  }
+
 }
+
+
 
 class TabItem {
   const TabItem({ this.title, this.icon });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:HackRU/colors.dart';
 
 class QRCode extends StatefulWidget {
   @override
@@ -8,7 +9,7 @@ class QRCode extends StatefulWidget {
 
 class _QRCodeState extends State<QRCode> {
 
-  String _dataString = 'https://www.hackru.org/';
+  String _dataString = 'f@f.com';
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class _QRCodeState extends State<QRCode> {
 
   Widget _contentWidget() {
     return Container(
-      color: const Color(0xFFFFFFFF),
+      color: bluegrey_dark,
       child: Column(
         children: <Widget>[
           Expanded(
@@ -34,9 +35,10 @@ class _QRCodeState extends State<QRCode> {
               child: Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: QrImage(
+                  size: 300.0,
                   data: _dataString,
-                  gapless: false,
-                  foregroundColor: const Color(0xFF111111),
+                  gapless: true,
+                  foregroundColor: mintgreen_light,
                 ),
               ),
             ),
