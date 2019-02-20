@@ -1,3 +1,4 @@
+import 'package:HackRU/screens/expandable.dart';
 import 'package:HackRU/screens/qrcode.dart';
 import 'package:HackRU/screens/scanner.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,14 @@ class _MyHomePageState extends State<MyHomePage> {
           colorLineSelected: pink_dark,
         ),
         About()));
+
+    items.add(new ScreenHiddenDrawer(
+        new ItemHiddenMenu(
+          name: "About",
+          colorTextUnSelected: white.withOpacity(0.5),
+          colorLineSelected: pink_dark,
+        ),
+        ExpansionPanelsDemo()));
 
     super.initState();
   }

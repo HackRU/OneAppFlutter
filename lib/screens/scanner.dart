@@ -75,8 +75,8 @@ class _QRScannerState extends State<QRScanner> {
                 child: camState
                     ? new Center(
                   child: new SizedBox(
-                    width: 400.0,
-                    height: 550.0,
+                    width: 800.0,       //400
+                    height: 1000.0,      //550
                     child: new QrCamera(
                       onError: (context, error) => Text(
                         error.toString(),
@@ -90,7 +90,7 @@ class _QRScannerState extends State<QRScanner> {
                       child: new Container(
                         decoration: new BoxDecoration(
                           color: Colors.transparent,
-                          border: Border.all(color: Colors.orange, width: 10.0, style: BorderStyle.solid),
+                          border: Border.all(color: mintgreen_light, width: 2.0, style: BorderStyle.solid),
                         ),
                       ),
                     ),

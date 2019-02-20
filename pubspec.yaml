@@ -33,7 +33,6 @@ dependencies:
   flip_panel: ^0.0.9
   http_middleware: ^1.0.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

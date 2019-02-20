@@ -95,7 +95,7 @@ class LcsError implements Exception {
 }
 
 class LcsLoginFailed implements Exception {
-  String errorMessage() => "bad username or password";
+  String errorMessage() => "Incorrect Username or Password!";
   String toString() => errorMessage();
 }
 
