@@ -14,6 +14,11 @@ class _QRCodeState extends State<QRCode> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: Text('QR Code'),
+          elevation: 0.0,
+          leading: FlatButton(onPressed: (){Navigator.pop(context);}, child: Icon(Icons.arrow_back, color: white, size: 30,),),
+      ),
       body: _contentWidget(),
       resizeToAvoidBottomPadding: true,
     );
@@ -35,7 +40,7 @@ class _QRCodeState extends State<QRCode> {
               child: Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: QrImage(
-                  size: 300.0,
+                  size: 250.0,
                   data: _dataString,
                   gapless: true,
                   foregroundColor: mintgreen_light,

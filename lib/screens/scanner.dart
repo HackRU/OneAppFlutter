@@ -43,6 +43,8 @@
 //    );
 //  }
 //}
+import 'package:HackRU/hackru_service.dart';
+import 'package:HackRU/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -74,19 +76,54 @@ class _QRScannerState extends State<QRScanner> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             new Expanded(
-                child: camState
-                    ? new Center(
+                child: camState ? new Center(
                   child: new SizedBox(
-                    width: 800.0,       //400
-                    height: 1000.0,      //550
+                    width: 800.0, height: 1000.0,      //400-550
                     child: new QrCamera(
-                      onError: (context, error) => Text(
-                        error.toString(),
-                        style: TextStyle(color: Colors.redAccent, fontSize: 5),
-                      ),
+                      onError: (context, error) => Text(error.toString(), style: TextStyle(color: pink_light, fontSize: 25),),
                       qrCodeCallback: (code) {
-                        setState(() {
+                        setState(() async {
                           qr = code;
+                          try{
+                            var cred = await login('email', 'password');
+                            var user = await getUser(cred, '$qr');
+                            if(await user.alreadyDid('fake_event103') == false){
+                              await updateUserDayOf(cred, user, "fake_event103");
+                              var user2 = await getUser(cred, '$qr');
+                              print("************* update user day_of *************");
+                              print(user);
+                              print(user2);
+                              await showDialog<void>(context: context, barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(backgroundColor: transp,
+                                    title: Text("Successfull Login!", style: TextStyle(fontSize: 16, color: mintgreen_light),),
+                                    actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 16, color: mintgreen_dark),), onPressed: () {Navigator.pop(context, 'Ok');},),],
+                                  );
+                                },
+                              );
+                            }
+                            else{
+                              await showDialog<void>(context: context, barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(backgroundColor: transp,
+                                    title: Text("ERROR: Already Scanned!", style: TextStyle(fontSize: 16, color: pink_light),),
+                                    actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 16, color: mintgreen_dark),), onPressed: () {Navigator.pop(context, 'Ok');},),],
+                                  );
+                                },
+                              );
+                            }
+                          } on LcsLoginFailed catch (e){
+                            print('ERROR!!');
+                            showDialog<void>(context: context, barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialog(backgroundColor: bluegrey_dark,
+                                  title: Text("ERROR: \n'"+LcsLoginFailed().toString()+"'", style: TextStyle(fontSize: 16, color: pink_light),),
+                                  actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 16, color: mintgreen_dark),), onPressed: () {Navigator.pop(context, 'Ok');},),],
+                                );
+                              },
+                            );
+                          }
+
                         });
                       },
                       child: new Container(
@@ -97,8 +134,8 @@ class _QRScannerState extends State<QRScanner> {
                       ),
                     ),
                   ),
-                )
-                    : new Center(child: new Text("Camera Inactive!", style: TextStyle(fontSize: 25, color:  white),))
+                ) : new Center(child: Padding(
+                  padding: const EdgeInsets.only(top:220.0), child: Column(children: <Widget>[new Text("Camera Inactive!", style: TextStyle(fontSize: 25, color:  white),), new Text("Click Camera Icon Below to Scan QR Codes!", style: TextStyle(fontSize: 18, color:  white),), SizedBox(height: 15,), Icon(GroovinMaterialIcons.arrow_bottom_right, color: mintgreen_light, size: 50,),],),))
             ),
             new Text("QRCODE: $qr", style: TextStyle(color: white, fontSize: 15),),
           ],
@@ -108,14 +145,11 @@ class _QRScannerState extends State<QRScanner> {
           backgroundColor: bluegrey,
           foregroundColor: mintgreen_light,
           child: new Icon(FontAwesomeIcons.camera),
-          onPressed: () {
+          onPressed: () { camState ? setState(() {camState = !camState;}) :
             showModalBottomSheet<Null>(
               context: context,
               builder: (BuildContext context) => _getDemoDrawer(),
             );
-//            setState(() {
-//              camState = !camState;
-//            });
           }),
     );
   }
@@ -140,9 +174,7 @@ class _QRScannerState extends State<QRScanner> {
   }
 
   void _open() async {
-    setState(() {
-      camState = !camState;
-    });
+    setState(() {camState = !camState;});
     Navigator.pop(context);
   }
 

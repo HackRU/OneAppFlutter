@@ -12,15 +12,20 @@ import 'package:http/http.dart' as http;
 import 'package:HackRU/hackru_service.dart';
 
 class Login extends StatefulWidget {
+  final _username = TextEditingController();
+  final _password = TextEditingController();
+
+  TextEditingController usernameCred () { var username = this._username; return _username;}
+  TextEditingController passwordCred () { var password = this._password; return _password;}
+
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _usernameController = Login()._username;
+  final _passwordController = Login()._password;
   bool _inputIsValid = true;
-  bool _loginSuccess = false;
 
   final formKey = new GlobalKey<FormState>();
   checkFields(){
@@ -112,79 +117,32 @@ class _LoginState extends State<Login> {
                   onPressed: () async {
                     try {
                       await login(_usernameController.text, _passwordController.text);
-                      _loginSuccess = true;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Main()),);
                     } on LcsLoginFailed catch (e) {
-                      print("LCS Login Failed!");
-                    }
-                    if (_loginSuccess == true) {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Main()),
-                      );
-                      _loginSuccess = false;
-                    } else {
-                      LcsLoginFailed();
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false,
+                      showDialog<void>(context: context, barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: bluegrey_dark,
+                          return AlertDialog(backgroundColor: bluegrey_dark,
                             title: Text("ERROR: \n'"+LcsLoginFailed().toString()+"'",
-                                style: TextStyle(fontSize: 16, color: pink_light),),
+                              style: TextStyle(fontSize: 16, color: pink_light),),
                             actions: <Widget>[
                               FlatButton(
                                 child: Text('OK', style: TextStyle(fontSize: 16, color: mintgreen_dark),),
-                                onPressed: () {
-                                  Navigator.pop(context, 'Ok');
-                                },
+                                onPressed: () {Navigator.pop(context, 'Ok');},
                               ),
                             ],
                           );
                         },
                       );
-//                      Navigator.push(context,
-//                        MaterialPageRoute(builder: (context) => Login()),
-//                      );
                     }
                   },
+
                 ),
               ],
             ),
-//            RaisedButton(
-//              child: Text('TEST LCS'),
-//              color: pink_dark,
-//              textColor: white,
-//              textTheme: ButtonTextTheme.normal,
-//              elevation: 6.0,
-//              shape: BeveledRectangleBorder(
-//                borderRadius: BorderRadius.all(Radius.circular(3.0)),
-//              ),
-//              onPressed: (){this.postData();},
-//            ),
           ],
         ),
       ),
     );
   }
-
-//  var client = new http.Client();
-//  var url = "https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test/authorize";
-//  postData() async {
-//    Map map = {
-//      'email': 'f@f.com', 'password': 'f',
-//    };
-//    print(await apiRequest(url, map));
-//  }
-//
-//  Future<String> apiRequest(String url, Map jsonMap) async {
-//    HttpClient httpClient = new HttpClient();
-//    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
-//    request.headers.set('content-type', 'application/json');
-//    request.add(utf8.encode(json.encode(jsonMap)));
-//    HttpClientResponse response = await request.close();
-//    String reply = await response.transform(utf8.decoder).join();
-//    httpClient.close();
-//    return reply;
-//  }
 
 }

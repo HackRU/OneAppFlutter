@@ -1,4 +1,8 @@
+import 'package:HackRU/hackru_service.dart';
+import 'package:HackRU/models.dart';
 import 'package:HackRU/screens/login.dart';
+import 'package:HackRU/screens/qrcode.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
@@ -78,10 +82,14 @@ class _HomeState extends State<Home>
             ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Login()),
-            );
+          onPressed: () async {
+            try {
+//              await login('f@f.com','f');
+              await login('username','password');
+              Navigator.push(context, MaterialPageRoute(builder: (context) => QRCode()),);
+            } on LcsLoginFailed catch (e) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()),);
+            }
           },
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
@@ -103,23 +111,6 @@ class _HomeState extends State<Home>
       ):
         bottomNavBar,
     );
-  }
-
-
-  Future<Null> _qrcode() async {
-    switch(await showDialog(
-        context: context,
-        builder: (BuildContext) {
-          new SimpleDialog(
-            title: new Text('Username'),
-            children: <Widget>[
-              new Image.asset('assets/images/hackru_qrcode.png',
-                fit: BoxFit.fill,
-              )
-            ],
-          );
-        })
-    ){}
   }
 
 }

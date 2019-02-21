@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
-          name: "About",
+          name: "Dropdown",
           colorTextUnSelected: white.withOpacity(0.5),
           colorLineSelected: pink_dark,
         ),
