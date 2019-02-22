@@ -1,4 +1,3 @@
-import 'package:HackRU/screens/expandable.dart';
 import 'package:HackRU/screens/qrcode.dart';
 import 'package:HackRU/screens/scanner.dart';
 import 'package:HackRU/screens/scanner2.dart';
@@ -65,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
           colorTextUnSelected: white.withOpacity(0.5),
           colorLineSelected: mintgreen_dark,
         ),
-        QRScanner()));
+        QRScanner2()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
@@ -91,21 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         About()));
 
-    items.add(new ScreenHiddenDrawer(
-        new ItemHiddenMenu(
-          name: "Dropdown",
-          colorTextUnSelected: white.withOpacity(0.5),
-          colorLineSelected: pink_dark,
-        ),
-        ExpansionPanelsDemo()));
-
-    items.add(new ScreenHiddenDrawer(
-        new ItemHiddenMenu(
-          name: "Scanner2",
-          colorTextUnSelected: white.withOpacity(0.5),
-          colorLineSelected: pink_dark,
-        ),
-        QRScanner2()));
 
     super.initState();
   }

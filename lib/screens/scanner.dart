@@ -1,48 +1,3 @@
-//import 'dart:async';
-//import 'package:flutter/material.dart';
-//import 'package:qrcode_reader/qrcode_reader.dart';
-//import 'package:HackRU/colors.dart';
-//
-//class QRScanner extends StatefulWidget {
-//  QRScanner({Key key, this.title}) : super(key: key);
-//  final String title;
-//  final Map<String, dynamic> pluginParameters = {};
-//
-//  @override
-//  _QRScannerState createState() => new _QRScannerState();
-//}
-//
-//class _QRScannerState extends State<QRScanner> {
-//  Future<String> _barcodeString;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return new Scaffold(
-//      body: new Center(
-//          child: new FutureBuilder<String>(
-//              future: _barcodeString,
-//              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-//                return new Text(snapshot.data != null ? snapshot.data : '');
-//              })),
-//      floatingActionButton: new FloatingActionButton(
-//        backgroundColor: bluegrey_dark,
-//        onPressed: () {
-//          setState(() {
-//            _barcodeString = new QRCodeReader()
-//                .setAutoFocusIntervalInMs(200)
-//                .setForceAutoFocus(true)
-//                .setTorchEnabled(true)
-//                .setHandlePermissions(true)
-//                .setExecuteAfterPermissionGranted(true)
-//                .scan();
-//          });
-//        },
-//        tooltip: 'Reader the QRCode',
-//        child: new Icon(Icons.add_a_photo),
-//      ),
-//    );
-//  }
-//}
 import 'package:HackRU/hackru_service.dart';
 import 'package:HackRU/models.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +15,7 @@ class QRScanner extends StatefulWidget {
 class _QRScannerState extends State<QRScanner> {
   String qr;
   bool camState = false;
+//  final ValueChanged<String> qrCodeCallback;
 
   @override
   initState() {
@@ -85,10 +41,10 @@ class _QRScannerState extends State<QRScanner> {
                         setState(() async {
                           qr = code;
                           try{
-                            var cred = await login('email', 'password');
+                            var cred = await login('test@ment.or', 'test');
                             var user = await getUser(cred, '$qr');
-                            if(await user.alreadyDid('fake_event103') == false){
-                              await updateUserDayOf(cred, user, "fake_event103");
+                            if(await user.alreadyDid('fake_event109') == false){
+                              await updateUserDayOf(cred, user, "fake_event109");
                               var user2 = await getUser(cred, '$qr');
                               print("************* update user day_of *************");
                               print(user);
