@@ -54,7 +54,9 @@ class EventsState extends State<Events>
         appBar: new AppBar(
             title: getTabBar(),
             backgroundColor: bluegrey_dark,
-            elevation: 1.5),
+            elevation: 1.5,
+            automaticallyImplyLeading: false,
+        ),
         body: getTabBarView(<Widget>[
           new SatEvents(), new SunEvents()])
     );

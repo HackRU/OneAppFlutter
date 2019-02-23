@@ -189,6 +189,7 @@ class QRScanner2 extends StatefulWidget {
 class _QRScanner2State extends State<QRScanner2> {
   List<DemoItem<dynamic>> _demoItems;
   Future<String> _barcodeString;
+  var _eventSelected;
 
   @override
   void initState() {
@@ -196,39 +197,39 @@ class _QRScanner2State extends State<QRScanner2> {
 
     _demoItems = <DemoItem<dynamic>>[
       DemoItem<Location>(name: 'Scanning...', value: Location.CheckIn, hint: 'Select Event',
-        valueToString: (Location location) => location.toString().split('.')[1],
-        builder: (DemoItem<Location> item) {
-          void close() { setState(() { item.isExpanded = false;});}
-          return Form(
-            child: Builder(
-              builder: (BuildContext context) {
-                return CollapsibleBody(
-                  onSave: () { Form.of(context).save(); close(); },
-                  onCancel: () { Form.of(context).reset(); close(); },
-                  child: FormField<Location>(
-                    initialValue: item.value,
-                    onSaved: (Location result) { item.value = result; },
-                    builder: (FormFieldState<Location> field) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          RadioListTile<Location>(value: Location.CheckIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                          RadioListTile<Location>(value: Location.Lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                          RadioListTile<Location>(value: Location.Dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                          RadioListTile<Location>(value: Location.TShirts, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                          RadioListTile<Location>(value: Location.MidnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                          RadioListTile<Location>(value: Location.MidnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                          RadioListTile<Location>(value: Location.Breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                          RadioListTile<Location>(value: Location.Lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                        ]
+          valueToString: (Location location) => location.toString().split('.')[1],
+          builder: (DemoItem<Location> item) {
+            void close() { setState(() { item.isExpanded = false;});}
+            return Form(
+                child: Builder(
+                    builder: (BuildContext context) {
+                      return CollapsibleBody(
+                        onSave: () { Form.of(context).save(); close(); },
+                        onCancel: () { Form.of(context).reset(); close(); },
+                        child: FormField<Location>(
+                            initialValue: item.value,
+                            onSaved: (Location result) { item.value = result; },
+                            builder: (FormFieldState<Location> field) {
+                              return Column(
+                                  mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    RadioListTile<Location>(value: Location.CheckIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.Lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.Dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.TShirts, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.MidnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.MidnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.Breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.Lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                  ]
+                              );
+                            }
+                        ),
                       );
                     }
-                  ),
-                );
-              }
-            )
-          );
-        }
+                ),
+            );
+          }
       ),
     ];
   }
@@ -245,10 +246,10 @@ class _QRScanner2State extends State<QRScanner2> {
                 child: Container(
                   margin: const EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                   child: ExpansionPanelList(
-                    expansionCallback: (int index, bool isExpanded) {
-                      setState(() { _demoItems[index].isExpanded = !isExpanded; });},
-                    children: _demoItems.map<ExpansionPanel>((DemoItem<dynamic> item) {
-                      return ExpansionPanel( isExpanded: item.isExpanded, headerBuilder: item.headerBuilder, body: item.build());}).toList()
+                      expansionCallback: (int index, bool isExpanded) {
+                        setState(() { _demoItems[index].isExpanded = !isExpanded; });},
+                      children: _demoItems.map<ExpansionPanel>((DemoItem<dynamic> item) {
+                        return ExpansionPanel( isExpanded: item.isExpanded, headerBuilder: item.headerBuilder, body: item.build());}).toList()
                   ),
                 ),
               ),

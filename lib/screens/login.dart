@@ -1,21 +1,18 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
 import 'package:HackRU/models.dart';
 import 'package:HackRU/test.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/main.dart';
-import 'package:HackRU/screens/signup.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:HackRU/hackru_service.dart';
 
+
 class Login extends StatefulWidget {
-  final _username = TextEditingController();
+  final _email = TextEditingController();
   final _password = TextEditingController();
 
-  TextEditingController usernameCred () { var username = this._username; return _username;}
+  TextEditingController emailCred () { var email = this._email; return _email;}
   TextEditingController passwordCred () { var password = this._password; return _password;}
 
   @override
@@ -23,7 +20,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _usernameController = Login()._username;
+  final _emailController = Login()._email;
   final _passwordController = Login()._password;
   bool _inputIsValid = true;
 
@@ -38,7 +35,7 @@ class _LoginState extends State<Login> {
   }
 
   loginUser(){
-      login(_usernameController.text, _passwordController.text);
+      login(_emailController.text, _passwordController.text);
   }
 
   @override
@@ -63,7 +60,7 @@ class _LoginState extends State<Login> {
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
                 style: TextStyle(fontSize: 20, color: bluegrey),
-                controller: _usernameController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Username',
                   fillColor: bluegrey,
@@ -94,17 +91,17 @@ class _LoginState extends State<Login> {
             ),
             ButtonBar(
               children: <Widget>[
-                OutlineButton(
-                    child: Text('CANCEL'),
-                    textColor: bluegrey,
-                    shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                    ),
-                    onPressed: (){
-                      _usernameController.clear();
-                      _passwordController.clear();
-                      Navigator.pop(context, 'Cancel');
-                    }),
+//                OutlineButton(
+//                    child: Text('CANCEL'),
+//                    textColor: bluegrey,
+//                    shape: BeveledRectangleBorder(
+//                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
+//                    ),
+//                    onPressed: (){
+//                      _emailController.clear();
+//                      _passwordController.clear();
+//                      Navigator.pop(context, 'Cancel');
+//                    }),
                 RaisedButton(
                   child: Text('LOGIN'),
                   color: pink_dark,
@@ -116,8 +113,10 @@ class _LoginState extends State<Login> {
                   ),
                   onPressed: () async {
                     try {
-                      await login(_usernameController.text, _passwordController.text);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Main()),);
+                      await login(_emailController.text, _passwordController.text);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
+                      _emailController.clear();
+                      _passwordController.clear();
                     } on LcsLoginFailed catch (e) {
                       showDialog<void>(context: context, barrierDismissible: false,
                         builder: (BuildContext context) {

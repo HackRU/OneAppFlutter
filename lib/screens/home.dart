@@ -11,6 +11,8 @@ import 'package:HackRU/tabs/timer.dart' as _secondTab;
 import 'package:HackRU/tabs/events.dart' as _thirdTab;
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 
+import 'package:lib_auth/main.dart';
+
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
 
@@ -25,6 +27,7 @@ class _HomeState extends State<Home>
   var _title_app = null;
   var _title_icon = null;
   PageController _tabController;
+
 
   @override
   void initState() {
@@ -83,13 +86,12 @@ class _HomeState extends State<Home>
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            try {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => QRCode()),);
+//            try {
 //              await login('f@f.com','f');
-              await login('username','password');
-              Navigator.push(context, MaterialPageRoute(builder: (context) => QRCode()),);
-            } on LcsLoginFailed catch (e) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()),);
-            }
+//            } on LcsLoginFailed catch (e) {
+//              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()),);
+//            }
           },
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
@@ -114,8 +116,6 @@ class _HomeState extends State<Home>
   }
 
 }
-
-
 
 class TabItem {
   const TabItem({ this.title, this.icon });

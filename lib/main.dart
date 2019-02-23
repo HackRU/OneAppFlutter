@@ -1,6 +1,8 @@
+import 'package:HackRU/screens/login.dart';
 import 'package:HackRU/screens/qrcode.dart';
 import 'package:HackRU/screens/scanner.dart';
 import 'package:HackRU/screens/scanner2.dart';
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'colors.dart';
@@ -13,7 +15,10 @@ import 'package:HackRU/screens/help.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:HackRU/screens/home.dart';
 
-void main() => runApp(Main());
+void main() {
+  BlocSupervisor().delegate = SimpleBlocDelegate();
+  runApp(Main());
+}
 
 class Main extends StatelessWidget {
   @override
@@ -25,7 +30,7 @@ class Main extends StatelessWidget {
         primaryColor: bluegrey_dark,
         accentColor: mintgreen_light,
       ),
-      home: MyHomePage(),
+      home: Login(),
     );
   }
 }
@@ -97,6 +102,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
+      actionsAppBar: <Widget>[
+        IconButton(
+            icon: Icon(Icons.exit_to_app),
+//            onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login()),);})
+            onPressed: (){Navigator.pop(context);})
+
+      ],
       backgroundColorMenu: bluegrey_dark,
       backgroundColorAppBar: bluegrey_dark,
       elevationAppBar: 0,
@@ -104,5 +116,12 @@ class _MyHomePageState extends State<MyHomePage> {
       screens: items,
     );
 
+  }
+}
+
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition);
   }
 }

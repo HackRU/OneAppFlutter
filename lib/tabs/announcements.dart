@@ -25,8 +25,10 @@ class AnnouncementsState extends State<Announcements> {
 
     setState(() {
       // Get the JSON data
+      if (mounted) {
       var dataConvertedToJSON = json.decode(response.body);
       data = dataConvertedToJSON['body'];
+    }
     });
 
     return "Successfull";
