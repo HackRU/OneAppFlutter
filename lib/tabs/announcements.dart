@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:HackRU/screens/string_parser.dart';
+import 'package:HackRU/screens/login.dart';
 
 
 // Create a stateful widget

@@ -1,7 +1,6 @@
 import 'package:HackRU/hackru_service.dart';
 import 'package:HackRU/models.dart';
 import 'package:HackRU/screens/login.dart';
-import 'package:HackRU/screens/qrcode.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,14 +84,13 @@ class _HomeState extends State<Home>
             ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => QRCode()),);
+          onPressed: _qrcode,
+//            Navigator.push(context, MaterialPageRoute(builder: (context) => QRCode()),);
 //            try {
 //              await login('f@f.com','f');
 //            } on LcsLoginFailed catch (e) {
 //              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()),);
 //            }
-          },
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
           foregroundColor: mintgreen_light,
@@ -115,6 +113,30 @@ class _HomeState extends State<Home>
     );
   }
 
+  Future<Null> _qrcode() async {
+    switch(await showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return new SimpleDialog(
+            children: <Widget>[
+              Container(
+                height: 300.0,
+                width: 300.0,
+                child: Center(
+                  child: QrImage(
+                      version: 1,
+                      data: 'f@f.com',
+                      gapless: true,
+                      foregroundColor: bluegrey,
+                    ),
+                ),
+              ),
+//              new Image.asset('assets/images/hackru_qrcode.png', fit: BoxFit.fill,)
+            ],
+          );
+        },)){}
+  }
+
 }
 
 class TabItem {
@@ -128,3 +150,4 @@ const List<TabItem> TabItems = const <TabItem>[
   const TabItem(title: 'Timer', icon: GroovinMaterialIcons.timer,),
   const TabItem(title: 'Events', icon: GroovinMaterialIcons.calendar_today,),
 ];
+

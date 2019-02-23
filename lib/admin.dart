@@ -14,34 +14,14 @@ import 'package:HackRU/screens/help.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:HackRU/screens/home.dart';
 
-void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(Main());
-}
-
-class Main extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'HackRU',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: bluegrey_dark,
-        accentColor: mintgreen_light,
-      ),
-      home: Login(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+class AdminPage extends StatefulWidget {
+  AdminPage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _AdminPageState createState() => _AdminPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _AdminPageState extends State<AdminPage> {
   List<ScreenHiddenDrawer> items = new List();
 
   @override
@@ -61,6 +41,14 @@ class _MyHomePageState extends State<MyHomePage> {
           colorLineSelected: pink_light,
         ),
         Map()));
+
+    items.add(new ScreenHiddenDrawer(
+        new ItemHiddenMenu(
+          name: "Scanner",
+          colorTextUnSelected: white.withOpacity(0.5),
+          colorLineSelected: mintgreen_dark,
+        ),
+        QRScanner2()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
@@ -95,12 +83,5 @@ class _MyHomePageState extends State<MyHomePage> {
       screens: items,
     );
 
-  }
-}
-
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Transition transition) {
-    print(transition);
   }
 }

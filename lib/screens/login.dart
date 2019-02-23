@@ -1,3 +1,4 @@
+import 'package:HackRU/admin.dart';
 import 'package:HackRU/models.dart';
 import 'package:HackRU/test.dart';
 import 'package:flutter/material.dart';
@@ -9,19 +10,19 @@ import 'package:HackRU/hackru_service.dart';
 
 
 class Login extends StatefulWidget {
-  final _email = TextEditingController();
-  final _password = TextEditingController();
+  const Login({Key key, this.user}) : super(key: key);
 
-  TextEditingController emailCred () { var email = this._email; return _email;}
-  TextEditingController passwordCred () { var password = this._password; return _password;}
+  TextEditingController get _email => null;
+  TextEditingController get _password => null;
+  final User user;
 
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  final _emailController = Login()._email;
-  final _passwordController = Login()._password;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _inputIsValid = true;
 
   final formKey = new GlobalKey<FormState>();
@@ -113,10 +114,14 @@ class _LoginState extends State<Login> {
                   ),
                   onPressed: () async {
                     try {
-                      await login(_emailController.text, _passwordController.text);
+                      var cred = await login(_emailController.text, _passwordController.text);
+                      var user = await getUser(cred, _emailController.text);
+                      print(user);
+                      var dir = 'director: true';
+                      if(user.role.containsKey(dir)){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
+                      }
                       Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
-                      _emailController.clear();
-                      _passwordController.clear();
                     } on LcsLoginFailed catch (e) {
                       showDialog<void>(context: context, barrierDismissible: false,
                         builder: (BuildContext context) {
