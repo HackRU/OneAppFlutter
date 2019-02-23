@@ -117,11 +117,12 @@ class _LoginState extends State<Login> {
                       var cred = await login(_emailController.text, _passwordController.text);
                       var user = await getUser(cred, _emailController.text);
                       print(user);
-                      var dir = 'director: true';
-                      if(user.role.containsKey(dir)){
+                      if(user.role["director"] = true ){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
                       }
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
+                      else{
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
+                      }
                     } on LcsLoginFailed catch (e) {
                       showDialog<void>(context: context, barrierDismissible: false,
                         builder: (BuildContext context) {
