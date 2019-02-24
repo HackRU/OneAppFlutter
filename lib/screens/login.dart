@@ -1,6 +1,7 @@
 import 'package:HackRU/admin.dart';
 import 'package:HackRU/models.dart';
 import 'package:HackRU/screens/home.dart';
+import 'package:HackRU/screens/scanner2.dart';
 import 'package:HackRU/test.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
@@ -107,7 +108,10 @@ class Login extends StatelessWidget {
                     try {
                       var cred = await login(_emailController.text, _passwordController.text);
                       var user = await getUser(cred, _emailController.text);
+                      QRScanner2.cred = cred;
                       Home.userEmail = _emailController.text;
+                      QRScanner2.userEmail = _emailController.text;
+                      QRScanner2.userPassword = _passwordController.text;
                       print(user);
                       if(user.role["director"] == true ){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);

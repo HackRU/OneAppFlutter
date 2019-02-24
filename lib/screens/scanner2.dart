@@ -181,6 +181,9 @@ class QRScanner2 extends StatefulWidget {
   static const String routeName = '/material/expansion_panels';
   final String title;
   final Map<String, dynamic> pluginParameters = {};
+  static String userEmail, userPassword;
+  static LcsCredential cred;
+  static String qrResult, msg;
 
   @override
   _QRScanner2State createState() => _QRScanner2State();
@@ -189,7 +192,6 @@ class QRScanner2 extends StatefulWidget {
 class _QRScanner2State extends State<QRScanner2> {
   List<DemoItem<dynamic>> _demoItems;
   Future<String> _barcodeString;
-  var _eventSelected;
 
   @override
   void initState() {
@@ -249,6 +251,8 @@ class _QRScanner2State extends State<QRScanner2> {
                       expansionCallback: (int index, bool isExpanded) {
                         setState(() { _demoItems[index].isExpanded = !isExpanded; });},
                       children: _demoItems.map<ExpansionPanel>((DemoItem<dynamic> item) {
+                        print(item.name);
+                        print(item.toString());
                         return ExpansionPanel( isExpanded: item.isExpanded, headerBuilder: item.headerBuilder, body: item.build());}).toList()
                   ),
                 ),
@@ -257,8 +261,12 @@ class _QRScanner2State extends State<QRScanner2> {
                 padding: EdgeInsets.all(25.0),
                 child: new FutureBuilder<String>(
                     future: _barcodeString,
-                    // future: _qrcode,
                     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      QRScanner2.qrResult = snapshot.data;
+                      _lcsHandle();
+                      print('*****************');
+                      print(QRScanner2.msg);
+
                       return Padding(
                         padding: const EdgeInsets.only(top: 100.0),
                         child: Container(
@@ -268,8 +276,14 @@ class _QRScanner2State extends State<QRScanner2> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(30.0),
-                            child: Text(snapshot.data != null ? snapshot.data : 'Note: Click [Camera Icon] Below to Scan QR Codes!',
-                              style: TextStyle(color: mintgreen_light, fontSize: 20.0,), textAlign: TextAlign.center,),
+                            child: Column(
+                              children: <Widget>[
+                                Text(QRScanner2.msg != null ?
+                                    QRScanner2.msg
+                                    : 'Note: Click [Camera Icon] Below to Scan QR Codes!',
+                                  style: TextStyle(color: mintgreen_light, fontSize: 20.0,), textAlign: TextAlign.center,),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -299,4 +313,35 @@ class _QRScanner2State extends State<QRScanner2> {
       ),
     );
   }
+}
+
+Future<String> _lcsHandle() async {
+  String result;
+  try{
+    print(QRScanner2.qrResult);
+    var user = await getUser(QRScanner2.cred, QRScanner2.qrResult);
+    if(user.dayOf.containsKey('event_777') == false){
+      updateUserDayOf(QRScanner2.cred, user, 'event_777');
+      var user2 = await getUser(QRScanner2.cred, QRScanner2.qrResult);
+      print("************* update user day_of *************");
+      print(user);
+      print(user2);
+      result = 'SCANNED!';
+      QRScanner2.msg = result;
+      print(result);
+    }
+    else{
+      // ERROR: Already Scanned!
+      result = 'ALREADY SCANNED!';
+      QRScanner2.msg = result;
+      print(result);
+    }
+  } on LcsLoginFailed catch (e){
+    print(e);
+    // ERROR: LCS_LogIn_Failed!
+    result = 'LCS LOGIN FAILED!';
+    QRScanner2.msg = result;
+    print(result);
+  }
+  return result;
 }
