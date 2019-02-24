@@ -10,10 +10,9 @@ import 'package:HackRU/tabs/timer.dart' as _secondTab;
 import 'package:HackRU/tabs/events.dart' as _thirdTab;
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 
-import 'package:lib_auth/main.dart';
-
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
+  static String userEmail;
 
   @override
   _HomeState createState() => _HomeState();
@@ -125,7 +124,7 @@ class _HomeState extends State<Home>
                 child: Center(
                   child: QrImage(
                       version: 1,
-                      data: 'f@f.com',
+                      data: Home.userEmail,
                       gapless: true,
                       foregroundColor: bluegrey,
                     ),

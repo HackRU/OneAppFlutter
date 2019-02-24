@@ -1,5 +1,6 @@
 import 'package:HackRU/admin.dart';
 import 'package:HackRU/models.dart';
+import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/test.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
@@ -8,24 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:HackRU/hackru_service.dart';
 
+class Login extends StatelessWidget {
 
-class Login extends StatefulWidget {
-  const Login({Key key, this.user}) : super(key: key);
-
-  TextEditingController get _email => null;
-  TextEditingController get _password => null;
-  final User user;
-
-  @override
-  _LoginState createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _inputIsValid = true;
 
   final formKey = new GlobalKey<FormState>();
+
   checkFields(){
     final form = formKey.currentState;
     if(form.validate()){
@@ -36,7 +27,7 @@ class _LoginState extends State<Login> {
   }
 
   loginUser(){
-      login(_emailController.text, _passwordController.text);
+    login(_emailController.text, _passwordController.text);
   }
 
   @override
@@ -116,8 +107,9 @@ class _LoginState extends State<Login> {
                     try {
                       var cred = await login(_emailController.text, _passwordController.text);
                       var user = await getUser(cred, _emailController.text);
+                      Home.userEmail = _emailController.text;
                       print(user);
-                      if(user.role["director"] = true ){
+                      if(user.role["director"] == true ){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
                       }
                       else{
@@ -139,6 +131,8 @@ class _LoginState extends State<Login> {
                         },
                       );
                     }
+                    _emailController.clear();
+                    _passwordController.clear();
                   },
 
                 ),
@@ -151,3 +145,5 @@ class _LoginState extends State<Login> {
   }
 
 }
+
+
