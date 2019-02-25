@@ -12,6 +12,7 @@ import 'package:HackRU/screens/about.dart';
 import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/help.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:HackRU/screens/home.dart';
 
 void main() {
@@ -86,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
       actionsAppBar: <Widget>[
-        IconButton(icon: Icon(Icons.exit_to_app), onPressed: (){Navigator.pop(context);})
+        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: pink_light,), color: pink_light, splashColor: pink_light, onPressed: (){Navigator.pop(context);})
       ],
       backgroundColorMenu: bluegrey_dark,
       backgroundColorAppBar: bluegrey_dark,

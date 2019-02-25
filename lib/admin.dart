@@ -4,6 +4,7 @@ import 'package:HackRU/screens/scanner2.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'colors.dart';
 import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
@@ -74,7 +75,8 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
       actionsAppBar: <Widget>[
-        IconButton(icon: Icon(Icons.exit_to_app), onPressed: (){Navigator.pop(context);})
+        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: pink_light,), color: pink_light, splashColor: pink_light, onPressed: (){Navigator.pop(context);})
+
       ],
       backgroundColorMenu: bluegrey_dark,
       backgroundColorAppBar: bluegrey_dark,

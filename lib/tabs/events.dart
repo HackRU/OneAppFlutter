@@ -25,18 +25,11 @@ class EventsState extends State<Events>
     super.dispose();
   }
 
-  var saturday = new Text('Saturday',
-    textAlign: TextAlign.center,
-    style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),);
-  var sunday = new Text('Sunday',
-    textAlign: TextAlign.center,
-    style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),);
-
   TabBar getTabBar() {
     return new TabBar(
         tabs: <Tab>[
           new Tab(text: 'SATURDAY',),
-          new Tab(text: 'SUNDAY'),],
+          new Tab(text: 'SUNDAY',),],
         indicatorColor: mintgreen_light,
         indicatorSize: TabBarIndicatorSize.tab,
         controller: controller
@@ -54,7 +47,7 @@ class EventsState extends State<Events>
         appBar: new AppBar(
             title: getTabBar(),
             backgroundColor: bluegrey_dark,
-            elevation: 1.5,
+            elevation: 1.0,
             automaticallyImplyLeading: false,
         ),
         body: getTabBarView(<Widget>[

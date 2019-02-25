@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:HackRU/screens/string_parser.dart';
-import 'package:HackRU/screens/login.dart';
+import 'package:HackRU/hackru_service.dart';
+import 'package:intl/intl.dart';
 
 
 // Create a stateful widget
@@ -16,42 +16,44 @@ class Announcements extends StatefulWidget {
 }
 
 class AnnouncementsState extends State<Announcements> {
-  final String url = "https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest/dayof-slack";
   List data;
-
   Future<String> getJSONData() async {
-    var response = await http.get(Uri.encodeFull(url),
-        headers: {"Accept": "application/json"});
-    print(response.body);
-
+    var response = await dayOfGetLcs('/dayof-slack');
     setState(() {
-      // Get the JSON data
-      if (mounted) {
       var dataConvertedToJSON = json.decode(response.body);
       data = dataConvertedToJSON['body'];
-    }
     });
-
-    return "Successfull";
+    return "Data Received!";
   }
 
   @override
   Widget build(BuildContext context) {
+    dayOfGetLcs('/dayof-slack');
+
     return new Scaffold(
       backgroundColor: bluegrey_dark,
       // Create a Listview and load the data when available
       body: new ListView.builder(
           itemCount: data == null ? 0 : data.length,
           itemBuilder: (BuildContext context, int index) {
+              String secs = data[index]['ts'].split(".")[0];
+              String time = DateTime.fromMillisecondsSinceEpoch(int.parse(secs)*1000).toIso8601String().substring(11,16);
             return new Container(
-              child: new Center(
-                  child: new Column(
+              child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       new Card(
                         child: new Container(
-                          // Customized URL Launcher
-                          child: new RichTextView(text: data[index]['text'] ?? ''),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              new Text(time, style: TextStyle(color: bluegrey_dark, fontWeight: FontWeight.w900),),
+                              SizedBox(height: 2.0,),
+                              new RichTextView(text: data[index]['text'] ?? ''),
+                            ],
+                          ),
 
                           // URL Launcher Library
                           //child: new Linkify(
@@ -66,7 +68,6 @@ class AnnouncementsState extends State<Announcements> {
                       )
                     ],
                   )
-              ),
             );
           }
       ),

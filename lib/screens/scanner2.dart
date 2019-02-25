@@ -16,7 +16,7 @@ import 'package:HackRU/models.dart';
 
 @visibleForTesting
 enum Location {
-  CheckIn, Lunch1, Dinner, TShirts, MidnightMeal, MidnightSurprise, Breakfast, Lunch2
+  checkIn, lunch1, dinner, tShirt, midnightMeal, midnightSurprise, breakfast, lunch2
 }
 
 typedef DemoItemBodyBuilder<T> = Widget Function(DemoItem<T> item);
@@ -183,7 +183,7 @@ class QRScanner2 extends StatefulWidget {
   final Map<String, dynamic> pluginParameters = {};
   static String userEmail, userPassword;
   static LcsCredential cred;
-  static String qrResult, msg;
+  static String qrResult, msg, event;
 
   @override
   _QRScanner2State createState() => _QRScanner2State();
@@ -198,7 +198,7 @@ class _QRScanner2State extends State<QRScanner2> {
     super.initState();
 
     _demoItems = <DemoItem<dynamic>>[
-      DemoItem<Location>(name: 'Scanning...', value: Location.CheckIn, hint: 'Select Event',
+      DemoItem<Location>(name: 'Scanning...', value: Location.checkIn, hint: 'Select Event',
           valueToString: (Location location) => location.toString().split('.')[1],
           builder: (DemoItem<Location> item) {
             void close() { setState(() { item.isExpanded = false;});}
@@ -215,14 +215,14 @@ class _QRScanner2State extends State<QRScanner2> {
                               return Column(
                                   mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    RadioListTile<Location>(value: Location.CheckIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.Lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.Dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.TShirts, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.MidnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.MidnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.Breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.Lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.checkIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.tShirt, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.midnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.midnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
                                   ]
                               );
                             }
@@ -251,8 +251,10 @@ class _QRScanner2State extends State<QRScanner2> {
                       expansionCallback: (int index, bool isExpanded) {
                         setState(() { _demoItems[index].isExpanded = !isExpanded; });},
                       children: _demoItems.map<ExpansionPanel>((DemoItem<dynamic> item) {
-                        print(item.name);
-                        print(item.toString());
+                        Location event = item.value;
+                        print(event.toString().substring(event.toString().indexOf('.')+1));
+                        QRScanner2.event = event.toString().substring(event.toString().indexOf('.')+1);
+
                         return ExpansionPanel( isExpanded: item.isExpanded, headerBuilder: item.headerBuilder, body: item.build());}).toList()
                   ),
                 ),
@@ -263,10 +265,9 @@ class _QRScanner2State extends State<QRScanner2> {
                     future: _barcodeString,
                     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                       QRScanner2.qrResult = snapshot.data;
-                      _lcsHandle();
-                      print('*****************');
-                      print(QRScanner2.msg);
-
+                      if(snapshot.data != null){
+                        _lcsHandle();
+                      }
                       return Padding(
                         padding: const EdgeInsets.only(top: 100.0),
                         child: Container(
@@ -275,13 +276,12 @@ class _QRScanner2State extends State<QRScanner2> {
                             border: Border.all(color: mintgreen_light, width: 2.0, style: BorderStyle.solid),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(30.0),
+                            padding: const EdgeInsets.all(25.0),
                             child: Column(
                               children: <Widget>[
-                                Text(QRScanner2.msg != null ?
-                                    QRScanner2.msg
-                                    : 'Note: Click [Camera Icon] Below to Scan QR Codes!',
-                                  style: TextStyle(color: mintgreen_light, fontSize: 20.0,), textAlign: TextAlign.center,),
+                                Text(QRScanner2.msg == null ?
+                                    'Note: Click [Camera Icon] Below to Scan QR Codes!' : '¯\\_(ツ)_/¯',
+                                  style: TextStyle(color: mintgreen_light, fontSize: 25.0,), textAlign: TextAlign.center,),
                               ],
                             ),
                           ),
@@ -313,35 +313,74 @@ class _QRScanner2State extends State<QRScanner2> {
       ),
     );
   }
-}
 
-Future<String> _lcsHandle() async {
-  String result;
-  try{
-    print(QRScanner2.qrResult);
-    var user = await getUser(QRScanner2.cred, QRScanner2.qrResult);
-    if(user.dayOf.containsKey('event_777') == false){
-      updateUserDayOf(QRScanner2.cred, user, 'event_777');
-      var user2 = await getUser(QRScanner2.cred, QRScanner2.qrResult);
-      print("************* update user day_of *************");
-      print(user);
-      print(user2);
-      result = 'SCANNED!';
-      QRScanner2.msg = result;
-      print(result);
-    }
-    else{
-      // ERROR: Already Scanned!
-      result = 'ALREADY SCANNED!';
-      QRScanner2.msg = result;
-      print(result);
-    }
-  } on LcsLoginFailed catch (e){
-    print(e);
-    // ERROR: LCS_LogIn_Failed!
-    result = 'LCS LOGIN FAILED!';
-    QRScanner2.msg = result;
-    print(result);
+  Future<Null> _successDialog() async {
+    switch(await showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return new AlertDialog(backgroundColor: bluegrey_dark,
+          title: Text("SCANNED!", style: TextStyle(fontSize: 30, color: mintgreen_light), textAlign:  TextAlign.center),
+          actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center,), onPressed: (){Navigator.pop(context);},),],
+        );
+      },)){}
   }
-  return result;
+
+  Future<Null> _existDialog() async {
+    switch(await showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return new AlertDialog(backgroundColor: bluegrey_dark,
+          title: Text("ALREADY SCANNED!", style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
+          actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
+        );
+      },)){}
+  }
+
+  Future<Null> _loginFailedDialog() async {
+    switch(await showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return new AlertDialog(backgroundColor: bluegrey_dark,
+          title: Text("LCS LOGIN FAILED!", style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
+          actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
+        );
+      },)){}
+  }
+
+  Future<String> _lcsHandle() async {
+    String result;
+    try {
+      var user = await getUser(QRScanner2.cred, QRScanner2.qrResult);
+      if (!user.dayOf.containsKey(QRScanner2.event) || user.dayOf[QRScanner2.event] == false) {
+        updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
+        print(user);
+        result = 'SCANNED!';
+        QRScanner2.msg = result;
+        print(result);
+        _successDialog();
+      }
+      else {
+        // ERROR: Already Scanned!
+        result = 'LOADING...';
+        QRScanner2.msg = result;
+        print(result);
+        CircularProgressIndicator();
+      }
+      if (user.dayOf.containsKey(QRScanner2.event) || user.dayOf[QRScanner2.event] == true) {
+        result = 'ALREADY SCANNED!';
+        QRScanner2.msg = result;
+        print(result);
+        _existDialog();
+      }
+    } on LcsLoginFailed catch (e){
+      print(e);
+      // ERROR: LCS_LogIn_Failed!
+      result = 'LCS LOGIN FAILED!';
+      QRScanner2.msg = result;
+      print(result);
+      _loginFailedDialog();
+    }
+    return result;
+  }
+
 }

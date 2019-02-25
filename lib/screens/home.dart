@@ -62,14 +62,14 @@ class _HomeState extends State<Home>
       items: TabItems.map((TabItem) {
         return new BottomNavigationBarItem(
           backgroundColor: bluegrey_dark,
-          title: new Text(TabItem.title),
-          icon: new Icon(TabItem.icon),
+          title: new Text(TabItem.title,),
+          icon: new Icon(TabItem.icon, color: mintgreen_light,),
         );
       }).toList(),
       currentIndex: _tab,
       type: _type,
       onTap: onTap,
-      fixedColor: mintgreen_light,
+      fixedColor: white,
     );
 
     return Scaffold(
@@ -84,12 +84,6 @@ class _HomeState extends State<Home>
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: _qrcode,
-//            Navigator.push(context, MaterialPageRoute(builder: (context) => QRCode()),);
-//            try {
-//              await login('f@f.com','f');
-//            } on LcsLoginFailed catch (e) {
-//              Navigator.push(context, MaterialPageRoute(builder: (context) => Login()),);
-//            }
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
           foregroundColor: mintgreen_light,
@@ -119,8 +113,7 @@ class _HomeState extends State<Home>
           return new SimpleDialog(
             children: <Widget>[
               Container(
-                height: 300.0,
-                width: 300.0,
+                height: 300.0, width: 300.0,
                 child: Center(
                   child: QrImage(
                       version: 1,
@@ -130,7 +123,6 @@ class _HomeState extends State<Home>
                     ),
                 ),
               ),
-//              new Image.asset('assets/images/hackru_qrcode.png', fit: BoxFit.fill,)
             ],
           );
         },)){}
