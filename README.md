@@ -56,14 +56,11 @@ List of features goes here...
 ## To-Do List
 
 ### Done
-- Basic App Layout, Login/Signup UI, Announcements, Timer, Events, and Floor Map
+- Basic App Layout, Login/Signup UI, Announcements, Timer, Events, Floor Map, and LCS stuff w/ QRScaner and code gen
 
 ### Needs To Be Done
 1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
-2) QR Code Scanner UI is working, but need to connect with BackEnd (LCS) (Code Exists)
-2) QR Code Gen UI is working, but need to connect with BackEnd (LCS) (Code Exists)
-3) LogIn/SignUp UI is working but need to connect with BackEnd (LCS) (Code Exists)
-4) "About Page" (which will include Flutter App Dev Team Members, HackRU Rnd Reference, and about the app)
+2) "About Page" (which will include Flutter App Dev Team Members, HackRU Rnd Reference, and about the app)
 
 ## Links to Further docs
 TBA
