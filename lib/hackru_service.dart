@@ -4,6 +4,7 @@ import 'package:HackRU/models.dart';
 
 const _lcsUrl = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test'; // prod
 //const _lcsUrl = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test'; // test
+const _dayOf = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest';
 const _miscUrl = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 
 var client = new http.Client();
@@ -25,6 +26,10 @@ String toParam(LcsCredential credential) {
 
 Future<http.Response> getLcs(String endpoint, [LcsCredential credential]) {
   return client.get(_lcsUrl + endpoint + toParam(credential));
+}
+
+Future<http.Response> dayOfGetLcs(String endpoint, [LcsCredential credential]) {
+  return client.get(_dayOf + endpoint + toParam(credential));
 }
 
 Future<http.Response> postLcs(String endpoint, dynamic body, [LcsCredential credential]) async {

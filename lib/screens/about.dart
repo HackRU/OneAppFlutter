@@ -4,18 +4,7 @@ import 'package:HackRU/colors.dart';
 class About extends StatelessWidget {
   @override
   Widget build (BuildContext context) => new Scaffold(
-
-    //App Bar
-//    appBar: new AppBar(
-//      backgroundColor: bluegrey,
-//      title: new Text(
-//        'About HackRU',
-//        style: new TextStyle(
-//          fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 17.0 : 20.0,
-//        ),
-//      ),
-//      elevation: 0.3,
-//    ),
+    backgroundColor: bluegrey_dark,
 
     //Content of tabs
     body: new PageView(
@@ -23,7 +12,7 @@ class About extends StatelessWidget {
         new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text('About page content')
+            new Text('About page content', style: TextStyle(fontSize: 20, color: white),)
           ],
         )
       ],

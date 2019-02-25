@@ -17,7 +17,7 @@ class HelpButton extends StatelessWidget {
   }
   
   Widget build (BuildContext context) => new Card(
-    color: pink_dark,
+    color: green_tab,
     margin: EdgeInsets.all(10.0),
     elevation: 0.0,
     child: Container(
@@ -44,6 +44,7 @@ class HelpButton extends StatelessWidget {
 class Help extends StatelessWidget {
   @override
   Widget build (BuildContext context) => new Scaffold(
+    backgroundColor: bluegrey_dark,
     body: new FutureBuilder<List<HelpResource>>(
       future: helpResources(),
       builder: (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {

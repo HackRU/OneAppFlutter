@@ -1,4 +1,7 @@
+import 'package:HackRU/hackru_service.dart';
+import 'package:HackRU/models.dart';
 import 'package:HackRU/screens/login.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
@@ -9,6 +12,7 @@ import 'package:groovin_material_icons/groovin_material_icons.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
+  static String userEmail;
 
   @override
   _HomeState createState() => _HomeState();
@@ -21,6 +25,7 @@ class _HomeState extends State<Home>
   var _title_app = null;
   var _title_icon = null;
   PageController _tabController;
+
 
   @override
   void initState() {
@@ -57,14 +62,14 @@ class _HomeState extends State<Home>
       items: TabItems.map((TabItem) {
         return new BottomNavigationBarItem(
           backgroundColor: bluegrey_dark,
-          title: new Text(TabItem.title),
-          icon: new Icon(TabItem.icon),
+          title: new Text(TabItem.title,),
+          icon: new Icon(TabItem.icon, color: mintgreen_light,),
         );
       }).toList(),
       currentIndex: _tab,
       type: _type,
       onTap: onTap,
-      fixedColor: mintgreen_light,
+      fixedColor: white,
     );
 
     return Scaffold(
@@ -78,11 +83,7 @@ class _HomeState extends State<Home>
             ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Login()),
-            );
-          },
+          onPressed: _qrcode,
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
           foregroundColor: mintgreen_light,
@@ -105,6 +106,28 @@ class _HomeState extends State<Home>
     );
   }
 
+  Future<Null> _qrcode() async {
+    switch(await showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return new SimpleDialog(
+            children: <Widget>[
+              Container(
+                height: 300.0, width: 300.0,
+                child: Center(
+                  child: QrImage(
+                      version: 1,
+                      data: Home.userEmail,
+                      gapless: true,
+                      foregroundColor: bluegrey,
+                    ),
+                ),
+              ),
+            ],
+          );
+        },)){}
+  }
+
 }
 
 class TabItem {
@@ -118,3 +141,4 @@ const List<TabItem> TabItems = const <TabItem>[
   const TabItem(title: 'Timer', icon: GroovinMaterialIcons.timer,),
   const TabItem(title: 'Events', icon: GroovinMaterialIcons.calendar_today,),
 ];
+

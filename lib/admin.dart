@@ -4,6 +4,7 @@ import 'package:HackRU/screens/scanner2.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'colors.dart';
 import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
@@ -12,37 +13,16 @@ import 'package:HackRU/screens/about.dart';
 import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/help.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:HackRU/screens/home.dart';
 
-void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(Main());
-}
-
-class Main extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'HackRU',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: bluegrey_dark,
-        accentColor: mintgreen_light,
-      ),
-      home: Login(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+class AdminPage extends StatefulWidget {
+  AdminPage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _AdminPageState createState() => _AdminPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _AdminPageState extends State<AdminPage> {
   List<ScreenHiddenDrawer> items = new List();
 
   @override
@@ -62,6 +42,14 @@ class _MyHomePageState extends State<MyHomePage> {
           colorLineSelected: pink_light,
         ),
         Map()));
+
+    items.add(new ScreenHiddenDrawer(
+        new ItemHiddenMenu(
+          name: "Scanner",
+          colorTextUnSelected: white.withOpacity(0.5),
+          colorLineSelected: mintgreen_dark,
+        ),
+        QRScanner2()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
@@ -88,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return HiddenDrawerMenu(
       actionsAppBar: <Widget>[
         IconButton(icon: Icon(GroovinMaterialIcons.logout, color: pink_light,), color: pink_light, splashColor: pink_light, onPressed: (){Navigator.pop(context);})
+
       ],
       backgroundColorMenu: bluegrey_dark,
       backgroundColorAppBar: bluegrey_dark,
@@ -96,12 +85,5 @@ class _MyHomePageState extends State<MyHomePage> {
       screens: items,
     );
 
-  }
-}
-
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Transition transition) {
-    print(transition);
   }
 }

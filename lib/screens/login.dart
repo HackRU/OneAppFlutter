@@ -1,28 +1,23 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
+import 'package:HackRU/admin.dart';
 import 'package:HackRU/models.dart';
+import 'package:HackRU/screens/home.dart';
+import 'package:HackRU/screens/scanner2.dart';
 import 'package:HackRU/test.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/main.dart';
-import 'package:HackRU/screens/signup.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:HackRU/hackru_service.dart';
 
-class Login extends StatefulWidget {
-  @override
-  _LoginState createState() => _LoginState();
-}
+class Login extends StatelessWidget {
 
-class _LoginState extends State<Login> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _inputIsValid = true;
-  bool _loginSuccess = false;
 
   final formKey = new GlobalKey<FormState>();
+
   checkFields(){
     final form = formKey.currentState;
     if(form.validate()){
@@ -33,7 +28,7 @@ class _LoginState extends State<Login> {
   }
 
   loginUser(){
-      login(_usernameController.text, _passwordController.text);
+    login(_emailController.text, _passwordController.text);
   }
 
   @override
@@ -58,7 +53,7 @@ class _LoginState extends State<Login> {
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
                 style: TextStyle(fontSize: 20, color: bluegrey),
-                controller: _usernameController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Username',
                   fillColor: bluegrey,
@@ -89,17 +84,17 @@ class _LoginState extends State<Login> {
             ),
             ButtonBar(
               children: <Widget>[
-                OutlineButton(
-                    child: Text('CANCEL'),
-                    textColor: bluegrey,
-                    shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                    ),
-                    onPressed: (){
-                      _usernameController.clear();
-                      _passwordController.clear();
-                      Navigator.pop(context, 'Cancel');
-                    }),
+//                OutlineButton(
+//                    child: Text('CANCEL'),
+//                    textColor: bluegrey,
+//                    shape: BeveledRectangleBorder(
+//                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
+//                    ),
+//                    onPressed: (){
+//                      _emailController.clear();
+//                      _passwordController.clear();
+//                      Navigator.pop(context, 'Cancel');
+//                    }),
                 RaisedButton(
                   child: Text('LOGIN'),
                   color: pink_dark,
@@ -111,80 +106,48 @@ class _LoginState extends State<Login> {
                   ),
                   onPressed: () async {
                     try {
-                      await login(_usernameController.text, _passwordController.text);
-                      _loginSuccess = true;
+                      var cred = await login(_emailController.text, _passwordController.text);
+                      var user = await getUser(cred, _emailController.text);
+                      QRScanner2.cred = cred;
+                      Home.userEmail = _emailController.text;
+                      QRScanner2.userEmail = _emailController.text;
+                      QRScanner2.userPassword = _passwordController.text;
+                      print(user);
+                      if(user.role["director"] == true ){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
+                      }
+                      else{
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
+                      }
                     } on LcsLoginFailed catch (e) {
-                      print("LCS Login Failed!");
-                    }
-                    if (_loginSuccess == true) {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Main()),
-                      );
-                      _loginSuccess = false;
-                    } else {
-                      LcsLoginFailed();
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false,
+                      showDialog<void>(context: context, barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: bluegrey_dark,
+                          return AlertDialog(backgroundColor: bluegrey_dark,
                             title: Text("ERROR: \n'"+LcsLoginFailed().toString()+"'",
-                                style: TextStyle(fontSize: 16, color: pink_light),),
+                              style: TextStyle(fontSize: 16, color: pink_light),),
                             actions: <Widget>[
                               FlatButton(
                                 child: Text('OK', style: TextStyle(fontSize: 16, color: mintgreen_dark),),
-                                onPressed: () {
-                                  Navigator.pop(context, 'Ok');
-                                },
+                                onPressed: () {Navigator.pop(context, 'Ok');},
                               ),
                             ],
                           );
                         },
                       );
-//                      Navigator.push(context,
-//                        MaterialPageRoute(builder: (context) => Login()),
-//                      );
                     }
+                    _emailController.clear();
+                    _passwordController.clear();
                   },
+
                 ),
               ],
             ),
-//            RaisedButton(
-//              child: Text('TEST LCS'),
-//              color: pink_dark,
-//              textColor: white,
-//              textTheme: ButtonTextTheme.normal,
-//              elevation: 6.0,
-//              shape: BeveledRectangleBorder(
-//                borderRadius: BorderRadius.all(Radius.circular(3.0)),
-//              ),
-//              onPressed: (){this.postData();},
-//            ),
           ],
         ),
       ),
     );
   }
 
-//  var client = new http.Client();
-//  var url = "https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test/authorize";
-//  postData() async {
-//    Map map = {
-//      'email': 'f@f.com', 'password': 'f',
-//    };
-//    print(await apiRequest(url, map));
-//  }
-//
-//  Future<String> apiRequest(String url, Map jsonMap) async {
-//    HttpClient httpClient = new HttpClient();
-//    HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
-//    request.headers.set('content-type', 'application/json');
-//    request.add(utf8.encode(json.encode(jsonMap)));
-//    HttpClientResponse response = await request.close();
-//    String reply = await response.transform(utf8.decoder).join();
-//    httpClient.close();
-//    return reply;
-//  }
-
 }
+
+
