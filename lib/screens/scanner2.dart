@@ -317,7 +317,7 @@ class _QRScanner2State extends State<QRScanner2> {
   Future<Null> _successDialog() async {
     switch(await showDialog(
       context: context,
-      builder: (BuildContext context){
+      builder: (BuildContext context, {barrierDismissible: false}){
         return new AlertDialog(backgroundColor: bluegrey_dark,
           title: Text("SCANNED!", style: TextStyle(fontSize: 30, color: mintgreen_light), textAlign:  TextAlign.center),
           actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center,), onPressed: (){Navigator.pop(context);},),],
@@ -328,7 +328,7 @@ class _QRScanner2State extends State<QRScanner2> {
   Future<Null> _existDialog() async {
     switch(await showDialog(
       context: context,
-      builder: (BuildContext context){
+      builder: (BuildContext context, {barrierDismissible: false}){
         return new AlertDialog(backgroundColor: bluegrey_dark,
           title: Text("ALREADY SCANNED!", style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
           actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
@@ -339,7 +339,7 @@ class _QRScanner2State extends State<QRScanner2> {
   Future<Null> _loginFailedDialog() async {
     switch(await showDialog(
       context: context,
-      builder: (BuildContext context){
+      builder: (BuildContext context, {barrierDismissible: false}){
         return new AlertDialog(backgroundColor: bluegrey_dark,
           title: Text("LCS LOGIN FAILED!", style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
           actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
@@ -349,24 +349,29 @@ class _QRScanner2State extends State<QRScanner2> {
 
   Future<String> _lcsHandle() async {
     String result;
+    var user;
     try {
-      var user = await getUser(QRScanner2.cred, QRScanner2.qrResult);
-      if (!user.dayOf.containsKey(QRScanner2.event) || user.dayOf[QRScanner2.event] == false) {
-        updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
-        print(user);
-        result = 'SCANNED!';
-        QRScanner2.msg = result;
-        print(result);
-        _successDialog();
+      if(QRScanner2.qrResult != null) {
+        user = await getUser(QRScanner2.cred, QRScanner2.qrResult);
       }
-      else {
-        // ERROR: Already Scanned!
-        result = 'LOADING...';
-        QRScanner2.msg = result;
-        print(result);
-        CircularProgressIndicator();
-      }
-      if (user.dayOf.containsKey(QRScanner2.event) || user.dayOf[QRScanner2.event] == true) {
+        if (!user.dayOf.containsKey(QRScanner2.event) ||
+            user.dayOf[QRScanner2.event] == false) {
+          updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
+          print(user);
+          result = 'SCANNED!';
+          QRScanner2.msg = result;
+          print(result);
+          _successDialog();
+        }
+        else {
+          // ERROR: Already Scanned!
+          result = 'LOADING...';
+          QRScanner2.msg = result;
+          print(result);
+          CircularProgressIndicator();
+        }
+
+      if (user.dayOf[QRScanner2.event] == true) {
         result = 'ALREADY SCANNED!';
         QRScanner2.msg = result;
         print(result);
