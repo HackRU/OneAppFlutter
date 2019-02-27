@@ -183,7 +183,7 @@ class QRScanner2 extends StatefulWidget {
   final Map<String, dynamic> pluginParameters = {};
   static String userEmail, userPassword;
   static LcsCredential cred;
-  static String qrResult, msg, event;
+  static String qrResult, lastQrResult, msg, event;
 
   @override
   _QRScanner2State createState() => _QRScanner2State();
@@ -265,9 +265,18 @@ class _QRScanner2State extends State<QRScanner2> {
                     future: _barcodeString,
                     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                       QRScanner2.qrResult = snapshot.data;
-                      if(snapshot.data != null){
-                        _lcsHandle();
+                      snapshot.
+                      print("builder "+snapshot.data+" "+QRScanner2.qrResult);
+                      if(snapshot.data != null && snapshot.data != QRScanner2.lastQrResult){
+                        QRScanner2.lastQrResult = snapshot.data;
+                        _lcsHandle().then((String message){
+                          _scanDialog(message);
+                          //QRScanner2.qrResult = null;
+                          //QRScanner2.lastQrResult = null;
+                        });
                       }
+
+
                       return Padding(
                         padding: const EdgeInsets.only(top: 100.0),
                         child: Container(
@@ -279,8 +288,9 @@ class _QRScanner2State extends State<QRScanner2> {
                             padding: const EdgeInsets.all(25.0),
                             child: Column(
                               children: <Widget>[
-                                Text(QRScanner2.msg == null ?
-                                    'Note: Click [Camera Icon] Below to Scan QR Codes!' : '¯\\_(ツ)_/¯',
+                                Text('Note: Click [Camera Icon] Below to Scan QR Codes!',
+//                                   QRScanner2.msg == null ?
+//                                    'Note: Click [Camera Icon] Below to Scan QR Codes!' : '¯\\_(ツ)_/¯',
                                   style: TextStyle(color: mintgreen_light, fontSize: 25.0,), textAlign: TextAlign.center,),
                               ],
                             ),
@@ -297,6 +307,9 @@ class _QRScanner2State extends State<QRScanner2> {
       floatingActionButton: new FloatingActionButton.extended(
         backgroundColor: bluegrey,
         onPressed: () {
+          print("---------------scan button pressed ---------------------");
+          //QRScanner2.lastQrResult = null;
+          QRScanner2.qrResult = null;
           setState(() {
             _barcodeString = new QRCodeReader()
                 .setAutoFocusIntervalInMs(200)
@@ -314,34 +327,20 @@ class _QRScanner2State extends State<QRScanner2> {
     );
   }
 
-  Future<Null> _successDialog() async {
-    switch(await showDialog(
-      context: context,
-      builder: (BuildContext context, {barrierDismissible: false}){
-        return new AlertDialog(backgroundColor: bluegrey_dark,
-          title: Text("SCANNED!", style: TextStyle(fontSize: 30, color: mintgreen_light), textAlign:  TextAlign.center),
-          actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center,), onPressed: (){Navigator.pop(context);},),],
-        );
-      },)){}
-  }
+  void _successDialog() => _scanDialog("SCANNED!");
+  void _existDialog() => _scanDialog("ALREADY SCANNED!");
+  void _loginFailedDialog() => _scanDialog("LCS LOGIN FAILED");
+  void _updateError() => _scanDialog("ERROR UPDATING USER");
+  void _lcsError() => _scanDialog("ERROR TALKING TO SERVER");
+  void _noSuchUser() => _scanDialog("NO SUCH USER");
+  void _unknown() => _scanDialog("UNEXPECTED ERROR");
 
-  Future<Null> _existDialog() async {
+  void _scanDialog(String body) async {
     switch(await showDialog(
       context: context,
       builder: (BuildContext context, {barrierDismissible: false}){
         return new AlertDialog(backgroundColor: bluegrey_dark,
-          title: Text("ALREADY SCANNED!", style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
-          actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
-        );
-      },)){}
-  }
-
-  Future<Null> _loginFailedDialog() async {
-    switch(await showDialog(
-      context: context,
-      builder: (BuildContext context, {barrierDismissible: false}){
-        return new AlertDialog(backgroundColor: bluegrey_dark,
-          title: Text("LCS LOGIN FAILED!", style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
+          title: Text(body, style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
           actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
         );
       },)){}
@@ -349,11 +348,12 @@ class _QRScanner2State extends State<QRScanner2> {
 
   Future<String> _lcsHandle() async {
     String result;
+    print("called lcsHandle with qr:"+QRScanner2.lastQrResult+" "+QRScanner2.qrResult);
     var user;
     try {
       if(QRScanner2.qrResult != null) {
         user = await getUser(QRScanner2.cred, QRScanner2.qrResult);
-      }
+        print("here2");
         if (!user.dayOf.containsKey(QRScanner2.event) ||
             user.dayOf[QRScanner2.event] == false) {
           updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
@@ -361,21 +361,15 @@ class _QRScanner2State extends State<QRScanner2> {
           result = 'SCANNED!';
           QRScanner2.msg = result;
           print(result);
-          _successDialog();
-        }
-        else {
-          // ERROR: Already Scanned!
-          result = 'LOADING...';
+          //_successDialog();
+        } else {
+          result = 'ALREADY SCANNED!'+QRScanner2.qrResult+" "+QRScanner2.lastQrResult;
           QRScanner2.msg = result;
           print(result);
-          CircularProgressIndicator();
+          //_existDialog();
         }
-
-      if (user.dayOf[QRScanner2.event] == true) {
-        result = 'ALREADY SCANNED!';
-        QRScanner2.msg = result;
-        print(result);
-        _existDialog();
+      } else {
+        print("attempt to scan null");
       }
     } on LcsLoginFailed catch (e){
       print(e);
@@ -383,8 +377,38 @@ class _QRScanner2State extends State<QRScanner2> {
       result = 'LCS LOGIN FAILED!';
       QRScanner2.msg = result;
       print(result);
-      _loginFailedDialog();
+      //_loginFailedDialog();
+    } on UpdateError {
+      result = 'UPDATE ERROR';
+      QRScanner2.msg = result;
+      print(result);
+      //_updateError();
+    } on NoSuchUser {
+      result = 'NO SUCH USER';
+      QRScanner2.msg = result;
+      print(result);
+      //_noSuchUser();
+    } on LcsError {
+      result = 'LCS ERROR';
+      QRScanner2.msg = result;
+      print(result);
+      //_lcsError();
+    } on ArgumentError catch(e){
+      result = 'UNEXPECTED ERROR';
+      QRScanner2.msg = result;
+      print(result);
+      print(e);
+      print(e.invalidValue);
+      print(e.message);
+      print(e.name);
+      //_unknown();
+    } catch(e) {
+      result = 'UNEXPECTED ERROR';
+      QRScanner2.msg = result;
+      print(result);
+      //_unknown();
     }
+    //_scanDialog("");
     return result;
   }
 
