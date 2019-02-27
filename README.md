@@ -54,13 +54,19 @@ Will be available on Play Store and App Store
 List of features goes here...
 
 ## To-Do List
-
 ### Done
 - Basic App Layout, Login/Signup UI, Announcements, Timer, Events, Floor Map, and LCS stuff w/ QRScaner and code gen
 
 ### Needs To Be Done
 1) Write a String Parser for Announcement Messages from Slack (we need to remove emojies and user mentions)
 2) "About Page" (which will include Flutter App Dev Team Members, HackRU Rnd Reference, and about the app)
+3) scanner ux improvements
+- give the users some kinda loading spinner/text
+- better auto focus
+- hide scan button when selecting event so users know to click save
+
+### would be nice to get done
+1) refactoring to make things cleaner
 
 ## Links to Further docs
 TBA
