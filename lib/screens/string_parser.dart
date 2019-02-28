@@ -18,9 +18,22 @@ class RichTextView extends StatelessWidget {
 
   RichTextView({@required this.text});
 
+  bool _isTag(String input){
+    final matcher = new RegExp(
+        r"<!everyone>|<!channel>"
+    );
+    return matcher.hasMatch(input);
+  }
+
   bool _isLink(String input) {
     final matcher = new RegExp(
         r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
+    return matcher.hasMatch(input);
+  }
+
+  bool _isEmoji(String input) {
+    final matcher = new RegExp(
+        r"(\:.*?\:)");
     return matcher.hasMatch(input);
   }
 
@@ -30,12 +43,22 @@ class RichTextView extends StatelessWidget {
     final words = text.split(' ');
     List<TextSpan> span = [];
     words.forEach((word) {
-      span.add(_isLink(word)
-          ? new LinkTextSpan(
-          text: '$word ',
-          url: word,
-          style: _style.copyWith(color: green_tab))
-          : new TextSpan(text: '$word ', style: _style));
+      if(_isLink(word)){
+        span.add(new LinkTextSpan(
+            text: '$word ',
+            url: word,
+            style: _style.copyWith(color: green_tab)));
+      }
+      else if(_isEmoji(word)){
+        span.add(new TextSpan(text: '', style: _style));
+      }
+      else if(_isTag(word)){
+        span.add(new TextSpan(text: '', style: _style));
+      }
+      else{
+        span.add(new TextSpan(text: '$word ', style: _style));
+      }
+
     });
     if (span.length > 0) {
       return new RichText(
