@@ -362,6 +362,9 @@ class _QRScanner2State extends State<QRScanner2> {
             user.dayOf[QRScanner2.event] == false) {
           updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
           print(user);
+          if (QRScanner2.event = "checkIn") {
+            await print(user);
+          }
           result = 'SCANNED!';
         } else {
           result = 'ALREADY SCANNED!';
