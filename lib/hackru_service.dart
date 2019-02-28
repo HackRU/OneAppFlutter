@@ -62,6 +62,15 @@ Future<String> labelUrl() async {
   return response.body;
 }
 
+void printLabel(String email, [String url]) async {
+  if (url == null) {
+    url = await labelUrl();
+  }
+  print(url);
+  print(email);
+  //void response = http.get(url+email);
+}
+
 Future<List<HelpResource>> helpResources() async {
   var response =  await getMisc("/resources.json");
   var resources = json.decode(response.body);

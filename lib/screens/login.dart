@@ -138,13 +138,12 @@ class Login extends StatelessWidget {
                     _emailController.clear();
                     _passwordController.clear();
                   },
-
                 ),
               ],
             ),
             SizedBox(height: 60.0,),
-            Text('** Not for Hackers!', style: TextStyle(color: pink_dark, fontSize: 12.0, fontWeight: FontWeight.w700),),
-            Text('Test Access: (g@g.com) (g)', style: TextStyle(color: bluegrey_dark, fontSize: 12.0),),
+//            Text('** Not for Hackers!', style: TextStyle(color: pink_dark, fontSize: 12.0, fontWeight: FontWeight.w700),),
+//            Text('Test Access: (g@g.com) (g)', style: TextStyle(color: bluegrey_dark, fontSize: 12.0),),
           ],
         ),
       ),

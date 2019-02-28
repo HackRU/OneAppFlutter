@@ -65,7 +65,7 @@ void testGetUser() async {
 }
 void testOtherUser() async {
   var cred = await login(env["LCS_USER"], env["LCS_PASSWORD"]);
-  var user = await getUser(cred, "test1@regist.er");
+  var user = await getUser(cred, env["LCS_USER2"]);
   try {
     var baduser = await getUser(cred, "fail@email.com");
     assert(false);
