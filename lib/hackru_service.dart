@@ -62,9 +62,12 @@ Future<String> labelUrl() async {
   return response.body;
 }
 
-void printLabel(String url, String email) async {
+void printLabel(String email, [String url]) async {
+  if (url == null) {
+    url = await labelUrl();
+  }
   print(url);
-  print(email)
+  print(email);
   //void response = http.get(url+email);
 }
 
