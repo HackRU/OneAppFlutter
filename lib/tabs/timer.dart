@@ -38,49 +38,14 @@ class TimerState extends State<Timer> {
               Padding(padding: EdgeInsets.all(0)),
               Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [0,1,2,3,4,5,6,7].map((count) => FlipPanel.stream(
-                  itemStream: Stream.fromFuture(Future.delayed(
-                  Duration(milliseconds: random.nextInt(20) * 100),() => 1)),
-                  itemBuilder: (_, value) => value <= 0 ? Container(
-                    color: Colors.white,
-                    width: widthFactor * imageWidth,
-                    height: heightFactor * imageHeight,
+                children: [
+                  Image.asset('assets/images/hackru_green_logo.png',
+                    width: MediaQuery.of(context).size.width*0.8,
+                    fit: BoxFit.contain,
                   )
-                      : ClipRect(
-                      child: Align(
-                          alignment: Alignment(-1.0+count * 2 * 0.125+count * toleranceFactor, -1.0),
-                          widthFactor: widthFactor,
-                          heightFactor: heightFactor,
-                          child: Image.asset('assets/images/cover_image.png',
-                            width: imageWidth,
-                            height: imageHeight,
-                          ))),
-                    initValue: 0,
-                    spacing: 0.0,
-                direction: FlipDirection.up,)).toList(),
+                ]
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [0,1,2,3,4,5,6,7].map((count) => FlipPanel.stream(
-                  itemStream: Stream.fromFuture(Future.delayed(
-                   Duration(milliseconds: random.nextInt(20) * 100),() => 1)),
-                  itemBuilder: (_, value) => value <= 0 ? Container(
-                    color: Colors.white,
-                    width: widthFactor * imageWidth,
-                    height: heightFactor * imageHeight,
-                  )
-                      : ClipRect(
-                      child: Align(alignment: Alignment(-1.0+count * 2 * 0.125+count * toleranceFactor, 1.0),
-                          widthFactor: widthFactor,
-                          heightFactor: heightFactor,
-                          child: Image.asset('assets/images/cover_image.png',
-                            width: imageWidth,
-                            height: imageHeight,
-                          ))),
-                      initValue: 0,
-                      spacing: 0.0,
-                      direction: FlipDirection.down,)).toList(),
-              ),
+
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
