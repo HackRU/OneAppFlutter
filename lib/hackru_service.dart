@@ -2,9 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:HackRU/models.dart';
 
-const _lcsUrl = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test'; // prod
-//const _lcsUrl = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test'; // test
-const _dayOf = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest';
+const _lcsUrl = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest';
 const _miscUrl = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 
 var client = new http.Client();
@@ -29,7 +27,7 @@ Future<http.Response> getLcs(String endpoint, [LcsCredential credential]) {
 }
 
 Future<http.Response> dayOfGetLcs(String endpoint, [LcsCredential credential]) {
-  return client.get(_dayOf + endpoint + toParam(credential));
+  return client.get(_lcsUrl + endpoint + toParam(credential));
 }
 
 Future<http.Response> postLcs(String endpoint, dynamic body, [LcsCredential credential]) async {
@@ -93,8 +91,11 @@ Future<LcsCredential> login(String email, String password) async {
   }
 }
 
-Future<User> getUser(LcsCredential credential, [String targetEmail]) async {
-  if (targetEmail == null) {
+Future<User> getUser(LcsCredential credential, [String targetEmail = "MAGIC_MAN"]) async {
+  if(targetEmail == null) {
+    throw ArgumentError("null email");
+  }
+  if (targetEmail == "MAGIC_MAN") {
     targetEmail = credential.email;
   }
   var result = await postLcs("/read", {
