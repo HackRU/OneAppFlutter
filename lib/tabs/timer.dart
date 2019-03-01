@@ -24,7 +24,7 @@ class TimerState extends State<Timer> {
 
     final bool debugMode = false;
     DateTime now = DateTime.now();
-    DateTime dDay = DateTime(2019, 03, 09, 10, 0, 0);
+    DateTime dDay = DateTime(2019, 03, 10, 11, 30, 0);
     dDay = (debugMode)? DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second): dDay;
     Duration _duration = dDay.difference(now);
 
@@ -101,7 +101,8 @@ class TimerState extends State<Timer> {
                       width: 30.0,
                       height: 55.0,
                       borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                      onDone: () => print('Thanks for coming!!!'),
+                      onDone: () => print('Hacking ends!! Don\'t forget to submit your projects to DevPost. '
+                          'Thanks for coming to HackRU Spring \'19!!!'),
                     ),
                   ),
                 ],
