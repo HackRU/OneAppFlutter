@@ -37,6 +37,12 @@ class RichTextView extends StatelessWidget {
     return matcher.hasMatch(input);
   }
 
+  bool _isUserTag(String input) {
+    final matcher = new RegExp(
+        r"(\<@U.*?\>)");
+    return matcher.hasMatch(input);
+  }
+
   @override
   Widget build(BuildContext context) {
     final _style = TextStyle(fontSize: 15.0, color: bluegrey_dark,);
@@ -53,6 +59,9 @@ class RichTextView extends StatelessWidget {
         span.add(new TextSpan(text: '', style: _style));
       }
       else if(_isTag(word)){
+        span.add(new TextSpan(text: '', style: _style));
+      }
+      else if(_isUserTag(word)){
         span.add(new TextSpan(text: '', style: _style));
       }
       else{
