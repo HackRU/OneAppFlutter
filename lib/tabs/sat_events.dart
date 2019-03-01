@@ -11,28 +11,33 @@ class SatEvents extends StatelessWidget {
           eventTime:  '10:00 AM',
           eventTitle: 'Check-In',
           eventLocation:  'Main Lobby',
-          map: Image.asset('assets/images/map/registration.png')),
+          map: Image.asset('assets/images/map/registration.png'),
+          color: bluegrey_dark),
       EventStruct(
           eventTime:  '11:00 AM',
           eventTitle: 'Lunch',
           eventLocation:  'Food Area',
-          map: Image.asset('assets/images/map/foodArea.png')),
+          map: Image.asset('assets/images/map/foodArea.png'),
+          color: bluegrey_dark),
       EventStruct(
           eventTime:  '11:30 AM',
           eventTitle: 'Opening Ceremonies',
           eventLocation:  'Main Stage',
-          map: Image.asset('assets/images/map/stageArea.png')),
+          map: Image.asset('assets/images/map/stageArea.png'),
+          color: bluegrey_dark),
 
     EventStruct(
           eventTime:  '01:00 PM',
           eventTitle: 'Hacking Commences',
           eventLocation:  'Hacking Area',
-          map: Image.asset('assets/images/map/hackingArea.png')),
+          map: Image.asset('assets/images/map/hackingArea.png'),
+          color: pink_dark),
       EventStruct(
           eventTime:  '06:00 PM',
           eventTitle: 'Dinner',
           eventLocation:  'Food Area',
-          map: Image.asset('assets/images/map/foodArea.png')),
+          map: Image.asset('assets/images/map/foodArea.png'),
+          color: bluegrey_dark),
     ];
   }
 
@@ -47,9 +52,10 @@ class EventStruct {
   final String eventLocation;
   final String eventTime;
   final Widget map;
+  final Color color;
 
   EventStruct({
-    this.eventTitle, this.eventLocation, this.eventTime, this.map,
+    this.eventTitle, this.eventLocation, this.eventTime, this.map, this.color,
   });
 }
 
@@ -74,7 +80,7 @@ class EventListItem extends StatelessWidget{
         trailing: Icon(GroovinMaterialIcons.map_marker, color: bluegrey,),
         title: new Text(_eventStruct.eventTitle,
           style: new TextStyle(
-            color: bluegrey,
+            color: _eventStruct.color,
             fontWeight: FontWeight.w600,
             fontSize: 20.0,
           ),

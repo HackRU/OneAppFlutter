@@ -12,37 +12,44 @@ class SunEvents extends StatelessWidget {
           eventTime:  '12:00 AM',
           eventTitle: 'Midnight Surprise',
           eventLocation:  "It's a surprise",
-          map: Image.asset('assets/images/map/stageArea.png')),
+          map: Image.asset('assets/images/map/stageArea.png'),
+          color: bluegrey_dark),
       EventStruct(
           eventTime:  '02:00 AM',
           eventTitle: 'Midnight Snacks',
           eventLocation:  "Food Area",
-          map: Image.asset('assets/images/map/foodArea.png')),
+          map: Image.asset('assets/images/map/foodArea.png'),
+          color: bluegrey_dark),
       EventStruct(
           eventTime:  '07:30 AM',
           eventTitle: 'Breakfast',
           eventLocation:  'Food Area',
-          map: Image.asset('assets/images/map/foodArea.png')),
+          map: Image.asset('assets/images/map/foodArea.png'),
+          color: bluegrey_dark),
       EventStruct(
           eventTime:  '11:30 AM',
           eventTitle: 'Hacking Ends',
           eventLocation:  'Hacking Area',
-          map: Image.asset('assets/images/map/hackingArea.png')),
+          map: Image.asset('assets/images/map/hackingArea.png'),
+          color: pink_dark),
       EventStruct(
           eventTime:  '11:30 AM',
           eventTitle: 'Lunch',
           eventLocation:  'Food Area',
-          map: Image.asset('assets/images/map/foodArea.png')),
+          map: Image.asset('assets/images/map/foodArea.png'),
+          color: bluegrey_dark),
       EventStruct(
           eventTime:  '12:00 PM',
           eventTitle: 'Demos Begin',
           eventLocation:  'Hacking Area',
-          map: Image.asset('assets/images/map/hackingArea.png')),
+          map: Image.asset('assets/images/map/hackingArea.png'),
+          color: bluegrey_dark),
       EventStruct(
           eventTime:  '02:00 PM',
           eventTitle: 'Closing Ceremonies',
           eventLocation:  'Main Stage',
-          map: Image.asset('assets/images/map/stageArea.png')),
+          map: Image.asset('assets/images/map/stageArea.png'),
+          color: bluegrey_dark),
     ];
   }
 
@@ -57,9 +64,10 @@ class EventStruct {
   final String eventLocation;
   final String eventTime;
   final Widget map;
+  final Color color;
 
   EventStruct({
-    this.eventTitle, this.eventLocation, this.eventTime,this.map,
+    this.eventTitle, this.eventLocation, this.eventTime,this.map, this.color,
   });
 }
 
@@ -84,7 +92,7 @@ class EventListItem extends StatelessWidget{
         trailing: Icon(GroovinMaterialIcons.map_marker, color: bluegrey,),
         title: new Text(_eventStruct.eventTitle,
           style: new TextStyle(
-            color: bluegrey,
+            color: _eventStruct.color,
             fontWeight: FontWeight.w600,
             fontSize: 20.0,
           ),

@@ -13,7 +13,8 @@ const bluegrey_dark = const Color(0xFF3E5569);
 const grey_light = const Color(0xFFECEFF1);
 const shadow = const Color(0xFFA9f6E5);
 const green_tab = const Color(0xFF1eb997);
-const transp = const Color(0x263E5569);     //1A, 26, 33
+const transp = const Color(0x263E5569);
+var fb = Colors.lightBlue[400];
 
 const g_blueDark_blueLight = const LinearGradient(
     colors: [mintgreen_dark, bluegrey],
