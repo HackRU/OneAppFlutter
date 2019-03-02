@@ -29,8 +29,8 @@ class HelpButton extends StatelessWidget {
           children: <Widget> [
             Expanded(
               child: new Text(
-                resource.name,
-                style: TextStyle(fontWeight: FontWeight.bold, color: white, fontSize: 25,),
+                resource.name.toUpperCase(),
+                style: TextStyle(color: white, fontSize: 25,),
                 textAlign: TextAlign.center
               )
             )
@@ -51,7 +51,9 @@ class Help extends StatelessWidget {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-          return new Text('loading');
+          return Center(
+            child: new CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+          );
           default:
           print(snapshot.hasError);
           var resources = snapshot.data;

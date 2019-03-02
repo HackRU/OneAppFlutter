@@ -79,6 +79,14 @@ Future<List<HelpResource>> helpResources() async {
   ).toList();
 }
 
+Future<List<SlackResource>> slackResources() async {
+  var response =  await dayOfGetLcs('/dayof-slack');
+  var resources = json.decode(response.body);
+  return resources.map<SlackResource>(
+          (resource) => new SlackResource.fromJson(resource)
+  ).toList();
+}
+
 // lcs functions
 
 // /authorize can give wrong status codes
