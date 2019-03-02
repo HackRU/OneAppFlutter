@@ -194,13 +194,12 @@ class QRScanner2 extends StatefulWidget {
 class _QRScanner2State extends State<QRScanner2> {
   List<DemoItem<dynamic>> _demoItems;
   Future<String> _message;
+  var _isVisible;
 
   @override
   void initState() {
     super.initState();
-    //_message = (()async=>'Note: Click [Camera Icon] Below to Scan QR Codes!')();
     _message = Future<String>.sync(()=>'Note: Click [Camera Icon] Below to Scan QR Codes!');
-
     _demoItems = <DemoItem<dynamic>>[
       DemoItem<Location>(name: 'Scanning...', value: Location.checkIn, hint: 'Select Event',
           valueToString: (Location location) => location.toString().split('.')[1],
@@ -259,6 +258,12 @@ class _QRScanner2State extends State<QRScanner2> {
                         print(event.toString().substring(event.toString().indexOf('.')+1));
                         QRScanner2.event = event.toString().substring(event.toString().indexOf('.')+1);
 
+                        if(item.isExpanded){
+                          _isVisible = false;
+                        } else{
+                          _isVisible = true;
+                        }
+
                         return ExpansionPanel( isExpanded: item.isExpanded, headerBuilder: item.headerBuilder, body: item.build());}).toList()
                   ),
                 ),
@@ -290,8 +295,6 @@ class _QRScanner2State extends State<QRScanner2> {
                             child: Column(
                               children: <Widget>[
                                 Text(text,
-//                                   QRScanner2.msg == null ?
-//                                    'Note: Click [Camera Icon] Below to Scan QR Codes!' : '¯\\_(ツ)_/¯',
                                   style: TextStyle(color: mintgreen_light, fontSize: 25.0,), textAlign: TextAlign.center,),
                               ],
                             ),
@@ -305,36 +308,33 @@ class _QRScanner2State extends State<QRScanner2> {
           ),
         ],
       ),
-      floatingActionButton: new FloatingActionButton.extended(
-        backgroundColor: bluegrey,
-        onPressed: () async {
-          print("---------------scan button pressed ---------------------");
-
-          var _barcodeString = await new QRCodeReader()
+      floatingActionButton: new Opacity(
+        opacity: _isVisible == true ? 1.0 : 0.0,
+        child: new FloatingActionButton.extended(
+          backgroundColor: bluegrey,
+          onPressed: () async {
+            print("---------------scan button pressed ---------------------");
+            var _barcodeString = await new QRCodeReader()
                 .setAutoFocusIntervalInMs(200)
                 .setForceAutoFocus(true)
                 .setTorchEnabled(true)
                 .setHandlePermissions(true)
                 .setExecuteAfterPermissionGranted(true)
                 .scan();
-          print("processing _barcodeString");
-          if(popup) {
-            var message = await _lcsHandle(_barcodeString);
-            _scanDialog(message);
-          } else {
-            setState(() {
-              _message = _lcsHandle(_barcodeString);
-            });
-          }
-
-
-        //QRScanner2.qrResult = null;
-        //QRScanner2.lastQrResult = null;
-
-        },
-        tooltip: 'QRCode Reader',
-        icon: Icon(FontAwesomeIcons.camera, color: mintgreen_light,),
-        label: Text('Scan', style: TextStyle(fontSize: 15.0, color: mintgreen_light),),
+            print("processing _barcodeString");
+            if(popup) {
+              var message = await _lcsHandle(_barcodeString);
+              _scanDialog(message);
+            } else {
+              setState(() {
+                _message = _lcsHandle(_barcodeString);
+              });
+            }
+          },
+          tooltip: 'QRCode Reader',
+          icon: Icon(FontAwesomeIcons.camera, color: mintgreen_light,),
+          label: Text('Scan', style: TextStyle(fontSize: 15.0, color: mintgreen_light),),
+        ),
       ),
     );
   }
