@@ -45,6 +45,24 @@ class HelpResource {
     url = json["url"];
 }
 
+class SlackResource {
+  final List data;
+  final String text;
+  final String ts;
+
+  SlackResource(this.data, this.text, this.ts);
+
+  @override
+  String toString() {
+    return "data";
+  }
+
+  SlackResource.fromJson(Map<String, dynamic> json)
+      : data = json['body'],
+        text = json['text'],
+        ts = json['ts'];
+}
+
 class User {
   final String name;
   final String email;

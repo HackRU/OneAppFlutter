@@ -87,6 +87,8 @@ class TimerState extends State<Timer> {
                   spacing: 0.0,
                   direction: FlipDirection.down,)).toList(),
               ),
+              SizedBox(height: 15.0,),
+              Text('Hacking Ends In...', style: TextStyle(color: pink_light, fontSize: 25.0,), textAlign: TextAlign.center,),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[

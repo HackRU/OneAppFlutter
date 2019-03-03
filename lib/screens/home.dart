@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/tabs/announcements.dart' as _firstTab;
+//import 'package:HackRU/tabs/slack.dart' as _firstTab;
 import 'package:HackRU/tabs/timer.dart' as _secondTab;
 import 'package:HackRU/tabs/events.dart' as _thirdTab;
 import 'package:groovin_material_icons/groovin_material_icons.dart';
