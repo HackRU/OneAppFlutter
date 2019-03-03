@@ -308,34 +308,32 @@ class _QRScanner2State extends State<QRScanner2> {
           ),
         ],
       ),
-      floatingActionButton: new Opacity(
-        opacity: _isVisible == true ? 1.0 : 0.0,
-        child: new FloatingActionButton.extended(
-          backgroundColor: bluegrey,
-          onPressed: () async {
-            print("---------------scan button pressed ---------------------");
-            var _barcodeString = await new QRCodeReader()
-                .setAutoFocusIntervalInMs(200)
-                .setForceAutoFocus(true)
-                .setTorchEnabled(true)
-                .setHandlePermissions(true)
-                .setExecuteAfterPermissionGranted(true)
-                .scan();
-            print("processing _barcodeString");
-            if(popup) {
-              var message = await _lcsHandle(_barcodeString);
-              _scanDialog(message);
-            } else {
-              setState(() {
-                _message = _lcsHandle(_barcodeString);
-              });
-            }
-          },
-          tooltip: 'QRCode Reader',
-          icon: Icon(FontAwesomeIcons.camera, color: mintgreen_light,),
-          label: Text('Scan', style: TextStyle(fontSize: 15.0, color: mintgreen_light),),
-        ),
-      ),
+      floatingActionButton: _isVisible == false ? null
+      : new FloatingActionButton.extended(
+      backgroundColor: bluegrey,
+      onPressed: () async {
+        print("---------------scan button pressed ---------------------");
+        var _barcodeString = await new QRCodeReader()
+            .setAutoFocusIntervalInMs(200)
+            .setForceAutoFocus(true)
+            .setTorchEnabled(true)
+            .setHandlePermissions(true)
+            .setExecuteAfterPermissionGranted(true)
+            .scan();
+        print("processing _barcodeString");
+        if(popup) {
+          var message = await _lcsHandle(_barcodeString);
+          _scanDialog(message);
+        } else {
+          setState(() {
+            _message = _lcsHandle(_barcodeString);
+          });
+        }
+      },
+      tooltip: 'QRCode Reader',
+      icon: Icon(FontAwesomeIcons.camera, color: mintgreen_light,),
+      label: Text('Scan', style: TextStyle(fontSize: 15.0, color: mintgreen_light),),
+    ),
     );
   }
 

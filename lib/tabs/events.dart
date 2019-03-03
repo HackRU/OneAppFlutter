@@ -1,3 +1,4 @@
+import 'package:HackRU/tabs/sat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HackRU/colors.dart';
@@ -51,7 +52,7 @@ class EventsState extends State<Events>
             automaticallyImplyLeading: false,
         ),
         body: getTabBarView(<Widget>[
-          new SatEvents(), new SunEvents()])
+          new SatEvents2(), new SunEvents()])
     );
   }
 }

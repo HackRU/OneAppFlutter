@@ -57,6 +57,22 @@ class Announcement {
   Announcement.fromJson(Map<String, dynamic> json) : text = json["text"], ts = json['ts'];
 }
 
+class Event {
+  final String summary;
+  final String location;
+  final DateTime start;
+
+  Event({this.summary, this.location, this.start});
+
+  @override
+  String toString() { return "{name: ${this.summary}, " + "location: ${this.location}, " + "time: ${this.start}, "; }
+
+  Event.fromJson(Map<String, dynamic> json) :
+        summary = json['summary'],
+        location = json['location'],
+        start = DateTime.parse(json['start']);
+}
+
 class User {
   final String name;
   final String email;
