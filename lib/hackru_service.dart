@@ -59,16 +59,18 @@ Future<List<String>> events() async {
 
 Future<String> labelUrl() async {
   var response = await getMisc("/label-url.txt");
-  return response.body;
+  // In case there is a newline character at the end, remove it (there was before)
+  return response.body.replaceAll("\n", "");
 }
 
 void printLabel(String email, [String url]) async {
   if (url == null) {
     url = await labelUrl();
   }
-  print(url);
-  print(email);
-  //void response = http.get(url+email);
+  var response = await client.post(url, headers: {"Content-Type": "application/json"}, body: "{\"email\": \"$email\"}");
+  if (response.statusCode != 200) {
+    throw LabelPrintingError();
+  }
 }
 
 Future<List<HelpResource>> helpResources() async {
