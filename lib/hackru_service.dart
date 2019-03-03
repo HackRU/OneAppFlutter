@@ -30,6 +30,10 @@ Future<http.Response> dayOfGetLcs(String endpoint, [LcsCredential credential]) {
   return client.get(_lcsUrl + endpoint + toParam(credential));
 }
 
+Future<http.Response> dayOfEvents(String endpoint, [LcsCredential credential]) {
+  return client.get(_lcsUrl + endpoint + toParam(credential));
+}
+
 Future<http.Response> postLcs(String endpoint, dynamic body, [LcsCredential credential]) async {
   var encodedBody = jsonEncode(body);
   var result = await client.post(_lcsUrl + endpoint + toParam(credential),
@@ -68,7 +72,6 @@ void printLabel(String email, [String url]) async {
   }
   print(url);
   print(email);
-  //void response = http.get(url+email);
 }
 
 Future<List<HelpResource>> helpResources() async {
@@ -79,12 +82,13 @@ Future<List<HelpResource>> helpResources() async {
   ).toList();
 }
 
-Future<List<SlackResource>> slackResources() async {
+Future<List<Announcement>> slackResources() async {
   var response =  await dayOfGetLcs('/dayof-slack');
   var resources = json.decode(response.body);
-  return resources.map<SlackResource>(
-          (resource) => new SlackResource.fromJson(resource)
+  var mapped = resources["body"].map<Announcement>(
+          (resource) => new Announcement.fromJson(resource)
   ).toList();
+  return mapped;
 }
 
 // lcs functions
