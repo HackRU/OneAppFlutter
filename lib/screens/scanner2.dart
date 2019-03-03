@@ -314,6 +314,18 @@ class _QRScanner2State extends State<QRScanner2> {
           backgroundColor: bluegrey,
           onPressed: () async {
             print("---------------scan button pressed ---------------------");
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context, {barrierDismissible: false}){
+                  return new AlertDialog(backgroundColor: bluegrey_dark,
+                    title: Center(
+                      child: new CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                    ),
+                  );
+                }
+            );
             var _barcodeString = await new QRCodeReader()
                 .setAutoFocusIntervalInMs(200)
                 .setForceAutoFocus(true)
@@ -322,10 +334,26 @@ class _QRScanner2State extends State<QRScanner2> {
                 .setExecuteAfterPermissionGranted(true)
                 .scan();
             print("processing _barcodeString");
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context, {barrierDismissible: false}){
+                  return new AlertDialog(backgroundColor: bluegrey_dark,
+                    title: Center(
+                      child: new CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                    ),
+                  );
+                }
+            );
             if(popup) {
               var message = await _lcsHandle(_barcodeString);
+              Navigator.pop(context);
+              Navigator.pop(context);
               _scanDialog(message);
             } else {
+              Navigator.pop(context);
+              Navigator.pop(context);
               setState(() {
                 _message = _lcsHandle(_barcodeString);
               });
@@ -357,17 +385,17 @@ class _QRScanner2State extends State<QRScanner2> {
     try {
       if(email != null) {
         user = await getUser(QRScanner2.cred, email);
-        print("here2");
         if (!user.dayOf.containsKey(QRScanner2.event) ||
             user.dayOf[QRScanner2.event] == false) {
           updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
           print(user);
-          if (QRScanner2.event == "checkIn") {
-            await print(user);
-          }
           result = "SCANNED!";
         } else {
           result = 'ALREADY SCANNED!';
+        }
+        if (QRScanner2.event == "checkIn") {
+          await printLabel(email);
+          result = "SCANNED!";
         }
       } else {
         print("attempt to scan null");
@@ -380,6 +408,8 @@ class _QRScanner2State extends State<QRScanner2> {
       result = 'NO SUCH USER';
     } on LcsError {
       result = 'LCS ERROR';
+    } on LabelPrintingError {
+      result = "ERROR PRINTING LABEL";
     } on ArgumentError catch(e){
       result = 'UNEXPECTED ERROR';
       print(result);

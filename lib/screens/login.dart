@@ -105,6 +105,19 @@ class Login extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(3.0)),
                   ),
                   onPressed: () async {
+                    // Show a dialog with a loading animation
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context, {barrierDismissible: false}){
+                        return new AlertDialog(backgroundColor: bluegrey_dark,
+                          title: Center(
+                            child: new CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                          ),
+                        );
+                      }
+                    );
                     try {
                       var cred = await login(_emailController.text, _passwordController.text);
                       var user = await getUser(cred, _emailController.text);
@@ -113,6 +126,8 @@ class Login extends StatelessWidget {
                       QRScanner2.userEmail = _emailController.text;
                       QRScanner2.userPassword = _passwordController.text;
                       print(user);
+                      // Dismiss the loading dialog
+                      Navigator.pop(context);
                       if(user.role["director"] == true ){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
                       }
@@ -120,6 +135,8 @@ class Login extends StatelessWidget {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
                       }
                     } on LcsLoginFailed catch (e) {
+                      // Dismiss the loading dialog
+                      Navigator.pop(context);
                       showDialog<void>(context: context, barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(backgroundColor: bluegrey_dark,
