@@ -8,9 +8,16 @@ class LcsCredential {
 
   LcsCredential(this.email, this.token, this.expiration);
 
+  String jsonString() {
+    var exp = this.expiration.toIso8601String();
+    return '{"email": "${this.email}", '
+    + '"token": "${this.token}", '
+    + '"valid_until": "$exp"}';
+  }
+  
   @override
   String toString() {
-    return "LcsCredentail{email: ${this.email}, "
+    return "LcsCredential{email: ${this.email}, "
     + "token: ${this.token}, "
     + "expiration: ${this.expiration}}";
   }

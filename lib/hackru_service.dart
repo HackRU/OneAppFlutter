@@ -86,7 +86,7 @@ Future<List<SlackResource>> slackResources() async {
   var resources = json.decode(response.body);
   return resources.map<SlackResource>(
           (resource) => new SlackResource.fromJson(resource)
-  ).toList();
+        ).toList();
 }
 
 // lcs functions
