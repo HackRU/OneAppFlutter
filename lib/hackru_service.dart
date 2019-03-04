@@ -87,7 +87,7 @@ Future<List<SlackResource>> slackResources() async {
   return resources["body"]
     .where((resource) => resource["text"] != null)
     .map<SlackResource>(
-      (resource) => return SlackResource.fromJson(resource);
+      (resource) => SlackResource.fromJson(resource)
     ).toList();
 }
 
