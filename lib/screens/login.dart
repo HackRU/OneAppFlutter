@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context, {barrierDismissible: false}){
-        return new AlertDialog(backgroundColor: bluegrey_dark,
+        return new AlertDialog(backgroundColor: Colors.transparent,
           title: Center(
             child: new CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
