@@ -9,8 +9,8 @@ Future<String> _appPath() async {
   return (await getApplicationDocumentsDirectory()).path;
 }
 
-Future<File> storedCredentialFile() async {
-  var path = (await _appPath())+"/credential.json";
+Future<File> storedFile(String name) async {
+  var path = (await _appPath()) + "/" + name;
   var f = await File(path);
   if (!(await f.exists())) {
     await f.create();
@@ -18,14 +18,18 @@ Future<File> storedCredentialFile() async {
   return f;
 }
 
+Future<File> storedCredentialFile() => storedFile("credential.json");
+
+Future<File> storedSlacksFile() => storedFile("slacks.json");
+
 Future<LcsCredential> getStoredCredential() async {
-    var credFile = await storedCredentialFile();
-    var contents = await credFile.readAsString();
-    if (contents == "") {
-      return null;
-    }
-    var decoded = json.decode(contents);
-    return LcsCredential.fromJson(decoded);
+  var credFile = await storedCredentialFile();
+  var contents = await credFile.readAsString();
+  if (contents == "") {
+    return null;
+  }
+  var decoded = json.decode(contents);
+  return LcsCredential.fromJson(decoded);
 }
 
 void setStoredCredential(LcsCredential cred) async {
@@ -34,6 +38,26 @@ void setStoredCredential(LcsCredential cred) async {
 }
 
 void deleteStoredCredential() async {
-    var credFile = await storedCredentialFile();
-    await credFile.delete();
+  var credFile = await storedCredentialFile();
+  await credFile.delete();
+}
+
+Future<List<SlackResource>> getStoredSlacks() async {
+  var slacksFile = await storedSlacksFile();
+  var contents = await slacksFile.readAsString();
+  if (contents == "") {
+    return null;
+  }
+  List<Map<String, dynamic>> decoded = json.decode(contents);
+  return decoded.map((slack) => SlackResource.fromJson(slack)).toList();
+}
+
+setStoredSlacks(List<SlackResource> slacks) async {
+  var slacksFile = await storedSlacksFile();
+  var slacksString = "[" +
+    slacks.map(
+      (slack) => slack.toString
+    ).toList().join(",") +
+    "]";
+  await slacksFile.writeAsString(slacksString);
 }
