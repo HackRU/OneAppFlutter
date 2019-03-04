@@ -383,17 +383,17 @@ class _QRScanner2State extends State<QRScanner2> {
     try {
       if(email != null) {
         user = await getUser(QRScanner2.cred, email);
-        print("here2");
         if (!user.dayOf.containsKey(QRScanner2.event) ||
             user.dayOf[QRScanner2.event] == false) {
           updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
           print(user);
-          if (QRScanner2.event == "checkIn") {
-            await print(user);
-          }
           result = "SCANNED!";
         } else {
           result = 'ALREADY SCANNED!';
+        }
+        if (QRScanner2.event == "checkIn") {
+          await printLabel(email);
+          result = "SCANNED!";
         }
       } else {
         print("attempt to scan null");
@@ -406,6 +406,8 @@ class _QRScanner2State extends State<QRScanner2> {
       result = 'NO SUCH USER';
     } on LcsError {
       result = 'LCS ERROR';
+    } on LabelPrintingError {
+      result = "ERROR PRINTING LABEL";
     } on ArgumentError catch(e){
       result = 'UNEXPECTED ERROR';
       print(result);

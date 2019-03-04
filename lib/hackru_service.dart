@@ -63,7 +63,8 @@ Future<List<String>> events() async {
 
 Future<String> labelUrl() async {
   var response = await getMisc("/label-url.txt");
-  return response.body;
+  // In case there is a newline character at the end, remove it (there was before)
+  return response.body.replaceAll("\n", "");
 }
 
 void printLabel(String email, [String url]) async {
