@@ -18,11 +18,13 @@ class AnnouncementsState extends State<Announcements> {
   Stream<List<SlackResource>> _getSlacks() {
     var streamctl = StreamController<List<SlackResource>>();
     getStoredSlacks().then((storedSlacks) {
-        streamctl.sink.add(storedSlacks);
+        if (storedSlacks != null) {
+          streamctl.sink.add(storedSlacks);
+        }
         return slackResources();
     }).then((networkSlacks){
         streamctl.sink.add(networkSlacks);
-        setSlacks(networkSlacks);
+        setStoredSlacks(networkSlacks);
     });
     return streamctl.stream;
   }
@@ -30,8 +32,8 @@ class AnnouncementsState extends State<Announcements> {
   @override
   Widget build (BuildContext context) => new Scaffold(
       backgroundColor: bluegrey_dark,
-      body: new FutureBuilder<List<SlackResource>>(
-          future: slackResources(),
+      body: new StreamBuilder<List<SlackResource>>(
+          stream: _getSlacks(),
           builder: (BuildContext context, AsyncSnapshot<List<SlackResource>> snapshot) {
             print(snapshot.data);
             switch (snapshot.connectionState) {
