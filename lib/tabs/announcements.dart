@@ -39,20 +39,29 @@ class Announcements extends StatefulWidget {
 
 
 class AnnouncementsState extends State<Announcements> {
+  static DateTime cacheTTL = DateTime.now();
+
   Stream<List<Announcement>> _getSlacks() {
     var streamctl = StreamController<List<Announcement>>();
     getStoredSlacks().then((storedSlacks) {
         if (storedSlacks != null) {
           streamctl.sink.add(storedSlacks);
         }
-        return slackResources();
+        if (cacheTTL.isBefore(DateTime.now())) {
+          return slackResources();
+        } else {
+          return null;
+        }
     }).then((networkSlacks){
-        streamctl.sink.add(networkSlacks);
-        setStoredSlacks(networkSlacks);
+        if (networkSlacks != null) {
+          streamctl.sink.add(networkSlacks);
+          setStoredSlacks(networkSlacks);
+          cacheTTL = DateTime.now().add(Duration(minutes: 9));
+        }
     });
     return streamctl.stream;
   }
-  
+
   @override
   Widget build (BuildContext context) => new Scaffold(
       backgroundColor: bluegrey_dark,
