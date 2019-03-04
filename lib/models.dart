@@ -154,3 +154,8 @@ class UpdateError implements Exception {
   String errorMessage() => "Failed to update user: $lcsMessage";
   String toString() => errorMessage();
 }
+
+class LabelPrintingError implements Exception {
+  String errorMessage() => "Error printing label!";
+  String toString() => errorMessage();
+}

@@ -70,8 +70,10 @@ void printLabel(String email, [String url]) async {
   if (url == null) {
     url = await labelUrl();
   }
-  print(url);
-  print(email);
+  var response = await client.post(url, headers: {"Content-Type": "application/json"}, body: "{\"email\": \"$email\"}");
+  if (response.statusCode != 200) {
+    throw LabelPrintingError();
+  }
 }
 
 Future<List<HelpResource>> helpResources() async {
