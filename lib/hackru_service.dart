@@ -84,9 +84,11 @@ Future<List<HelpResource>> helpResources() async {
 Future<List<SlackResource>> slackResources() async {
   var response =  await dayOfGetLcs('/dayof-slack');
   var resources = json.decode(response.body);
-  return resources.map<SlackResource>(
-          (resource) => new SlackResource.fromJson(resource)
-        ).toList();
+  return resources["body"]
+    .where((resource) => resource["text"] != null)
+    .map<SlackResource>(
+      (resource) => return SlackResource.fromJson(resource);
+    ).toList();
 }
 
 // lcs functions
