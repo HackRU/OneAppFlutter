@@ -48,7 +48,7 @@ Future<List<SlackResource>> getStoredSlacks() async {
   if (contents == "") {
     return null;
   }
-  List<Map<String, dynamic>> decoded = json.decode(contents);
+  List<dynamic> decoded = json.decode(contents);
   return decoded.map((slack) => SlackResource.fromJson(slack)).toList();
 }
 
@@ -56,8 +56,13 @@ setStoredSlacks(List<SlackResource> slacks) async {
   var slacksFile = await storedSlacksFile();
   var slacksString = "[" +
     slacks.map(
-      (slack) => slack.toString
+      (slack) => slack.toString()
     ).toList().join(",") +
     "]";
   await slacksFile.writeAsString(slacksString);
+}
+
+Future<void> deleteStoredSlacks() async {
+  var slacksFile = await storedSlacksFile();
+  await slacksFile.delete();
 }
