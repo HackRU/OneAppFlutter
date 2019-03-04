@@ -54,12 +54,10 @@ Will be available on Play Store and App Store
 List of features goes here...
 
 ## To-Do List
-### Done
-- Basic App Layout, Login/Signup UI, Announcements, Timer, Events, Floor Map, and LCS stuff w/ QRScaner and code gen
+### Almost, Ready for Launch!!
 
-
-### would be nice to get done
-1) refactoring to make things cleaner
+### Would Be Nice to Get It Done
+1) Refactoring to make things cleaner :)
 
 ## Links to Further docs
 TBA
