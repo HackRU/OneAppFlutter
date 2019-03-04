@@ -1,3 +1,4 @@
+import 'package:HackRU/loading_indicator.dart';
 import 'package:HackRU/screens/string_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
@@ -73,7 +74,7 @@ class AnnouncementsState extends State<Announcements> {
               case ConnectionState.none:
               case ConnectionState.waiting:
                 return Center(
-                  child: new CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                  child: new ColorLoader2(),
                 );
               default:
                 print(snapshot.hasError);

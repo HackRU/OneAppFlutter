@@ -121,6 +121,7 @@ class _HomeState extends State<Home>
                 ),
               ),
             ],
+            backgroundColor: white,
           );
         },)){}
   }

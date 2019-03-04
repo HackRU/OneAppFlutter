@@ -1,3 +1,4 @@
+import 'package:HackRU/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +8,7 @@ import 'package:HackRU/models.dart';
 class HelpButton extends StatelessWidget {
   HelpButton({@required this.resource});
   final HelpResource resource;
-  
+
   void _open() async {
     if (await canLaunch(resource.url)) {
       await launch(resource.url);
@@ -15,7 +16,7 @@ class HelpButton extends StatelessWidget {
       print("failed to launch url");
     }
   }
-  
+
   Widget build (BuildContext context) => new Card(
     color: green_tab,
     margin: EdgeInsets.all(10.0),
@@ -52,7 +53,7 @@ class Help extends StatelessWidget {
           case ConnectionState.none:
           case ConnectionState.waiting:
           return Center(
-            child: new CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+            child: new ColorLoader2(),
           );
           default:
           print(snapshot.hasError);

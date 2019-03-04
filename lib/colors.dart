@@ -16,7 +16,7 @@ const green_tab = const Color(0xFF1eb997);
 const transp = const Color(0x263E5569);
 var fb = Colors.lightBlue[400];
 
-const g_blueDark_blueLight = const LinearGradient(
+const g_green_grey = const LinearGradient(
     colors: [mintgreen_dark, bluegrey],
     begin: const FractionalOffset(0.4, 0.0),
     end: const FractionalOffset(0.0, 0.5),

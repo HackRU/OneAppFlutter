@@ -1,4 +1,5 @@
 import 'package:HackRU/admin.dart';
+import 'package:HackRU/loading_indicator.dart';
 import 'package:HackRU/models.dart';
 import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/screens/scanner2.dart';
@@ -71,17 +72,16 @@ class _LoginState extends State<Login> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context, {barrierDismissible: false}){
-        return new AlertDialog(backgroundColor: Colors.transparent,
+        return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
           title: Center(
-            child: new CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+            child: new ColorLoader2(),
           ),
         );
       }
     );
   }
 
-  // given a context return a login button functiona
+  // given a context return a login button function
   _buttonLogin(context) => () async {
     _loginLoad(context);
     try {

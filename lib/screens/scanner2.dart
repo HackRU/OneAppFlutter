@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:HackRU/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
@@ -319,8 +320,7 @@ class _QRScanner2State extends State<QRScanner2> {
               builder: (BuildContext context, {barrierDismissible: false}){
                 return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
                   title: Center(
-                    child: new CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                    child: new ColorLoader2(),
                   ),
                 );
               }
@@ -339,8 +339,7 @@ class _QRScanner2State extends State<QRScanner2> {
               builder: (BuildContext context, {barrierDismissible: false}){
                 return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
                   title: Center(
-                    child: new CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                    child: new ColorLoader2(),
                   ),
                 );
               }

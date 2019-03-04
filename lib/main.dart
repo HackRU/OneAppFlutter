@@ -100,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
       elevationAppBar: 0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
+      iconMenuAppBar: Icon(Icons.arrow_back, color: mintgreen_light,),
     );
 
   }

@@ -54,7 +54,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
         new ItemHiddenMenu(
           name: "Help",
           colorTextUnSelected: white.withOpacity(0.5),
-          colorLineSelected: mintgreen_dark,
+          colorLineSelected: pink_dark,
         ),
         Help()));
 
@@ -62,7 +62,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
         new ItemHiddenMenu(
           name: "About",
           colorTextUnSelected: white.withOpacity(0.5),
-          colorLineSelected: pink_dark,
+          colorLineSelected: mintgreen_light,
         ),
         About()));
 

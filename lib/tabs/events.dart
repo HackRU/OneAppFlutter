@@ -5,6 +5,7 @@ import 'package:HackRU/tabs/events_for_day.dart';
 import 'package:HackRU/models.dart';
 import 'package:HackRU/hackru_service.dart';
 import 'dart:async';
+import 'package:HackRU/loading_indicator.dart';
 
 class Events extends StatefulWidget{
   @override
@@ -79,7 +80,7 @@ class EventsState extends State<Events>
               case ConnectionState.none:
               case ConnectionState.waiting:
                 return Center(
-                  child: new CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                    child: new ColorLoader2(),
                 );
                 default:
                 print(snapshot.hasError);
