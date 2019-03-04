@@ -55,7 +55,7 @@ class EventCard extends StatelessWidget {
 class EventsForDay extends StatelessWidget {
   final String day;
   final List<Event> events;
-  EventsForDay({Key key, @required String this.day, @requried this.events}): super(key: key);
+  EventsForDay({Key key, @required String this.day, @required this.events}): super(key: key);
   
   @override
   Widget build (BuildContext context) => new Scaffold(
