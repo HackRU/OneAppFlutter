@@ -1,7 +1,4 @@
-import 'package:HackRU/screens/login.dart';
-import 'package:HackRU/screens/scanner.dart';
 import 'package:HackRU/screens/scanner2.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
@@ -12,7 +9,6 @@ import 'package:hidden_drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
 import 'package:HackRU/screens/about.dart';
 import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/help.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:HackRU/screens/home.dart';
 
 class AdminPage extends StatefulWidget {
