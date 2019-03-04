@@ -4,6 +4,7 @@ import 'package:HackRU/colors.dart';
 import 'package:HackRU/hackru_service.dart';
 import 'package:HackRU/filestore.dart';
 import 'package:HackRU/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 
 class AnnouncementCard extends StatelessWidget {

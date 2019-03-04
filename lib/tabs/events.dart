@@ -65,6 +65,7 @@ class EventsState extends State<Events>
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        backgroundColor: bluegrey_dark,
         appBar: new AppBar(
             title: getTabBar(),
             backgroundColor: bluegrey_dark,
