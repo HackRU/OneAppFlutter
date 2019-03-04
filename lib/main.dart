@@ -1,5 +1,4 @@
 import 'package:HackRU/screens/login.dart';
-import 'package:HackRU/screens/scanner.dart';
 import 'package:HackRU/screens/scanner2.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';

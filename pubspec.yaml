@@ -55,10 +55,14 @@ flutter:
   - assets/images/drawer_bg.png
   - assets/images/cover_image.png
   - assets/images/map/event_map.png
-  - assets/images/map/foodArea.png
-  - assets/images/map/hackingArea.png
+  - assets/images/map/glass_room.png
+  - assets/images/map/help_desk.png
+  - assets/images/map/food_table.png
+  - assets/images/map/red_lion_cafe.png
+  - assets/images/map/hacking_area.png
   - assets/images/map/registration.png
-  - assets/images/map/stageArea.png
+  - assets/images/map/stage.png
+  - assets/images/map/food_court.png
 
   fonts:
   - family: OpenSans
