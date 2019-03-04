@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:HackRU/colors.dart';
 
 class LinkTextSpan extends TextSpan {
@@ -50,10 +51,13 @@ class RichTextView extends StatelessWidget {
     List<TextSpan> span = [];
     words.forEach((word) {
       if(_isLink(word)){
-        span.add(new LinkTextSpan(
-            text: '$word ',
-            url: word,
-            style: _style.copyWith(color: green_tab)));
+        var eWord = word.replaceAll(new RegExp(r'[<>]'), '');
+        span.add(
+            new LinkTextSpan(
+            style: _style.copyWith(color: green_tab),
+            url: eWord,
+            text: '$eWord ',)
+        );
       }
       else if(_isEmoji(word)){
         span.add(new TextSpan(text: '', style: _style));
