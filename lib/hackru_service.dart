@@ -90,8 +90,8 @@ Future<List<Announcement>> slackResources() async {
   var resources = json.decode(response.body);
   return resources["body"]
     .where((resource) => resource["text"] != null)
-    .map<SlackResource>(
-      (resource) => SlackResource.fromJson(resource)
+    .map<Announcement>(
+      (resource) => Announcement.fromJson(resource)
     ).toList();
 }
 

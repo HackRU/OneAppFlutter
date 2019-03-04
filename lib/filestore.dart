@@ -42,17 +42,17 @@ void deleteStoredCredential() async {
   await credFile.delete();
 }
 
-Future<List<SlackResource>> getStoredSlacks() async {
+Future<List<Announcement>> getStoredSlacks() async {
   var slacksFile = await storedSlacksFile();
   var contents = await slacksFile.readAsString();
   if (contents == "") {
     return null;
   }
   List<dynamic> decoded = json.decode(contents);
-  return decoded.map((slack) => SlackResource.fromJson(slack)).toList();
+  return decoded.map((slack) => Announcement.fromJson(slack)).toList();
 }
 
-setStoredSlacks(List<SlackResource> slacks) async {
+setStoredSlacks(List<Announcement> slacks) async {
   var slacksFile = await storedSlacksFile();
   var slacksString = "[" +
     slacks.map(

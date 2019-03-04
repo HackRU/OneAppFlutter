@@ -4,6 +4,7 @@ import 'package:HackRU/colors.dart';
 import 'package:HackRU/hackru_service.dart';
 import 'package:HackRU/filestore.dart';
 import 'package:HackRU/models.dart';
+import 'dart:async';
 
 class AnnouncementCard extends StatelessWidget {
   AnnouncementCard({@required this.resource});
@@ -38,8 +39,8 @@ class Announcements extends StatefulWidget {
 
 
 class AnnouncementsState extends State<Announcements> {
-  Stream<List<SlackResource>> _getSlacks() {
-    var streamctl = StreamController<List<SlackResource>>();
+  Stream<List<Announcement>> _getSlacks() {
+    var streamctl = StreamController<List<Announcement>>();
     getStoredSlacks().then((storedSlacks) {
         if (storedSlacks != null) {
           streamctl.sink.add(storedSlacks);
@@ -55,9 +56,9 @@ class AnnouncementsState extends State<Announcements> {
   @override
   Widget build (BuildContext context) => new Scaffold(
       backgroundColor: bluegrey_dark,
-      body: new StreamBuilder<List<SlackResource>>(
+      body: new StreamBuilder<List<Announcement>>(
           stream: _getSlacks(),
-          builder: (BuildContext context, AsyncSnapshot<List<SlackResource>> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
