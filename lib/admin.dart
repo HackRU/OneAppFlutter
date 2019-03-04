@@ -1,6 +1,7 @@
 import 'package:HackRU/screens/scanner2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'colors.dart';
 import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
@@ -19,11 +20,12 @@ class AdminPage extends StatefulWidget {
   _AdminPageState createState() => _AdminPageState();
 }
 
-class _AdminPageState extends State<AdminPage> {
+class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
   List<ScreenHiddenDrawer> items = new List();
 
   @override
   void initState() {
+
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Home",
@@ -79,13 +81,13 @@ class _AdminPageState extends State<AdminPage> {
             Navigator.pop(context);
             deleteStoredCredential();
         })
-
       ],
       backgroundColorMenu: bluegrey_dark,
       backgroundColorAppBar: bluegrey_dark,
       elevationAppBar: 0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
+      iconMenuAppBar: Icon(Icons.arrow_back, color: mintgreen_light,),
     );
 
   }
