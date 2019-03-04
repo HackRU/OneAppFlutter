@@ -94,11 +94,9 @@ Future<List<Announcement>> slackResources() async {
 Future<List<Event>> dayofEventsResources() async {
   var response =  await dayOfGetLcs('/dayof-events');
   var resources = json.decode(response.body);
-  print(resources);
   var maped = resources["body"].map<Event>(
           (resource) => new Event.fromJson(resource)
   ).toList();
-  print('--------'+'${maped}'+'--------');
   return maped;
 }
 

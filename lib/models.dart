@@ -65,12 +65,18 @@ class Event {
   Event({this.summary, this.location, this.start});
 
   @override
-  String toString() { return "{name: ${this.summary}, " + "location: ${this.location}, " + "time: ${this.start}, "; }
+  String toString() {
+    return "{name: ${this.summary}, "
+        + "location: ${this.location}, "
+        + "time: ${this.start} }";
+  }
 
   Event.fromJson(Map<String, dynamic> json) :
         summary = json['summary'],
         location = json['location'],
-        start = DateTime.parse(json['start']);
+        start = DateTime.parse(json['start']['dateTime']);
+//        dateTime = DateTime.parse(json['dateTime']);
+
 }
 
 class User {
