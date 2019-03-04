@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:HackRU/screens/string_parser.dart';
 import 'package:HackRU/hackru_service.dart';
+import 'package:HackRU/filestore.dart';
 
 
 // Create a stateful widget
@@ -14,14 +15,16 @@ class Announcements extends StatefulWidget {
 }
 
 class AnnouncementsState extends State<Announcements> {
-  List data;
-  Future<String> getJSONData() async {
-    var response = await dayOfGetLcs('/dayof-slack');
-    setState(() {
-      var dataConvertedToJSON = json.decode(response.body);
-      data = dataConvertedToJSON['body'];
+  Stream<List<SlackResource>> _getSlacks() {
+    var streamctl = StreamController<List<SlackResource>>();
+    getStoredSlacks().then((storedSlacks) {
+        streamctl.sink.add(storedSlacks);
+        return slackResources();
+    }).then((networkSlacks){
+        streamctl.sink.add(networkSlacks);
+        setSlacks(networkSlacks);
     });
-    return "Data Received!";
+    return streamctl.stream;
   }
 
   @override
@@ -41,12 +44,12 @@ class AnnouncementsState extends State<Announcements> {
               default:
                 print(snapshot.hasError);
                 var resources = snapshot.data;
-                print(resources);
                 return new Container(
                     child: new ListView.builder(
-                        itemCount: data == null ? 0 : data.length,
+                        itemCount: snapshot.data == null ? 0 : snapshot.data.length,
                         itemBuilder: (BuildContext context, int index) {
-                          String secs = data[index]['ts'].split(".")[0];
+                          String ts = snapshot.data[index].ts;
+                          String secs = snapshot.data[index].ts.split(".")[0];
                           String time = DateTime.fromMillisecondsSinceEpoch(int.parse(secs)*1000).toIso8601String().substring(11,16);
                           return new Container(
                               child: new Column(
@@ -61,7 +64,7 @@ class AnnouncementsState extends State<Announcements> {
                                         children: <Widget>[
                                           new Text(time, style: TextStyle(color: bluegrey_dark, fontWeight: FontWeight.w900),),
                                           SizedBox(height: 2.0,),
-                                          new RichTextView(text: data[index]['text'] ?? ''),
+                                          new RichTextView(text: snapshot.data[index].text ?? ''),
                                         ],
                                       ),
                                       padding: const EdgeInsets.all(15.0),
@@ -78,11 +81,4 @@ class AnnouncementsState extends State<Announcements> {
           }
       )
   );
-
-  @override
-  void initState() {
-    super.initState();
-    this.getJSONData();
-  }
-
 }
