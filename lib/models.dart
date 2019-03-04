@@ -61,7 +61,10 @@ class SlackResource {
 
   @override
   String toString() {
-    return '{"body":"${this.data}","text":${this.text},"ts":"${this.ts}"}';
+    var res = '{"body":'+json.encode(this.data)
+    res += ',"text":'+json.encode(this.text)
+    res += ',"ts":"${this.ts}"}';
+    return res;
   }
 
   SlackResource.fromJson(Map<String, dynamic> json)
