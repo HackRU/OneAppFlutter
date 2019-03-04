@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HackRU/colors.dart';
-import 'package:HackRU/tabs/sat_events.dart';
-import 'package:HackRU/tabs/sun_events.dart';
+import 'package:HackRU/tabs/events_for_day.dart';
+import 'package:HackRU/models.dart';
+import 'package:HackRU/hackru_service.dart';
+import 'dart:async';
 
 class Events extends StatefulWidget{
   @override
@@ -41,6 +43,25 @@ class EventsState extends State<Events>
         children: tabs, controller: controller);
   }
 
+  static List<Event> cachedEvents = null;
+  static DateTime cacheTTL = DateTime.now();
+  Stream<List<Event>> _getEvents() {
+    var streamctl = StreamController<List<Event>>();
+    if (cachedEvents != null) {
+      streamctl.sink.add(cachedEvents);
+    }
+    if (cacheTTL.isBefore(DateTime.now())) {
+      print("cache miss");
+      dayofEventsResources().then((events){
+          streamctl.sink.add(events);
+          cachedEvents = events;
+          cacheTTL = DateTime.now().add(Duration(minutes: 30));
+      });
+    }
+    return streamctl.stream;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -50,8 +71,25 @@ class EventsState extends State<Events>
             elevation: 1.0,
             automaticallyImplyLeading: false,
         ),
-        body: getTabBarView(<Widget>[
-          new SatEvents(), new SunEvents()])
+        body: StreamBuilder<List<Event>>(
+          stream: _getEvents(),
+          builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return Center(
+                  child: new CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                );
+                default:
+                print(snapshot.hasError);
+                var events = snapshot.data;
+                return getTabBarView(<Widget>[
+                    EventsForDay(day: '09', events: events),
+                    EventsForDay(day: '10', events: events)
+                ]);
+          }
+        }
+      )
     );
   }
 }
