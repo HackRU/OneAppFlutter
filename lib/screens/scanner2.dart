@@ -308,61 +308,59 @@ class _QRScanner2State extends State<QRScanner2> {
           ),
         ],
       ),
-      floatingActionButton: new Opacity(
-        opacity: _isVisible == true ? 1.0 : 0.0,
-        child: new FloatingActionButton.extended(
-          backgroundColor: bluegrey,
-          onPressed: () async {
-            print("---------------scan button pressed ---------------------");
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context, {barrierDismissible: false}){
-                  return new AlertDialog(backgroundColor: bluegrey_dark,
-                    title: Center(
-                      child: new CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
-                    ),
-                  );
-                }
-            );
-            var _barcodeString = await new QRCodeReader()
-                .setAutoFocusIntervalInMs(200)
-                .setForceAutoFocus(true)
-                .setTorchEnabled(true)
-                .setHandlePermissions(true)
-                .setExecuteAfterPermissionGranted(true)
-                .scan();
-            print("processing _barcodeString");
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context, {barrierDismissible: false}){
-                  return new AlertDialog(backgroundColor: bluegrey_dark,
-                    title: Center(
-                      child: new CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
-                    ),
-                  );
-                }
-            );
-            if(popup) {
-              var message = await _lcsHandle(_barcodeString);
-              Navigator.pop(context);
-              Navigator.pop(context);
-              _scanDialog(message);
-            } else {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              setState(() {
-                _message = _lcsHandle(_barcodeString);
-              });
-            }
-          },
-          tooltip: 'QRCode Reader',
-          icon: Icon(FontAwesomeIcons.camera, color: mintgreen_light,),
-          label: Text('Scan', style: TextStyle(fontSize: 15.0, color: mintgreen_light),),
-        ),
+      floatingActionButton: _isVisible == false ? null
+      : new FloatingActionButton.extended(
+      backgroundColor: bluegrey,
+        onPressed: () async {
+          print("---------------scan button pressed ---------------------");
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context, {barrierDismissible: false}){
+                return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
+                  title: Center(
+                    child: new CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                  ),
+                );
+              }
+          );
+          var _barcodeString = await new QRCodeReader()
+              .setAutoFocusIntervalInMs(200)
+              .setForceAutoFocus(true)
+              .setTorchEnabled(true)
+              .setHandlePermissions(true)
+              .setExecuteAfterPermissionGranted(true)
+              .scan();
+          print("processing _barcodeString");
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context, {barrierDismissible: false}){
+                return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
+                  title: Center(
+                    child: new CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
+                  ),
+                );
+              }
+          );
+          if(popup) {
+            var message = await _lcsHandle(_barcodeString);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            _scanDialog(message);
+          } else {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            setState(() {
+              _message = _lcsHandle(_barcodeString);
+            });
+          }
+      },
+      tooltip: 'QRCode Reader',
+      icon: Icon(FontAwesomeIcons.camera, color: mintgreen_light,),
+      label: Text('Scan', style: TextStyle(fontSize: 15.0, color: mintgreen_light),),
       ),
     );
   }

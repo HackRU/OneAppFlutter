@@ -110,7 +110,7 @@ class Login extends StatelessWidget {
                       barrierDismissible: false,
                       context: context,
                       builder: (BuildContext context, {barrierDismissible: false}){
-                        return new AlertDialog(backgroundColor: bluegrey_dark,
+                        return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
                           title: Center(
                             child: new CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),

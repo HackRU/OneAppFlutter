@@ -45,22 +45,38 @@ class HelpResource {
     url = json["url"];
 }
 
-class SlackResource {
-  final List data;
+class Announcement {
   final String text;
   final String ts;
 
-  SlackResource(this.data, this.text, this.ts);
+  Announcement({this.text, this.ts});
+
+  @override
+  String toString() { return "{text: ${this.text}, " + "time: ${this.ts}, }"; }
+
+  Announcement.fromJson(Map<String, dynamic> json) : text = json["text"], ts = json['ts'];
+}
+
+class Event {
+  final String summary;
+  final String location;
+  final DateTime start;
+
+  Event({this.summary, this.location, this.start});
 
   @override
   String toString() {
-    return "data";
+    return "{name: ${this.summary}, "
+        + "location: ${this.location}, "
+        + "time: ${this.start} }";
   }
 
-  SlackResource.fromJson(Map<String, dynamic> json)
-      : data = json['body'],
-        text = json['text'],
-        ts = json['ts'];
+  Event.fromJson(Map<String, dynamic> json) :
+        summary = json['summary'],
+        location = json['location'],
+        start = DateTime.parse(json['start']['dateTime']);
+//        dateTime = DateTime.parse(json['dateTime']);
+
 }
 
 class User {
