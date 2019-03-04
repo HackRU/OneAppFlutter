@@ -54,6 +54,7 @@ class _LoginState extends State<Login> {
 
   void _completeLogin(LcsCredential cred, BuildContext context) async {
     var user = await getUser(cred);
+    Navigator.pop(context);
     QRScanner2.cred = cred;
     Home.userEmail = _emailController.text;
     QRScanner2.userEmail = _emailController.text;
@@ -88,6 +89,7 @@ class _LoginState extends State<Login> {
       setStoredCredential(cred);
       await _completeLogin(cred, context);
     } on LcsLoginFailed catch (e) {
+      Navigator.pop(context);
       showDialog<void>(context: context, barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(backgroundColor: bluegrey_dark,
