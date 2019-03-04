@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
         print("init got cred"+cred.toString());
         if (cred != null) {
           if (!cred.isExpired()) {
+            _loginLoad(context);
             _completeLogin(cred, context);
           } else {
             deleteStoredCredential();
@@ -64,9 +65,7 @@ class _LoginState extends State<Login> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
     }
   }
-
-  // given a context return a login button functiona
-  _buttonLogin(context) => () async {
+  _loginLoad(context) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -79,6 +78,11 @@ class _LoginState extends State<Login> {
         );
       }
     );
+  }
+
+  // given a context return a login button functiona
+  _buttonLogin(context) => () async {
+    _loginLoad(context);
     try {
       var cred = await login(_emailController.text, _passwordController.text);
       setStoredCredential(cred);
@@ -152,25 +156,25 @@ class _LoginState extends State<Login> {
                 ),
               ),
             ),
-            ButtonBar(
-              children: <Widget>[
-                RaisedButton(
-                  child: Text('LOGIN'),
-                  color: pink_dark,
-                  textColor: white,
-                  textTheme: ButtonTextTheme.normal,
-                  elevation: 6.0,
-                  shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                  )
-                  onPressed: _buttonLogin(context),
+          ),
+          ButtonBar(
+            children: <Widget>[
+              RaisedButton(
+                child: Text('LOGIN'),
+                color: pink_dark,
+                textColor: white,
+                textTheme: ButtonTextTheme.normal,
+                elevation: 6.0,
+                shape: BeveledRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(3.0)),
                 ),
-              ],
-            ),
-            SizedBox(height: 60.0,),
-          )
-        ],
-      ),
+                onPressed: _buttonLogin(context),
+              ),
+            ],
+          ),
+          SizedBox(height: 60.0,),
+        ]
+      )
     )
   );
 }
