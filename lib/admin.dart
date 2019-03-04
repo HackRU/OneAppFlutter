@@ -10,6 +10,7 @@ import 'package:HackRU/screens/about.dart';
 import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/help.dart';
 import 'package:HackRU/screens/home.dart';
+import 'package:HackRU/filestore.dart';
 
 class AdminPage extends StatefulWidget {
   AdminPage({Key key}) : super(key: key);
@@ -71,7 +72,13 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
       actionsAppBar: <Widget>[
-        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: pink_light,), color: pink_light, splashColor: pink_light, onPressed: (){Navigator.pop(context);})
+        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: pink_light,),
+          color: pink_light,
+          splashColor: pink_light,
+          onPressed: (){
+            Navigator.pop(context);
+            deleteStoredCredential();
+        })
 
       ],
       backgroundColorMenu: bluegrey_dark,

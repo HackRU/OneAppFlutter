@@ -88,10 +88,11 @@ Future<List<HelpResource>> helpResources() async {
 Future<List<Announcement>> slackResources() async {
   var response =  await dayOfGetLcs('/dayof-slack');
   var resources = json.decode(response.body);
-  var maped = resources["body"].map<Announcement>(
-          (resource) => new Announcement.fromJson(resource)
-  ).toList();
-  return maped;
+  return resources["body"]
+    .where((resource) => resource["text"] != null)
+    .map<Announcement>(
+      (resource) => Announcement.fromJson(resource)
+    ).toList();
 }
 
 Future<List<Event>> dayofEventsResources() async {

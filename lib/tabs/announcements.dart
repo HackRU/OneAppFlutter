@@ -2,7 +2,9 @@ import 'package:HackRU/screens/string_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/hackru_service.dart';
+import 'package:HackRU/filestore.dart';
 import 'package:HackRU/models.dart';
+import 'dart:async';
 
 class AnnouncementCard extends StatelessWidget {
   AnnouncementCard({@required this.resource});
@@ -29,12 +31,33 @@ class AnnouncementCard extends StatelessWidget {
   }
 }
 
-class Announcements extends StatelessWidget {
+// Create a stateful widget
+class Announcements extends StatefulWidget {
+  @override
+  AnnouncementsState createState() => new AnnouncementsState();
+}
+
+
+class AnnouncementsState extends State<Announcements> {
+  Stream<List<Announcement>> _getSlacks() {
+    var streamctl = StreamController<List<Announcement>>();
+    getStoredSlacks().then((storedSlacks) {
+        if (storedSlacks != null) {
+          streamctl.sink.add(storedSlacks);
+        }
+        return slackResources();
+    }).then((networkSlacks){
+        streamctl.sink.add(networkSlacks);
+        setStoredSlacks(networkSlacks);
+    });
+    return streamctl.stream;
+  }
+  
   @override
   Widget build (BuildContext context) => new Scaffold(
       backgroundColor: bluegrey_dark,
-      body: new FutureBuilder<List<Announcement>>(
-          future: slackResources(),
+      body: new StreamBuilder<List<Announcement>>(
+          stream: _getSlacks(),
           builder: (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:

@@ -8,9 +8,16 @@ class LcsCredential {
 
   LcsCredential(this.email, this.token, this.expiration);
 
+  String jsonString() {
+    var exp = this.expiration.toIso8601String();
+    return '{"email": "${this.email}", '
+    + '"token": "${this.token}", '
+    + '"valid_until": "$exp"}';
+  }
+  
   @override
   String toString() {
-    return "LcsCredentail{email: ${this.email}, "
+    return "LcsCredential{email: ${this.email}, "
     + "token: ${this.token}, "
     + "expiration: ${this.expiration}}";
   }
@@ -52,7 +59,10 @@ class Announcement {
   Announcement({this.text, this.ts});
 
   @override
-  String toString() { return "{text: ${this.text}, " + "time: ${this.ts}, }"; }
+  String toString() {
+    return '{"text": ${json.encode(this.text)}'
+    + ',"ts": ${json.encode(this.ts)}}';
+  }
 
   Announcement.fromJson(Map<String, dynamic> json) : text = json["text"], ts = json['ts'];
 }
@@ -75,7 +85,6 @@ class Event {
         summary = json['summary'],
         location = json['location'],
         start = DateTime.parse(json['start']['dateTime']);
-//        dateTime = DateTime.parse(json['dateTime']);
 
 }
 
