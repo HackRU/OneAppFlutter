@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
-import 'package:HackRU/hackru_service.dart';
 import 'package:HackRU/models.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:pinch_zoom_image/pinch_zoom_image.dart';
 
 class EventCard extends StatelessWidget {
-  EventCard({@required this.resource});
+  EventCard({@required this.resource, @required this.day});
   final Event resource;
+  final String day;
 
   Widget build (BuildContext context){
     var time = resource.start.toLocal().toString().substring(11,16);
     var date = resource.start.toLocal().toString().substring(8,10);
     return Container(
-      child: date == '10' ? new Card(
+      child: date == day ? new Card(
         child: ExpansionTile(
           leading: new Text(
             time,
@@ -43,7 +43,7 @@ class EventCard extends StatelessWidget {
                 onZoomStart: () {},
                 onZoomEnd: () {},
               ),
-            )
+            ),
           ],
         ),
       )
@@ -52,32 +52,21 @@ class EventCard extends StatelessWidget {
   }
 }
 
-class SunEvents extends StatelessWidget {
+class EventsForDay extends StatelessWidget {
+  final String day;
+  final List<Event> events;
+  EventsForDay({Key key, @required String this.day, @required this.events}): super(key: key);
+  
   @override
   Widget build (BuildContext context) => new Scaffold(
       backgroundColor: bluegrey_dark,
-      body: new FutureBuilder<List<Event>>(
-          future: dayofEventsResources(),
-          builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return Center(
-                  child: new CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(mintgreen_light), strokeWidth: 3.0,),
-                );
-              default:
-                print(snapshot.hasError);
-                var resources = snapshot.data;
-                return new Container(
-                    child: new ListView.builder(
-                        itemCount: resources == null ? 0 : resources.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return new EventCard(resource: resources[index]);
-                        }
-                    )
-                );
-            }
+      body: new Container(
+        child: new ListView.builder(
+          itemCount: events == null ? 0 : events.length,
+          itemBuilder: (BuildContext context, int index) {
+            return new EventCard(resource: events[index], day: this.day);
           }
+        )
       )
-  );
+    );
 }
