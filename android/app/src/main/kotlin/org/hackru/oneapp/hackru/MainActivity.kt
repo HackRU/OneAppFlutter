@@ -1,4 +1,4 @@
-package org.hackru.hackruflutter
+package org.hackru.oneapp.hackru
 
 import android.os.Bundle
 
