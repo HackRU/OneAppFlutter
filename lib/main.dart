@@ -31,6 +31,9 @@ class Main extends StatelessWidget {
         accentColor: mintgreen_light,
       ),
       home: Login(),
+      routes: <String, WidgetBuilder> {
+        '/login': (BuildContext context) => new Login(),
+      },
     );
   }
 }
@@ -91,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
           color: pink_light,
           splashColor: pink_light,
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => Login()), ModalRoute.withName('/login'));
             deleteStoredCredential();
         })
       ],

@@ -62,10 +62,13 @@ class _LoginState extends State<Login> {
     QRScanner2.userEmail = _emailController.text;
     QRScanner2.userPassword = _passwordController.text;
     if(user.role["director"] == true ){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
+//      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
+      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => AdminPage()), ModalRoute.withName('/login'));
     }
     else{
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
+//      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
+      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => MyHomePage()), ModalRoute.withName('/login'));
+
     }
   }
   _loginLoad(context) {
