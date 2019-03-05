@@ -19,12 +19,12 @@ import 'package:HackRU/models.dart';
 // button without scanning anything. This is set to false when the scanner returns
 // null to signify that we shouldn't show a progress indicator popup.
 var popup = true;
-
+const NOT_SCANNED = "NOT SCANNED";
 const instructions = 'Note: Click [Camera Icon] Below to Scan QR Codes!';
 
 @visibleForTesting
 enum Location {
-  checkIn, lunch1, dinner, tShirt, midnightMeal, midnightSurprise, breakfast, lunch2
+  checkIn, checkInNoDelayed, lunch1, dinner, tShirt, midnightMeal, midnightSurprise, breakfast, lunch2
 }
 
 typedef DemoItemBodyBuilder<T> = Widget Function(DemoItem<T> item);
@@ -112,24 +112,10 @@ class CollapsibleBody extends StatelessWidget {
 
     return Column(
         children: <Widget>[
-          Container(
-              margin: const EdgeInsets.only(
-                  left: 24.0,
-                  right: 24.0,
-                  bottom: 24.0
-              ) - margin,
-              child: Center(
-                  child: DefaultTextStyle(
-                      style: textTheme.caption.copyWith(fontSize: 15.0),
-                      child: child
-                  )
-              )
-          ),
           const Divider(height: 1.0),
           Container(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
                         margin: const EdgeInsets.only(right: 8.0),
@@ -147,7 +133,21 @@ class CollapsibleBody extends StatelessWidget {
                     )
                   ]
               )
-          )
+          ),
+          const Divider(height: 1.0),
+          Container(
+              margin: const EdgeInsets.only(
+                  left: 24.0,
+                  right: 24.0,
+                  bottom: 24.0
+              ) - margin,
+              child: Center(
+                  child: DefaultTextStyle(
+                      style: textTheme.caption.copyWith(fontSize: 15.0),
+                      child: child
+                  )
+              )
+          ),
         ]
     );
   }
@@ -207,7 +207,7 @@ class _QRScanner2State extends State<QRScanner2> {
     super.initState();
     _message = Future<String>.sync(()=>instructions);
     _demoItems = <DemoItem<dynamic>>[
-      DemoItem<Location>(name: 'Scanning...', value: Location.checkIn, hint: 'Select Event',
+      DemoItem<Location>(name: 'Scanning...', value: Location.checkInNoDelayed, hint: 'Select Event',
           valueToString: (Location location) => location.toString().split('.')[1],
           builder: (DemoItem<Location> item) {
             void close() { setState(() { item.isExpanded = false;});}
@@ -224,6 +224,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               return Column(
                                   mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
+                                    RadioListTile<Location>(value: Location.checkInNoDelayed, title: const Text('Check-In (Warn if Delayed Entry)'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
                                     RadioListTile<Location>(value: Location.checkIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
                                     RadioListTile<Location>(value: Location.lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
                                     RadioListTile<Location>(value: Location.dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
@@ -362,7 +363,9 @@ class _QRScanner2State extends State<QRScanner2> {
             Navigator.pop(context);
             // Now wew can pop the loading indicator.
             Navigator.pop(context);
-            _scanDialog(message);
+            if (message != NOT_SCANNED) {
+              _scanDialog(message);
+            }
           } else {
             // I'm (Sean) pretty sure that the scanner creates an extraneous
             // item on the Navigator stack. We need to pop it before we continue.
@@ -381,13 +384,32 @@ class _QRScanner2State extends State<QRScanner2> {
 
   void _scanDialog(String body) async {
     switch(await showDialog(
-      context: context,
-      builder: (BuildContext context, {barrierDismissible: false}){
-        return new AlertDialog(backgroundColor: bluegrey_dark,
-          title: Text(body, style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
-          actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
-        );
-      },)){}
+        context: context,
+        builder: (BuildContext context, {barrierDismissible: false}){
+          return new AlertDialog(backgroundColor: bluegrey_dark,
+            title: Text(body, style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
+            actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
+          );
+    },)){}
+  }
+  Future<bool> _scanDialogWarning(String body) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context, {barrierDismissible: false}){
+          return new AlertDialog(backgroundColor: bluegrey_dark,
+            title: Text(body, style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
+            actions: <Widget>[
+              FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center),
+                onPressed: () async {
+                  Navigator.pop(context, true);
+              }),
+              FlatButton(child: Text('CANCEL', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center),
+                onPressed: (){
+                  Navigator.pop(context, false);
+                }),
+            ],
+          );
+    },);
   }
 
   Future<String> _lcsHandle(String email) async {
@@ -397,18 +419,40 @@ class _QRScanner2State extends State<QRScanner2> {
     try {
       if(email != null) {
         user = await getUser(QRScanner2.cred, email);
+        print("scanned user");
+        print(user);
         if (!user.dayOf.containsKey(QRScanner2.event) ||
             user.dayOf[QRScanner2.event] == false) {
-          updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
           print(user);
           result = "SCANNED!";
+
+          if (QRScanner2.event == "checkInNoDelayed") {
+            if (user.isDelayedEntry()
+              && !await _scanDialogWarning("HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
+              return NOT_SCANNED;
+            } else {
+              QRScanner2.event = "checkIn";
+            }
+          }
+
+          if (QRScanner2.event == "checkIn") {
+            await printLabel(email);
+          }
+
+          updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
         } else {
           result = 'ALREADY SCANNED!';
+          if (QRScanner2.event == "checkIn") {
+            if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
+              await printLabel(email);
+              result = "SCANNED!";
+            } else {
+              return NOT_SCANNED;
+            }
+          }
         }
-        if (QRScanner2.event == "checkIn") {
-          await printLabel(email);
-          result = "SCANNED!";
-        }
+
+
       } else {
         print("attempt to scan null");
       }
@@ -429,6 +473,8 @@ class _QRScanner2State extends State<QRScanner2> {
       print(e.invalidValue);
       print(e.message);
       print(e.name);
+    } on SocketException {
+      result = "NETWORK ERROR";
     } catch(e) {
       result = 'UNEXPECTED ERROR';
       print(e);

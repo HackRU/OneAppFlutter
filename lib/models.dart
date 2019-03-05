@@ -91,15 +91,17 @@ class Event {
 class User {
   final String name;
   final String email;
+  final String status;
   final Map<String, dynamic> role; // role.director, admin, organizer
   final Map<String, dynamic> dayOf; // this should always be a bool really
   
-  User(this.name, this.email, this.dayOf, this.role);
+  User(this.name, this.email, this.dayOf, this.role, this.status);
 
   @override
   String toString() {
     return "User{name: ${this.name}, "
     + "email: ${this.email}, "
+    + "status: ${this.status}, "
     + "role: ${this.role}, "
     + "dayOf: ${this.dayOf}";
   }
@@ -112,11 +114,16 @@ class User {
       return this.dayOf[event];
     }
   }
+
+  bool isDelayedEntry() {
+    return this.status == "waitlist";
+  }
   
   User.fromJson(Map<String, dynamic> json)
   : name = (json["first_name"] ?? "") + " " + (json["last_name"] ?? ""),
     email = json["email"],
     dayOf = json["day_of"],
+    status = json["registration_status"],
     role = json["role"];
 }
 
