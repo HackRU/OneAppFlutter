@@ -15,6 +15,9 @@ import 'package:HackRU/models.dart';
 //    .setExecuteAfterPermissionGranted(true)
 //    .scan();
 
+// This variable tracks if the user scanned something or just pressed the back
+// button without scanning anything. This is set to false when the scanner returns
+// null to signify that we shouldn't show a progress indicator popup.
 var popup = true;
 
 @visibleForTesting
@@ -333,24 +336,34 @@ class _QRScanner2State extends State<QRScanner2> {
               .setExecuteAfterPermissionGranted(true)
               .scan();
           print("processing _barcodeString");
-          showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context, {barrierDismissible: false}){
-                return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
-                  title: Center(
-                    child: new ColorLoader2(),
-                  ),
-                );
-              }
-          );
+          print(_barcodeString);
+          // Decide
+          if(_barcodeString == null) {
+            popup = false;
+          }
           if(popup) {
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context, {barrierDismissible: false}){
+                  return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
+                    title: Center(
+                      child: new ColorLoader2(),
+                    ),
+                  );
+                }
+            );
             var message = await _lcsHandle(_barcodeString);
+            // I'm (Sean) pretty sure that the scanner creates an extraneous
+            // item on the Navigator stack. We need to pop it before we can pop
+            // the loading indicator.
             Navigator.pop(context);
+            // Now wew can pop the loading indicator.
             Navigator.pop(context);
             _scanDialog(message);
           } else {
-            Navigator.pop(context);
+            // I'm (Sean) pretty sure that the scanner creates an extraneous
+            // item on the Navigator stack. We need to pop it before we continue.
             Navigator.pop(context);
             setState(() {
               _message = _lcsHandle(_barcodeString);
