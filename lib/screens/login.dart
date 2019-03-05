@@ -55,6 +55,7 @@ class _LoginState extends State<Login> {
 
   void _completeLogin(LcsCredential cred, BuildContext context) async {
     var user = await getUser(cred);
+    // Pop the loading indicator
     Navigator.pop(context);
     QRScanner2.cred = cred;
     Home.userEmail = _emailController.text;
@@ -88,12 +89,19 @@ class _LoginState extends State<Login> {
       var cred = await login(_emailController.text, _passwordController.text);
       setStoredCredential(cred);
       await _completeLogin(cred, context);
-    } on LcsLoginFailed catch (e) {
+    } catch (e) {
+      var errorMessage = "No internet";
+      if (e is LcsLoginFailed) {
+        errorMessage = e.errorMessage();
+      } else if (e is LcsError) {
+        errorMessage = e.errorMessage();
+      }
+      // Pop the loading indicator
       Navigator.pop(context);
       showDialog<void>(context: context, barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(backgroundColor: bluegrey_dark,
-            title: Text("ERROR: \n'"+LcsLoginFailed().toString()+"'",
+            title: Text("ERROR: \n'"+errorMessage+"'",
               style: TextStyle(fontSize: 16, color: pink_light),),
             actions: <Widget>[
               FlatButton(
