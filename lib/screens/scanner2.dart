@@ -15,7 +15,12 @@ import 'package:HackRU/models.dart';
 //    .setExecuteAfterPermissionGranted(true)
 //    .scan();
 
+// This variable tracks if the user scanned something or just pressed the back
+// button without scanning anything. This is set to false when the scanner returns
+// null to signify that we shouldn't show a progress indicator popup.
 var popup = true;
+
+const instructions = 'Note: Click [Camera Icon] Below to Scan QR Codes!';
 
 @visibleForTesting
 enum Location {
@@ -200,7 +205,7 @@ class _QRScanner2State extends State<QRScanner2> {
   @override
   void initState() {
     super.initState();
-    _message = Future<String>.sync(()=>'Note: Click [Camera Icon] Below to Scan QR Codes!');
+    _message = Future<String>.sync(()=>instructions);
     _demoItems = <DemoItem<dynamic>>[
       DemoItem<Location>(name: 'Scanning...', value: Location.checkIn, hint: 'Select Event',
           valueToString: (Location location) => location.toString().split('.')[1],
@@ -274,7 +279,7 @@ class _QRScanner2State extends State<QRScanner2> {
                 child: new FutureBuilder<String>(
                     future: _message,
                     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      var text = "Loading ...";
+                      var text = instructions;
                       if (snapshot.hasData) {
                         text = snapshot.data;
                       }
@@ -333,24 +338,34 @@ class _QRScanner2State extends State<QRScanner2> {
               .setExecuteAfterPermissionGranted(true)
               .scan();
           print("processing _barcodeString");
-          showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context, {barrierDismissible: false}){
-                return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
-                  title: Center(
-                    child: new ColorLoader2(),
-                  ),
-                );
-              }
-          );
+          print(_barcodeString);
+          // If the user didn't scan anything, then _barcodeString will be null.
+          // If that is the case, then don't show a progress indicator popup or
+          // do anything.
+          popup = _barcodeString != null;
           if(popup) {
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context, {barrierDismissible: false}){
+                  return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
+                    title: Center(
+                      child: new ColorLoader2(),
+                    ),
+                  );
+                }
+            );
             var message = await _lcsHandle(_barcodeString);
+            // I'm (Sean) pretty sure that the scanner creates an extraneous
+            // item on the Navigator stack. We need to pop it before we can pop
+            // the loading indicator.
             Navigator.pop(context);
+            // Now wew can pop the loading indicator.
             Navigator.pop(context);
             _scanDialog(message);
           } else {
-            Navigator.pop(context);
+            // I'm (Sean) pretty sure that the scanner creates an extraneous
+            // item on the Navigator stack. We need to pop it before we continue.
             Navigator.pop(context);
             setState(() {
               _message = _lcsHandle(_barcodeString);
