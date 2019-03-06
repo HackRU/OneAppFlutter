@@ -88,6 +88,11 @@ Future<List<HelpResource>> helpResources() async {
 Future<List<Announcement>> slackResources() async {
   var response =  await dayOfGetLcs('/dayof-slack');
   var resources = json.decode(response.body);
+  print(resources);
+  if (resources["body"] == null) {
+    var tsnow = (DateTime.now().millisecondsSinceEpoch~/1000).toString();
+    return [Announcement(text: "Nothing yet!", ts: tsnow)];
+  }
   return resources["body"]
     .where((resource) => resource["text"] != null)
     .map<Announcement>(
