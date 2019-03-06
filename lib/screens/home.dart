@@ -1,7 +1,5 @@
-//import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:HackRU/filestore.dart';
-import 'package:HackRU/qr/qr_image.dart';
-import 'package:HackRU/screens/qrcode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
