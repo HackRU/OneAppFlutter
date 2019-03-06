@@ -1,4 +1,5 @@
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:HackRU/filestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
@@ -22,6 +23,7 @@ class _HomeState extends State<Home>
   var _title_app = null;
   var _title_icon = null;
   PageController _tabController;
+  String userEmailAddr;
 
 
   @override
@@ -29,6 +31,13 @@ class _HomeState extends State<Home>
     super.initState();
     _tabController = new PageController();
     this._title_app = TabItems[0].title;
+
+    getStoredCredential().then((cred) {
+      print("init got cred"+cred.toString());
+      if (cred != null) {
+        userEmailAddr = cred.email;
+      }
+    });
   }
 
   void onTap(int tab){
@@ -80,7 +89,9 @@ class _HomeState extends State<Home>
             ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: _qrcode,
+          onPressed: (){
+            _qrcode();
+          } ,
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
           foregroundColor: mintgreen_light,
@@ -107,16 +118,22 @@ class _HomeState extends State<Home>
     switch(await showDialog(
         context: context,
         builder: (BuildContext context){
+          print("******************");
+          print(userEmailAddr);
           return new SimpleDialog(
             children: <Widget>[
               Container(
-                height: 300.0, width: 300.0,
+                height: 300.0,
+                width: 300.0,
                 child: Center(
                   child: QrImage(
-                      version: 1,
-                      data: Home.userEmail,
+                      version: 4,
+                      data: userEmailAddr,
                       gapless: true,
                       foregroundColor: bluegrey,
+                      onError: (dynamic ex){
+                        print('[QR] ERROR - $ex');
+                      },
                     ),
                 ),
               ),

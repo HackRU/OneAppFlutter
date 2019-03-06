@@ -6,6 +6,7 @@ homepage: https://github.com/HackRU/OneAppFlutter
 
 environment:
   sdk: ">=2.1.0-dev.68.0 <3.0.0"
+  flutter: ">=1.2.0"
 
 dependencies:
   flutter:
@@ -20,7 +21,8 @@ dependencies:
   pinch_zoom_image: ^0.2.5
   qrcode_reader: ^0.4.4
   qr_mobile_vision: ^0.1.0
-  qr_flutter: ^2.0.0
+  qr_flutter: ^2.0.0+51
+  qr: ^1.0.1
   http: ^0.11.3+16
 #  http: ^0.12.0+1
   flutter_linkify: ^1.0.3
