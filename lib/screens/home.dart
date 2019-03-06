@@ -90,7 +90,6 @@ class _HomeState extends State<Home>
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: (){
-//            Navigator.push(context, MaterialPageRoute(builder: (context) => QRCode()),);
             _qrcode();
           } ,
           tooltip: 'QR Code',
