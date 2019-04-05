@@ -24,7 +24,7 @@ class TimerState extends State<Timer> {
 
     final bool debugMode = false;
     DateTime now = DateTime.now();
-    DateTime dDay = DateTime(2019, 03, 10, 11, 30, 0);
+    DateTime dDay = DateTime(2019, 04, 6, 11, 30, 0);
     dDay = (debugMode)? DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second): dDay;
     Duration _duration = dDay.difference(now);
 

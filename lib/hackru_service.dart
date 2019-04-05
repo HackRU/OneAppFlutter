@@ -2,7 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:HackRU/models.dart';
 
-const _lcsUrl = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest';
+const _lcsUrl = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test';
+//const _lcsUrl = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest';
 const _miscUrl = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 
 var client = new http.Client();

@@ -65,6 +65,7 @@ flutter:
   - assets/images/map/registration.png
   - assets/images/map/stage.png
   - assets/images/map/food_court.png
+  - assets/images/map/CAVE.png
 
   fonts:
   - family: OpenSans
