@@ -18,6 +18,7 @@ We had started using an inhouse hybrid mobile application to keep track of analy
 ## Style Guide
 Coming Soon...
 We'll be using LINTER for Dart (https://github.com/dart-lang/linter)
+And, `dartfmt` which recommended by Flutter team
 
 ## Installation Guide
 
@@ -34,10 +35,12 @@ We'll be using LINTER for Dart (https://github.com/dart-lang/linter)
 To learn about Flutter App Development:
 
 - [Flutter Website: https://flutter.io]
+- [Libraries: https://pub.dartlang.org/]
 - [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-- [Online documentation: (https://flutter.io/docs], which offers tutorials,
+- [Official Documentation: (https://flutter.io/docs)], which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+- ⭑ Working Examples+Tutorials+Libraries [https://github.com/Solido/awesome-flutter]
 
 ### Running tests
 1. also have command line dart installed
