@@ -30,7 +30,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Home",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: mintgreen_light,
         ),
         Home()));
@@ -38,7 +38,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Map",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: pink_light,
         ),
         Map()));
@@ -46,7 +46,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Scanner",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: mintgreen_dark,
         ),
         QRScanner2()));
@@ -54,7 +54,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Help",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: pink_dark,
         ),
         Help()));
@@ -62,7 +62,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "About",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: mintgreen_light,
         ),
         About()));

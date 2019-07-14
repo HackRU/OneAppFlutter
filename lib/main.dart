@@ -16,7 +16,6 @@ import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/filestore.dart';
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
   runApp(Main());
 }
 
@@ -53,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Home",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: mintgreen_light,
         ),
         Home()));
@@ -61,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Map",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: pink_light,
         ),
         Map()));
@@ -69,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Help",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: mintgreen_dark,
         ),
         Help()));
@@ -77,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "About",
-          colorTextUnSelected: white.withOpacity(0.5),
+          baseStyle: TextStyle( color: Colors.white.withOpacity(0.8), fontSize: 28.0 ),
           colorLineSelected: pink_dark,
         ),
         About()));
@@ -106,12 +105,5 @@ class _MyHomePageState extends State<MyHomePage> {
       iconMenuAppBar: Icon(Icons.arrow_back, color: mintgreen_light,),
     );
 
-  }
-}
-
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Transition transition) {
-    print(transition);
   }
 }

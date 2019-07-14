@@ -15,27 +15,26 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  font_awesome_flutter: ^8.2.0
+  font_awesome_flutter: ^8.4.0
   groovin_material_icons: ^1.1.6
-  hidden_drawer_menu: ^0.5.0
+  hidden_drawer_menu: ^1.1.1
   pinch_zoom_image: ^0.2.5
   qrcode_reader: ^0.4.4
-  qr_mobile_vision: ^0.1.0
-  qr_flutter: ^2.0.0+51
-  qr: ^1.0.1
+  qr_flutter: ^2.1.0+55
+  qr: ^1.2.0
   http: ^0.11.3+16
-#  http: ^0.12.0+1
-  flutter_linkify: ^1.0.3
-  url_launcher: ^5.0.1
-  flutter_webview_plugin: ^0.3.0+2
-  flutter_bloc: ^0.6.3
-  bloc: ^0.9.3
-  equatable: ^0.2.0
+#  http: ^0.12.0+2
+  flutter_linkify: ^2.1.0
+  url_launcher: ^5.0.5
+  flutter_bloc: ^0.19.0
+  bloc: ^0.14.4
+  equatable: ^0.2.6
   meta: ^1.1.6
-  flip_panel: ^0.0.9
+  flip_panel: ^1.0.0
   http_middleware: ^1.0.0
-  intl: ^0.15.7
-  path_provider: ^0.5.0+1
+  intl: ^0.15.8
+  path_provider: ^1.1.2
+  dart_lcs_client: ^1.0.0
 
 dev_dependencies:
   flutter_test:
