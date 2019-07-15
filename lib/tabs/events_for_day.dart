@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
-import 'package:HackRU/models.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:pinch_zoom_image/pinch_zoom_image.dart';
+import 'package:dart_lcs_client/dart_lcs_client.dart';
 
 class EventCard extends StatelessWidget {
   EventCard({@required this.resource, @required this.day});
@@ -19,17 +19,15 @@ class EventCard extends StatelessWidget {
             time,
             textAlign: TextAlign.center,
             style: new TextStyle(
-              color: green_tab,
-              fontWeight: FontWeight.w800,
+              color: pink,
               textBaseline: TextBaseline.alphabetic,
               fontSize: 18.0,
             ),
           ),
-          trailing: Icon(GroovinMaterialIcons.map_marker, color: bluegrey,),
+          trailing: Icon(GroovinMaterialIcons.map_marker, color: yellow,),
           title: new Text(resource.summary,
             style: new TextStyle(
-              color: bluegrey_dark,
-              fontWeight: FontWeight.w600,
+              color: green,
               fontSize: 20.0,
             ),
           ),
@@ -59,7 +57,7 @@ class EventsForDay extends StatelessWidget {
   
   @override
   Widget build (BuildContext context) => new Scaffold(
-      backgroundColor: bluegrey_dark,
+      backgroundColor: white,
       body: new Container(
         child: new ListView.builder(
           itemCount: events == null ? 0 : events.length,

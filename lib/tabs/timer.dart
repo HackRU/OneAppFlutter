@@ -29,7 +29,7 @@ class TimerState extends State<Timer> {
     Duration _duration = dDay.difference(now);
 
     return Scaffold(
-      backgroundColor: bluegrey_dark,
+      backgroundColor: charcoal,
       body: Container(
         child: Center(
           child: Column(
@@ -42,7 +42,7 @@ class TimerState extends State<Timer> {
                   itemStream: Stream.fromFuture(Future.delayed(
                       Duration(milliseconds: random.nextInt(20) * 100),() => 1)),
                   itemBuilder: (_, value) => value <= 0 ? Container(
-                    color: bluegrey_dark,
+                    color: charcoal_light,
                     width: widthFactor * imageWidth,
                     height: heightFactor * imageHeight,
                   )
@@ -68,7 +68,7 @@ class TimerState extends State<Timer> {
                   itemStream: Stream.fromFuture(Future.delayed(
                       Duration(milliseconds: random.nextInt(20) * 100),() => 1)),
                   itemBuilder: (_, value) => value <= 0 ? Container(
-                    color: bluegrey_dark,
+                    color: charcoal_light,
                     width: widthFactor * imageWidth,
                     height: heightFactor * imageHeight,
                   )
@@ -88,7 +88,7 @@ class TimerState extends State<Timer> {
                   direction: FlipDirection.down,)).toList(),
               ),
               SizedBox(height: 15.0,),
-              Text('Hacking Ends In...', style: TextStyle(color: pink_light, fontSize: 25.0,), textAlign: TextAlign.center,),
+              Text('Hacking Ends In...', style: TextStyle(color: yellow, fontSize: 25.0,), textAlign: TextAlign.center,),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -97,8 +97,8 @@ class TimerState extends State<Timer> {
                     widthFactor: 0.0,
                     child: FlipClock.reverseCountdown(
                       duration: _duration,
-                      digitColor: bluegrey_dark,
-                      backgroundColor: mintgreen_light,
+                      digitColor: white,
+                      backgroundColor: green,
                       digitSize: 40.0,
                       width: 30.0,
                       height: 55.0,

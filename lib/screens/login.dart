@@ -1,16 +1,13 @@
 import 'package:HackRU/admin.dart';
 import 'package:HackRU/loading_indicator.dart';
-import 'package:HackRU/models.dart';
 import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/screens/scanner2.dart';
-import 'package:HackRU/test.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/main.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:HackRU/hackru_service.dart';
 import 'package:HackRU/filestore.dart';
+import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:HackRU/constants.dart';
 
 class Login extends StatefulWidget {
   //const Login({Key: key}): super(key: key);
@@ -54,7 +51,7 @@ class _LoginState extends State<Login> {
   }
 
   void _completeLogin(LcsCredential cred, BuildContext context) async {
-    var user = await getUser(cred);
+    var user = await getUser(DEV_URL, cred);
     // Pop the loading indicator
     Navigator.pop(context);
     QRScanner2.cred = cred;
@@ -89,7 +86,7 @@ class _LoginState extends State<Login> {
   _buttonLogin(context) => () async {
     _loginLoad(context);
     try {
-      var cred = await login(_emailController.text, _passwordController.text);
+      var cred = await login(_emailController.text, _passwordController.text, DEV_URL);
       setStoredCredential(cred);
       await _completeLogin(cred, context);
     } catch (e) {
@@ -103,12 +100,12 @@ class _LoginState extends State<Login> {
       Navigator.pop(context);
       showDialog<void>(context: context, barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(backgroundColor: bluegrey_dark,
+          return AlertDialog(backgroundColor: charcoal,
             title: Text("ERROR: \n'"+errorMessage+"'",
-              style: TextStyle(fontSize: 16, color: pink_light),),
+              style: TextStyle(fontSize: 16, color: yellow),),
             actions: <Widget>[
               FlatButton(
-                child: Text('OK', style: TextStyle(fontSize: 16, color: mintgreen_dark),),
+                child: Text('OK', style: TextStyle(fontSize: 16, color: green),),
                 onPressed: () {Navigator.pop(context, 'Ok');},
               ),
             ],
@@ -122,6 +119,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    backgroundColor: charcoal,
     body: SafeArea(
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -132,7 +130,7 @@ class _LoginState extends State<Login> {
               Image.asset('assets/images/hackru_circle_logo.png', width: 150, height: 150,),
               SizedBox(height: 5.0),
               Text('SPRING 2019',
-                style: TextStyle(color: green_tab, fontSize: 25),
+                style: TextStyle(color: pink, fontSize: 25),
               ),
             ],
           ),
@@ -140,14 +138,15 @@ class _LoginState extends State<Login> {
           Center(
             child: TextField(
               keyboardType: TextInputType.emailAddress,
-              style: TextStyle(fontSize: 20, color: bluegrey),
+              style: TextStyle(fontSize: 20, color: yellow),
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Username',
-                fillColor: bluegrey,
+                fillColor: yellow,
                 hasFloatingPlaceholder: true,
                 errorText: _inputIsValid ? null : 'Please enter valid email address',
-                border: OutlineInputBorder(
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: const BorderSide(color: white, width: 0.0),
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
               ),
@@ -156,38 +155,61 @@ class _LoginState extends State<Login> {
           SizedBox(height: 12.0),
           Center(
             child: TextField(
-              style: TextStyle(fontSize: 20, color: bluegrey),
+              style: TextStyle(fontSize: 20, color: yellow),
               controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
-                fillColor: bluegrey,
+                fillColor: yellow,
                 hasFloatingPlaceholder: true,
                 errorText: _inputIsValid ? null : 'Please enter valid password',
-                border: OutlineInputBorder(
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: const BorderSide(color: white, width: 0.0),
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
               ),
             ),
           ),
-          ButtonBar(
-            children: <Widget>[
-              RaisedButton(
-                child: Text('LOGIN'),
-                color: pink_dark,
-                textColor: white,
-                textTheme: ButtonTextTheme.normal,
-                elevation: 6.0,
-                shape: BeveledRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(3.0)),
+          SizedBox(height: 40.0,),
+          RaisedButton(
+            onPressed: _buttonLogin(context),
+            color: charcoal,
+            textColor: white,
+            padding: const EdgeInsets.all(0.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Container(
+                width: double.infinity,
+                height: 60.0,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: <Color>[pink, yellow,],
+                  ),
                 ),
-                onPressed: _buttonLogin(context),
+                padding: const EdgeInsets.all(18.0),
+                child: const Text(
+                  'LOGIN',
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ],
+            ),
           ),
-          SizedBox(height: 60.0,),
+//            RaisedButton(
+//              child: Text('LOGIN'),
+//              color: pink,
+//              textColor: white,
+//              textTheme: ButtonTextTheme.normal,
+//              elevation: 10.0,
+//              shape: BeveledRectangleBorder(
+//                borderRadius: BorderRadius.all(Radius.circular(3.0)),
+//              ),
+//              onPressed: _buttonLogin(context),
+//            ),
         ]
       )
     )
   );
 }
+
+

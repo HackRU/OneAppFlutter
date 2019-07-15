@@ -2,16 +2,15 @@ import 'package:HackRU/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:HackRU/hackru_service.dart';
-import 'package:HackRU/models.dart';
+import 'package:dart_lcs_client/dart_lcs_client.dart';
 import 'package:HackRU/constants.dart';
 
 class Help extends StatelessWidget {
   @override
   Widget build (BuildContext context) => new Scaffold(
-    backgroundColor: bluegrey_dark,
+    backgroundColor: charcoal,
     body: new FutureBuilder<List<HelpResource>>(
-      future: helpResources(),
+      future: helpResources(MISC_URL),
       builder: (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -50,7 +49,7 @@ class HelpButton extends StatelessWidget {
   }
 
   Widget build (BuildContext context) => new Card(
-      color: green_tab,
+      color: green,
       margin: EdgeInsets.all(10.0),
       elevation: 0.0,
       child: Container(
