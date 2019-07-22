@@ -22,7 +22,7 @@ class About extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Center(
-              child: Image.asset('assets/images/hackru_circle_logo.png',
+              child: Image.asset('assets/images/hackru_f19_logo.png',
                 alignment: Alignment.center,
                 height: 150.0, width: 150.0,),
             ),

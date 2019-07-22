@@ -127,9 +127,9 @@ class _LoginState extends State<Login> {
           SizedBox(height: 30.0),
           Column(
             children: <Widget>[
-              Image.asset('assets/images/hackru_circle_logo.png', width: 150, height: 150,),
+              Image.asset('assets/images/hackru_f19_logo.png', width: 180, height: 180,),
               SizedBox(height: 5.0),
-              Text('SPRING 2019',
+              Text('FALL 2019',
                 style: TextStyle(color: pink, fontSize: 25),
               ),
             ],

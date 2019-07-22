@@ -14,6 +14,7 @@ class EventCard extends StatelessWidget {
     var date = resource.start.toLocal().toString().substring(8,10);
     return Container(
       child: date == day ? new Card(
+        color: charcoal_light,
         child: ExpansionTile(
           leading: new Text(
             time,
@@ -22,6 +23,7 @@ class EventCard extends StatelessWidget {
               color: pink,
               textBaseline: TextBaseline.alphabetic,
               fontSize: 18.0,
+              fontWeight: FontWeight.w800,
             ),
           ),
           trailing: Icon(GroovinMaterialIcons.map_marker, color: yellow,),
@@ -29,6 +31,7 @@ class EventCard extends StatelessWidget {
             style: new TextStyle(
               color: green,
               fontSize: 20.0,
+              fontWeight: FontWeight.w500,
             ),
           ),
           children: <Widget>[
@@ -57,7 +60,7 @@ class EventsForDay extends StatelessWidget {
   
   @override
   Widget build (BuildContext context) => new Scaffold(
-      backgroundColor: white,
+      backgroundColor: charcoal,
       body: new Container(
         child: new ListView.builder(
           itemCount: events == null ? 0 : events.length,

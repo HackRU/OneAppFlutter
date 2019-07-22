@@ -54,7 +54,7 @@ flutter:
   - assets/images/hackru_pink_logo.png
   - assets/images/hackru_white_logo.png
   - assets/images/drawer_bg.png
-  - assets/images/cover_image.png
+  - assets/images/hackru_banner.png
   - assets/images/map/event_map.png
   - assets/images/map/glass_room.png
   - assets/images/map/help_desk.png
@@ -65,6 +65,7 @@ flutter:
   - assets/images/map/stage.png
   - assets/images/map/food_court.png
   - assets/images/map/CAVE.png
+  - assets/images/hackru_f19_logo.png
 
   fonts:
   - family: OpenSans

@@ -53,7 +53,7 @@ class EventsState extends State<Events>
     }
     if (cacheTTL.isBefore(DateTime.now())) {
       print("cache miss");
-      dayofEventsResources(DEV_URL).then((events){
+      dayofEventsResources(PROD_URL).then((events){
           streamctl.sink.add(events);
           cachedEvents = events;
           cacheTTL = DateTime.now().add(Duration(minutes: 30));
@@ -86,8 +86,8 @@ class EventsState extends State<Events>
                 print(snapshot.hasError);
                 var events = snapshot.data;
                 return getTabBarView(<Widget>[
-                    EventsForDay(day: '09', events: events),
-                    EventsForDay(day: '10', events: events)
+                    EventsForDay(day: '19', events: events),
+                    EventsForDay(day: '20', events: events)
                 ]);
           }
         }
