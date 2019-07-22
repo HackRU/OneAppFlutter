@@ -38,10 +38,10 @@ android {
 
     defaultConfig {
         applicationId "org.hackru.oneapp.hackru"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 27
-        versionCode 12
-        versionName '3.0.0'
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

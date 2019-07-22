@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/tabs/events_for_day.dart';
-import 'package:HackRU/models.dart';
-import 'package:HackRU/hackru_service.dart';
 import 'dart:async';
 import 'package:HackRU/loading_indicator.dart';
+import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:HackRU/constants.dart';
 
 class Events extends StatefulWidget{
   @override
@@ -33,7 +33,7 @@ class EventsState extends State<Events>
         tabs: <Tab>[
           new Tab(text: 'SATURDAY',),
           new Tab(text: 'SUNDAY',),],
-        indicatorColor: mintgreen_light,
+        indicatorColor: yellow,
         indicatorSize: TabBarIndicatorSize.tab,
         controller: controller
     );
@@ -53,7 +53,7 @@ class EventsState extends State<Events>
     }
     if (cacheTTL.isBefore(DateTime.now())) {
       print("cache miss");
-      dayofEventsResources().then((events){
+      dayofEventsResources(PROD_URL).then((events){
           streamctl.sink.add(events);
           cachedEvents = events;
           cacheTTL = DateTime.now().add(Duration(minutes: 30));
@@ -66,10 +66,10 @@ class EventsState extends State<Events>
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        backgroundColor: bluegrey_dark,
+        backgroundColor: charcoal,
         appBar: new AppBar(
             title: getTabBar(),
-            backgroundColor: bluegrey_dark,
+            backgroundColor: charcoal,
             elevation: 1.0,
             automaticallyImplyLeading: false,
         ),
@@ -86,8 +86,8 @@ class EventsState extends State<Events>
                 print(snapshot.hasError);
                 var events = snapshot.data;
                 return getTabBarView(<Widget>[
-                    EventsForDay(day: '09', events: events),
-                    EventsForDay(day: '10', events: events)
+                    EventsForDay(day: '19', events: events),
+                    EventsForDay(day: '20', events: events)
                 ]);
           }
         }

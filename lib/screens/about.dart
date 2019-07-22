@@ -15,14 +15,14 @@ class About extends StatelessWidget {
 
   @override
   Widget build (BuildContext context) => new Scaffold(
-    backgroundColor: bluegrey_dark,
+    backgroundColor: charcoal,
     body: new PageView(
       children: <Widget>[
         new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Center(
-              child: Image.asset('assets/images/hackru_circle_logo.png',
+              child: Image.asset('assets/images/hackru_f19_logo.png',
                 alignment: Alignment.center,
                 height: 150.0, width: 150.0,),
             ),
@@ -34,7 +34,7 @@ class About extends StatelessWidget {
             ),
             SizedBox(height: 15.0,),
             ListTile(
-              leading: Icon(GroovinMaterialIcons.web, color: mintgreen_light,),
+              leading: Icon(GroovinMaterialIcons.web, color: green,),
               title: Text('HackRU Website', style: TextStyle(color: white,)),
               onTap: () => url_launcher.launch('https://hackru.org/'),
             ),
@@ -49,7 +49,7 @@ class About extends StatelessWidget {
               onTap: () => url_launcher.launch('https://www.facebook.com/theHackRU/'),
             ),
             ListTile(
-              leading: Icon(FontAwesomeIcons.instagram, color: pink_light,),
+              leading: Icon(FontAwesomeIcons.instagram, color: pink,),
               title: Text('Follow us on Instagram', style: TextStyle(color: white,)),
               onTap: () => url_launcher.launch('https://www.instagram.com/thehackru/'),
             ),

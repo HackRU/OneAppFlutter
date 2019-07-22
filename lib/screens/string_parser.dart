@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:HackRU/colors.dart';
 
 class LinkTextSpan extends TextSpan {
@@ -46,7 +45,7 @@ class RichTextView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _style = TextStyle(fontSize: 15.0, color: bluegrey_dark,);
+    final _style = TextStyle(fontSize: 15.0, color: white,);
     final words = text.split(' ');
     List<TextSpan> span = [];
     words.forEach((word) {
@@ -54,7 +53,7 @@ class RichTextView extends StatelessWidget {
         var eWord = word.replaceAll(new RegExp(r'[<>]'), '');
         span.add(
             new LinkTextSpan(
-            style: _style.copyWith(color: green_tab, fontWeight: FontWeight.w500),
+            style: _style.copyWith(color: green),
             url: eWord,
             text: '$eWord ',)
         );
@@ -75,10 +74,10 @@ class RichTextView extends StatelessWidget {
     });
     if (span.length > 0) {
       return new RichText(
-        text: new TextSpan(text: '', children: span, style: TextStyle(fontSize: 15.0, color: bluegrey_dark,)),
+        text: new TextSpan(text: '', children: span, style: TextStyle(fontSize: 15.0, color: white,)),
       );
     } else {
-      return new Text(text, style: TextStyle(fontSize: 15.0, color: bluegrey_dark,),);
+      return new Text(text, style: TextStyle(fontSize: 15.0, color: white,),);
     }
   }
 }

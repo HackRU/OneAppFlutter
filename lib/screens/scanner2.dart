@@ -5,16 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
 import 'package:HackRU/colors.dart';
-import 'package:HackRU/hackru_service.dart';
-import 'package:HackRU/models.dart';
-
-//Future<String> _qrcode = new QRCodeReader()
-//    .setAutoFocusIntervalInMs(200)
-//    .setForceAutoFocus(true)
-//    .setTorchEnabled(true)
-//    .setHandlePermissions(true)
-//    .setExecuteAfterPermissionGranted(true)
-//    .scan();
+import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:HackRU/constants.dart';
 
 // This variable tracks if the user scanned something or just pressed the back
 // button without scanning anything. This is set to false when the scanner returns
@@ -72,7 +64,7 @@ class DualHeaderWithHint extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   name,
-                  style: textTheme.body1.copyWith(fontSize: 16.0, color: bluegrey_dark, fontWeight: FontWeight.w900),
+                  style: textTheme.body1.copyWith(fontSize: 16.0, color: charcoal, fontWeight: FontWeight.w900),
                 ),
               ),
             ),
@@ -122,14 +114,14 @@ class CollapsibleBody extends StatelessWidget {
                         margin: const EdgeInsets.only(right: 8.0),
                         child: FlatButton(
                             onPressed: onCancel,
-                            child: const Text('CANCEL', style: TextStyle(color: bluegrey, fontSize: 15.0, fontWeight: FontWeight.w500))
+                            child: const Text('CANCEL', style: TextStyle(color: charcoal, fontSize: 15.0, fontWeight: FontWeight.w500))
                         )
                     ),
                     Container(
                         margin: const EdgeInsets.only(right: 8.0),
                         child: FlatButton(
                             onPressed: onSave,
-                            child: const Text('SAVE', style: TextStyle(color: pink_dark, fontSize: 15, fontWeight: FontWeight.w500),)
+                            child: const Text('SAVE', style: TextStyle(color: green, fontSize: 15, fontWeight: FontWeight.w500),)
                         )
                     )
                   ]
@@ -225,15 +217,15 @@ class _QRScanner2State extends State<QRScanner2> {
                               return Column(
                                   mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    RadioListTile<Location>(value: Location.checkInNoDelayed, title: const Text('Check-In (Warn if Delayed Entry)'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.checkIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.tShirt, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.midnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.midnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
-                                    RadioListTile<Location>(value: Location.lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink_dark,),
+                                    RadioListTile<Location>(value: Location.checkInNoDelayed, title: const Text('Check-In (Warn if Delayed Entry)'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.checkIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.tShirt, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.midnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.midnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                                    RadioListTile<Location>(value: Location.lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
                                   ]
                               );
                             }
@@ -250,7 +242,7 @@ class _QRScanner2State extends State<QRScanner2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bluegrey_dark,
+      backgroundColor: charcoal,
       body: ListView(
         children: <Widget>[
           Column(
@@ -296,14 +288,14 @@ class _QRScanner2State extends State<QRScanner2> {
                         child: Container(
                           decoration: new BoxDecoration(
                             color: Colors.transparent,
-                            border: Border.all(color: mintgreen_light, width: 2.0, style: BorderStyle.solid),
+                            border: Border.all(color: yellow, width: 2.0, style: BorderStyle.solid),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(25.0),
                             child: Column(
                               children: <Widget>[
                                 Text(text,
-                                  style: TextStyle(color: mintgreen_light, fontSize: 25.0,), textAlign: TextAlign.center,),
+                                  style: TextStyle(color: pink, fontSize: 25.0,), textAlign: TextAlign.center,),
                               ],
                             ),
                           ),
@@ -318,7 +310,7 @@ class _QRScanner2State extends State<QRScanner2> {
       ),
       floatingActionButton: _isVisible == false ? null
       : new FloatingActionButton.extended(
-      backgroundColor: bluegrey,
+      backgroundColor: pink,
         onPressed: () async {
           print("---------------scan button pressed ---------------------");
           showDialog(
@@ -377,8 +369,8 @@ class _QRScanner2State extends State<QRScanner2> {
           }
       },
       tooltip: 'QRCode Reader',
-      icon: Icon(FontAwesomeIcons.camera, color: mintgreen_light,),
-      label: Text('Scan', style: TextStyle(fontSize: 15.0, color: mintgreen_light),),
+      icon: Icon(FontAwesomeIcons.camera, color: white,),
+      label: Text('Scan', style: TextStyle(fontSize: 15.0, color: yellow),),
       ),
     );
   }
@@ -387,9 +379,9 @@ class _QRScanner2State extends State<QRScanner2> {
     switch(await showDialog(
         context: context,
         builder: (BuildContext context, {barrierDismissible: false}){
-          return new AlertDialog(backgroundColor: bluegrey_dark,
-            title: Text(body, style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
-            actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
+          return new AlertDialog(backgroundColor: charcoal,
+            title: Text(body, style: TextStyle(fontSize: 30, color: yellow), textAlign:  TextAlign.center),
+            actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: green), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
           );
     },)){}
   }
@@ -397,10 +389,10 @@ class _QRScanner2State extends State<QRScanner2> {
     return showDialog(
         context: context,
         builder: (BuildContext context, {barrierDismissible: false}){
-          return new AlertDialog(backgroundColor: bluegrey_dark,
-            title: Text(body, style: TextStyle(fontSize: 30, color: pink_light), textAlign:  TextAlign.center),
+          return new AlertDialog(backgroundColor: charcoal,
+            title: Text(body, style: TextStyle(fontSize: 30, color: yellow), textAlign:  TextAlign.center),
             actions: <Widget>[
-              FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center),
+              FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: green), textAlign:  TextAlign.center),
                 onPressed: () async {
                   Navigator.pop(context, true);
               }),
@@ -419,7 +411,7 @@ class _QRScanner2State extends State<QRScanner2> {
     var user;
     try {
       if(email != null) {
-        user = await getUser(QRScanner2.cred, email);
+        user = await getUser(DEV_URL, QRScanner2.cred, email);
         print("scanned user");
         print(user);
         if (!user.dayOf.containsKey(QRScanner2.event) ||
@@ -437,15 +429,15 @@ class _QRScanner2State extends State<QRScanner2> {
           }
 
           if (QRScanner2.event == "checkIn") {
-            await printLabel(email);
+            printLabel(email, MISC_URL);
           }
 
-          updateUserDayOf(QRScanner2.cred, user, QRScanner2.event);
+          updateUserDayOf(DEV_URL, QRScanner2.cred, user, QRScanner2.event);
         } else {
           result = 'ALREADY SCANNED!';
           if (QRScanner2.event == "checkIn") {
             if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
-              await printLabel(email);
+              printLabel(email, MISC_URL);
               result = "SCANNED!";
             } else {
               return NOT_SCANNED;
