@@ -30,7 +30,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Home",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: yellow,
         ),
         Home()));
@@ -38,7 +38,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Map",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: pink,
         ),
         Map()));
@@ -46,7 +46,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Scanner",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: yellow,
         ),
         QRScanner2()));
@@ -54,7 +54,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Help",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: pink,
         ),
         Help()));
@@ -62,7 +62,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "About",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: yellow,
         ),
         About()));
@@ -75,20 +75,21 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
       actionsAppBar: <Widget>[
-        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: pink,),
-          color: pink,
-          splashColor: yellow,
+        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: yellow,),
+          color: yellow,
+          splashColor: white,
           onPressed: (){
             Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => Login()), ModalRoute.withName('/login'));
             deleteStoredCredential();
         })
       ],
+      tittleAppBar: Text('HackRU', style: TextStyle(color: white),),
       backgroundColorMenu: charcoal,
-      backgroundColorAppBar: charcoal,
+      backgroundColorAppBar: pink,
       elevationAppBar: 0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
-      iconMenuAppBar: Icon(Icons.arrow_back, color: green,),
+      iconMenuAppBar: Icon(Icons.arrow_back, color: white,),
     );
 
   }

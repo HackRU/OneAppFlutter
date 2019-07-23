@@ -8,7 +8,7 @@ import 'package:HackRU/constants.dart';
 class Help extends StatelessWidget {
   @override
   Widget build (BuildContext context) => new Scaffold(
-    backgroundColor: charcoal,
+    backgroundColor: pink,
     body: new FutureBuilder<List<HelpResource>>(
       future: helpResources(MISC_URL),
       builder: (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
@@ -49,20 +49,20 @@ class HelpButton extends StatelessWidget {
   }
 
   Widget build (BuildContext context) => new Card(
-      color: green,
+      color: white,
       margin: EdgeInsets.all(10.0),
       elevation: 0.0,
       child: Container(
           height: 80.0,
           child: InkWell(
-              splashColor: white,
+              splashColor: yellow,
               onTap: _open,
               child: new Row (
                   children: <Widget> [
                     Expanded(
                         child: new Text(
                             resource.name.toUpperCase(),
-                            style: TextStyle(color: white, fontSize: 25,),
+                            style: TextStyle(color: pink, fontSize: 25,),
                             textAlign: TextAlign.center
                         )
                     )

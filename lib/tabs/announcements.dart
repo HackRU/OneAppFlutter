@@ -23,17 +23,17 @@ class AnnouncementCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(time, style: TextStyle(color: yellow, fontWeight: FontWeight.w700),),
+                new Text(time, style: TextStyle(color: charcoal, fontWeight: FontWeight.w700),),
                 SizedBox(height: 2.0,),
                 new RichTextView(text: resource.text ?? ''),
               ],
             ),
-            color: charcoal_light,
+            color: white,
             padding: const EdgeInsets.all(15.0),
           ),
         ),
         elevation: 5.0,
-        color: charcoal,
+        color: white,
       ),
     );
   }
@@ -72,7 +72,7 @@ class AnnouncementsState extends State<Announcements> {
 
   @override
   Widget build (BuildContext context) => new Scaffold(
-      backgroundColor: charcoal,
+      backgroundColor: pink,
       body: new StreamBuilder<List<Announcement>>(
           stream: _getSlacks(),
           builder: (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {

@@ -1,14 +1,14 @@
 # One App Flutter
 
 The Official HackRU Flutter App
-<img align="right" src="./screenshots/appIconImage.png" height="200">
+<img align="right" src="./screenshots/appIconImagePink.png" height="200">
 
 ## Description
 *What is the purpose of this project?*
 
 This project is a mobile application for hackers, organizers, mentors, sponsors at the hackathon. Hackers would be able to get announcements, get a QR code for checking, food, t-shirts, as well as see the schedule and map for the hackathon. Organizers would be able to scan for checkin, food, t-shirts for analytics that can be used after or even during the hackathon. Any more ideas to expand this project are always welcome.
 
-<img src="screenshots/login.png" height="300em" /> <img src="screenshots/announcements.png" height="300em" /> <img src="screenshots/drawer.png" height="300em" /> <img src="screenshots/events.png" height="300em" /> <img src="screenshots/timer.png" height="300em" />
+<img src="screenshots/login2.png" height="300em" /> <img src="screenshots/announcements2.png" height="300em" /> <img src="screenshots/drawer2.png" height="300em" /> <img src="screenshots/events2.png" height="300em" /> <img src="screenshots/timer2.png" height="300em" />
 
 ## Inspiration
 *How did this project come to be?*

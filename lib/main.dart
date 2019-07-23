@@ -24,16 +24,16 @@ class Main extends StatelessWidget {
       title: 'HackRU',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: pink,
-        accentColor: green,
+        primaryColor: yellow,
+        accentColor: pink,
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: white, width: 0.0),
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
           ),
-          fillColor: greyLight,
+          fillColor: pink,
           labelStyle: TextStyle(
-            color: greyLight,
+            color: white,
           ),
         ),
       ),
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Home",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0, ),
           colorLineSelected: yellow,
         ),
         Home()));
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Map",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: pink,
         ),
         Map()));
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Help",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: yellow,
         ),
         Help()));
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "About",
-          baseStyle: TextStyle( color: white.withOpacity(0.5), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: pink,
         ),
         About()));
@@ -97,20 +97,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
       actionsAppBar: <Widget>[
-        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: pink,),
-          color: pink,
-          splashColor: yellow,
+        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: yellow,),
+          color: yellow,
+          splashColor: white,
           onPressed: (){
             Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => Login()), ModalRoute.withName('/login'));
             deleteStoredCredential();
         })
       ],
+      tittleAppBar: Text('HackRU', style: TextStyle(color: white),),
       backgroundColorMenu: charcoal,
-      backgroundColorAppBar: charcoal,
+      backgroundColorAppBar: pink,
       elevationAppBar: 0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
-      iconMenuAppBar: Icon(Icons.arrow_back, color: green,),
+      iconMenuAppBar: Icon(Icons.arrow_back, color: white,),
     );
 
   }

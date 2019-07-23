@@ -66,6 +66,7 @@ flutter:
   - assets/images/map/food_court.png
   - assets/images/map/CAVE.png
   - assets/images/hackru_f19_logo.png
+  - assets/images/hackru_f19_logo_circle.png
 
   fonts:
   - family: OpenSans

@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 //const shadow = const Color(0xFFA9f6E5);
 //const green_tab = const Color(0xFF1eb997);
 
+const pink_light = const Color(0xFFe85f5f);
 const pink = const Color(0xFFC85151);
+const pink_dark = const Color(0xFF592323);
 const green = const Color(0xFF4FAB5F);
 const yellow = const Color(0xFFF1BA43);
 
@@ -17,7 +19,7 @@ const bluegrey = const Color(0xFF3E5569);
 
 const white = Colors.white;
 const grey_light = const Color(0xFFECEFF1);
-const greyLight = const Color(0xFF898c8c);
+const grey = const Color(0xFF898c8c);
 const charcoal = const Color(0xFF24292E);
 const black = Colors.black;
 const charcoal_light = const Color(0xFF2f363d);

@@ -121,7 +121,7 @@ class CollapsibleBody extends StatelessWidget {
                         margin: const EdgeInsets.only(right: 8.0),
                         child: FlatButton(
                             onPressed: onSave,
-                            child: const Text('SAVE', style: TextStyle(color: green, fontSize: 15, fontWeight: FontWeight.w500),)
+                            child: const Text('SAVE', style: TextStyle(color: pink, fontSize: 15, fontWeight: FontWeight.w600),)
                         )
                     )
                   ]
@@ -242,7 +242,7 @@ class _QRScanner2State extends State<QRScanner2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: charcoal,
+      backgroundColor: pink,
       body: ListView(
         children: <Widget>[
           Column(
@@ -295,7 +295,7 @@ class _QRScanner2State extends State<QRScanner2> {
                             child: Column(
                               children: <Widget>[
                                 Text(text,
-                                  style: TextStyle(color: pink, fontSize: 25.0,), textAlign: TextAlign.center,),
+                                  style: TextStyle(color: white, fontSize: 25.0,), textAlign: TextAlign.center,),
                               ],
                             ),
                           ),
@@ -310,7 +310,7 @@ class _QRScanner2State extends State<QRScanner2> {
       ),
       floatingActionButton: _isVisible == false ? null
       : new FloatingActionButton.extended(
-      backgroundColor: pink,
+      backgroundColor: yellow,
         onPressed: () async {
           print("---------------scan button pressed ---------------------");
           showDialog(
@@ -369,8 +369,8 @@ class _QRScanner2State extends State<QRScanner2> {
           }
       },
       tooltip: 'QRCode Reader',
-      icon: Icon(FontAwesomeIcons.camera, color: white,),
-      label: Text('Scan', style: TextStyle(fontSize: 15.0, color: yellow),),
+      icon: Icon(FontAwesomeIcons.camera, color: charcoal,),
+      label: Text('Scan', style: TextStyle(fontSize: 15.0, color: pink),),
       ),
     );
   }
@@ -379,8 +379,8 @@ class _QRScanner2State extends State<QRScanner2> {
     switch(await showDialog(
         context: context,
         builder: (BuildContext context, {barrierDismissible: false}){
-          return new AlertDialog(backgroundColor: charcoal,
-            title: Text(body, style: TextStyle(fontSize: 30, color: yellow), textAlign:  TextAlign.center),
+          return new AlertDialog(backgroundColor: white,
+            title: Text(body, style: TextStyle(fontSize: 30, color: charcoal), textAlign:  TextAlign.center),
             actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: green), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
           );
     },)){}
@@ -389,14 +389,14 @@ class _QRScanner2State extends State<QRScanner2> {
     return showDialog(
         context: context,
         builder: (BuildContext context, {barrierDismissible: false}){
-          return new AlertDialog(backgroundColor: charcoal,
-            title: Text(body, style: TextStyle(fontSize: 30, color: yellow), textAlign:  TextAlign.center),
+          return new AlertDialog(backgroundColor: white,
+            title: Text(body, style: TextStyle(fontSize: 30, color: charcoal), textAlign:  TextAlign.center),
             actions: <Widget>[
               FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: green), textAlign:  TextAlign.center),
                 onPressed: () async {
                   Navigator.pop(context, true);
               }),
-              FlatButton(child: Text('CANCEL', style: TextStyle(fontSize: 20, color: white), textAlign:  TextAlign.center),
+              FlatButton(child: Text('CANCEL', style: TextStyle(fontSize: 20, color: pink), textAlign:  TextAlign.center),
                 onPressed: (){
                   Navigator.pop(context, false);
                 }),

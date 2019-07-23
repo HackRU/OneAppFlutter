@@ -15,14 +15,14 @@ class About extends StatelessWidget {
 
   @override
   Widget build (BuildContext context) => new Scaffold(
-    backgroundColor: charcoal,
+    backgroundColor: pink,
     body: new PageView(
       children: <Widget>[
         new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Center(
-              child: Image.asset('assets/images/hackru_f19_logo.png',
+              child: Image.asset('assets/images/hackru_f19_logo_circle.png',
                 alignment: Alignment.center,
                 height: 150.0, width: 150.0,),
             ),
@@ -34,22 +34,22 @@ class About extends StatelessWidget {
             ),
             SizedBox(height: 15.0,),
             ListTile(
-              leading: Icon(GroovinMaterialIcons.web, color: green,),
+              leading: Icon(GroovinMaterialIcons.web, color: yellow,),
               title: Text('HackRU Website', style: TextStyle(color: white,)),
               onTap: () => url_launcher.launch('https://hackru.org/'),
             ),
             ListTile(
-              leading: Icon(FontAwesomeIcons.github, color: white,),
+              leading: Icon(FontAwesomeIcons.github, color: yellow,),
               title: Text('Source code on GitHub', style: TextStyle(color: white,)),
               onTap: () => url_launcher.launch('https://github.com/HackRU/OneAppFlutter'),
             ),
             ListTile(
-              leading: Icon(FontAwesomeIcons.facebookSquare, color: fb,),
+              leading: Icon(FontAwesomeIcons.facebookSquare, color: yellow,),
               title: Text('Like us on Facebook', style: TextStyle(color: white,)),
               onTap: () => url_launcher.launch('https://www.facebook.com/theHackRU/'),
             ),
             ListTile(
-              leading: Icon(FontAwesomeIcons.instagram, color: pink,),
+              leading: Icon(FontAwesomeIcons.instagram, color: yellow,),
               title: Text('Follow us on Instagram', style: TextStyle(color: white,)),
               onTap: () => url_launcher.launch('https://www.instagram.com/thehackru/'),
             ),

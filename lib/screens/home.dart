@@ -67,9 +67,9 @@ class _HomeState extends State<Home>
     final BottomNavigationBar bottomNavBar = BottomNavigationBar(
       items: TabItems.map((TabItem) {
         return new BottomNavigationBarItem(
-          backgroundColor: charcoal,
+          backgroundColor: pink,
           title: new Text(TabItem.title,),
-          icon: new Icon(TabItem.icon, color: green,),
+          icon: new Icon(TabItem.icon, color: white,),
         );
       }).toList(),
       currentIndex: _tab,
@@ -94,13 +94,13 @@ class _HomeState extends State<Home>
           } ,
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
-          foregroundColor: yellow,
-          backgroundColor: pink,
+          foregroundColor: pink,
+          backgroundColor: yellow,
       ),
       bottomNavigationBar: Theme.of(context).platform == TargetPlatform.iOS ?
       new CupertinoTabBar(
-        backgroundColor: charcoal,
-        activeColor: green,
+        backgroundColor: pink,
+        activeColor: white,
         currentIndex: _tab,
         onTap: onTap,
         items: TabItems.map((TabItem) {
@@ -127,18 +127,16 @@ class _HomeState extends State<Home>
                 width: 300.0,
                 child: Center(
                   child: QrImage(
-                      version: 4,
-                      data: userEmailAddr,
-                      gapless: true,
-                      foregroundColor: yellow,
-                      onError: (dynamic ex){
-                        print('[QR] ERROR - $ex');
-                      },
-                    ),
+                    version: 4,
+                    data: userEmailAddr,
+                    gapless: true,
+                    foregroundColor: pink,
+                    onError: (dynamic ex){ print('[QR] ERROR - $ex'); },
+                  ),
                 ),
               ),
             ],
-            backgroundColor: charcoal,
+            backgroundColor: white,
           );
         },)){}
   }

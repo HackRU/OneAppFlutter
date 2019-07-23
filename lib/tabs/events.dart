@@ -35,7 +35,9 @@ class EventsState extends State<Events>
           new Tab(text: 'SUNDAY',),],
         indicatorColor: yellow,
         indicatorSize: TabBarIndicatorSize.tab,
-        controller: controller
+        controller: controller,
+        unselectedLabelColor: pink_dark,
+        labelColor: white,
     );
   }
 
@@ -66,10 +68,10 @@ class EventsState extends State<Events>
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        backgroundColor: charcoal,
+        backgroundColor: pink,
         appBar: new AppBar(
             title: getTabBar(),
-            backgroundColor: charcoal,
+            backgroundColor: pink,
             elevation: 1.0,
             automaticallyImplyLeading: false,
         ),

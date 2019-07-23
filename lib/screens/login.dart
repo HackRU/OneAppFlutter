@@ -100,9 +100,9 @@ class _LoginState extends State<Login> {
       Navigator.pop(context);
       showDialog<void>(context: context, barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(backgroundColor: charcoal,
+          return AlertDialog(backgroundColor: white,
             title: Text("ERROR: \n'"+errorMessage+"'",
-              style: TextStyle(fontSize: 16, color: yellow),),
+              style: TextStyle(fontSize: 16, color: charcoal),),
             actions: <Widget>[
               FlatButton(
                 child: Text('OK', style: TextStyle(fontSize: 16, color: green),),
@@ -119,7 +119,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: charcoal,
+    backgroundColor: pink,
     body: SafeArea(
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -127,10 +127,10 @@ class _LoginState extends State<Login> {
           SizedBox(height: 30.0),
           Column(
             children: <Widget>[
-              Image.asset('assets/images/hackru_f19_logo.png', width: 180, height: 180,),
+              Image.asset('assets/images/hackru_f19_logo_circle.png', width: 180, height: 180,),
               SizedBox(height: 5.0),
               Text('FALL 2019',
-                style: TextStyle(color: pink, fontSize: 25),
+                style: TextStyle(color: white, fontSize: 25),
               ),
             ],
           ),
@@ -138,15 +138,15 @@ class _LoginState extends State<Login> {
           Center(
             child: TextField(
               keyboardType: TextInputType.emailAddress,
-              style: TextStyle(fontSize: 20, color: yellow),
+              style: TextStyle(fontSize: 20, color: white),
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Username',
-                fillColor: yellow,
+                fillColor: white,
                 hasFloatingPlaceholder: true,
                 errorText: _inputIsValid ? null : 'Please enter valid email address',
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: const BorderSide(color: white, width: 0.0),
+                  borderSide: const BorderSide(color: white, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
               ),
@@ -155,16 +155,16 @@ class _LoginState extends State<Login> {
           SizedBox(height: 12.0),
           Center(
             child: TextField(
-              style: TextStyle(fontSize: 20, color: yellow),
+              style: TextStyle(fontSize: 20, color: white),
               controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
-                fillColor: yellow,
+                fillColor: white,
                 hasFloatingPlaceholder: true,
                 errorText: _inputIsValid ? null : 'Please enter valid password',
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: const BorderSide(color: white, width: 0.0),
+                  borderSide: const BorderSide(color: white, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
               ),
@@ -173,7 +173,8 @@ class _LoginState extends State<Login> {
           SizedBox(height: 40.0,),
           RaisedButton(
             onPressed: _buttonLogin(context),
-            color: charcoal,
+            elevation: 0.0,
+            color: pink,
             textColor: white,
             padding: const EdgeInsets.all(0.0),
             child: ClipRRect(
@@ -181,31 +182,16 @@ class _LoginState extends State<Login> {
               child: Container(
                 width: double.infinity,
                 height: 60.0,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: <Color>[pink, yellow,],
-                  ),
-                ),
+                color: yellow,
                 padding: const EdgeInsets.all(18.0),
                 child: const Text(
                   'LOGIN',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: pink, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
           ),
-//            RaisedButton(
-//              child: Text('LOGIN'),
-//              color: pink,
-//              textColor: white,
-//              textTheme: ButtonTextTheme.normal,
-//              elevation: 10.0,
-//              shape: BeveledRectangleBorder(
-//                borderRadius: BorderRadius.all(Radius.circular(3.0)),
-//              ),
-//              onPressed: _buttonLogin(context),
-//            ),
         ]
       )
     )
