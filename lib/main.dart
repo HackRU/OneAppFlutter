@@ -105,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
             deleteStoredCredential();
         })
       ],
-      tittleAppBar: Text('HackRU', style: TextStyle(color: white),),
-      backgroundColorMenu: charcoal,
+      tittleAppBar: Text('HackRU', style: TextStyle(color: grey),),
+      backgroundColorMenu: white,
       backgroundColorAppBar: pink,
       elevationAppBar: 0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),

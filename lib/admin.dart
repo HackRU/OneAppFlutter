@@ -30,40 +30,45 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Home",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: yellow,
+          selectedStyle: TextStyle(color: charcoal),
         ),
         Home()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Map",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: pink,
+          selectedStyle: TextStyle(color: charcoal),
         ),
         Map()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Scanner",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: yellow,
+          selectedStyle: TextStyle(color: charcoal),
         ),
         QRScanner2()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Help",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: pink,
+          selectedStyle: TextStyle(color: charcoal),
         ),
         Help()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "About",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey.withOpacity(0.7), fontSize: 28.0 ),
           colorLineSelected: yellow,
+          selectedStyle: TextStyle(color: charcoal),
         ),
         About()));
 
@@ -84,7 +89,7 @@ class _AdminPageState extends State<AdminPage> with TickerProviderStateMixin {
         })
       ],
       tittleAppBar: Text('HackRU', style: TextStyle(color: white),),
-      backgroundColorMenu: charcoal,
+      backgroundColorMenu: white,
       backgroundColorAppBar: pink,
       elevationAppBar: 0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),

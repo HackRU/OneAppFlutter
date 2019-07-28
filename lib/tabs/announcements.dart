@@ -23,17 +23,17 @@ class AnnouncementCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(time, style: TextStyle(color: charcoal, fontWeight: FontWeight.w700),),
+                new Text(time, style: TextStyle(color: off_white, fontWeight: FontWeight.w700),),
                 SizedBox(height: 2.0,),
                 new RichTextView(text: resource.text ?? ''),
               ],
             ),
-            color: white,
+            color: card_color,
             padding: const EdgeInsets.all(15.0),
           ),
         ),
         elevation: 5.0,
-        color: white,
+        color: card_color,
       ),
     );
   }

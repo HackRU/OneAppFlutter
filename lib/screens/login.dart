@@ -127,7 +127,7 @@ class _LoginState extends State<Login> {
           SizedBox(height: 30.0),
           Column(
             children: <Widget>[
-              Image.asset('assets/images/hackru_f19_logo_circle.png', width: 180, height: 180,),
+              Image.asset('assets/images/hackru_white_logo.png', width: 180, height: 180,),
               SizedBox(height: 5.0),
               Text('FALL 2019',
                 style: TextStyle(color: white, fontSize: 25),
@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
               child: Container(
                 width: double.infinity,
                 height: 60.0,
-                color: yellow,
+                color: white,
                 padding: const EdgeInsets.all(18.0),
                 child: const Text(
                   'LOGIN',

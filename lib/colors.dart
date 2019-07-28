@@ -1,16 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-//const mintgreen_dark = const Color(0xFF26E8BD);
-//const mintgreen_light= const Color(0xFF5FFFDC);
-//const bluegrey = const Color(0xFF5A7A96);
-//const pink_dark = const Color(0xFFFF80CF);
-//const pink_light = const Color(0xFFF8A5FF);
-//const shadow = const Color(0xFFA9f6E5);
-//const green_tab = const Color(0xFF1eb997);
-
-const pink_light = const Color(0xFFe85f5f);
 const pink = const Color(0xFFC85151);
+const card_color = const Color(0xFFb04646);
 const pink_dark = const Color(0xFF592323);
 const green = const Color(0xFF4FAB5F);
 const yellow = const Color(0xFFF1BA43);
@@ -19,6 +11,7 @@ const bluegrey = const Color(0xFF3E5569);
 
 const white = Colors.white;
 const grey_light = const Color(0xFFECEFF1);
+const off_white = const Color(0xFFfff5e8);
 const grey = const Color(0xFF898c8c);
 const charcoal = const Color(0xFF24292E);
 const black = Colors.black;
