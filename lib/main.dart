@@ -25,15 +25,15 @@ class Main extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: yellow,
-        accentColor: pink,
+        accentColor: yellow,
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: white, width: 0.0),
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
           ),
-          fillColor: pink,
+          fillColor: yellow,
           labelStyle: TextStyle(
-            color: white,
+            color: off_white,
           ),
         ),
       ),
@@ -60,32 +60,36 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Home",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0, ),
+          baseStyle: TextStyle( color: grey, fontSize: 28.0, ),
           colorLineSelected: yellow,
+          selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
         ),
         Home()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Map",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey, fontSize: 28.0 ),
           colorLineSelected: pink,
+          selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
         ),
         Map()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "Help",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey, fontSize: 28.0 ),
           colorLineSelected: yellow,
+          selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
         ),
         Help()));
 
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           name: "About",
-          baseStyle: TextStyle( color: yellow.withOpacity(0.7), fontSize: 28.0 ),
+          baseStyle: TextStyle( color: grey, fontSize: 28.0 ),
           colorLineSelected: pink,
+          selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
         ),
         About()));
 
@@ -105,13 +109,13 @@ class _MyHomePageState extends State<MyHomePage> {
             deleteStoredCredential();
         })
       ],
-      tittleAppBar: Text('HackRU', style: TextStyle(color: white),),
-      backgroundColorMenu: charcoal,
+      tittleAppBar: Text('HackRU', style: TextStyle(color: off_white),),
+      backgroundColorMenu: off_white,
       backgroundColorAppBar: pink,
-      elevationAppBar: 0,
+      elevationAppBar: 10.0,
       backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
-      iconMenuAppBar: Icon(Icons.arrow_back, color: white,),
+      iconMenuAppBar: Icon(Icons.arrow_back, color: off_white,),
     );
 
   }

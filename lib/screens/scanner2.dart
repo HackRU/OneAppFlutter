@@ -295,7 +295,7 @@ class _QRScanner2State extends State<QRScanner2> {
                             child: Column(
                               children: <Widget>[
                                 Text(text,
-                                  style: TextStyle(color: white, fontSize: 25.0,), textAlign: TextAlign.center,),
+                                  style: TextStyle(color: off_white, fontSize: 25.0,), textAlign: TextAlign.center,),
                               ],
                             ),
                           ),
@@ -369,8 +369,8 @@ class _QRScanner2State extends State<QRScanner2> {
           }
       },
       tooltip: 'QRCode Reader',
-      icon: Icon(FontAwesomeIcons.camera, color: charcoal,),
-      label: Text('Scan', style: TextStyle(fontSize: 15.0, color: pink),),
+      icon: Icon(FontAwesomeIcons.camera, color: pink,),
+      label: Text('Scan', style: TextStyle(fontSize: 20.0, color: pink, fontWeight: FontWeight.w600),),
       ),
     );
   }

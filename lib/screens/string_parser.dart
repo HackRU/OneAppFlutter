@@ -45,7 +45,7 @@ class RichTextView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _style = TextStyle(fontSize: 15.0, color: charcoal_light, fontWeight: FontWeight.w400);
+    final _style = TextStyle(fontSize: 15.0, color: pink, fontWeight: FontWeight.w600);
     final words = text.split(' ');
     List<TextSpan> span = [];
     words.forEach((word) {
@@ -53,7 +53,7 @@ class RichTextView extends StatelessWidget {
         var eWord = word.replaceAll(new RegExp(r'[<>]'), '');
         span.add(
             new LinkTextSpan(
-            style: _style.copyWith(color: pink, fontWeight: FontWeight.w500),
+            style: _style.copyWith(color: charcoal_light, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
             url: eWord,
             text: '$eWord ',)
         );
@@ -74,10 +74,10 @@ class RichTextView extends StatelessWidget {
     });
     if (span.length > 0) {
       return new RichText(
-        text: new TextSpan(text: '', children: span, style: TextStyle(fontSize: 15.0, color: pink,)),
+        text: new TextSpan(text: '', children: span, style: TextStyle(fontSize: 15.0, color: charcoal_light,)),
       );
     } else {
-      return new Text(text, style: TextStyle(fontSize: 15.0, color: pink,),);
+      return new Text(text, style: TextStyle(fontSize: 15.0, color: charcoal_light,),);
     }
   }
 }

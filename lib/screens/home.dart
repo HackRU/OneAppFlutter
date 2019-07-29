@@ -69,13 +69,13 @@ class _HomeState extends State<Home>
         return new BottomNavigationBarItem(
           backgroundColor: pink,
           title: new Text(TabItem.title,),
-          icon: new Icon(TabItem.icon, color: white,),
+          icon: new Icon(TabItem.icon, color: off_white,),
         );
       }).toList(),
       currentIndex: _tab,
       type: _type,
       onTap: onTap,
-      fixedColor: white,
+      fixedColor: off_white,
     );
 
     return Scaffold(
@@ -100,7 +100,7 @@ class _HomeState extends State<Home>
       bottomNavigationBar: Theme.of(context).platform == TargetPlatform.iOS ?
       new CupertinoTabBar(
         backgroundColor: pink,
-        activeColor: white,
+        activeColor: off_white,
         currentIndex: _tab,
         onTap: onTap,
         items: TabItems.map((TabItem) {
@@ -136,7 +136,7 @@ class _HomeState extends State<Home>
                 ),
               ),
             ],
-            backgroundColor: white,
+            backgroundColor: off_white,
           );
         },)){}
   }
