@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const pink = const Color(0xFFC85151);
-const card_color = const Color(0xFFb04646);
+const card_color = const Color(0xFFe06969);
 const pink_dark = const Color(0xFF592323);
+const weblink = const Color(0xFF732d2d);
 const green = const Color(0xFF4FAB5F);
 const yellow = const Color(0xFFF1BA43);
 
