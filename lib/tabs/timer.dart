@@ -24,7 +24,7 @@ class TimerState extends State<Timer> {
 
     final bool debugMode = false;
     DateTime now = DateTime.now();
-    DateTime dDay = DateTime(2019, 10, 19, 10, 00, 0);
+    DateTime dDay = DateTime(2019, 10, 20, 13, 00, 0);
     dDay = (debugMode)? DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second): dDay;
     Duration _duration = dDay.difference(now);
 
@@ -88,24 +88,33 @@ class TimerState extends State<Timer> {
                   direction: FlipDirection.down,)).toList(),
               ),
               SizedBox(height: 12.0,),
-              Text('HackRU Fall 2019 In...', style: TextStyle(color: yellow, fontSize: 30.0,), textAlign: TextAlign.center,),
+              (_duration.inHours > 23 && _duration.inHours.isNegative == false) ? Text('HackRU Fall 2019 In...', style: TextStyle(color: off_white, fontSize: 30.0, fontWeight: FontWeight.w600,), textAlign: TextAlign.center,)
+              : (_duration.isNegative == false) ? Text('HackRU Ends In...', style: TextStyle(color: yellow, fontSize: 30.0, fontWeight: FontWeight.w600,), textAlign: TextAlign.center,): Text(''),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Center(
                     heightFactor: 0.0,
                     widthFactor: 0.0,
-                    child: FlipClock.reverseCountdown(
+                    child: (_duration.isNegative == false) ?
+                    FlipClock.reverseCountdown(
                       duration: _duration,
                       digitColor: pink,
-                      backgroundColor: white,
+                      backgroundColor: off_white,
                       digitSize: 40.0,
                       width: 30.0,
                       height: 55.0,
                       borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                      onDone: () => print('Hacking ends!! Don\'t forget to submit your projects to DevPost. '
-                          'Thanks for coming to HackRU Spring \'19!!!'),
-                    ),
+                      onDone: () => print('Times Up!'),
+                    ) : Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 100.0,),
+                        Text('Times Up!!\n\n Don\'t forget to submit your projects\n on DevPost. Thanks for attending\n HackRU Fall 2019!!!\n\n -- HackRU Organizing Team',
+                          style: TextStyle(color: pink, fontSize: 18.0, fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,),
+                      ]),
                   ),
                 ],
               ),

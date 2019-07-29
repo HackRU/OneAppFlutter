@@ -17,23 +17,23 @@ class AnnouncementCard extends StatelessWidget {
     return new Container(
       child: new Card(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(30.0),
           child: new Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(time, style: TextStyle(color: off_white, fontWeight: FontWeight.w700),),
+                new Text(time, style: TextStyle(color: charcoal_light, fontWeight: FontWeight.w600),),
                 SizedBox(height: 2.0,),
                 new RichTextView(text: resource.text ?? ''),
               ],
             ),
-            color: card_color,
+            color: off_white,
             padding: const EdgeInsets.all(15.0),
           ),
         ),
-        elevation: 5.0,
-        color: card_color,
+        elevation: 3.0,
+        color: off_white,
       ),
     );
   }

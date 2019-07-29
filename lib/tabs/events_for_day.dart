@@ -14,22 +14,22 @@ class EventCard extends StatelessWidget {
     var date = resource.start.toLocal().toString().substring(8,10);
     return Container(
       child: date == day ? new Card(
-        color: card_color,
+        color: off_white,
         child: ExpansionTile(
           leading: new Text(
             time,
             textAlign: TextAlign.center,
             style: new TextStyle(
-              color: yellow,
+              color: charcoal_light,
               textBaseline: TextBaseline.alphabetic,
               fontSize: 18.0,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          trailing: Icon(GroovinMaterialIcons.map_marker, color: charcoal,),
+          trailing: Icon(GroovinMaterialIcons.map_marker, color: grey, size: 28.0,),
           title: new Text(resource.summary,
             style: new TextStyle(
-              color: white,
+              color: pink,
               fontSize: 20.0,
               fontWeight: FontWeight.w500,
             ),

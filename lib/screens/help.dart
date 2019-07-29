@@ -49,7 +49,7 @@ class HelpButton extends StatelessWidget {
   }
 
   Widget build (BuildContext context) => new Card(
-      color: white,
+      color: off_white,
       margin: EdgeInsets.all(10.0),
       elevation: 0.0,
       child: Container(

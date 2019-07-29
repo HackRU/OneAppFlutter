@@ -34,10 +34,12 @@ class EventsState extends State<Events>
           new Tab(text: 'SATURDAY',),
           new Tab(text: 'SUNDAY',),],
         indicatorColor: yellow,
+        indicatorWeight: 3.0,
         indicatorSize: TabBarIndicatorSize.tab,
         controller: controller,
         unselectedLabelColor: pink_dark,
-        labelColor: white,
+        labelColor: off_white,
+        labelStyle: TextStyle(fontWeight: FontWeight.w600),
     );
   }
 

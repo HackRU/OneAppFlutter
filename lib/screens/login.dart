@@ -124,29 +124,29 @@ class _LoginState extends State<Login> {
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         children: <Widget>[
-          SizedBox(height: 30.0),
+          SizedBox(height: 5.0),
           Column(
             children: <Widget>[
-              Image.asset('assets/images/hackru_white_logo.png', width: 180, height: 180,),
-              SizedBox(height: 5.0),
+              Image.asset('assets/images/hackru_white_logo.png', width: 240, height: 240,),
+              SizedBox(height: 2.0),
               Text('FALL 2019',
-                style: TextStyle(color: white, fontSize: 25),
+                style: TextStyle(color: off_white, fontSize: 25),
               ),
             ],
           ),
-          SizedBox(height: 35.0),
+          SizedBox(height: 30.0),
           Center(
             child: TextField(
               keyboardType: TextInputType.emailAddress,
-              style: TextStyle(fontSize: 20, color: white),
+              style: TextStyle(fontSize: 20, color: off_white),
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Username',
-                fillColor: white,
+                fillColor: off_white,
                 hasFloatingPlaceholder: true,
                 errorText: _inputIsValid ? null : 'Please enter valid email address',
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: const BorderSide(color: white, width: 2.0),
+                  borderSide: const BorderSide(color: off_white, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
               ),
@@ -155,16 +155,16 @@ class _LoginState extends State<Login> {
           SizedBox(height: 12.0),
           Center(
             child: TextField(
-              style: TextStyle(fontSize: 20, color: white),
+              style: TextStyle(fontSize: 20, color: off_white),
               controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
-                fillColor: white,
+                fillColor: off_white,
                 hasFloatingPlaceholder: true,
                 errorText: _inputIsValid ? null : 'Please enter valid password',
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: const BorderSide(color: white, width: 2.0),
+                  borderSide: const BorderSide(color: off_white, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
               ),
@@ -175,14 +175,14 @@ class _LoginState extends State<Login> {
             onPressed: _buttonLogin(context),
             elevation: 0.0,
             color: pink,
-            textColor: white,
+            textColor: pink,
             padding: const EdgeInsets.all(0.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: Container(
                 width: double.infinity,
                 height: 60.0,
-                color: white,
+                color: off_white,
                 padding: const EdgeInsets.all(18.0),
                 child: const Text(
                   'LOGIN',
