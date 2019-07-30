@@ -25,44 +25,44 @@ class AnnouncementCard extends StatelessWidget {
   Widget build (BuildContext context){
     String secs = resource.ts.split(".")[0];
     String time = DateTime.fromMillisecondsSinceEpoch(int.parse(secs)*1000).toIso8601String().substring(11,16);
-    return Container(
-      margin: const EdgeInsets.all(5.0),
-      padding: const EdgeInsets.all(15.0),
-      decoration: hackRUBoxDecoration(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Text(time, style: TextStyle(color: off_white, fontWeight: FontWeight.w600, fontSize: 18.0),),
-          SizedBox(height: 3.0,),
-          new RichTextView(text: resource.text ?? ''),
-        ],
-      ),
-    );
-//    return new Container(
-//      child: new Card(
-//        child: ClipRRect(
-//          borderRadius: BorderRadius.circular(18.0),
-//          child: new Container(
-//            child: Column(
-//              mainAxisAlignment: MainAxisAlignment.start,
-//              crossAxisAlignment: CrossAxisAlignment.start,
-//              children: <Widget>[
-//                new Text(time, style: TextStyle(color: white, fontWeight: FontWeight.w800, fontSize: 16.0),),
-//                SizedBox(height: 2.0,),
-//                new RichTextView(text: resource.text ?? ''),
-//              ],
-//            ),
-//            color: card_color,
-//            padding: const EdgeInsets.all(15.0),
-//          ),
-//        ),
-//        borderOnForeground: true,
-//        elevation: 0.0,
-//        color: pink,
-//      ),
+//    return Container(
+//      margin: const EdgeInsets.all(5.0),
+//      padding: const EdgeInsets.all(15.0),
 //      decoration: hackRUBoxDecoration(),
+//      child: Column(
+//        mainAxisAlignment: MainAxisAlignment.start,
+//        crossAxisAlignment: CrossAxisAlignment.start,
+//        children: <Widget>[
+//          new Text(time, style: TextStyle(color: off_white, fontWeight: FontWeight.w600, fontSize: 18.0),),
+//          SizedBox(height: 3.0,),
+//          new RichTextView(text: resource.text ?? ''),
+//        ],
+//      ),
 //    );
+    return new Container(
+      child: new Card(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(18.0),
+          child: new Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Text(time, style: TextStyle(color: white, fontWeight: FontWeight.w800, fontSize: 16.0),),
+                SizedBox(height: 2.0,),
+                new RichTextView(text: resource.text ?? ''),
+              ],
+            ),
+            color: card_color,
+            padding: const EdgeInsets.all(15.0),
+          ),
+        ),
+        borderOnForeground: true,
+        elevation: 0.0,
+        color: pink,
+      ),
+//      decoration: hackRUBoxDecoration(),
+    );
   }
 }
 
