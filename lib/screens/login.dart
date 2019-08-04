@@ -1,4 +1,3 @@
-import 'package:HackRU/admin.dart';
 import 'package:HackRU/loading_indicator.dart';
 import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/screens/scanner2.dart';
@@ -8,19 +7,22 @@ import 'package:HackRU/main.dart';
 import 'package:HackRU/filestore.dart';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
 import 'package:HackRU/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   //const Login({Key: key}): super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  LoginState createState() => LoginState();
 }
 
-class _LoginState extends State<Login> {
+class LoginState extends State<Login> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _inputIsValid = true;
+  static var credStr = '';
+  static LcsCredential credential;
 
   final formKey = new GlobalKey<FormState>();
 
@@ -33,11 +35,22 @@ class _LoginState extends State<Login> {
     return false;
   }
 
+  _launchUrl() async {
+    const url = 'https://dev.hackru.org/signup';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   initState() {
     // if we have a stored credential then login with that
     super.initState();
     getStoredCredential().then((cred) {
+        credStr = cred.toString();
+        credential = cred;
         print("init got cred"+cred.toString());
         if (cred != null) {
           if (!cred.isExpired()) {
@@ -51,22 +64,22 @@ class _LoginState extends State<Login> {
   }
 
   void _completeLogin(LcsCredential cred, BuildContext context) async {
-    var user = await getUser(DEV_URL, cred);
     // Pop the loading indicator
     Navigator.pop(context);
     QRScanner2.cred = cred;
     Home.userEmail = _emailController.text;
     QRScanner2.userEmail = _emailController.text;
     QRScanner2.userPassword = _passwordController.text;
-    if(user.role["director"] == true ){
+    Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => MyHomePage()), ModalRoute.withName('/main'));
+//    if(user.role["director"] == true ){
 //      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
-      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => AdminPage()), ModalRoute.withName('/login'));
-    }
-    else{
+//      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => AdminPage()), ModalRoute.withName('/main'));
+//    }
+//    else{
 //      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
-      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => MyHomePage()), ModalRoute.withName('/login'));
+//      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => MyHomePage()), ModalRoute.withName('/main'));
+//    }
 
-    }
   }
   _loginLoad(context) {
     showDialog(
@@ -127,8 +140,7 @@ class _LoginState extends State<Login> {
           SizedBox(height: 5.0),
           Column(
             children: <Widget>[
-              Image.asset('assets/images/hackru_white_logo.png', width: 240, height: 240,),
-              SizedBox(height: 2.0),
+              Image.asset('assets/images/hackru_white_logo.png', width: 200, height: 200,),
               Text('FALL 2019',
                 style: TextStyle(color: off_white, fontSize: 25),
               ),
@@ -190,6 +202,16 @@ class _LoginState extends State<Login> {
                   textAlign: TextAlign.center,
                 ),
               ),
+            ),
+          ),
+          SizedBox(height: 60.0,),
+          RaisedButton(
+            onPressed: _launchUrl,
+            color: pink,
+            elevation: 0.0,
+            child: Text('Forgot Password? / Sign Up',
+              style: TextStyle(fontSize: 15, color: off_white, fontWeight: FontWeight.w500, decoration: TextDecoration.underline),
+              textAlign: TextAlign.center,
             ),
           ),
         ]

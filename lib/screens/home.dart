@@ -1,3 +1,4 @@
+import 'package:HackRU/screens/login.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:HackRU/filestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,9 +90,13 @@ class _HomeState extends State<Home>
             ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            _qrcode();
-          } ,
+          onPressed: () async {
+            var credFile = await storedCredentialFile();
+            var contents = await credFile.readAsString();
+            (contents == "")
+              ? Navigator.push(context, MaterialPageRoute(builder: (context) => Login()))
+              : _qrCode();
+          },
           tooltip: 'QR Code',
           child: Icon(GroovinMaterialIcons.qrcode, size: 30,),
           foregroundColor: pink,
@@ -114,12 +119,10 @@ class _HomeState extends State<Home>
     );
   }
 
-  Future<Null> _qrcode() async {
+  Future<Null> _qrCode() async {
     switch(await showDialog(
         context: context,
         builder: (BuildContext context){
-          print("******************");
-          print(userEmailAddr);
           return new SimpleDialog(
             children: <Widget>[
               Container(

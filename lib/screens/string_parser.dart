@@ -53,7 +53,7 @@ class RichTextView extends StatelessWidget {
         var eWord = word.replaceAll(new RegExp(r'[<>]'), '');
         span.add(
             new LinkTextSpan(
-            style: _style.copyWith(color: weblink, fontWeight: FontWeight.w700, decoration: TextDecoration.underline),
+            style: _style.copyWith(color: weblink, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
             url: eWord,
             text: '$eWord ',)
         );
