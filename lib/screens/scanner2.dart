@@ -370,7 +370,7 @@ class _QRScanner2State extends State<QRScanner2> {
       },
       tooltip: 'QRCode Reader',
       icon: Icon(FontAwesomeIcons.camera, color: pink,),
-      label: Text('Scan', style: TextStyle(fontSize: 20.0, color: pink, fontWeight: FontWeight.w600),),
+      label: Text('Scan', style: TextStyle(fontSize: 18.0, color: pink, fontWeight: FontWeight.w600),),
       ),
     );
   }

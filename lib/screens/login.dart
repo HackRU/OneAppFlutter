@@ -22,7 +22,7 @@ class LoginState extends State<Login> {
   final _passwordController = TextEditingController();
   bool _inputIsValid = true;
   static var credStr = '';
-  static LcsCredential credential;
+  static var guestUser;
 
   final formKey = new GlobalKey<FormState>();
 
@@ -50,7 +50,6 @@ class LoginState extends State<Login> {
     super.initState();
     getStoredCredential().then((cred) {
         credStr = cred.toString();
-        credential = cred;
         print("init got cred"+cred.toString());
         if (cred != null) {
           if (!cred.isExpired()) {
@@ -64,6 +63,8 @@ class LoginState extends State<Login> {
   }
 
   void _completeLogin(LcsCredential cred, BuildContext context) async {
+    var user = await getUser(DEV_URL, cred);
+    guestUser = user;
     // Pop the loading indicator
     Navigator.pop(context);
     QRScanner2.cred = cred;

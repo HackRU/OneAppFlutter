@@ -56,15 +56,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-getUserDetails() async{
-  if(LoginState.credential != null){
-    return await getUser(DEV_URL, LoginState.credential);
-  }
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   List<ScreenHiddenDrawer> items = new List();
-  var user = getUserDetails();
+  var user = LoginState.guestUser;
 
   @override
   void initState() {
@@ -104,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         About()));
 
-    if(LoginState.credential != null){
-      if(user.role["director"] == true) {
+    if(LoginState.credStr != '') {
+      if (user.role["director"] == true) {
         items.add(new ScreenHiddenDrawer(
             new ItemHiddenMenu(
               name: "Scanner",

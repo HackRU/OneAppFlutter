@@ -4,6 +4,8 @@ import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../loading_indicator.dart';
+
 
 class About extends StatelessWidget {
 
