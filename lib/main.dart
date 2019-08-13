@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
               selectedStyle: TextStyle(
                   color: pink_dark, fontWeight: FontWeight.w500),
             ),
-            QRScanner2()));
+            QRScanner()));
       }
     }
 

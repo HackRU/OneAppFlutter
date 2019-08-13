@@ -144,6 +144,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
               _selectedEvent = events[index];
             });
             _controller.collapse();
+            openQRScanner();
           },
           child: new Row (
             children: <Widget> [
