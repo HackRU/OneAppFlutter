@@ -205,34 +205,34 @@ class _QRScanner2State extends State<QRScanner2> {
           builder: (DemoItem<Location> item) {
             void close() { setState(() { item.isExpanded = false;});}
             return Form(
-                child: Builder(
-                    builder: (BuildContext context) {
-                      return CollapsibleBody(
-                        onSave: () { Form.of(context).save(); close(); },
-                        onCancel: () { Form.of(context).reset(); close(); },
-                        child: FormField<Location>(
-                            initialValue: item.value,
-                            onSaved: (Location result) { item.value = result; },
-                            builder: (FormFieldState<Location> field) {
-                              return Column(
-                                  mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    RadioListTile<Location>(value: Location.checkInNoDelayed, title: const Text('Check-In (Warn if Delayed Entry)'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.checkIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.tShirt, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.midnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.midnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                    RadioListTile<Location>(value: Location.lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
-                                  ]
-                              );
-                            }
-                        ),
-                      );
-                    }
-                ),
+              child: Builder(
+                builder: (BuildContext context) {
+                  return CollapsibleBody(
+                    onSave: () { Form.of(context).save(); close(); },
+                    onCancel: () { Form.of(context).reset(); close(); },
+                    child: FormField<Location>(
+                      initialValue: item.value,
+                      onSaved: (Location result) { item.value = result; },
+                      builder: (FormFieldState<Location> field) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            RadioListTile<Location>(value: Location.checkInNoDelayed, title: const Text('Check-In (Warn if Delayed Entry)'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.checkIn, title: const Text('Check-In'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.lunch1, title: const Text('Lunch-1'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.dinner, title: const Text('Dinner'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.tShirt, title: const Text('T-Shirts'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.midnightMeal, title: const Text('Midnight-Meal'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.midnightSurprise, title: const Text('Midnight-Surprise'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.breakfast, title: const Text('Breakfast'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                            RadioListTile<Location>(value: Location.lunch2, title: const Text('Lunch-2'), groupValue: field.value, onChanged: field.didChange, activeColor: pink,),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             );
           }
       ),
@@ -277,11 +277,10 @@ class _QRScanner2State extends State<QRScanner2> {
                       if (snapshot.hasData) {
                         text = snapshot.data;
                       }
-                      print("building");
-                      print(snapshot);
-                      print(snapshot.hasData);
-                      print(snapshot.data);
-
+//                      print("building");
+//                      print(snapshot);
+//                      print(snapshot.hasData);
+//                      print(snapshot.data);
 
                       return Padding(
                         padding: const EdgeInsets.only(top: 100.0),

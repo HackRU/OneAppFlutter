@@ -35,6 +35,7 @@ dependencies:
   intl: ^0.15.8
   path_provider: ^1.1.2
   dart_lcs_client: ^1.0.0
+  rubber: ^0.3.2
 
 dev_dependencies:
   flutter_test:
