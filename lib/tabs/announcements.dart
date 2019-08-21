@@ -1,11 +1,14 @@
 import 'package:HackRU/loading_indicator.dart';
 import 'package:HackRU/screens/string_parser.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/filestore.dart';
 import 'dart:async';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
 import 'package:HackRU/constants.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class AnnouncementCard extends StatelessWidget {
   AnnouncementCard({@required this.resource});
@@ -20,6 +23,31 @@ class AnnouncementCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _isWebLink(String input) {
+    final matcher = new RegExp(
+        r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
+    final specialChar = new RegExp("/");
+    return matcher.hasMatch(input) && specialChar.hasMatch(input);
+  }
+
+  _enableWebview(String text){
+    final words = text.split(' ');
+    WebView webView;
+    words.forEach((link) {
+      if (_isWebLink(link)) {
+        var linkText = link.replaceAll(new RegExp(r'[<>]'), '');
+        webView = new WebView(
+          initialUrl: linkText ?? '[null]',
+          gestureRecognizers: Set()
+            ..add(Factory<VerticalDragGestureRecognizer>(
+                    () => VerticalDragGestureRecognizer())),
+          javascriptMode: JavascriptMode.unrestricted,
+        );
+      }
+    });
+    return webView;
   }
 
   Widget build (BuildContext context){
@@ -40,6 +68,7 @@ class AnnouncementCard extends StatelessWidget {
 //      ),
 //    );
     return new Container(
+      key: Key(resource.ts),
       child: new Card(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(18.0),
@@ -50,7 +79,15 @@ class AnnouncementCard extends StatelessWidget {
               children: <Widget>[
                 new Text(time, style: TextStyle(color: white, fontWeight: FontWeight.w800, fontSize: 16.0),),
                 SizedBox(height: 2.0,),
-                new RichTextView(text: resource.text ?? ''),
+                new StringParser(text: resource.text ?? ''),
+                SizedBox(height: 6.0,),
+                new ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: new Container(
+                    child: _enableWebview(resource.text),
+                    height: _isWebLink(resource.text) ? 250.0 : 0.0,
+                  ),
+                ),
               ],
             ),
             color: card_color,
@@ -121,7 +158,7 @@ class AnnouncementsState extends State<Announcements> {
                     )
                 );
             }
-          }
+          },
       )
   );
 }
