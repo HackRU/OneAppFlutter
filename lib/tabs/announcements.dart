@@ -14,17 +14,6 @@ class AnnouncementCard extends StatelessWidget {
   AnnouncementCard({@required this.resource});
   final Announcement resource;
 
-  BoxDecoration hackRUBoxDecoration() {
-    return BoxDecoration(
-      border: Border(
-        bottom: BorderSide(
-          color: white,
-          width: 0.5,
-        ),
-      ),
-    );
-  }
-
   bool _isWebLink(String input) {
     final matcher = new RegExp(
         r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
@@ -40,9 +29,9 @@ class AnnouncementCard extends StatelessWidget {
         var linkText = link.replaceAll(new RegExp(r'[<>]'), '');
         webView = new WebView(
           initialUrl: linkText ?? '[null]',
-          gestureRecognizers: Set()
-            ..add(Factory<VerticalDragGestureRecognizer>(
-                    () => VerticalDragGestureRecognizer())),
+          gestureRecognizers: [
+            Factory(() => PlatformViewVerticalGestureRecognizer()),
+            ].toSet(),
           javascriptMode: JavascriptMode.unrestricted,
         );
       }
@@ -53,20 +42,6 @@ class AnnouncementCard extends StatelessWidget {
   Widget build (BuildContext context){
     String secs = resource.ts.split(".")[0];
     String time = DateTime.fromMillisecondsSinceEpoch(int.parse(secs)*1000).toIso8601String().substring(11,16);
-//    return Container(
-//      margin: const EdgeInsets.all(5.0),
-//      padding: const EdgeInsets.all(15.0),
-//      decoration: hackRUBoxDecoration(),
-//      child: Column(
-//        mainAxisAlignment: MainAxisAlignment.start,
-//        crossAxisAlignment: CrossAxisAlignment.start,
-//        children: <Widget>[
-//          new Text(time, style: TextStyle(color: off_white, fontWeight: FontWeight.w600, fontSize: 18.0),),
-//          SizedBox(height: 3.0,),
-//          new RichTextView(text: resource.text ?? ''),
-//        ],
-//      ),
-//    );
     return new Container(
       key: Key(resource.ts),
       child: new Card(
@@ -98,17 +73,14 @@ class AnnouncementCard extends StatelessWidget {
         elevation: 0.0,
         color: pink,
       ),
-//      decoration: hackRUBoxDecoration(),
     );
   }
 }
 
-// Create a stateful widget
 class Announcements extends StatefulWidget {
   @override
   AnnouncementsState createState() => new AnnouncementsState();
 }
-
 
 class AnnouncementsState extends State<Announcements> {
   static DateTime cacheTTL = DateTime.now();
@@ -161,4 +133,43 @@ class AnnouncementsState extends State<Announcements> {
           },
       )
   );
+}
+
+// Source credit for following class: https://cutt.ly/mwdVxtM
+class PlatformViewVerticalGestureRecognizer
+    extends VerticalDragGestureRecognizer {
+  PlatformViewVerticalGestureRecognizer({PointerDeviceKind kind})
+      : super(kind: kind);
+
+  Offset _dragDistance = Offset.zero;
+
+  @override
+  void addPointer(PointerEvent event) {
+    startTrackingPointer(event.pointer);
+  }
+
+  @override
+  void handleEvent(PointerEvent event) {
+    _dragDistance = _dragDistance + event.delta;
+    if (event is PointerMoveEvent) {
+      final double dy = _dragDistance.dy.abs();
+      final double dx = _dragDistance.dx.abs();
+
+      if (dy > dx && dy > kTouchSlop) {
+        // vertical drag - accept
+        resolve(GestureDisposition.accepted);
+        _dragDistance = Offset.zero;
+      } else if (dx > kTouchSlop && dx > dy) {
+        // horizontal drag - stop tracking
+        stopTrackingPointer(event.pointer);
+        _dragDistance = Offset.zero;
+      }
+    }
+  }
+
+  @override
+  String get debugDescription => 'horizontal drag (platform view)';
+
+  @override
+  void didStopTrackingLastPointer(int pointer) {}
 }

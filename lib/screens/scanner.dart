@@ -7,7 +7,6 @@ import 'package:HackRU/constants.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
 import 'package:rubber/rubber.dart';
 import 'package:HackRU/colors.dart';
-
 import '../loading_indicator.dart';
 
 var popup = true;
@@ -30,7 +29,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
   ScrollController _scrollController = ScrollController();
   Future<String> _message;
   var _selectedEvent = '* None *';
-  var events = ['Check-In', 'Check-In No Delayed', 'Lunch1', 'Dinner', 'T-Shirt', 'Midnight Meal', 'Midnight Surprise', 'Breakfast', 'Lunch2'];
+//  var events = ['Check-In', 'Check-In No Delayed', 'Lunch1', 'Dinner', 'T-Shirt', 'Midnight Meal', 'Midnight Surprise', 'Breakfast', 'Lunch2'];
 
   @override
   void initState() {
@@ -45,29 +44,45 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: RubberBottomSheet(
-          scrollController: _scrollController,
-          lowerLayer: _getLowerLayer(),
-          header: new Container(
-            height: 300.0,
-            color: Colors.transparent,
-            child: new Container(
-              decoration: new BoxDecoration(
-                color: pink,
-                borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(40.0),
-                  topRight: const Radius.circular(40.0),
+      backgroundColor: pink,
+      body: new FutureBuilder<List<String>>(
+        future: events(MISC_URL),
+        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return Center(
+                child: new Text('Loading...'),
+              );
+            default:
+              var events = snapshot.data;
+              return new Container(
+                child: RubberBottomSheet(
+                  scrollController: _scrollController,
+                  lowerLayer: _getLowerLayer(),
+                  header: new Container(
+                    height: 300.0,
+                    color: Colors.transparent,
+                    child: new Container(
+                      decoration: new BoxDecoration(
+                        color: pink,
+                        borderRadius: new BorderRadius.only(
+                          topLeft: const Radius.circular(40.0),
+                          topRight: const Radius.circular(40.0),
+                        ),
+                      ),
+                      child: new Center(
+                        child: new Text("Select Event", style: TextStyle(fontSize: 20.0, color: off_white),),
+                      ),
+                    ),
+                  ),
+                  headerHeight: 60,
+                  upperLayer: _getUpperLayer(events),
+                  animationController: _controller,
                 ),
-              ),
-              child: new Center(
-                child: new Text("Select Event", style: TextStyle(fontSize: 20.0, color: off_white),),
-              )),
-          ),
-          headerHeight: 60,
-          upperLayer: _getUpperLayer(),
-          animationController: _controller,
-        ),
+              );
+          }
+        },
       ),
     );
   }
@@ -114,7 +129,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
       // I'm (Sean) pretty sure that the scanner creates an extraneous
       // item on the Navigator stack. We need to pop it before we can pop
       // the loading indicator.
-      Navigator.pop(context);
+//      Navigator.pop(context);
       // Now wew can pop the loading indicator.
       Navigator.pop(context);
       if (message != NOT_SCANNED) {
@@ -130,8 +145,8 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     }
   }
 
-  Widget _eventCard(index){
-    return Card(
+  Widget _eventCard(index, events){
+    return new Card(
       color: off_white,
       margin: EdgeInsets.all(10.0),
       elevation: 0.0,
@@ -149,8 +164,8 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
           child: new Row (
             children: <Widget> [
               Expanded(
-                child: new Text(events[index],
-                  style: TextStyle(color: pink, fontSize: 20.0,),
+                child: new Text(events[index].toString().toUpperCase(),
+                  style: TextStyle(color: pink, fontSize: 20.0),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -168,13 +183,18 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
       ),
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Image.asset('assets/images/hackru_f19_logo.png', width: 200, height: 200,),
+            Text('Day-Of Events Scanner',
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600, color: green),
+              textAlign: TextAlign.center,),
+            SizedBox(height: 15.0,),
             Text('Selected Event:',
               style: TextStyle(fontSize: 20.0, color: pink,),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 5.0,),
+            SizedBox(height: 3.0,),
             Text('"$_selectedEvent"',
                 style: TextStyle(fontSize: 25.0, color: pink, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
@@ -185,7 +205,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     );
   }
 
-  Widget _getUpperLayer() {
+  Widget _getUpperLayer(events) {
     return Container(
       decoration: BoxDecoration(
         color: pink,
@@ -195,7 +215,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
         controller: _scrollController,
         itemCount: events.length,
         itemBuilder: (BuildContext context, int index) {
-          return _eventCard(index);
+          return (events[index] != '') ? _eventCard(index, events) : SizedBox(height: 0.0,);
         },
       ),
     );
