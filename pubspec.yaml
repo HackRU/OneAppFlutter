@@ -25,18 +25,17 @@ dependencies:
   http: ^0.11.3+16
 #  http: ^0.12.0+2
   flutter_linkify: ^2.1.0
-  url_launcher: ^5.0.5
-  flutter_bloc: ^0.19.0
+  url_launcher: ^5.1.2
   bloc: ^0.14.4
-  equatable: ^0.2.6
   meta: ^1.1.6
   flip_panel: ^1.0.0
   http_middleware: ^1.0.0
   intl: ^0.15.8
-  path_provider: ^1.1.2
-  dart_lcs_client: ^1.0.0
+  path_provider: ^1.2.0
+  dart_lcs_client: ^1.0.2
   rubber: ^0.3.2
   webview_flutter: ^0.3.13
+  fluttertoast: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +54,7 @@ flutter:
   - assets/images/hackru_green_logo.png
   - assets/images/hackru_pink_logo.png
   - assets/images/hackru_white_logo.png
+  - assets/images/hackru_offwhite_logo.png
   - assets/images/drawer_bg.png
   - assets/images/hackru_banner.png
   - assets/images/map/event_map.png
@@ -67,6 +67,7 @@ flutter:
   - assets/images/map/stage.png
   - assets/images/map/food_court.png
   - assets/images/map/CAVE.png
+  - assets/images/map/hackru_logo.png
   - assets/images/hackru_f19_logo.png
   - assets/images/hackru_f19_logo_circle.png
 

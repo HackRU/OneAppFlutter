@@ -9,47 +9,51 @@ class EventCard extends StatelessWidget {
   final Event resource;
   final String day;
 
-  Widget build (BuildContext context){
-    var time = resource.start.toLocal().toString().substring(11,16);
-    var date = resource.start.toLocal().toString().substring(8,10);
-    return Container(
-      child: date == day ? new Card(
-        color: off_white,
-        child: ExpansionTile(
-          leading: new Text(
-            time,
-            textAlign: TextAlign.center,
-            style: new TextStyle(
-              color: charcoal_light,
-              textBaseline: TextBaseline.alphabetic,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          trailing: Icon(GroovinMaterialIcons.map_marker, color: grey, size: 28.0,),
-          title: new Text(resource.summary,
-            style: new TextStyle(
-              color: pink,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          children: <Widget>[
-            new Container(
-              padding: EdgeInsets.all(16.0),
-              child: PinchZoomImage(
-                image: Image.asset('assets/images/map/'+resource.location+'.png'),
-                zoomedBackgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
-                hideStatusBarWhileZooming: false,
-                onZoomStart: () {},
-                onZoomEnd: () {},
+  Widget build (BuildContext context) {
+    var time = resource.start.toLocal().toString().substring(11, 16);
+    var date = resource.start.toLocal().toString().substring(8, 10);
+    var today = DateTime.now().day.toString();
+    if (date == day || date == today) {
+      return Container(
+        child: new Card(
+          color: off_white,
+          child: ExpansionTile(
+            leading: new Text(
+              time,
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                color: charcoal_light,
+                textBaseline: TextBaseline.alphabetic,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w700,
               ),
             ),
-          ],
+            trailing: Icon(
+              GroovinMaterialIcons.map_marker, color: grey, size: 28.0,),
+            title: new Text(resource.summary,
+              style: new TextStyle(
+                color: pink,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            children: <Widget>[
+              new Container(
+                padding: EdgeInsets.all(16.0),
+                child: PinchZoomImage(
+                  image: Image.asset(
+                      'assets/images/map/' + resource.location + '.png'),
+                  zoomedBackgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
+                  hideStatusBarWhileZooming: false,
+                  onZoomStart: () {},
+                  onZoomEnd: () {},
+                ),
+              ),
+            ],
+          ),
         ),
-      )
-          : null,
-    );
+      );
+    }
   }
 }
 
@@ -63,7 +67,7 @@ class EventsForDay extends StatelessWidget {
       backgroundColor: pink,
       body: new Container(
         child: new ListView.builder(
-          itemCount: events == null ? 0 : events.length,
+          itemCount: events == null ? 1 : events.length,
           itemBuilder: (BuildContext context, int index) {
             return new EventCard(resource: events[index], day: this.day);
           }

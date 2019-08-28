@@ -6,7 +6,7 @@ const pink = const Color(0xFFC85151);
 const weblink = const Color(0xFF732d2d);
 const pink_dark = const Color(0xFF592323);
 const green = const Color(0xFF4FAB5F);
-const yellow = const Color(0xFFF1BA43);
+const yellow = const Color(0xFFf5c152);
 
 const white = Colors.white;
 const grey_light = const Color(0xFFECEFF1);

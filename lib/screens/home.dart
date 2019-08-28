@@ -108,6 +108,7 @@ class _HomeState extends State<Home>
         activeColor: off_white,
         currentIndex: _tab,
         onTap: onTap,
+        inactiveColor: pink_dark,
         items: TabItems.map((TabItem) {
           return new BottomNavigationBarItem(
             title: new Text(TabItem.title),

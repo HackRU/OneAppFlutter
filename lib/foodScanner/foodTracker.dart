@@ -1,93 +1,106 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:HackRU/foodScanner/dashboard.dart';
+import 'package:HackRU/foodScanner/foodScanner.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
 import 'package:HackRU/constants.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
-import 'package:rubber/rubber.dart';
 import 'package:HackRU/colors.dart';
 import '../loading_indicator.dart';
 
 var popup = true;
 const NOT_SCANNED = "NOT SCANNED";
 
-class QRScanner extends StatefulWidget {
+class FoodTracker extends StatefulWidget {
   static LcsCredential cred;
   static String event;
 
-  QRScanner({Key key}) : super(key: key);
+  FoodTracker({Key key}) : super(key: key);
 
   @override
-  QRScannerState createState() => QRScannerState();
+  FoodTrackerState createState() => FoodTrackerState();
 
 }
 
-class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixin {
-
-  RubberAnimationController _controller;
-  ScrollController _scrollController = ScrollController();
+class FoodTrackerState extends State<FoodTracker> with TickerProviderStateMixin {
   Future<String> _message;
-  var _selectedEvent = '* None *';
-//  var events = ['Check-In', 'Check-In No Delayed', 'Lunch1', 'Dinner', 'T-Shirt', 'Midnight Meal', 'Midnight Surprise', 'Breakfast', 'Lunch2'];
 
   @override
   void initState() {
-    _controller = RubberAnimationController(
-        vsync: this,
-        halfBoundValue: AnimationControllerValue(percentage: 0.5),
-        duration: Duration(milliseconds: 200)
-    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: pink,
-      body: new FutureBuilder<List<String>>(
-        future: events(MISC_URL),
-        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return Center(
-                child: new Text('Loading...'),
-              );
-            default:
-              var events = snapshot.data;
-              return new Container(
-                child: RubberBottomSheet(
-                  scrollController: _scrollController,
-                  lowerLayer: _getLowerLayer(),
-                  header: new Container(
-                    height: 300.0,
-                    color: Colors.transparent,
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                        color: pink,
-                        borderRadius: new BorderRadius.only(
-                          topLeft: const Radius.circular(40.0),
-                          topRight: const Radius.circular(40.0),
-                        ),
-                      ),
-                      child: new Center(
-                        child: new Text("Select Event", style: TextStyle(fontSize: 20.0, color: off_white),),
-                      ),
-                    ),
-                  ),
-                  headerHeight: 60,
-                  upperLayer: _getUpperLayer(events),
-                  animationController: _controller,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Image.asset('assets/images/hackru_offwhite_logo.png', width: 200, height: 200,),
+            Card(
+              color: off_white,
+              margin: EdgeInsets.all(10.0),
+              child: Container(
+                height: 100.0,
+                child: InkWell(
+                  splashColor: yellow,
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
+                  },
+                  child: cardDetails('Dashboard', GroovinMaterialIcons.view_dashboard),
                 ),
-              );
-          }
-        },
+              ),
+            ),
+            Card(
+              color: off_white,
+              margin: EdgeInsets.all(10.0),
+              child: Container(
+                height: 100.0,
+                child: InkWell(
+                  splashColor: yellow,
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FoodScanner()));
+                  },
+                  child: cardDetails('Food Scanner', GroovinMaterialIcons.qrcode_scan),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  openQRScanner() async {
+  Widget cardDetails(text, icon){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget> [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Icon(icon, color: pink, size: 35.0, semanticLabel: text+' icon',),
+              SizedBox(height: 8.0,),
+              new Text(
+                text,
+                style: TextStyle(color: pink, fontSize: 20, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+                semanticsLabel: text,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _openQRScanner() async {
     print("---------------scan button pressed ---------------------");
     showDialog(
         barrierDismissible: false,
@@ -145,82 +158,6 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     }
   }
 
-  Widget _eventCard(index, events){
-    return new Card(
-      color: off_white,
-      margin: EdgeInsets.all(10.0),
-      elevation: 0.0,
-      child: Container(
-        height: 60.0,
-        child: InkWell(
-          splashColor: yellow,
-          onTap: () async {
-            setState(() {
-              _selectedEvent = events[index];
-            });
-            _controller.collapse();
-            openQRScanner();
-          },
-          child: new Row (
-            children: <Widget> [
-              Expanded(
-                child: new Text(events[index].toString().toUpperCase(),
-                  style: TextStyle(color: pink, fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _getLowerLayer() {
-    return Container(
-      decoration: BoxDecoration(
-        color: off_white,
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Image.asset('assets/images/hackru_f19_logo.png', width: 200, height: 200,),
-            Text('Day-Of Events Scanner',
-              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500, color: charcoal),
-              textAlign: TextAlign.center,),
-            SizedBox(height: 15.0,),
-            Text('Selected Event:',
-              style: TextStyle(fontSize: 20.0, color: pink,),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 3.0,),
-            Text('"$_selectedEvent"',
-                style: TextStyle(fontSize: 25.0, color: pink, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _getUpperLayer(events) {
-    return Container(
-      decoration: BoxDecoration(
-        color: pink,
-      ),
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        controller: _scrollController,
-        itemCount: events.length,
-        itemBuilder: (BuildContext context, int index) {
-          return (events[index] != '') ? _eventCard(index, events) : SizedBox(height: 0.0,);
-        },
-      ),
-    );
-  }
-
   void _scanDialog(String body) async {
     switch(await showDialog(
       context: context,
@@ -231,6 +168,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
         );
       },)){}
   }
+
   Future<bool> _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
@@ -257,31 +195,31 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     var user;
     try {
       if(email != null) {
-        user = await getUser(DEV_URL, QRScanner.cred, email);
+        user = await getUser(DEV_URL, FoodTracker.cred, email);
         print("scanned user");
         print(user);
-        if (!user.dayOf.containsKey(QRScanner.event) ||
-            user.dayOf[QRScanner.event] == false) {
+        if (!user.dayOf.containsKey(FoodTracker.event) ||
+            user.dayOf[FoodTracker.event] == false) {
           print(user);
           result = "SCANNED!";
 
-          if (QRScanner.event == "checkInNoDelayed") {
+          if (FoodTracker.event == "checkInNoDelayed") {
             if (user.isDelayedEntry()
                 && !await _scanDialogWarning("HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
               return NOT_SCANNED;
             } else {
-              QRScanner.event = "checkIn";
+              FoodTracker.event = "checkIn";
             }
           }
 
-          if (QRScanner.event == "checkIn") {
+          if (FoodTracker.event == "checkIn") {
             printLabel(email, MISC_URL);
           }
 
-          updateUserDayOf(DEV_URL, QRScanner.cred, user, QRScanner.event);
+          updateUserDayOf(DEV_URL, FoodTracker.cred, user, FoodTracker.event);
         } else {
           result = 'ALREADY SCANNED!';
-          if (QRScanner.event == "checkIn") {
+          if (FoodTracker.event == "checkIn") {
             if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
               printLabel(email, MISC_URL);
               result = "SCANNED!";

@@ -108,30 +108,30 @@ class AnnouncementsState extends State<Announcements> {
 
   @override
   Widget build (BuildContext context) => new Scaffold(
-      backgroundColor: pink,
-      body: new StreamBuilder<List<Announcement>>(
-          stream: _getSlacks(),
-          builder: (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return Center(
-                  child: new ColorLoader2(),
-                );
-              default:
-                print(snapshot.hasError);
-                var resources = snapshot.data;
-                return new Container(
-                    child: new ListView.builder(
-                        itemCount: resources.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return new AnnouncementCard(resource: resources[index]);
-                        }
-                    )
-                );
-            }
-          },
-      )
+    backgroundColor: pink,
+    body: new StreamBuilder<List<Announcement>>(
+      stream: _getSlacks(),
+      builder: (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Center(
+              child: new ColorLoader2(),
+            );
+          default:
+            print(snapshot.hasError);
+            var resources = snapshot.data;
+            return new Container(
+              child: new ListView.builder(
+                itemCount: resources.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return new AnnouncementCard(resource: resources[index]);
+                },
+              ),
+            );
+        }
+      },
+    ),
   );
 }
 

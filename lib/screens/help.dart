@@ -49,26 +49,26 @@ class HelpButton extends StatelessWidget {
   }
 
   Widget build (BuildContext context) => new Card(
-      color: off_white,
-      margin: EdgeInsets.all(10.0),
-      elevation: 0.0,
-      child: Container(
-          height: 80.0,
-          child: InkWell(
-              splashColor: yellow,
-              onTap: _open,
-              child: new Row (
-                  children: <Widget> [
-                    Expanded(
-                        child: new Text(
-                            resource.name.toUpperCase(),
-                            style: TextStyle(color: pink, fontSize: 25,),
-                            textAlign: TextAlign.center
-                        )
-                    )
-                  ]
-              )
-          )
-      )
+    color: off_white,
+    margin: EdgeInsets.all(10.0),
+    elevation: 0.0,
+    child: Container(
+      height: 80.0,
+      child: InkWell(
+        splashColor: yellow,
+        onTap: _open,
+        child: new Row (
+          children: <Widget> [
+            Expanded(
+              child: new Text(
+                resource.name.toUpperCase(),
+                style: TextStyle(color: pink, fontSize: 25,),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }
