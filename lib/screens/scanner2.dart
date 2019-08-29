@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:HackRU/loading_indicator.dart';
+import 'package:HackRU/models/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';

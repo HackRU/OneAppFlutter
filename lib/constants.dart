@@ -1,8 +1,8 @@
 
 /// ENDPOINTS
 
-const DEV_URL = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test';
-const PROD_URL = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest';
+const DEV_URL = 'https://api.hackru.org/dev';
+const PROD_URL = 'https://api.hackru.org/prod';
 const MISC_URL = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 
 const WAIVER_URL = "https://hackru.org/resources/waiver.pdf";
@@ -19,10 +19,9 @@ const INSTAGRAM_PAGE_URL = "https://www.instagram.com/thehackru/";
 const ABOUT_HACKRU = 'The HackRU App is an open source effort made possible by the HackRU Research & Development Team. Hackers would be able to get announcements, a QR code for checking, food, etc. as well as see the schedule and map for the hackathon. Organizers would have an access to the QR Scanner.';
 
 
-/// New API endpoints
-
-//const DEV_URL = 'https://api.hackru.org/dev';
-//const PROD_URL = 'https://api.hackru.org/prod';
+/// Old API endpoints
+//  const DEV_URL = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test';
+//  const PROD_URL = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest';
 
 /// LCS API Calls
 

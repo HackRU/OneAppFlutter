@@ -1,5 +1,6 @@
+import 'package:HackRU/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:pinch_zoom_image/pinch_zoom_image.dart';
+import 'package:HackRU/models/expandable_image.dart';
 
 class Map extends StatefulWidget {
   @override
@@ -10,15 +11,10 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(16.0),
-        child: PinchZoomImage(
-          image: Image.asset('assets/images/map/event_map.png'),
-          zoomedBackgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
-          hideStatusBarWhileZooming: false,
-          onZoomStart: () {},
-          onZoomEnd: () {},
-        )
+      color: off_white,
+      child: ExpandableImage(Image.asset('assets/images/map/event_map.png')),
     );
   }
 }
+
 

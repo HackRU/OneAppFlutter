@@ -1,10 +1,10 @@
-import 'package:HackRU/loading_indicator.dart';
-import 'package:HackRU/screens/string_parser.dart';
+import 'package:HackRU/models/loading_indicator.dart';
+import 'package:HackRU/models/string_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:HackRU/colors.dart';
-import 'package:HackRU/filestore.dart';
+import 'package:HackRU/models/filestore.dart';
 import 'dart:async';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
 import 'package:HackRU/constants.dart';
@@ -86,24 +86,31 @@ class AnnouncementsState extends State<Announcements> {
   static DateTime cacheTTL = DateTime.now();
 
   Stream<List<Announcement>> _getSlacks() {
-    var streamctl = StreamController<List<Announcement>>();
-    getStoredSlacks().then((storedSlacks) {
+    try{
+      var streamctl = StreamController<List<Announcement>>();
+      getStoredSlacks().then((storedSlacks) {
         if (storedSlacks != null) {
           streamctl.sink.add(storedSlacks);
         }
         if (cacheTTL.isBefore(DateTime.now())) {
-          return slackResources(PROD_URL);
+          return slackResources(DEV_URL);
         } else {
           return null;
         }
-    }).then((networkSlacks){
+      }).then((networkSlacks){
         if (networkSlacks != null) {
           streamctl.sink.add(networkSlacks);
           setStoredSlacks(networkSlacks);
           cacheTTL = DateTime.now().add(Duration(minutes: 9));
         }
-    });
-    return streamctl.stream;
+      });
+      return streamctl.stream;
+    }
+    catch(e){
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("Error Getting Slack Data: "+e)),
+      );
+    }
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:HackRU/foodScanner/foodTracker.dart';
 import 'package:HackRU/screens/login.dart';
 import 'package:HackRU/screens/scanner.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/help.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:HackRU/screens/home.dart';
-import 'package:HackRU/filestore.dart';
+import 'package:HackRU/models/filestore.dart';
 import 'colors.dart';
 
 void main() {
@@ -107,16 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
       ),
       About(),
-    ));
-
-    items.add(new ScreenHiddenDrawer(
-      new ItemHiddenMenu(
-        name: "Food Tracker",
-        baseStyle: TextStyle( color: grey, fontSize: 28.0 ),
-        colorLineSelected: yellow,
-        selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
-      ),
-      FoodTracker(),
     ));
 
     if(LoginState.credStr != '') {

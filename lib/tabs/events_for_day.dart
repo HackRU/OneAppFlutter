@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:pinch_zoom_image/pinch_zoom_image.dart';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:HackRU/models/expandable_image.dart';
 
 class EventCard extends StatelessWidget {
   EventCard({@required this.resource, @required this.day});
@@ -39,14 +39,9 @@ class EventCard extends StatelessWidget {
             ),
             children: <Widget>[
               new Container(
-                padding: EdgeInsets.all(16.0),
-                child: PinchZoomImage(
-                  image: Image.asset(
-                      'assets/images/map/' + resource.location + '.png'),
-                  zoomedBackgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
-                  hideStatusBarWhileZooming: false,
-                  onZoomStart: () {},
-                  onZoomEnd: () {},
+                padding: EdgeInsets.all(12.0),
+                child: ExpandableImage(
+                  Image.asset('assets/images/map/' + resource.location + '.png'),
                 ),
               ),
             ],
@@ -54,13 +49,14 @@ class EventCard extends StatelessWidget {
         ),
       );
     }
+    return SizedBox(height: 0.0,);
   }
 }
 
 class EventsForDay extends StatelessWidget {
   final String day;
   final List<Event> events;
-  EventsForDay({Key key, @required String this.day, @required this.events}): super(key: key);
+  EventsForDay({Key key, @required this.day, @required this.events}): super(key: key);
   
   @override
   Widget build (BuildContext context) => new Scaffold(

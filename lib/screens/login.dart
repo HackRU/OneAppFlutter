@@ -1,10 +1,10 @@
-import 'package:HackRU/loading_indicator.dart';
+import 'package:HackRU/models/loading_indicator.dart';
 import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/screens/scanner2.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/main.dart';
-import 'package:HackRU/filestore.dart';
+import 'package:HackRU/models/filestore.dart';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
 import 'package:HackRU/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -102,7 +102,7 @@ class LoginState extends State<Login> {
     try {
       var cred = await login(_emailController.text, _passwordController.text, DEV_URL);
       setStoredCredential(cred);
-      await _completeLogin(cred, context);
+      _completeLogin(cred, context);
     } catch (e) {
       var errorMessage = "No internet";
       if (e is LcsLoginFailed) {
@@ -220,5 +220,7 @@ class LoginState extends State<Login> {
     )
   );
 }
+
+
 
 

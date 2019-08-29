@@ -1,6 +1,6 @@
 import 'package:HackRU/screens/login.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:HackRU/filestore.dart';
+import 'package:HackRU/models/filestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
