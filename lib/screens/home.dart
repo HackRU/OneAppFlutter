@@ -1,6 +1,6 @@
 import 'package:HackRU/screens/login.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:HackRU/filestore.dart';
+import 'package:HackRU/models/filestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
@@ -108,6 +108,7 @@ class _HomeState extends State<Home>
         activeColor: off_white,
         currentIndex: _tab,
         onTap: onTap,
+        inactiveColor: pink_dark,
         items: TabItems.map((TabItem) {
           return new BottomNavigationBarItem(
             title: new Text(TabItem.title),

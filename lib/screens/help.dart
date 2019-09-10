@@ -1,4 +1,4 @@
-import 'package:HackRU/loading_indicator.dart';
+import 'package:HackRU/models/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -49,26 +49,37 @@ class HelpButton extends StatelessWidget {
   }
 
   Widget build (BuildContext context) => new Card(
-      color: off_white,
-      margin: EdgeInsets.all(10.0),
-      elevation: 0.0,
-      child: Container(
-          height: 80.0,
-          child: InkWell(
-              splashColor: yellow,
-              onTap: _open,
-              child: new Row (
-                  children: <Widget> [
-                    Expanded(
-                        child: new Text(
-                            resource.name.toUpperCase(),
-                            style: TextStyle(color: pink, fontSize: 25,),
-                            textAlign: TextAlign.center
-                        )
-                    )
-                  ]
-              )
-          )
-      )
+    color: off_white,
+    margin: EdgeInsets.all(10.0),
+    elevation: 0.0,
+    child: Container(
+      height: 100.0,
+      child: InkWell(
+        splashColor: yellow,
+        onTap: _open,
+        child: new Column(
+          children: <Widget> [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Text(
+                    resource.name.toUpperCase(),
+                    style: TextStyle(color: pink, fontSize: 25, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 3.0,),
+                  new Text(
+                    resource.description,
+                    style: TextStyle(color: pink, fontSize: 15, fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }
