@@ -86,31 +86,30 @@ class AnnouncementsState extends State<Announcements> {
   static DateTime cacheTTL = DateTime.now();
 
   Stream<List<Announcement>> _getSlacks() {
-    try{
-      var streamctl = StreamController<List<Announcement>>();
-      getStoredSlacks().then((storedSlacks) {
-        if (storedSlacks != null) {
-          streamctl.sink.add(storedSlacks);
-        }
-        if (cacheTTL.isBefore(DateTime.now())) {
-          return slackResources(DEV_URL);
-        } else {
-          return null;
-        }
-      }).then((networkSlacks){
-        if (networkSlacks != null) {
-          streamctl.sink.add(networkSlacks);
-          setStoredSlacks(networkSlacks);
-          cacheTTL = DateTime.now().add(Duration(minutes: 9));
-        }
-      });
-      return streamctl.stream;
-    }
-    catch(e){
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text("Error Getting Slack Data: "+e)),
-      );
-    }
+      var streamCtrl = StreamController<List<Announcement>>();
+      try {
+        getStoredSlacks().then((storedSlacks) {
+          if (storedSlacks != null) {
+            streamCtrl.sink.add(storedSlacks);
+          }
+          if (cacheTTL.isBefore(DateTime.now())) {
+            return slackResources(DEV_URL);
+          } else {
+            return null;
+          }
+        }).then((networkSlacks) {
+          if (networkSlacks != null) {
+            streamCtrl.sink.add(networkSlacks);
+            setStoredSlacks(networkSlacks);
+            cacheTTL = DateTime.now().add(Duration(minutes: 9));
+            streamCtrl.close();
+          }
+        });
+      }
+      catch(e){
+        print("***********************\nSlack data stream ctrl error: " + e);
+      }
+      return streamCtrl.stream;
   }
 
   @override

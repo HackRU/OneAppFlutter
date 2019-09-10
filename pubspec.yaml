@@ -24,6 +24,8 @@ dependencies:
   dart_lcs_client: ^1.0.6
   rubber: ^0.3.2
   webview_flutter: ^0.3.13
+  pinch_zoom_image: ^0.2.5
+  flare_flutter: ^1.5.8
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +60,7 @@ flutter:
   - assets/images/map/hackru_logo.png
   - assets/images/hackru_f19_logo.png
   - assets/images/hackru_f19_logo_circle.png
+  - assets/Filip.flr
 
   fonts:
   - family: OpenSans

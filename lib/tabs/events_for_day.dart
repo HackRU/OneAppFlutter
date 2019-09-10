@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:HackRU/colors.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
-import 'package:HackRU/models/expandable_image.dart';
+import 'package:pinch_zoom_image/pinch_zoom_image.dart';
 
 class EventCard extends StatelessWidget {
   EventCard({@required this.resource, @required this.day});
@@ -40,8 +40,10 @@ class EventCard extends StatelessWidget {
             children: <Widget>[
               new Container(
                 padding: EdgeInsets.all(12.0),
-                child: ExpandableImage(
-                  Image.asset('assets/images/map/' + resource.location + '.png'),
+                child: PinchZoomImage(
+                  image: Image.asset('assets/images/map/' + resource.location + '.png'),
+                  zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
+                  hideStatusBarWhileZooming: false,
                 ),
               ),
             ],

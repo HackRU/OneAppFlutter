@@ -28,7 +28,6 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
   ScrollController _scrollController = ScrollController();
   Future<String> _message;
   var _selectedEvent = '* None *';
-//  var events = ['Check-In', 'Check-In No Delayed', 'Lunch1', 'Dinner', 'T-Shirt', 'Midnight Meal', 'Midnight Surprise', 'Breakfast', 'Lunch2'];
 
   @override
   void initState() {
@@ -128,7 +127,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
       // I'm (Sean) pretty sure that the scanner creates an extraneous
       // item on the Navigator stack. We need to pop it before we can pop
       // the loading indicator.
-//      Navigator.pop(context);
+      Navigator.pop(context);
       // Now wew can pop the loading indicator.
       Navigator.pop(context);
       if (message != NOT_SCANNED) {

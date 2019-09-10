@@ -1,5 +1,6 @@
 import 'package:HackRU/screens/login.dart';
 import 'package:HackRU/screens/scanner.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
@@ -12,6 +13,7 @@ import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/models/filestore.dart';
 import 'colors.dart';
+import 'models/custom_hidden_drawer_menu.dart';
 
 void main() {
   runApp(Main());
@@ -128,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return HiddenDrawerMenu(
+    return CustomHiddenDrawerMenu(
       actionsAppBar: (LoginState.credStr != '') ? <Widget>[
         IconButton(icon: Icon(GroovinMaterialIcons.logout, color: yellow,),
           color: yellow,
@@ -144,8 +146,15 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColorMenu: off_white,
       backgroundColorAppBar: pink,
       elevationAppBar: 0.0,
-      backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
+      backgroundMenu: FlareActor(
+        'assets/Filip.flr',
+        alignment: Alignment.center,
+        fit: BoxFit.contain,
+        animation: "idle",
+      ),
+//      backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
+
     );
 
   }
