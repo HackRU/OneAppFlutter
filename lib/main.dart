@@ -1,17 +1,19 @@
-import 'package:HackRU/screens/login.dart';
-import 'package:HackRU/screens/scanner.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
-import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
-import 'package:hidden_drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
-import 'package:HackRU/screens/about.dart';
-import 'package:HackRU/screens/map.dart';
-import 'package:HackRU/screens/help.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/models/filestore.dart';
+import 'package:HackRU/screens/about.dart';
+import 'package:HackRU/screens/help.dart';
+import 'package:HackRU/screens/home.dart';
+import 'package:HackRU/screens/login.dart';
+import 'package:HackRU/screens/map.dart';
+import 'package:HackRU/screens/page_not_found.dart';
+import 'package:HackRU/screens/scanner2.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
+import 'package:hidden_drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
+import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
+
 import 'colors.dart';
 import 'models/custom_hidden_drawer_menu.dart';
 
@@ -40,20 +42,21 @@ class Main extends StatelessWidget {
         ),
       ),
       home: MyHomePage(),
-      routes: <String, WidgetBuilder> {
+      routes: <String, WidgetBuilder>{
         '/login': (BuildContext context) => new Login(),
         '/main': (BuildContext context) => new MyHomePage(),
       },
-//      onUnknownRoute: (RouteSettings setting) {
-//        String unknownRoute = setting.name ;
-//        return new MaterialPageRoute(
-//            builder: (context) => NotFoundPage()
-//        );
-//      },
+      onUnknownRoute: (RouteSettings setting) {
+        String unknownRoute = setting.name;
+        return new MaterialPageRoute(
+          builder: (context) => PageNotFound(
+            title: unknownRoute,
+          ),
+        );
+      },
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.initPositionSelected}) : super(key: key);
@@ -73,7 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
       new ItemHiddenMenu(
         name: "Home",
-        baseStyle: TextStyle( color: grey, fontSize: 28.0, ),
+        baseStyle: TextStyle(
+          color: grey,
+          fontSize: 28.0,
+        ),
         colorLineSelected: yellow,
         selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
       ),
@@ -83,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
       new ItemHiddenMenu(
         name: "Map",
-        baseStyle: TextStyle( color: grey, fontSize: 28.0 ),
+        baseStyle: TextStyle(color: grey, fontSize: 28.0),
         colorLineSelected: pink,
         selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
       ),
@@ -93,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
       new ItemHiddenMenu(
         name: "Help",
-        baseStyle: TextStyle( color: grey, fontSize: 28.0 ),
+        baseStyle: TextStyle(color: grey, fontSize: 28.0),
         colorLineSelected: yellow,
         selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
       ),
@@ -103,23 +109,34 @@ class _MyHomePageState extends State<MyHomePage> {
     items.add(new ScreenHiddenDrawer(
       new ItemHiddenMenu(
         name: "About",
-        baseStyle: TextStyle( color: grey, fontSize: 28.0 ),
+        baseStyle: TextStyle(color: grey, fontSize: 28.0),
         colorLineSelected: pink,
         selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
       ),
       About(),
     ));
 
-    if(LoginState.credStr != '') {
+    if (LoginState.credStr != '') {
       if (user.role["director"] == true) {
+//        items.add(new ScreenHiddenDrawer(
+//          new ItemHiddenMenu(
+//            name: "QR Scanner2",
+//            baseStyle: TextStyle(color: grey, fontSize: 28.0),
+//            colorLineSelected: yellow,
+//            selectedStyle:
+//                TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
+//          ),
+//          QRScanner(),
+//        ));
         items.add(new ScreenHiddenDrawer(
           new ItemHiddenMenu(
             name: "QR Scanner",
             baseStyle: TextStyle(color: grey, fontSize: 28.0),
             colorLineSelected: yellow,
-            selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
+            selectedStyle:
+                TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
           ),
-          QRScanner(),
+          QRScanner2(),
         ));
       }
     }
@@ -129,19 +146,47 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return CustomHiddenDrawerMenu(
-      actionsAppBar: (LoginState.credStr != '') ? <Widget>[
-        IconButton(icon: Icon(GroovinMaterialIcons.logout, color: yellow,),
-          color: yellow,
-          splashColor: white,
-          onPressed: (){
-            Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => MyHomePage()), ModalRoute.withName('/main'));
-            deleteStoredCredential();
-            LoginState.credStr = '';
-        }),
-      ] : <Widget>[],
-      iconMenuAppBar: Icon(Icons.arrow_back, color: off_white,),
+      actionsAppBar: (LoginState.credStr != '')
+          ? <Widget>[
+              IconButton(
+                icon: Icon(
+                  GroovinMaterialIcons.logout,
+                  color: yellow,
+                ),
+                color: yellow,
+                splashColor: white,
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) => MyHomePage(),
+                          maintainState: false),
+                      ModalRoute.withName('/main'));
+                  deleteStoredCredential();
+                  LoginState.credStr = '';
+                },
+              ),
+            ]
+          : <Widget>[
+              IconButton(
+                icon: Icon(
+                  GroovinMaterialIcons.login,
+                  color: yellow,
+                ),
+                color: yellow,
+                splashColor: white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                  );
+                },
+              ),
+            ],
+      iconMenuAppBar: Icon(
+        Icons.arrow_back,
+        color: off_white,
+      ),
       styleAutoTittleName: TextStyle(color: off_white),
       backgroundColorMenu: off_white,
       backgroundColorAppBar: pink,
@@ -152,12 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
         fit: BoxFit.contain,
         animation: "idle",
       ),
-//      backgroundMenu: DecorationImage(image: ExactAssetImage('assets/images/drawer_bg.png'),fit: BoxFit.cover),
       screens: items,
-
     );
-
   }
-
 }
-

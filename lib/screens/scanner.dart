@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:dart_lcs_client/dart_lcs_client.dart';
+
+import 'package:HackRU/colors.dart';
 import 'package:HackRU/constants.dart';
+import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:flutter/material.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
 import 'package:rubber/rubber.dart';
-import 'package:HackRU/colors.dart';
+
 import '../models/loading_indicator.dart';
 
 var popup = true;
@@ -14,16 +16,16 @@ const NOT_SCANNED = "NOT SCANNED";
 class QRScanner extends StatefulWidget {
   static LcsCredential cred;
   static String event;
+  static String userEmail, userPassword;
 
   QRScanner({Key key}) : super(key: key);
 
   @override
   QRScannerState createState() => QRScannerState();
-
 }
 
-class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixin {
-
+class QRScannerState extends State<QRScanner>
+    with SingleTickerProviderStateMixin {
   RubberAnimationController _controller;
   ScrollController _scrollController = ScrollController();
   Future<String> _message;
@@ -34,8 +36,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     _controller = RubberAnimationController(
         vsync: this,
         halfBoundValue: AnimationControllerValue(percentage: 0.5),
-        duration: Duration(milliseconds: 200)
-    );
+        duration: Duration(milliseconds: 200));
     super.initState();
   }
 
@@ -70,7 +71,10 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
                         ),
                       ),
                       child: new Center(
-                        child: new Text("Select Event", style: TextStyle(fontSize: 20.0, color: off_white),),
+                        child: new Text(
+                          "Select Event",
+                          style: TextStyle(fontSize: 20.0, color: off_white),
+                        ),
                       ),
                     ),
                   ),
@@ -90,14 +94,15 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context, {barrierDismissible: false}){
-          return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
+        builder: (BuildContext context, {barrierDismissible: false}) {
+          return new AlertDialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
             title: Center(
               child: new ColorLoader2(),
             ),
           );
-        }
-    );
+        });
     var _barcodeString = await new QRCodeReader()
         .setAutoFocusIntervalInMs(200)
         .setForceAutoFocus(true)
@@ -111,18 +116,19 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     // If that is the case, then don't show a progress indicator popup or
     // do anything.
     popup = _barcodeString != null;
-    if(popup) {
+    if (popup) {
       showDialog(
           barrierDismissible: false,
           context: context,
-          builder: (BuildContext context, {barrierDismissible: false}){
-            return new AlertDialog(backgroundColor: Colors.transparent, elevation: 0.0,
+          builder: (BuildContext context, {barrierDismissible: false}) {
+            return new AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
               title: Center(
                 child: new ColorLoader2(),
               ),
             );
-          }
-      );
+          });
       var message = await _lcsHandle(_barcodeString);
       // I'm (Sean) pretty sure that the scanner creates an extraneous
       // item on the Navigator stack. We need to pop it before we can pop
@@ -143,7 +149,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
     }
   }
 
-  Widget _eventCard(index, events){
+  Widget _eventCard(index, events) {
     return new Card(
       color: off_white,
       margin: EdgeInsets.all(10.0),
@@ -156,13 +162,14 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
             setState(() {
               _selectedEvent = events[index];
             });
-            _controller.collapse();
+//            _controller.collapse();
             openQRScanner();
           },
-          child: new Row (
-            children: <Widget> [
+          child: new Row(
+            children: <Widget>[
               Expanded(
-                child: new Text(events[index].toString().toUpperCase(),
+                child: new Text(
+                  events[index].toString().toUpperCase(),
                   style: TextStyle(color: pink, fontSize: 20.0),
                   textAlign: TextAlign.center,
                 ),
@@ -183,19 +190,36 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Image.asset('assets/images/hackru_f19_logo.png', width: 200, height: 200,),
-            Text('Day-Of Events Scanner',
-              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500, color: charcoal),
-              textAlign: TextAlign.center,),
-            SizedBox(height: 15.0,),
-            Text('Selected Event:',
-              style: TextStyle(fontSize: 20.0, color: pink,),
+            Image.asset(
+              'assets/images/hackru_f19_logo.png',
+              width: 200,
+              height: 200,
+            ),
+            Text(
+              'Day-Of Events Scanner',
+              style: TextStyle(
+                  fontSize: 25.0, fontWeight: FontWeight.w500, color: charcoal),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 3.0,),
-            Text('"$_selectedEvent"',
-                style: TextStyle(fontSize: 25.0, color: pink, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
+            SizedBox(
+              height: 15.0,
+            ),
+            Text(
+              'Selected Event:',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: pink,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 3.0,
+            ),
+            Text(
+              '"$_selectedEvent"',
+              style: TextStyle(
+                  fontSize: 25.0, color: pink, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -213,73 +237,104 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
         controller: _scrollController,
         itemCount: events.length,
         itemBuilder: (BuildContext context, int index) {
-          return (events[index] != '') ? _eventCard(index, events) : SizedBox(height: 0.0,);
+          return (events[index] != '')
+              ? _eventCard(index, events)
+              : SizedBox(
+                  height: 0.0,
+                );
         },
       ),
     );
   }
 
   void _scanDialog(String body) async {
-    switch(await showDialog(
+    switch (await showDialog(
       context: context,
-      builder: (BuildContext context, {barrierDismissible: false}){
-        return new AlertDialog(backgroundColor: white,
-          title: Text(body, style: TextStyle(fontSize: 30, color: charcoal), textAlign:  TextAlign.center),
-          actions: <Widget>[FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: green), textAlign:  TextAlign.center), onPressed: (){Navigator.pop(context);},),],
+      builder: (BuildContext context, {barrierDismissible: false}) {
+        return new AlertDialog(
+          backgroundColor: white,
+          title: Text(body,
+              style: TextStyle(fontSize: 30, color: charcoal),
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK',
+                  style: TextStyle(fontSize: 20, color: green),
+                  textAlign: TextAlign.center),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         );
-      },)){}
+      },
+    )) {
+    }
   }
+
   Future<bool> _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
-      builder: (BuildContext context, {barrierDismissible: false}){
-        return new AlertDialog(backgroundColor: white,
-          title: Text(body, style: TextStyle(fontSize: 30, color: charcoal), textAlign:  TextAlign.center),
+      builder: (BuildContext context, {barrierDismissible: false}) {
+        return new AlertDialog(
+          backgroundColor: white,
+          title: Text(body,
+              style: TextStyle(fontSize: 30, color: charcoal),
+              textAlign: TextAlign.center),
           actions: <Widget>[
-            FlatButton(child: Text('OK', style: TextStyle(fontSize: 20, color: green), textAlign:  TextAlign.center),
+            FlatButton(
+                child: Text('OK',
+                    style: TextStyle(fontSize: 20, color: green),
+                    textAlign: TextAlign.center),
                 onPressed: () async {
                   Navigator.pop(context, true);
                 }),
-            FlatButton(child: Text('CANCEL', style: TextStyle(fontSize: 20, color: pink), textAlign:  TextAlign.center),
-                onPressed: (){
+            FlatButton(
+                child: Text('CANCEL',
+                    style: TextStyle(fontSize: 20, color: pink),
+                    textAlign: TextAlign.center),
+                onPressed: () {
                   Navigator.pop(context, false);
                 }),
           ],
         );
-      },);
+      },
+    );
   }
 
   Future<String> _lcsHandle(String email) async {
     String result;
-    print("called lcsHandle with qr:"+email);
+    print("called lcsHandle with qr:" + email);
     var user;
     try {
-      if(email != null) {
+      if (email != null) {
+        print(QRScanner.cred);
         user = await getUser(DEV_URL, QRScanner.cred, email);
         print("scanned user");
         print(user);
-        if (!user.dayOf.containsKey(QRScanner.event) ||
-            user.dayOf[QRScanner.event] == false) {
+        if (!user.dayOf.containsKey(_selectedEvent) ||
+            user.dayOf[_selectedEvent] == false) {
           print(user);
           result = "SCANNED!";
 
-          if (QRScanner.event == "checkInNoDelayed") {
-            if (user.isDelayedEntry()
-                && !await _scanDialogWarning("HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
+          if (_selectedEvent == "checkInNoDelayed") {
+            if (user.isDelayedEntry() &&
+                !await _scanDialogWarning(
+                    "HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
               return NOT_SCANNED;
             } else {
-              QRScanner.event = "checkIn";
+              _selectedEvent = "checkIn";
             }
           }
 
-          if (QRScanner.event == "checkIn") {
+          if (_selectedEvent == "checkIn") {
             printLabel(email, MISC_URL);
           }
 
-          updateUserDayOf(DEV_URL, QRScanner.cred, user, QRScanner.event);
+          updateUserDayOf(DEV_URL, QRScanner.cred, user, _selectedEvent);
         } else {
           result = 'ALREADY SCANNED!';
-          if (QRScanner.event == "checkIn") {
+          if (_selectedEvent == "checkIn") {
             if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
               printLabel(email, MISC_URL);
               result = "SCANNED!";
@@ -288,8 +343,6 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
             }
           }
         }
-
-
       } else {
         print("attempt to scan null");
       }
@@ -303,7 +356,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
       result = 'LCS ERROR';
     } on LabelPrintingError {
       result = "ERROR PRINTING LABEL";
-    } on ArgumentError catch(e){
+    } on ArgumentError catch (e) {
       result = 'UNEXPECTED ERROR';
       print(result);
       print(e);
@@ -312,7 +365,7 @@ class QRScannerState extends State<QRScanner> with SingleTickerProviderStateMixi
       print(e.name);
     } on SocketException {
       result = "NETWORK ERROR";
-    } catch(e) {
+    } catch (e) {
       result = 'UNEXPECTED ERROR';
       print(e);
     }

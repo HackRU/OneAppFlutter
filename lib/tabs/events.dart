@@ -57,7 +57,7 @@ class EventsState extends State<Events>
     }
     if (cacheTTL.isBefore(DateTime.now())) {
       print("cache miss");
-      dayofEventsResources(PROD_URL).then((events){
+      dayofEventsResources(DEV_URL).then((events){
           streamctl.sink.add(events);
           cachedEvents = events;
           cacheTTL = DateTime.now().add(Duration(minutes: 30));
