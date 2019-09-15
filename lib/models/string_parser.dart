@@ -6,17 +6,18 @@ import 'package:HackRU/colors.dart';
 
 class LinkTextSpan extends TextSpan {
   LinkTextSpan({TextStyle style, String url, String text})
-      : super(
+    : super(
       style: style,
       text: text ?? url,
       recognizer: new TapGestureRecognizer()
-        ..onTap = () => launcher.launch(url));
+        ..onTap = () => launcher.launch(url)
+    );
 }
 
-class RichTextView extends StatelessWidget {
+class StringParser extends StatelessWidget {
   final String text;
 
-  RichTextView({@required this.text});
+  StringParser({@required this.text});
 
   bool _isTag(String input){
     final matcher = new RegExp(
@@ -28,18 +29,30 @@ class RichTextView extends StatelessWidget {
   bool _isLink(String input) {
     final matcher = new RegExp(
         r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
-    return matcher.hasMatch(input);
+    final specialChar = new RegExp("/");
+    return matcher.hasMatch(input) && specialChar.hasMatch(input);
   }
 
   bool _isEmoji(String input) {
     final matcher = new RegExp(
         r"(\:.*?\:)");
-    return matcher.hasMatch(input);
+    final moreEmoji = new RegExp(
+        r"(\.*?\:.*?\:.*?)");
+    return matcher.hasMatch(input) || moreEmoji.hasMatch(input);
   }
 
   bool _isUserTag(String input) {
     final matcher = new RegExp(
         r"(\<@U.*?\>)");
+    final hashtag = new RegExp(
+        r"(\<#.*?\>)");
+    return matcher.hasMatch(input) || hashtag.hasMatch(input);
+  }
+
+  bool _isMisc(String input){
+    final matcher = new RegExp(
+        r"(\<.*?\>)"
+    );
     return matcher.hasMatch(input);
   }
 
@@ -52,7 +65,7 @@ class RichTextView extends StatelessWidget {
       if(_isLink(word)){
         var eWord = word.replaceAll(new RegExp(r'[<>]'), '');
         span.add(
-            new LinkTextSpan(
+          new LinkTextSpan(
             style: _style.copyWith(color: weblink, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
             url: eWord,
             text: '$eWord ',)
@@ -67,6 +80,9 @@ class RichTextView extends StatelessWidget {
       else if(_isUserTag(word)){
         span.add(new TextSpan(text: '', style: _style));
       }
+      else if(_isMisc(word)){
+        span.add(new TextSpan(text: '', style: _style));
+      }
       else{
         span.add(new TextSpan(text: '$word ', style: _style));
       }
@@ -74,10 +90,14 @@ class RichTextView extends StatelessWidget {
     });
     if (span.length > 0) {
       return new RichText(
-        text: new TextSpan(text: '', children: span, style: TextStyle(fontSize: 15.0, color: pink_dark,)),
-      );
+        text: new TextSpan(
+          text: '',
+          children: span,
+          style: TextStyle(fontSize: 15.0, color: pink_dark,),),
+        );
     } else {
-      return new Text(text, style: TextStyle(fontSize: 15.0, color: pink_dark,),);
+      return new Text(text, style: TextStyle(fontSize: 15.0, color: pink_dark,),
+      );
     }
   }
 }

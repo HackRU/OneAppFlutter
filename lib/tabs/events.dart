@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/tabs/events_for_day.dart';
 import 'dart:async';
-import 'package:HackRU/loading_indicator.dart';
+import 'package:HackRU/models/loading_indicator.dart';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
 import 'package:HackRU/constants.dart';
 
@@ -57,7 +57,7 @@ class EventsState extends State<Events>
     }
     if (cacheTTL.isBefore(DateTime.now())) {
       print("cache miss");
-      dayofEventsResources(PROD_URL).then((events){
+      dayofEventsResources(DEV_URL).then((events){
           streamctl.sink.add(events);
           cachedEvents = events;
           cacheTTL = DateTime.now().add(Duration(minutes: 30));
