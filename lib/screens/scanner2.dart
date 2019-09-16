@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/constants.dart';
-import 'package:HackRU/models/loading_indicator.dart';
 import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -190,7 +190,7 @@ class _QRScanner2State extends State<QRScanner2> {
     _message = Future<String>.sync(() => instructions);
     _demoItems = <DemoItem<dynamic>>[
       DemoItem<Event>(
-          name: 'Scanning...',
+          name: 'DayOf Event',
           value: Event.Check_In_No_Delayed,
           hint: 'Select Event',
           valueToString: (Event location) => location.toString().split('.')[1],
@@ -242,6 +242,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('Check-In'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -254,6 +255,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('Lunch-1'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -266,6 +268,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('Dinner'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -278,6 +281,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('T-Shirts'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -290,6 +294,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('Midnight-Meal'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -302,6 +307,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('Midnight-Surprise'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -314,6 +320,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('Breakfast'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -326,6 +333,7 @@ class _QRScanner2State extends State<QRScanner2> {
                               title: const Text('Lunch-2'),
                               groupValue: field.value,
                               onChanged: (Event value) {
+                                field.didChange(value);
                                 setState(() {
                                   item.value = value;
                                   close();
@@ -393,27 +401,13 @@ class _QRScanner2State extends State<QRScanner2> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Image.asset(
-                      'assets/images/hackru_offwhite_logo.png',
-                      width: 200,
-                      height: 200,
-                      semanticLabel: 'Hack RU Logo',
-                    ),
-                    Text(
-                      'Day-Of Events Scanner',
-                      style: TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.w500,
-                          color: off_white),
-                      textAlign: TextAlign.center,
-                    ),
                     SizedBox(
-                      height: 25.0,
+                      height: 15.0,
                     ),
                     Text(
                       'Scanning For:',
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 15.0,
                         color: off_white,
                       ),
                       textAlign: TextAlign.center,
@@ -424,7 +418,7 @@ class _QRScanner2State extends State<QRScanner2> {
                     Text(
                       QRScanner2.event,
                       style: TextStyle(
-                          fontSize: 40.0,
+                          fontSize: 30.0,
                           color: yellow,
                           fontWeight: FontWeight.w600),
                       textAlign: TextAlign.center,
@@ -447,20 +441,7 @@ class _QRScanner2State extends State<QRScanner2> {
                 onPressed: () async {
                   print(
                       "---------------scan button pressed ---------------------");
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context,
-                        {barrierDismissible: false}) {
-                      return new AlertDialog(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0.0,
-                        title: Center(
-                          child: new ColorLoader2(),
-                        ),
-                      );
-                    },
-                  );
+                  _loading_indicator();
                   _openQRScanner();
                 },
                 tooltip: 'QRCode Reader',
@@ -526,19 +507,7 @@ class _QRScanner2State extends State<QRScanner2> {
     // If the user didn't scan anything, then _barcodeString will be null. If that is the case, then don't show a progress indicator popup or do anything.
     popup = _barcodeString != null;
     if (popup) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context, {barrierDismissible: false}) {
-          return new AlertDialog(
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            title: Center(
-              child: new ColorLoader2(),
-            ),
-          );
-        },
-      );
+      _loading_indicator();
       var message = await _lcsHandle(_barcodeString);
       // The scanner creates an extraneous item on the Navigator stack. We need to pop it before we can pop the loading indicator.
       Navigator.pop(context);
@@ -569,19 +538,7 @@ class _QRScanner2State extends State<QRScanner2> {
     // If the user didn't scan anything, then _barcodeString will be null. If that is the case, then don't show a progress indicator popup or do anything.
     popup = _barcodeString != null;
     if (popup) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context, {barrierDismissible: false}) {
-          return new AlertDialog(
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            title: Center(
-              child: new ColorLoader2(),
-            ),
-          );
-        },
-      );
+      _loading_indicator();
       var message = await _lcsHandle(_barcodeString);
       Navigator.pop(context);
       if (message != NOT_SCANNED) {
@@ -592,6 +549,31 @@ class _QRScanner2State extends State<QRScanner2> {
         _message = _lcsHandle(_barcodeString);
       });
     }
+  }
+
+  Future<void> _loading_indicator() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            color: transparent,
+            height: 400.0,
+            width: 400.0,
+            child: FlareActor(
+              'assets/qr_scanner.flr',
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+              animation: "Scan",
+            ),
+          ),
+          backgroundColor: transparent,
+          contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+          elevation: 0.0,
+        );
+      },
+    );
   }
 
   Future<bool> _scanDialogWarning(String body) async {
