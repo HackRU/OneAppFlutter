@@ -61,6 +61,7 @@ flutter:
   - assets/images/hackru_f19_logo.png
   - assets/images/hackru_f19_logo_circle.png
   - assets/Filip.flr
+  - assets/Background.flr
 
   fonts:
   - family: OpenSans

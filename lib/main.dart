@@ -192,10 +192,10 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColorAppBar: pink,
       elevationAppBar: 0.0,
       backgroundMenu: FlareActor(
-        'assets/Filip.flr',
+        'assets/Background.flr',
         alignment: Alignment.center,
-        fit: BoxFit.contain,
-        animation: "idle",
+        fit: BoxFit.cover,
+        animation: "HackRu",
       ),
       screens: items,
     );
