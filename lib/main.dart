@@ -117,17 +117,9 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
 
     if (LoginState.credStr != '') {
-      if (user.role["director"] == true) {
-//        items.add(new ScreenHiddenDrawer(
-//          new ItemHiddenMenu(
-//            name: "QR Scanner2",
-//            baseStyle: TextStyle(color: grey, fontSize: 28.0),
-//            colorLineSelected: yellow,
-//            selectedStyle:
-//                TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
-//          ),
-//          QRScanner(),
-//        ));
+      if (user.role["director"] == true ||
+          user.role["volunteer"] == true ||
+          user.role["organizer"] == true) {
         items.add(new ScreenHiddenDrawer(
           new ItemHiddenMenu(
             name: "QR Scanner",
@@ -191,13 +183,21 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColorMenu: off_white,
       backgroundColorAppBar: pink,
       elevationAppBar: 0.0,
-      backgroundMenu: FlareActor(
-        'assets/Filip.flr',
-        alignment: Alignment.center,
-        fit: BoxFit.contain,
-        animation: "idle",
-      ),
+      backgroundMenu: Theme.of(context).platform == TargetPlatform.iOS
+          ? FlareActor(
+              'assets/party.flr',
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+              animation: "idle",
+            )
+          : FlareActor(
+              'assets/party.flr',
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+              animation: "idle",
+            ),
       screens: items,
+      typeOpen: TypeOpen.FROM_LEFT,
     );
   }
 }

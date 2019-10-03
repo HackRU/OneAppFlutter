@@ -2,10 +2,11 @@ import 'package:HackRU/colors.dart';
 import 'package:HackRU/constants.dart';
 import 'package:HackRU/main.dart';
 import 'package:HackRU/models/filestore.dart';
-import 'package:HackRU/models/loading_indicator.dart';
+import 'package:HackRU/models/hackru_service.dart';
+import 'package:HackRU/models/models.dart';
 import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/screens/scanner2.dart';
-import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -62,7 +63,7 @@ class LoginState extends State<Login> {
   }
 
   void _completeLogin(LcsCredential cred, BuildContext context) async {
-    var user = await getUser(DEV_URL, cred);
+    var user = await getUser(PROD_URL, cred);
     guestUser = user;
     // Pop the loading indicator
     Navigator.pop(context);
@@ -92,7 +93,17 @@ class LoginState extends State<Login> {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             title: Center(
-              child: new ColorLoader2(),
+              child: Container(
+                color: transparent,
+                height: 400.0,
+                width: 400.0,
+                child: FlareActor(
+                  'assets/loading_indicator.flr',
+                  alignment: Alignment.center,
+                  fit: BoxFit.contain,
+                  animation: "idle",
+                ),
+              ),
             ),
           );
         });
@@ -103,7 +114,7 @@ class LoginState extends State<Login> {
         _loginLoad(context);
         try {
           var cred = await login(
-              _emailController.text, _passwordController.text, DEV_URL);
+              _emailController.text, _passwordController.text, PROD_URL);
           setStoredCredential(cred);
           _completeLogin(cred, context);
         } catch (e) {
@@ -154,18 +165,37 @@ class LoginState extends State<Login> {
             SizedBox(height: 5.0),
             Column(
               children: <Widget>[
-                Image.asset(
-                  'assets/images/hackru_white_logo.png',
-                  width: 200,
-                  height: 200,
+                Container(
+                  height: 200.0,
+                  child: FlareActor(
+                    'assets/scarlet_knight_login.flr',
+                    alignment: Alignment.center,
+                    fit: BoxFit.contain,
+                    animation: "idle",
+                  ),
+                ),
+//                Image.asset(
+//                  'assets/images/hackru_white_logo.png',
+//                  width: 200,
+//                  height: 200,
+//                ),
+                SizedBox(
+                  height: 5.0,
                 ),
                 Text(
-                  'FALL 2019',
-                  style: TextStyle(color: off_white, fontSize: 25),
+                  'HackRU',
+                  style: TextStyle(
+                      color: off_white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  'Fall 2019',
+                  style: TextStyle(color: off_white, fontSize: 18),
                 ),
               ],
             ),
-            SizedBox(height: 30.0),
+            SizedBox(height: 18.0),
             Center(
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
@@ -206,26 +236,20 @@ class LoginState extends State<Login> {
             SizedBox(
               height: 40.0,
             ),
-            RaisedButton(
-              onPressed: _buttonLogin(context),
-              elevation: 0.0,
-              color: pink,
-              textColor: pink,
-              padding: const EdgeInsets.all(0.0),
-              child: ClipRRect(
+            MaterialButton(
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 60.0,
-                  color: off_white,
-                  padding: const EdgeInsets.all(18.0),
-                  child: const Text(
-                    'LOGIN',
-                    style: TextStyle(
-                        fontSize: 20, color: pink, fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              ),
+              splashColor: yellow,
+              height: 60.0,
+              color: off_white,
+              onPressed: _buttonLogin(context),
+              padding: const EdgeInsets.all(18.0),
+              child: const Text(
+                'LOGIN',
+                style: TextStyle(
+                    fontSize: 20, color: pink, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
               ),
             ),
             SizedBox(

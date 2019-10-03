@@ -1,19 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:HackRU/colors.dart';
-import 'package:HackRU/tabs/events_for_day.dart';
 import 'dart:async';
-import 'package:HackRU/models/loading_indicator.dart';
-import 'package:dart_lcs_client/dart_lcs_client.dart';
-import 'package:HackRU/constants.dart';
 
-class Events extends StatefulWidget{
+import 'package:HackRU/colors.dart';
+import 'package:HackRU/constants.dart';
+import 'package:HackRU/models/hackru_service.dart';
+import 'package:HackRU/models/models.dart';
+import 'package:HackRU/tabs/events_for_day.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class Events extends StatefulWidget {
   @override
   EventsState createState() => EventsState();
 }
 
-class EventsState extends State<Events>
-    with SingleTickerProviderStateMixin{
+class EventsState extends State<Events> with SingleTickerProviderStateMixin {
   TabController controller;
 
   @override
@@ -30,22 +31,26 @@ class EventsState extends State<Events>
 
   TabBar getTabBar() {
     return new TabBar(
-        tabs: <Tab>[
-          new Tab(text: 'SATURDAY',),
-          new Tab(text: 'SUNDAY',),],
-        indicatorColor: yellow,
-        indicatorWeight: 3.0,
-        indicatorSize: TabBarIndicatorSize.tab,
-        controller: controller,
-        unselectedLabelColor: pink_dark,
-        labelColor: off_white,
-        labelStyle: TextStyle(fontWeight: FontWeight.w600),
+      tabs: <Tab>[
+        new Tab(
+          text: 'SATURDAY',
+        ),
+        new Tab(
+          text: 'SUNDAY',
+        ),
+      ],
+      indicatorColor: yellow,
+      indicatorWeight: 3.0,
+      indicatorSize: TabBarIndicatorSize.tab,
+      controller: controller,
+      unselectedLabelColor: pink_dark,
+      labelColor: off_white,
+      labelStyle: TextStyle(fontWeight: FontWeight.w600),
     );
   }
 
   TabBarView getTabBarView(var tabs) {
-    return new TabBarView(
-        children: tabs, controller: controller);
+    return new TabBarView(children: tabs, controller: controller);
   }
 
   static List<Event> cachedEvents = null;
@@ -57,45 +62,53 @@ class EventsState extends State<Events>
     }
     if (cacheTTL.isBefore(DateTime.now())) {
       print("cache miss");
-      dayofEventsResources(DEV_URL).then((events){
-          streamctl.sink.add(events);
-          cachedEvents = events;
-          cacheTTL = DateTime.now().add(Duration(minutes: 30));
+      dayofEventsResources(PROD_URL).then((events) {
+        streamctl.sink.add(events);
+        cachedEvents = events;
+        cacheTTL = DateTime.now().add(Duration(minutes: 30));
       });
     }
     return streamctl.stream;
   }
-
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         backgroundColor: pink,
         appBar: new AppBar(
-            title: getTabBar(),
-            backgroundColor: pink,
-            elevation: 1.0,
-            automaticallyImplyLeading: false,
+          title: getTabBar(),
+          backgroundColor: pink,
+          elevation: 1.0,
+          automaticallyImplyLeading: false,
         ),
         body: StreamBuilder<List<Event>>(
-          stream: _getEvents(),
-          builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return Center(
-                    child: new ColorLoader2(),
-                );
+            stream: _getEvents(),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Container(
+                      color: transparent,
+                      height: 400.0,
+                      width: 400.0,
+                      child: FlareActor(
+                        'assets/loading_indicator.flr',
+                        alignment: Alignment.center,
+                        fit: BoxFit.contain,
+                        animation: "idle",
+                      ),
+                    ),
+                  );
                 default:
-                print(snapshot.hasError);
-                var events = snapshot.data;
-                return getTabBarView(<Widget>[
+                  print(snapshot.hasError);
+                  var events = snapshot.data;
+                  return getTabBarView(<Widget>[
                     EventsForDay(day: '19', events: events),
                     EventsForDay(day: '20', events: events)
-                ]);
-          }
-        }
-      )
-    );
+                  ]);
+              }
+            }));
   }
 }

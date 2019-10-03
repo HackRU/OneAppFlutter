@@ -1,13 +1,16 @@
-import 'package:HackRU/models/loading_indicator.dart';
+import 'dart:async';
+
+import 'package:HackRU/colors.dart';
+import 'package:HackRU/constants.dart';
+import 'package:HackRU/models/filestore.dart';
+import 'package:HackRU/models/hackru_service.dart';
+import 'package:HackRU/models/models.dart';
 import 'package:HackRU/models/string_parser.dart';
-import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:HackRU/colors.dart';
-import 'package:HackRU/models/filestore.dart';
-import 'dart:async';
-import 'package:dart_lcs_client/dart_lcs_client.dart';
-import 'package:HackRU/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AnnouncementCard extends StatelessWidget {
@@ -21,7 +24,7 @@ class AnnouncementCard extends StatelessWidget {
     return matcher.hasMatch(input) && specialChar.hasMatch(input);
   }
 
-  _enableWebview(String text){
+  _enableWebview(String text) {
     final words = text.split(' ');
     WebView webView;
     words.forEach((link) {
@@ -31,7 +34,7 @@ class AnnouncementCard extends StatelessWidget {
           initialUrl: linkText ?? '[null]',
           gestureRecognizers: [
             Factory(() => PlatformViewVerticalGestureRecognizer()),
-            ].toSet(),
+          ].toSet(),
           javascriptMode: JavascriptMode.unrestricted,
         );
       }
@@ -39,9 +42,12 @@ class AnnouncementCard extends StatelessWidget {
     return webView;
   }
 
-  Widget build (BuildContext context){
+  Widget build(BuildContext context) {
     String secs = resource.ts.split(".")[0];
-    String time = DateTime.fromMillisecondsSinceEpoch(int.parse(secs)*1000).toIso8601String().substring(11,16);
+    var timeStr =
+        DateTime.fromMillisecondsSinceEpoch(int.parse(secs) * 1000).toLocal();
+    var formattedTime = new DateFormat('hh:mm a').format(timeStr);
+
     return new Container(
       key: Key(resource.ts),
       child: new Card(
@@ -52,10 +58,22 @@ class AnnouncementCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(time, style: TextStyle(color: white, fontWeight: FontWeight.w800, fontSize: 16.0),),
-                SizedBox(height: 2.0,),
-                new StringParser(text: resource.text ?? ''),
-                SizedBox(height: 6.0,),
+                new Text(
+                  formattedTime,
+                  style: TextStyle(
+                      color: white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16.0),
+                ),
+                SizedBox(
+                  height: 2.0,
+                ),
+                new StringParser(
+                  text: resource.text ?? '',
+                ),
+                SizedBox(
+                  height: 6.0,
+                ),
                 new ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
                   child: new Container(
@@ -86,59 +104,69 @@ class AnnouncementsState extends State<Announcements> {
   static DateTime cacheTTL = DateTime.now();
 
   Stream<List<Announcement>> _getSlacks() {
-      var streamCtrl = StreamController<List<Announcement>>();
-      try {
-        getStoredSlacks().then((storedSlacks) {
-          if (storedSlacks != null) {
-            streamCtrl.sink.add(storedSlacks);
-          }
-          if (cacheTTL.isBefore(DateTime.now())) {
-            return slackResources(DEV_URL);
-          } else {
-            return null;
-          }
-        }).then((networkSlacks) {
-          if (networkSlacks != null) {
-            streamCtrl.sink.add(networkSlacks);
-            setStoredSlacks(networkSlacks);
-            cacheTTL = DateTime.now().add(Duration(minutes: 9));
-            streamCtrl.close();
-          }
-        });
-      }
-      catch(e){
-        print("***********************\nSlack data stream ctrl error: " + e);
-      }
-      return streamCtrl.stream;
+    var streamCtrl = StreamController<List<Announcement>>();
+    try {
+      getStoredSlacks().then((storedSlacks) {
+        if (storedSlacks != null) {
+          streamCtrl.sink.add(storedSlacks);
+        }
+        if (cacheTTL.isBefore(DateTime.now())) {
+          return slackResources(PROD_URL);
+        } else {
+          return null;
+        }
+      }).then((networkSlacks) {
+        if (networkSlacks != null) {
+          streamCtrl.sink.add(networkSlacks);
+          setStoredSlacks(networkSlacks);
+          cacheTTL = DateTime.now().add(Duration(minutes: 9));
+          streamCtrl.close();
+        }
+      });
+    } catch (e) {
+      print("***********************\nSlack data stream ctrl error: " + e);
+    }
+    return streamCtrl.stream;
   }
 
   @override
-  Widget build (BuildContext context) => new Scaffold(
-    backgroundColor: pink,
-    body: new StreamBuilder<List<Announcement>>(
-      stream: _getSlacks(),
-      builder: (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return Center(
-              child: new ColorLoader2(),
-            );
-          default:
-            print(snapshot.hasError);
-            var resources = snapshot.data;
-            return new Container(
-              child: new ListView.builder(
-                itemCount: resources.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return new AnnouncementCard(resource: resources[index]);
-                },
-              ),
-            );
-        }
-      },
-    ),
-  );
+  Widget build(BuildContext context) => new Scaffold(
+        backgroundColor: pink,
+        body: new StreamBuilder<List<Announcement>>(
+          stream: _getSlacks(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<Announcement>> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return Center(
+                  child: Container(
+                    color: transparent,
+                    height: 400.0,
+                    width: 400.0,
+                    child: FlareActor(
+                      'assets/loading_indicator.flr',
+                      alignment: Alignment.center,
+                      fit: BoxFit.contain,
+                      animation: "idle",
+                    ),
+                  ),
+                );
+              default:
+                print(snapshot.hasError);
+                var resources = snapshot.data;
+                return new Container(
+                  child: new ListView.builder(
+                    itemCount: resources.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return new AnnouncementCard(resource: resources[index]);
+                    },
+                  ),
+                );
+            }
+          },
+        ),
+      );
 }
 
 // Source credit for following class: https://cutt.ly/mwdVxtM

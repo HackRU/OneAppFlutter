@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'dart:convert';
-import 'package:path_provider/path_provider.dart';
-import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'dart:io';
 
+import 'package:HackRU/models/models.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<String> _appPath() async {
   return (await getApplicationDocumentsDirectory()).path;
@@ -53,11 +53,8 @@ Future<List<Announcement>> getStoredSlacks() async {
 
 setStoredSlacks(List<Announcement> slacks) async {
   var slacksFile = await storedSlacksFile();
-  var slacksString = "[" +
-    slacks.map(
-      (slack) => slack.toString()
-    ).toList().join(",") +
-    "]";
+  var slacksString =
+      "[" + slacks.map((slack) => slack.toString()).toList().join(",") + "]";
   await slacksFile.writeAsString(slacksString);
 }
 
