@@ -183,19 +183,12 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColorMenu: off_white,
       backgroundColorAppBar: pink,
       elevationAppBar: 0.0,
-      backgroundMenu: Theme.of(context).platform == TargetPlatform.iOS
-          ? FlareActor(
-              'assets/party.flr',
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-              animation: "idle",
-            )
-          : FlareActor(
-              'assets/party.flr',
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-              animation: "idle",
-            ),
+      backgroundMenu: FlareActor(
+        'assets/party.flr',
+        alignment: Alignment.center,
+        fit: BoxFit.contain,
+        animation: "idle",
+      ),
       screens: items,
       typeOpen: TypeOpen.FROM_LEFT,
     );
