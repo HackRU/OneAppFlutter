@@ -16,16 +16,25 @@ dependencies:
   font_awesome_flutter: ^8.4.0
   groovin_material_icons: ^1.1.6
   hidden_drawer_menu: ^1.1.1
-  qrcode_reader: ^0.4.4
-  qr_flutter: ^2.1.0+55
+#  qrcode_reader: ^0.4.4
+  qr_flutter: ^3.0.1
+  qr_code_scanner: ^0.0.12
   http: ^0.11.3+16
-  url_launcher: ^5.1.2
+  url_launcher: ^4.1.0+1
   flip_panel: ^1.0.0
-  dart_lcs_client: ^1.0.6
+#  dart_lcs_client: ^0.0.3
   rubber: ^0.3.2
   webview_flutter: ^0.3.13
   pinch_zoom_image: ^0.2.5
   flare_flutter: ^1.5.8
+
+  flutter_linkify: ^2.1.0
+  equatable: ^0.4.0
+  meta: ^1.1.6
+  http_middleware: ^1.0.0
+  intl: ^0.15.8
+  path_provider: ^1.2.0
+#  path_provider: ^0.4.1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +72,12 @@ flutter:
   - assets/Filip.flr
   - assets/qr_scanner.flr
   - assets/scarlet_knight_login.flr
+  - assets/Background.flr
+  - assets/loading_indicator.flr
+  - assets/success_check.flr
+  - assets/error.flr
+  - assets/party.flr
+  - assets/hackru.flr
 
   fonts:
   - family: OpenSans

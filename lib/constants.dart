@@ -1,4 +1,3 @@
-
 /// ENDPOINTS
 
 const DEV_URL = 'https://api.hackru.org/dev';
@@ -16,8 +15,9 @@ const HACKRU_PAGE_URL = "https://hackru.org/";
 const FACEBOOK_PAGE_URL = "https://www.facebook.com/theHackRU/";
 const INSTAGRAM_PAGE_URL = "https://www.instagram.com/thehackru/";
 
-const ABOUT_HACKRU = 'The HackRU App is an open source effort made possible by the HackRU Research & Development Team. Hackers would be able to get announcements, a QR code for checking, food, etc. as well as see the schedule and map for the hackathon. Organizers would have an access to the QR Scanner.';
-
+/// STRINGS & OTHER CONSTANTS
+const ABOUT_HACKRU =
+    'The HackRU App is an open source effort made possible by the HackRU Research & Development Team. Hackers would be able to get announcements, a QR code for checking, food, etc. as well as see the schedule and map for the hackathon. Organizers would have an access to the QR Scanner.';
 
 /// Old API endpoints
 //  const DEV_URL = 'https://7c5l6v7ip3.execute-api.us-west-2.amazonaws.com/lcs-test';
@@ -76,7 +76,6 @@ const ABOUT_HACKRU = 'The HackRU App is an open source effort made possible by t
 
 /// Day of slack announcements
 //  BASE + "/dayof-slack"
-
 
 /// Get QR codes
 //  BASE + "/qr",       for given email address get generated qr code

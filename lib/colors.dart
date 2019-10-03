@@ -17,6 +17,7 @@ const charcoal_light = const Color(0xFF2f363d);
 const charcoal = const Color(0xFF24292E);
 const black = Colors.black;
 const transparent = const Color(0x00ffffff);
+const overlay = const Color.fromRGBO(0, 0, 0, 80);
 
 const ada_pink = const Color(0xFFB94B4B);
 const ada_green = const Color(0xFF3D854A);

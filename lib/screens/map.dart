@@ -11,7 +11,7 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: off_white,
+      color: white,
       child: PinchZoomImage(
         image: Image.asset('assets/images/map/event_map.png'),
         zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
@@ -20,5 +20,3 @@ class _MapState extends State<Map> {
     );
   }
 }
-
-

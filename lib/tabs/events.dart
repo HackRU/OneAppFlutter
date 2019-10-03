@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/constants.dart';
-import 'package:HackRU/models/loading_indicator.dart';
+import 'package:HackRU/models/hackru_service.dart';
+import 'package:HackRU/models/models.dart';
 import 'package:HackRU/tabs/events_for_day.dart';
-import 'package:dart_lcs_client/dart_lcs_client.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,17 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
                   return Center(
-                    child: new ColorLoader2(),
+                    child: Container(
+                      color: transparent,
+                      height: 400.0,
+                      width: 400.0,
+                      child: FlareActor(
+                        'assets/loading_indicator.flr',
+                        alignment: Alignment.center,
+                        fit: BoxFit.contain,
+                        animation: "idle",
+                      ),
+                    ),
                   );
                 default:
                   print(snapshot.hasError);
