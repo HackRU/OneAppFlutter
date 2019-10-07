@@ -78,7 +78,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
         appBar: new AppBar(
           title: getTabBar(),
           backgroundColor: pink,
-          elevation: 1.0,
+          elevation: 0.0,
           automaticallyImplyLeading: false,
         ),
         body: StreamBuilder<List<Event>>(
