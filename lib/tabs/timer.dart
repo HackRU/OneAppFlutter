@@ -16,7 +16,7 @@ class Timer extends StatefulWidget {
 class TimerState extends State<Timer> {
   @override
   Widget build(BuildContext context) {
-    final imageWidth = MediaQuery.of(context).size.width - 10.0;
+    final imageWidth = MediaQuery.of(context).size.width - 45.0;
     final imageHeight = 230.0;
     final toleranceFactor = 0.033;
     final widthFactor = 0.125;
@@ -137,45 +137,60 @@ class TimerState extends State<Timer> {
                           textAlign: TextAlign.center,
                         )
                       : Text(''),
-              Center(
-                heightFactor: 0.0,
-                widthFactor: 0.0,
-                child: (_duration.isNegative == false)
-                    ? FlipClock.reverseCountdown(
-                        duration: _duration,
-                        digitColor: pink,
-                        backgroundColor: off_white,
-                        digitSize: 35.0,
-                        width: 25.0,
-                        height: 45.0,
-                        spacing: (MediaQuery.of(context).size.width <= 350)
-                            ? EdgeInsets.only(
-                                bottom: 35.0,
-                                right: 4.0,
-                              )
-                            : EdgeInsets.all(0.0),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(3.0)),
-                        onDone: () => print('Times Up!'),
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 80.0,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Center(
+                    heightFactor: 0.0,
+                    widthFactor: 0.0,
+                    child: (_duration.isNegative == false)
+                        ? FlipClock.reverseCountdown(
+                            duration: _duration,
+                            digitColor: pink,
+                            backgroundColor: off_white,
+                            digitSize:
+                                (MediaQuery.of(context).size.width <= 325)
+                                    ? 35.0
+                                    : 40.0,
+                            width: (MediaQuery.of(context).size.width <= 325)
+                                ? 25.0
+                                : 30.0,
+                            height: (MediaQuery.of(context).size.width <= 325)
+                                ? 45.0
+                                : 55.0,
+                            spacing: (MediaQuery.of(context).size.width <= 325)
+                                ? EdgeInsets.only(
+                                    bottom: 35.0,
+                                    right: 4.0,
+                                  )
+                                : EdgeInsets.all(1.8),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(3.0)),
+                            onDone: () => print('Times Up!'),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height:
+                                    (MediaQuery.of(context).size.width <= 325)
+                                        ? 80.0
+                                        : 100.0,
+                              ),
+                              Text(
+                                'Times Up!!\n\n Don\'t forget to submit your projects\n on DevPost. Thanks for attending\n HackRU Fall 2019!!!\n\n -- HackRU Organizing Team',
+                                style: TextStyle(
+                                  color: pink,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Times Up!!\n\n Don\'t forget to submit your projects\n on DevPost. Thanks for attending\n HackRU Fall 2019!!!\n\n -- HackRU Organizing Team',
-                            style: TextStyle(
-                              color: pink,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                  ),
+                ],
               ),
             ],
           ),
