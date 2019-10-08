@@ -50,5 +50,5 @@ samples, guidance on mobile development, and a full API reference.
 4. `cd lib && dart test.dart`
 
 ### For Users
-For Android: Search for `HackRU` app
-For iOS: Search for `HackRU Official` app
+* For Android: Search for `HackRU` app
+* For iOS: Search for `HackRU Official` app
