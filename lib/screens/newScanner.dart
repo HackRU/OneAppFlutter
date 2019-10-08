@@ -256,6 +256,9 @@ class _NewScannerState extends State<NewScanner>
     String result;
     print("***** Called `lcsHandle` with qr:" + userEmailOrId);
     var user;
+    var adminUser =
+        await getUser(PROD_URL, QRScanner2.cred, "oneapp@flutter.dev");
+    print('****** Admin User: $adminUser');
     var numUserScanned;
     try {
       if (userEmailOrId != null) {
