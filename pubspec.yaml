@@ -20,7 +20,7 @@ dependencies:
   qr_code_scanner: ^0.0.12
   http: ^0.11.3+16
   url_launcher: ^4.1.0+1
-  flip_panel: ^1.0.0
+#  flip_panel: ^1.0.0
   rubber: ^0.3.2
   webview_flutter: ^0.3.13
   pinch_zoom_image: ^0.2.5
@@ -65,6 +65,8 @@ flutter:
   - assets/images/map/food_court.png
   - assets/images/map/CAVE.png
   - assets/images/map/hackru_logo.png
+  - assets/images/map/horz_hackru_casc_map.png
+  - assets/images/map/ver_hackru_casc_map.png
   - assets/images/hackru_f19_logo.png
   - assets/images/hackru_f19_logo_circle.png
   - assets/Filip.flr

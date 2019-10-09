@@ -1,0 +1,170 @@
+import 'package:HackRU/colors.dart';
+import 'package:HackRU/models/hackru_service.dart';
+import 'package:HackRU/models/models.dart';
+import 'package:HackRU/screens/newScanner.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
+
+import '../constants.dart';
+
+const NOT_SCANNED = "NOT SCANNED";
+
+class QRScanner extends StatefulWidget {
+  QRScanner({Key key, this.title}) : super(key: key);
+  static const String routeName = '/material/expansion_panels';
+  final String title;
+  static LcsCredential cred;
+  static String event;
+
+  @override
+  _QRScannerState createState() => _QRScannerState();
+}
+
+class _QRScannerState extends State<QRScanner> {
+  List _fetchedEventArray;
+  bool isExpanded = false;
+  var _isVisible;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Orientation currentOrientation = MediaQuery.of(context).orientation;
+
+    return Scaffold(
+      backgroundColor: pink,
+      body: FutureBuilder(
+        future: qrEvents(MISC_URL),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none &&
+              snapshot.hasData == null) {
+            print('qr events (NULL): ${snapshot.data}');
+            return Container();
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Container(
+                color: transparent,
+                height: 400.0,
+                width: 400.0,
+                child: FlareActor(
+                  'assets/loading_indicator.flr',
+                  alignment: Alignment.center,
+                  fit: BoxFit.contain,
+                  animation: "idle",
+                ),
+              ),
+            );
+          }
+          print('qr events: ${snapshot.data}');
+          _fetchedEventArray = snapshot.data;
+          return ListView(
+            children: <Widget>[
+              Container(
+                margin:
+                    const EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
+                child: Card(
+                  elevation: 0.0,
+                  color: (isExpanded == true) ? off_white : card_color,
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
+                    child: ExpansionTile(
+                      onExpansionChanged: (bool expanding) =>
+                          setState(() => this.isExpanded = expanding),
+                      trailing: Icon(
+                        isExpanded
+                            ? GroovinMaterialIcons.chevron_up
+                            : GroovinMaterialIcons.chevron_down,
+                        color: isExpanded ? grey : pink_dark,
+                        size: 28.0,
+                      ),
+                      title: new Text(
+                        _fetchedEventArray[1],
+                        style: new TextStyle(
+                          color: isExpanded ? pink : off_white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      children: <Widget>[
+                        new Container(
+                          height: 100.0,
+                          padding: EdgeInsets.all(12.0),
+                          child: ListView.builder(
+                            itemCount: _fetchedEventArray.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              print('****************\n');
+                              print(_fetchedEventArray[index]);
+                              isExpanded = false;
+                              return new ListTile(
+                                title: Text(_fetchedEventArray[index]),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment(0.0, 0.0),
+                height:
+                    currentOrientation == Orientation.portrait ? 500.0 : 200.0,
+                child: FlareActor(
+                  'assets/Filip.flr',
+                  alignment: Alignment.center,
+                  fit: BoxFit.contain,
+                  animation: "idle",
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+      floatingActionButton: Container(
+        width: MediaQuery.of(context).size.width - 50,
+        margin: EdgeInsets.symmetric(horizontal: 20.0),
+        child: _isVisible == false
+            ? null
+            : new FloatingActionButton.extended(
+                backgroundColor: yellow,
+                splashColor: pink,
+                onPressed: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => NewScanner(),
+                    ),
+                  );
+                },
+                tooltip: 'QRCode Reader',
+                icon: Center(
+                  child: Icon(
+                    FontAwesomeIcons.camera,
+                    color: pink,
+                    semanticLabel: 'Camera Icon',
+                  ),
+                ),
+                label: Text(
+                  'Scan',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: pink,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+    );
+  }
+}

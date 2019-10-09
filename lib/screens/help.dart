@@ -9,8 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 class Help extends StatelessWidget {
   @override
   Widget build(BuildContext context) => new Scaffold(
-      backgroundColor: pink,
-      body: new FutureBuilder<List<HelpResource>>(
+        backgroundColor: pink,
+        body: new FutureBuilder<List<HelpResource>>(
           future: helpResources(MISC_URL),
           builder: (BuildContext context,
               AsyncSnapshot<List<HelpResource>> snapshot) {
@@ -35,13 +35,17 @@ class Help extends StatelessWidget {
                 var resources = snapshot.data;
                 print(resources);
                 return new Container(
-                    child: new ListView.builder(
-                        itemCount: resources.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return new HelpButton(resource: resources[index]);
-                        }));
+                  child: new ListView.builder(
+                    itemCount: resources.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return new HelpButton(resource: resources[index]);
+                    },
+                  ),
+                );
             }
-          }));
+          },
+        ),
+      );
 }
 
 class HelpButton extends StatelessWidget {

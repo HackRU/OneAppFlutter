@@ -10,10 +10,17 @@ class Map extends StatefulWidget {
 class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
+    Orientation currentOrientation = MediaQuery.of(context).orientation;
+
     return Container(
       color: white,
+      alignment: Alignment(0, 0),
       child: PinchZoomImage(
-        image: Image.asset('assets/images/map/event_map.png'),
+        image: currentOrientation == Orientation.portrait
+            ? Image.asset('assets/images/map/ver_hackru_casc_map.png')
+            : Image.asset(
+                'assets/images/map/horz_hackru_casc_map.png',
+              ),
         zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
         hideStatusBarWhileZooming: false,
       ),

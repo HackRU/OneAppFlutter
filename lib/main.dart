@@ -5,6 +5,7 @@ import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/screens/login.dart';
 import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/page_not_found.dart';
+import 'package:HackRU/screens/scanner.dart';
 import 'package:HackRU/screens/scanner2.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -129,6 +130,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
           ),
           QRScanner2(),
+        ));
+      }
+    }
+
+    if (LoginState.credStr != '') {
+      if (user.role["director"] == true ||
+          user.role["volunteer"] == true ||
+          user.role["organizer"] == true) {
+        items.add(new ScreenHiddenDrawer(
+          new ItemHiddenMenu(
+            name: "QR Scanner 2",
+            baseStyle: TextStyle(color: grey, fontSize: 28.0),
+            colorLineSelected: yellow,
+            selectedStyle:
+                TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
+          ),
+          QRScanner(),
         ));
       }
     }

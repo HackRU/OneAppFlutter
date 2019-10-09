@@ -19,6 +19,8 @@ enum Event {
   Breakfast,
   Lunch_2,
   Check_In_No_Delayed,
+  Raffle_1,
+  Raffle_2,
 }
 
 typedef DemoItemBodyBuilder<T> = Widget Function(DemoItem<T> item);
@@ -302,6 +304,32 @@ class _QRScanner2State extends State<QRScanner2> {
                               },
                               activeColor: pink,
                             ),
+                            RadioListTile<Event>(
+                              value: Event.Raffle_1,
+                              title: const Text('Raffle-1'),
+                              groupValue: field.value,
+                              onChanged: (Event value) {
+                                field.didChange(value);
+                                setState(() {
+                                  item.value = value;
+                                  close();
+                                });
+                              },
+                              activeColor: pink,
+                            ),
+                            RadioListTile<Event>(
+                              value: Event.Raffle_2,
+                              title: const Text('Raffle-2'),
+                              groupValue: field.value,
+                              onChanged: (Event value) {
+                                field.didChange(value);
+                                setState(() {
+                                  item.value = value;
+                                  close();
+                                });
+                              },
+                              activeColor: pink,
+                            ),
                           ],
                         );
                       },
@@ -316,6 +344,8 @@ class _QRScanner2State extends State<QRScanner2> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation currentOrientation = MediaQuery.of(context).orientation;
+
     return Scaffold(
       backgroundColor: pink,
       body: ListView(
@@ -360,7 +390,8 @@ class _QRScanner2State extends State<QRScanner2> {
               ),
               Container(
                 alignment: Alignment(0.0, 0.0),
-                height: 500.0,
+                height:
+                    currentOrientation == Orientation.portrait ? 500.0 : 200.0,
                 child: FlareActor(
                   'assets/Filip.flr',
                   alignment: Alignment.center,
