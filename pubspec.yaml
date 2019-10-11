@@ -53,13 +53,17 @@ flutter:
   - assets/images/hackru_offwhite_logo.png
   - assets/images/drawer_bg.png
   - assets/images/hackru_banner.png
+  - assets/images/map/4th_floor.png
   - assets/images/map/event_map.png
   - assets/images/map/glass_room.png
   - assets/images/map/help_desk.png
-  - assets/images/map/food_table.png
+  - assets/images/map/food_tables.png
   - assets/images/map/red_lion_cafe.png
+  - assets/images/map/lion_lounge.png
+  - assets/images/map/outdoor_activities.png
   - assets/images/map/hacking_area.png
   - assets/images/map/registration.png
+  - assets/images/map/support_tables.png
   - assets/images/map/stage.png
   - assets/images/map/food_court.png
   - assets/images/map/CAVE.png
