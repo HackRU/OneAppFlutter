@@ -87,11 +87,14 @@ class EventsForDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => new Scaffold(
-      backgroundColor: pink,
-      body: new Container(
+        backgroundColor: pink,
+        body: new Container(
           child: new ListView.builder(
-              itemCount: events == null ? 1 : events.length,
-              itemBuilder: (BuildContext context, int index) {
-                return new EventCard(resource: events[index], day: this.day);
-              })));
+            itemCount: events == null ? 1 : events.length,
+            itemBuilder: (BuildContext context, int index) {
+              return new EventCard(resource: events[index], day: this.day);
+            },
+          ),
+        ),
+      );
 }

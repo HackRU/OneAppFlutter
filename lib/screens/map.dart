@@ -1,6 +1,9 @@
 import 'package:HackRU/colors.dart';
+import 'package:HackRU/constants.dart';
+import 'package:HackRU/models/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:pinch_zoom_image/pinch_zoom_image.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Map extends StatefulWidget {
   @override
@@ -17,9 +20,27 @@ class _MapState extends State<Map> {
       alignment: Alignment(0, 0),
       child: PinchZoomImage(
         image: currentOrientation == Orientation.portrait
-            ? Image.asset('assets/images/map/ver_hackru_casc_map.png')
-            : Image.asset(
-                'assets/images/map/horz_hackru_casc_map.png',
+            ? Stack(
+                children: <Widget>[
+                  Center(child: FancyLoadingIndicator()),
+                  Center(
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: FLOOR_MAP_VER,
+                    ),
+                  ),
+                ],
+              )
+            : Stack(
+                children: <Widget>[
+                  Center(child: FancyLoadingIndicator()),
+                  Center(
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: FLOOR_MAP_HOR,
+                    ),
+                  ),
+                ],
               ),
         zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
         hideStatusBarWhileZooming: false,

@@ -5,7 +5,7 @@ import 'package:HackRU/models/filestore.dart';
 import 'package:HackRU/models/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:HackRU/screens/home.dart';
-import 'package:HackRU/screens/scanner2.dart';
+import 'package:HackRU/screens/scanner.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -67,21 +67,13 @@ class LoginState extends State<Login> {
     guestUser = user;
     // Pop the loading indicator
     Navigator.pop(context);
-    QRScanner2.cred = cred;
+    QRScanner.cred = cred;
     Home.userEmail = _emailController.text;
-    QRScanner2.userEmail = _emailController.text;
-    QRScanner2.userPassword = _passwordController.text;
+    QRScanner.userEmail = _emailController.text;
+    QRScanner.userPassword = _passwordController.text;
     Navigator.of(context).pushAndRemoveUntil(
         new MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
         ModalRoute.withName('/main'));
-//    if(user.role["director"] == true ){
-//      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()),);
-//      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => AdminPage()), ModalRoute.withName('/main'));
-//    }
-//    else{
-//      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()),);
-//      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute( builder: (BuildContext context) => MyHomePage()), ModalRoute.withName('/main'));
-//    }
   }
 
   _loginLoad(context) {
@@ -98,7 +90,7 @@ class LoginState extends State<Login> {
                 height: 400.0,
                 width: 400.0,
                 child: FlareActor(
-                  'assets/loading_indicator.flr',
+                  'assets/flare/loading_indicator.flr',
                   alignment: Alignment.center,
                   fit: BoxFit.contain,
                   animation: "idle",
@@ -168,17 +160,12 @@ class LoginState extends State<Login> {
                 Container(
                   height: 200.0,
                   child: FlareActor(
-                    'assets/scarlet_knight_login.flr',
+                    'assets/flare/scarlet_knight_login.flr',
                     alignment: Alignment.center,
                     fit: BoxFit.contain,
                     animation: "idle",
                   ),
                 ),
-//                Image.asset(
-//                  'assets/images/hackru_white_logo.png',
-//                  width: 200,
-//                  height: 200,
-//                ),
                 SizedBox(
                   height: 5.0,
                 ),

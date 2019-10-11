@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:HackRU/colors.dart';
 import 'package:HackRU/models/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
-import 'package:HackRU/screens/scanner2.dart';
+import 'package:HackRU/screens/scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -77,7 +77,7 @@ class _NewScannerState extends State<NewScanner>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   new Text(
-                    QRScanner2.event,
+                    CardExpansion.event,
                     style: TextStyle(
                       fontSize: 14.0,
                       color: white,
@@ -257,21 +257,21 @@ class _NewScannerState extends State<NewScanner>
     print("***** Called `lcsHandle` with qr:" + userEmailOrId);
     var user;
     var adminUser =
-        await getUser(PROD_URL, QRScanner2.cred, "oneapp@flutter.dev");
+        await getUser(PROD_URL, QRScanner.cred, "oneapp@flutter.dev");
     print('****** Admin User: $adminUser');
     var numUserScanned;
     try {
       if (userEmailOrId != null) {
         // HANDLE CHECK_IN EVENT
-        if (QRScanner2.event == "Check_In") {
+        if (CardExpansion.event == "check-in") {
           if (_isEmailAddress(userEmailOrId)) {
             NewScanner.userEmail = userEmailOrId;
-            user = await getUser(PROD_URL, QRScanner2.cred, userEmailOrId);
+            user = await getUser(PROD_URL, QRScanner.cred, userEmailOrId);
             print('****** User: $user');
             result = "EMAIL SCANNED!";
           } else {
             if (NewScanner.userEmail != '') {
-              linkQR(PROD_URL, QRScanner2.cred, NewScanner.userEmail,
+              linkQR(PROD_URL, QRScanner.cred, NewScanner.userEmail,
                   userEmailOrId);
               result = "DAY-OF QR LINKED!";
             } else {
@@ -281,24 +281,24 @@ class _NewScannerState extends State<NewScanner>
         }
 
         // HANDLE CHECK_IN_DELAYED EVENT
-        if (QRScanner2.event == "Check_In_No_Delayed") {
+        if (CardExpansion.event == "check-in-no-delayed") {
           if (_isEmailAddress(userEmailOrId)) {
             NewScanner.userEmail = userEmailOrId;
-            user = await getUser(PROD_URL, QRScanner2.cred, userEmailOrId);
+            user = await getUser(PROD_URL, QRScanner.cred, userEmailOrId);
 
             if (user.isDelayedEntry() &&
                 !await _scanDialogWarning(
                     "HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
               return NOT_SCANNED;
             } else {
-              QRScanner2.event = "Check_In";
+              CardExpansion.event = "check-in";
             }
 
             result = "EMAIL SCANNED!";
             print('****** User: $user');
           } else {
             if (NewScanner.userEmail != '') {
-              linkQR(PROD_URL, QRScanner2.cred, NewScanner.userEmail,
+              linkQR(PROD_URL, QRScanner.cred, NewScanner.userEmail,
                   userEmailOrId);
               result = "DAY-OF QR LINKED!";
             } else {
@@ -308,17 +308,17 @@ class _NewScannerState extends State<NewScanner>
         }
 
         // HANDLE ALL THE OTHER EVENTS
-        if (QRScanner2.event != "Check_In" ||
-            QRScanner2.event != "Check_In_No_Delayed") {
+        if (CardExpansion.event != "check-in" ||
+            CardExpansion.event != "check-in-no-delayed") {
           numUserScanned = await attendEvent(
-              PROD_URL, QRScanner2.cred, userEmailOrId, QRScanner2.event);
+              PROD_URL, QRScanner.cred, userEmailOrId, CardExpansion.event);
           print("********** user event count: $numUserScanned");
 
           if (numUserScanned == 1) {
             result = "SCANNED!";
           } else {
             result = 'ALREADY SCANNED!';
-            if (QRScanner2.event == "Check_In") {
+            if (CardExpansion.event == "check-in") {
               if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
                 result = "SCANNED!";
               } else {

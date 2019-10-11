@@ -23,7 +23,7 @@ class Help extends StatelessWidget {
                     height: 400.0,
                     width: 400.0,
                     child: FlareActor(
-                      'assets/loading_indicator.flr',
+                      'assets/flare/loading_indicator.flr',
                       alignment: Alignment.center,
                       fit: BoxFit.contain,
                       animation: "idle",

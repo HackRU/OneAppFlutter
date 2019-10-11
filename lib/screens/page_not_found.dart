@@ -37,7 +37,7 @@ class _PageNotFoundState extends State<PageNotFound> {
             margin: EdgeInsets.only(left: 50.0, bottom: 35.0),
             height: 400.0,
             child: FlareActor(
-              'assets/Filip.flr',
+              'assets/flare/Filip.flr',
               alignment: Alignment.topRight,
               fit: BoxFit.contain,
               animation: "idle",
