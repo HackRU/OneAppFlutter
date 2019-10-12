@@ -191,13 +191,16 @@ class _CardExpansionState extends State<CardExpansion> {
             ),
           ),
         ),
+        SizedBox(
+          height: 20.0,
+        ),
         !isExpanded
             ? Container(
                 alignment: Alignment(0.0, 0.0),
                 height:
-                    currentOrientation == Orientation.portrait ? 500.0 : 200.0,
+                    currentOrientation == Orientation.portrait ? 300.0 : 0.0,
                 child: FlareActor(
-                  'assets/flare/Filip.flr',
+                  'assets/flare/forever_wondering.flr',
                   alignment: Alignment.center,
                   fit: BoxFit.contain,
                   animation: "idle",

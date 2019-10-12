@@ -72,7 +72,6 @@ flutter:
   - assets/images/map/ver_hackru_casc_map.png
   - assets/images/hackru_f19_logo.png
   - assets/images/hackru_f19_logo_circle.png
-  - assets/flare/Filip.flr
   - assets/flare/qr_scanner.flr
   - assets/flare/scarlet_knight_login.flr
   - assets/flare/Background.flr
@@ -82,6 +81,7 @@ flutter:
   - assets/flare/error.flr
   - assets/flare/party.flr
   - assets/flare/hackru.flr
+  - assets/flare/forever_wondering.flr
 
   fonts:
   - family: OpenSans

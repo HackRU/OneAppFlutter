@@ -17,7 +17,8 @@ class TimerState extends State<Timer> {
   @override
   Widget build(BuildContext context) {
     final imageWidth = MediaQuery.of(context).size.width - 45.0;
-    final imageHeight = 230.0;
+    final imageHeight =
+        (MediaQuery.of(context).size.width <= 325) ? 150.0 : 230.0;
     final toleranceFactor = 0.033;
     final widthFactor = 0.125;
     final heightFactor = 0.5;
