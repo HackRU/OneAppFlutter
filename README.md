@@ -1,6 +1,13 @@
 # One App Flutter
 
 The Official HackRU Flutter App
+
+Feel free to show some :heart: and :star: the repo to support the project.
+
+![GitHub closed issues](https://img.shields.io/github/issues-closed/HackRU/OneAppFlutter)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/HackRU/OneAppFlutter)
+![GitHub](https://img.shields.io/github/license/HackRU/OneAppFlutter)
+
 <img align="right" src="./screenshots/appIconImage.png" height="200">
 
 ## Description
@@ -52,3 +59,8 @@ samples, guidance on mobile development, and a full API reference.
 ### For Users
 * For Android: Search for `HackRU` app
 * For iOS: Search for `HackRU Official` app
+
+### Follow Us On
+<a href="https://www.facebook.com/theHackRU/"><img src="https://webstockreview.net/images/facebook-clipart-favicon.png" width="40"></a>
+<a href="https://www.instagram.com/thehackru/"><img src="https://i.pinimg.com/originals/a2/5f/4f/a25f4f58938bbe61357ebca42d23866f.png" width="40"></a>
+<a href="https://hackru.org/"><img src="https://raw.githubusercontent.com/HackRU/OneAppFlutter/master/screenshots/appIconImage.png" width="40"></a>
