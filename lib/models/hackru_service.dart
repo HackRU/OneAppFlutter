@@ -92,6 +92,13 @@ Future<List<HelpResource>> helpResources(String miscUrl) async {
       .toList();
 }
 
+Future<List<String>> qrEvents(String miscUrl) async {
+  var response = await getMisc(miscUrl, "/events.json");
+  var resources = json.decode(response.body);
+  List<String> qrEvents = new List<String>.from(resources);
+  return qrEvents;
+}
+
 Future<List<Announcement>> slackResources(String lcsUrl) async {
   var response = await dayOfGetLcs(lcsUrl, '/dayof-slack');
   var resources = json.decode(response.body);

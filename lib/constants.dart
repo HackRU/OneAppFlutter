@@ -15,6 +15,11 @@ const HACKRU_PAGE_URL = "https://hackru.org/";
 const FACEBOOK_PAGE_URL = "https://www.facebook.com/theHackRU/";
 const INSTAGRAM_PAGE_URL = "https://www.instagram.com/thehackru/";
 
+const FLOOR_MAP_HOR =
+    "https://hackru-misc.s3-us-west-2.amazonaws.com/floormap_horziontal.png";
+const FLOOR_MAP_VER =
+    "https://hackru-misc.s3-us-west-2.amazonaws.com/floormap_vertical.png";
+
 /// STRINGS & OTHER CONSTANTS
 const ABOUT_HACKRU =
     'The HackRU App is an open source effort made possible by the HackRU Research & Development Team. Hackers would be able to get announcements, a QR code for checking, food, etc. as well as see the schedule and map for the hackathon. Organizers would have an access to the QR Scanner.';

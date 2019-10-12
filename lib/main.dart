@@ -5,7 +5,7 @@ import 'package:HackRU/screens/home.dart';
 import 'package:HackRU/screens/login.dart';
 import 'package:HackRU/screens/map.dart';
 import 'package:HackRU/screens/page_not_found.dart';
-import 'package:HackRU/screens/scanner2.dart';
+import 'package:HackRU/screens/scanner.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
             selectedStyle:
                 TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
           ),
-          QRScanner2(),
+          QRScanner(),
         ));
       }
     }
@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColorAppBar: pink,
       elevationAppBar: 0.0,
       backgroundMenu: FlareActor(
-        'assets/party.flr',
+        'assets/flare/party.flr',
         alignment: Alignment.center,
         fit: BoxFit.contain,
         animation: "idle",
