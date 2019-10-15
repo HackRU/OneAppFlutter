@@ -81,6 +81,7 @@ flutter:
   - assets/flare/error.flr
   - assets/flare/party.flr
   - assets/flare/hackru.flr
+  - assets/flare/hackru_logo.flr
   - assets/flare/forever_wondering.flr
 
   fonts:
