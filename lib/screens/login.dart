@@ -157,10 +157,13 @@ class LoginState extends State<Login> {
             SizedBox(height: 5.0),
             Column(
               children: <Widget>[
+                SizedBox(
+                  height: 30.0,
+                ),
                 Container(
-                  height: 200.0,
+                  height: 150.0,
                   child: FlareActor(
-                    'assets/flare/scarlet_knight_login.flr',
+                    'assets/flare/hackru_logo.flr',
                     alignment: Alignment.center,
                     fit: BoxFit.contain,
                     animation: "idle",
@@ -170,19 +173,16 @@ class LoginState extends State<Login> {
                   height: 5.0,
                 ),
                 Text(
-                  'HackRU',
+                  'FALL 2019',
                   style: TextStyle(
-                      color: off_white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  'Fall 2019',
-                  style: TextStyle(color: off_white, fontSize: 18),
+                    color: off_white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 18.0),
+            SizedBox(height: 35.0),
             Center(
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
