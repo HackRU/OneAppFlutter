@@ -36,7 +36,7 @@ class LoginState extends State<Login> {
   }
 
   _launchUrl() async {
-    const url = 'https://dev.hackru.org/signup';
+    const url = 'https://hackru.org/signup';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
