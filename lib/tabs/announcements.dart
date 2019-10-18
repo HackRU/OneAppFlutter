@@ -111,7 +111,7 @@ class AnnouncementsState extends State<Announcements> {
           streamCtrl.sink.add(storedSlacks);
         }
         if (cacheTTL.isBefore(DateTime.now())) {
-          return slackResources(PROD_URL);
+          return slackResources(API_URL);
         } else {
           return null;
         }

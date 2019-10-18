@@ -63,7 +63,7 @@ class LoginState extends State<Login> {
   }
 
   void _completeLogin(LcsCredential cred, BuildContext context) async {
-    var user = await getUser(PROD_URL, cred);
+    var user = await getUser(API_URL, cred);
     guestUser = user;
     // Pop the loading indicator
     Navigator.pop(context);
@@ -106,7 +106,7 @@ class LoginState extends State<Login> {
         _loginLoad(context);
         try {
           var cred = await login(
-              _emailController.text, _passwordController.text, PROD_URL);
+              _emailController.text, _passwordController.text, API_URL);
           setStoredCredential(cred);
           _completeLogin(cred, context);
         } catch (e) {

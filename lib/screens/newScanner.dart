@@ -263,13 +263,13 @@ class _NewScannerState extends State<NewScanner>
         if (CardExpansion.event == "check-in") {
           if (_isEmailAddress(userEmailOrId)) {
             NewScanner.userEmail = userEmailOrId;
-            user = await getUser(PROD_URL, QRScanner.cred, userEmailOrId);
+            user = await getUser(API_URL, QRScanner.cred, userEmailOrId);
             print('****** User: $user');
             result = "EMAIL SCANNED!";
           } else {
             if (NewScanner.userEmail != '') {
-              linkQR(PROD_URL, QRScanner.cred, NewScanner.userEmail,
-                  userEmailOrId);
+              linkQR(
+                  API_URL, QRScanner.cred, NewScanner.userEmail, userEmailOrId);
               result = "DAY-OF QR LINKED!";
               print("**** Day-of QR linked!");
             } else {
@@ -282,7 +282,7 @@ class _NewScannerState extends State<NewScanner>
         if (CardExpansion.event == "check-in-no-delayed") {
           if (_isEmailAddress(userEmailOrId)) {
             NewScanner.userEmail = userEmailOrId;
-            user = await getUser(PROD_URL, QRScanner.cred, userEmailOrId);
+            user = await getUser(API_URL, QRScanner.cred, userEmailOrId);
 
             if (user.isDelayedEntry() &&
                 !await _scanDialogWarning(
@@ -296,8 +296,8 @@ class _NewScannerState extends State<NewScanner>
             print('****** User: $user');
           } else {
             if (NewScanner.userEmail != '') {
-              linkQR(PROD_URL, QRScanner.cred, NewScanner.userEmail,
-                  userEmailOrId);
+              linkQR(
+                  API_URL, QRScanner.cred, NewScanner.userEmail, userEmailOrId);
               result = "DAY-OF QR LINKED!";
               print("**** Day-of QR linked!");
             } else {
@@ -310,7 +310,7 @@ class _NewScannerState extends State<NewScanner>
         if (CardExpansion.event != "check-in" ||
             CardExpansion.event != "check-in-no-delayed") {
           numUserScanned = await attendEvent(
-              PROD_URL, QRScanner.cred, userEmailOrId, CardExpansion.event);
+              API_URL, QRScanner.cred, userEmailOrId, CardExpansion.event);
           print("********** user event count: $numUserScanned");
 
           if (numUserScanned == 1) {
