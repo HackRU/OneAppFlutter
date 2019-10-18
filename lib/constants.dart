@@ -1,13 +1,17 @@
 /// ENDPOINTS
 
-const DEV_URL = 'https://api.hackru.org/dev';
-const PROD_URL = 'https://api.hackru.org/prod';
+/// DEV
+//const API_URL = 'https://api.hackru.org/dev';
+
+/// PROD
+const API_URL = 'https://api.hackru.org/prod';
+
 const MISC_URL = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 
 const WAIVER_URL = "https://hackru.org/resources/waiver.pdf";
-const DEVPOST_URL = "http://hackru-s19.devpost.com";
-const SLACKPAGE_URL = "http://bit.ly/hackru-s19";
-const HELPQ_URL = "https://hackru-helpq.herokuapp.com";
+const DEVPOST_URL = "https://hackru-f19.devpost.com";
+const SLACKPAGE_URL = "http://tinyurl.com/hackru-f19";
+const HELPQ_URL = "http://helpq.hackru.org/";
 const FOOD_MENU_URL = "https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf";
 
 const REPOSITORY_URL = "https://github.com/HackRU/OneAppFlutter";
