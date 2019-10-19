@@ -219,7 +219,7 @@ void updateUserDayOf(
 }
 
 Future<int> attendEvent(String lcsUrl, LcsCredential credential,
-    String userEmailOrId, String event) async {
+    String userEmailOrId, String event, bool again) async {
   print(event);
   var result = await postLcs(
       lcsUrl,
@@ -229,7 +229,7 @@ Future<int> attendEvent(String lcsUrl, LcsCredential credential,
         "qr": userEmailOrId,
         "token": credential.token,
         "event": event,
-        "again": true
+        "again": again
       },
       credential);
 
@@ -238,7 +238,7 @@ Future<int> attendEvent(String lcsUrl, LcsCredential credential,
     return body["body"]["new_count"];
   } else if (body["statusCode"] == 402) {
     throw UserCheckedEvent();
-  } else if (body["statusCode"] != 404) {
+  } else if (body["statusCode"] == 404) {
     throw UserNotFound();
   } else {
     throw LcsError(result);
