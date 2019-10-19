@@ -118,6 +118,8 @@ class _NewScannerState extends State<NewScanner>
     var prevQR = 'xxx@xxx.com';
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
+        print('-------------');
+        print(scanData);
       setState(() {
         if (scanData != prevQR) {
           qrText = scanData;
@@ -259,73 +261,58 @@ class _NewScannerState extends State<NewScanner>
     var numUserScanned;
     try {
       if (userEmailOrId != null) {
-        // HANDLE CHECK_IN EVENT
-        if (CardExpansion.event == "check-in") {
+        String event = CardExpansion.event;
+        // HANDLE CHECK_IN EVENT, potentially link
+        if (event == "check-in" || event == "check-in-no-delayed") {
           if (_isEmailAddress(userEmailOrId)) {
-            NewScanner.userEmail = userEmailOrId;
             user = await getUser(API_URL, QRScanner.cred, userEmailOrId);
-            print('****** User: $user');
-            result = "EMAIL SCANNED!";
-          } else {
-            if (NewScanner.userEmail != '') {
-              linkQR(
-                  API_URL, QRScanner.cred, NewScanner.userEmail, userEmailOrId);
-              result = "DAY-OF QR LINKED!";
-              print("**** Day-of QR linked!");
-            } else {
-              _scanDialogWarning('Scan Email First!');
+            if (event == "check-in-no-delayed") {
+              if (user.isDelayedEntry()) {
+                if (!await _scanDialogWarning("HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
+                  return NOT_SCANNED;
+                }
+              }
+              event = "check-in";
             }
+            NewScanner.userEmail = userEmailOrId;
           }
+          
+          print('****** User: $user');
+          result = "EMAIL SCANNED!";
         }
 
-        // HANDLE CHECK_IN_DELAYED EVENT
-        if (CardExpansion.event == "check-in-no-delayed") {
-          if (_isEmailAddress(userEmailOrId)) {
-            NewScanner.userEmail = userEmailOrId;
-            user = await getUser(API_URL, QRScanner.cred, userEmailOrId);
-
-            if (user.isDelayedEntry() &&
-                !await _scanDialogWarning(
-                    "HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
-              return NOT_SCANNED;
-            } else {
-              CardExpansion.event = "check-in";
-            }
-
-            result = "EMAIL SCANNED!";
-            print('****** User: $user');
-          } else {
-            if (NewScanner.userEmail != '') {
-              linkQR(
-                  API_URL, QRScanner.cred, NewScanner.userEmail, userEmailOrId);
-              result = "DAY-OF QR LINKED!";
-              print("**** Day-of QR linked!");
-            } else {
-              _scanDialogWarning('Scan Email First!');
-            }
-          }
-        }
-
-        // HANDLE ALL THE OTHER EVENTS
-        if (CardExpansion.event != "check-in" ||
-            CardExpansion.event != "check-in-no-delayed") {
+        // ATTEND THE EVENT
+        try {
           numUserScanned = await attendEvent(
-              API_URL, QRScanner.cred, userEmailOrId, CardExpansion.event);
+            API_URL, QRScanner.cred, userEmailOrId, event, false);
           print("********** user event count: $numUserScanned");
-
-          if (numUserScanned == 1) {
+          result = "SCANNED!";
+        } on UserCheckedEvent {
+          print("already "+userEmailOrId);
+          if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
+            numUserScanned = await attendEvent(
+              API_URL, QRScanner.cred, userEmailOrId, event, true);
+            print("********** user event count: $numUserScanned");
             result = "SCANNED!";
           } else {
-            result = 'ALREADY SCANNED!';
-            if (CardExpansion.event == "check-in") {
-              if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
-                result = "SCANNED!";
-              } else {
-                return NOT_SCANNED;
-              }
+            return NOT_SCANNED;
+          }
+        } on UserNotFound catch (e) {
+          print('h ' + userEmailOrId);
+          if (!_isEmailAddress(userEmailOrId)) {
+            if (NewScanner.userEmail != '') {
+              linkQR(
+                API_URL, QRScanner.cred, NewScanner.userEmail, userEmailOrId);
+              print("**** Day-of QR linked!");
+              return "DAY-OF QR LINKED!";
+            } else {
+              _scanDialogWarning('Scan Email First!');
             }
+          } else {
+            throw e;
           }
         }
+        
       } else {
         print("attempt to scan null");
       }
