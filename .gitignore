@@ -10,6 +10,8 @@
 .history
 .svn/
 
+secrets.dart
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -30,6 +32,7 @@
 .pub-cache/
 .pub/
 build/
+/build/
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -65,6 +68,9 @@ build/
 **/ios/Flutter/flutter_assets/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+# Web related
+lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3

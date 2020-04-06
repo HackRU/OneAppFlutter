@@ -1,50 +1,47 @@
-import 'package:HackRU/models/filestore.dart';
-import 'package:HackRU/screens/about.dart';
-import 'package:HackRU/screens/help.dart';
-import 'package:HackRU/screens/home.dart';
-import 'package:HackRU/screens/login.dart';
-import 'package:HackRU/screens/map.dart';
-import 'package:HackRU/screens/page_not_found.dart';
-import 'package:HackRU/screens/scanner.dart';
-import 'package:flare_flutter/flare_actor.dart';
+import 'package:HackRU/blocs/auth/authentication.dart';
+import 'package:HackRU/blocs/bloc_delegate.dart';
+import 'package:HackRU/defaults.dart';
+import 'package:HackRU/models/models.dart';
+import 'package:HackRU/ui/hackru_app.dart';
+import 'package:HackRU/ui/pages/map.dart';
+import 'package:HackRU/ui/widgets/SplashScreen.dart';
+import 'package:HackRU/ui/widgets/loading_indicator.dart';
+import 'package:HackRU/ui/widgets/page_not_found.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:hidden_drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
-import 'package:hidden_drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
-import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'colors.dart';
-import 'models/custom_hidden_drawer_menu.dart';
+import 'blocs/auth/authentication_bloc.dart';
+import 'blocs/login/login.dart';
+import 'styles.dart';
 
 void main() {
-  runApp(Main());
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: pink,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.black,
+    systemNavigationBarIconBrightness: Brightness.light,
+  ));
+  runApp(MainApp());
 }
 
-class Main extends StatelessWidget {
+class MainApp extends StatelessWidget {
+
+  final LcsCredential lcsCredential;
+  const MainApp({Key key, this.lcsCredential}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HackRU',
+      title: kAppTitle,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: yellow,
-        accentColor: yellow,
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(color: white, width: 0.0),
-            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          ),
-          fillColor: yellow,
-          labelStyle: TextStyle(
-            color: off_white,
-          ),
-        ),
-      ),
-      home: MyHomePage(),
+      theme: kLightTheme,
+      darkTheme: kDarkTheme,
+      home: HackRUApp(lcsCredential: lcsCredential),
       routes: <String, WidgetBuilder>{
-        '/login': (BuildContext context) => new Login(),
-        '/main': (BuildContext context) => new MyHomePage(),
+        '/login': (BuildContext context) => new LoginPage(),
+        '/hackRUApp': (BuildContext context) => new HackRUMap(),
       },
       onUnknownRoute: (RouteSettings setting) {
         String unknownRoute = setting.name;
@@ -58,139 +55,66 @@ class Main extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.initPositionSelected}) : super(key: key);
+///TODO: Yet to be implemented!
 
-  final int initPositionSelected;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  List<ScreenHiddenDrawer> items = new List();
-  var user = LoginState.guestUser;
-
-  @override
-  void initState() {
-    items.add(new ScreenHiddenDrawer(
-      new ItemHiddenMenu(
-        name: "Home",
-        baseStyle: TextStyle(
-          color: grey,
-          fontSize: 28.0,
-        ),
-        colorLineSelected: yellow,
-        selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
-      ),
-      Home(),
-    ));
-
-    items.add(new ScreenHiddenDrawer(
-      new ItemHiddenMenu(
-        name: "Map",
-        baseStyle: TextStyle(color: grey, fontSize: 28.0),
-        colorLineSelected: pink,
-        selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
-      ),
-      Map(),
-    ));
-
-    items.add(new ScreenHiddenDrawer(
-      new ItemHiddenMenu(
-        name: "Help",
-        baseStyle: TextStyle(color: grey, fontSize: 28.0),
-        colorLineSelected: yellow,
-        selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
-      ),
-      Help(),
-    ));
-
-    items.add(new ScreenHiddenDrawer(
-      new ItemHiddenMenu(
-        name: "About",
-        baseStyle: TextStyle(color: grey, fontSize: 28.0),
-        colorLineSelected: pink,
-        selectedStyle: TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
-      ),
-      About(),
-    ));
-
-    if (LoginState.credStr != '') {
-      if (user.role["director"] == true ||
-          user.role["volunteer"] == true ||
-          user.role["organizer"] == true) {
-        items.add(new ScreenHiddenDrawer(
-          new ItemHiddenMenu(
-            name: "QR Scanner",
-            baseStyle: TextStyle(color: grey, fontSize: 28.0),
-            colorLineSelected: yellow,
-            selectedStyle:
-                TextStyle(color: pink_dark, fontWeight: FontWeight.w500),
-          ),
-          QRScanner(),
-        ));
-      }
-    }
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomHiddenDrawerMenu(
-      actionsAppBar: (LoginState.credStr != '')
-          ? <Widget>[
-              IconButton(
-                icon: Icon(
-                  GroovinMaterialIcons.logout,
-                  color: yellow,
-                ),
-                color: yellow,
-                splashColor: white,
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      new MaterialPageRoute(
-                          builder: (BuildContext context) => MyHomePage(),
-                          maintainState: false),
-                      ModalRoute.withName('/main'));
-                  deleteStoredCredential();
-                  LoginState.credStr = '';
-                },
-              ),
-            ]
-          : <Widget>[
-              IconButton(
-                icon: Icon(
-                  GroovinMaterialIcons.login,
-                  color: yellow,
-                ),
-                color: yellow,
-                splashColor: white,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Login()),
-                  );
-                },
-              ),
-            ],
-      iconMenuAppBar: Icon(
-        Icons.arrow_back,
-        color: off_white,
-      ),
-      styleAutoTittleName: TextStyle(color: off_white),
-      backgroundColorMenu: off_white,
-      backgroundColorAppBar: pink,
-      elevationAppBar: 0.0,
-      backgroundMenu: FlareActor(
-        'assets/flare/party.flr',
-        alignment: Alignment.center,
-        fit: BoxFit.contain,
-        animation: "idle",
-      ),
-      screens: items,
-      typeOpen: TypeOpen.FROM_LEFT,
-    );
-  }
-}
+//void main() {
+//  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+//    statusBarColor: Colors.white,
+//    statusBarIconBrightness: Brightness.light,
+//    systemNavigationBarColor: Colors.black,
+//    systemNavigationBarIconBrightness: Brightness.light,
+//  ));
+//
+//  BlocSupervisor.delegate = AppBlocDelegate();
+//  LcsCredential lcsCredential;
+//  runApp(
+//    BlocProvider<AuthenticationBloc>(
+//      create: (BuildContext context) {
+//        return AuthenticationBloc(lcsCredential: lcsCredential)..add(AppStarted());
+//      },
+//      child: MainApp(lcsCredential: lcsCredential),
+//    ),
+//  );
+//}
+//
+//class MainApp extends StatelessWidget {
+//
+//  final LcsCredential lcsCredential;
+//  const MainApp({Key key, this.lcsCredential}) : super(key: key);
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      title: kAppTitle,
+//      debugShowCheckedModeBanner: false,
+//      theme: kLightTheme,
+//      darkTheme: kDarkTheme,
+//      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+//        builder: (context, state) {
+//          if (state is AuthenticationAuthenticated) {
+//            return HackRUApp();
+//          }
+//          if (state is AuthenticationUnauthenticated) {
+//            return LoginPage(lcsCredential: lcsCredential);
+//          }
+//          if (state is AuthenticationLoading) {
+//            return FancyLoadingIndicator();
+//          }
+//          return SplashScreen();
+//        },
+//      ),
+//      routes: <String, WidgetBuilder>{
+//        '/login': (BuildContext context) => new LoginPage(lcsCredential: lcsCredential,),
+//        '/hackRUApp': (BuildContext context) => new HackRUMap(),
+//      },
+//      onUnknownRoute: (RouteSettings setting) {
+//        String unknownRoute = setting.name;
+//        return new MaterialPageRoute(
+//          builder: (context) => PageNotFound(
+//            title: unknownRoute,
+//          ),
+//        );
+//      },
+//    );
+//  }
+//}

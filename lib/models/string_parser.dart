@@ -1,4 +1,4 @@
-import 'package:HackRU/colors.dart';
+import 'package:HackRU/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +98,7 @@ class StringParser extends StatelessWidget {
         var eWord = word.replaceAll(new RegExp(r'[<>]'), '');
         span.add(new LinkTextSpan(
           style: _style.copyWith(
-            color: weblink,
+            color: web_link,
             fontWeight: FontWeight.w500,
             decoration: TextDecoration.underline,
           ),
