@@ -9,6 +9,7 @@
 .buildlog/
 .history
 .svn/
+/ios/Flutter/flutter_export_environment.sh
 
 secrets.dart
 
