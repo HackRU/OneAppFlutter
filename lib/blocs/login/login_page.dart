@@ -34,11 +34,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: transparent,
-        brightness: Brightness.dark,
         elevation: 0.0,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColor,
+        ),
       ),
       body: Center(
         child: LoginForm(),

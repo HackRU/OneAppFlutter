@@ -8,6 +8,7 @@ const web_link = const Color(0xFF732d2d);
 const pink_dark = const Color(0xFF592323);
 const green = const Color(0xFF4FAB5F);
 const yellow = const Color(0xFFf1ba43);
+var yellowLight = Colors.yellow.shade500;
 
 /// Black & White
 const white = Colors.white;
@@ -69,17 +70,17 @@ ThemeData _buildLightTheme() {
     scaffoldBackgroundColor: white,
     fontFamily: 'TitilliumWeb',
     dividerTheme: DividerThemeData(
-      color: grey_light,
+      color: Colors.grey.shade200,
       thickness: 2.0,
     ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
-        borderSide: const BorderSide(color: off_white, width: 1.0),
+        borderSide: const BorderSide(color: charcoal_light, width: 2.0),
         borderRadius: BorderRadius.all(Radius.circular(15.0)),
       ),
-      fillColor: off_white,
+      fillColor: charcoal_light,
       labelStyle: TextStyle(
-        color: off_white,
+        color: charcoal_light,
       ),
     ),
     textTheme: TextTheme(
@@ -88,9 +89,9 @@ ThemeData _buildLightTheme() {
       display2: TextStyle(fontSize: 45.0, color: white,),
       display1: TextStyle(fontSize: 35.0, color: white,),
       headline: TextStyle(fontSize: 25.0, color: charcoal_light, fontWeight: FontWeight.w700,),
-      title: TextStyle(fontSize: 20.0, color: white, fontWeight: FontWeight.w700,),
+      title: TextStyle(fontSize: 20.0, color: charcoal_light, fontWeight: FontWeight.w700,),
       subhead: TextStyle(fontSize: 18.0, color: charcoal_light, fontWeight: FontWeight.w700,),
-      body2: TextStyle(color: white,),
+      body2: TextStyle(color: charcoal_light,),
       body1: TextStyle(color: charcoal_light,),
     ),
     primaryTextTheme: TextTheme(
@@ -126,9 +127,9 @@ ThemeData _buildLightTheme() {
 ThemeData _buildDarkTheme() {
   final ThemeData base = ThemeData(
     brightness: Brightness.dark,
-    primaryColor: pink,
+    primaryColor: pink_light,
     primaryColorLight: pink_light,
-    primaryColorDark: pink_dark,
+    primaryColorDark: pink,
     accentColor: yellow,
     backgroundColor: charcoal,
     scaffoldBackgroundColor: charcoal,

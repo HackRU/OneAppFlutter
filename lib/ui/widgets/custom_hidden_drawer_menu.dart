@@ -135,7 +135,7 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
             title: getTittleAppBar(position),
             centerTitle: isTitleCentered,
             leading: _buildLeading(bloc),
-            actions: actions,
+            actions: actionsAppBar,
           ),
           body: screens[position].screen,
         );

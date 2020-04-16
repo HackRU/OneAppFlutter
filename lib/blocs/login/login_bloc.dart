@@ -27,7 +27,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginLoading();
 
       try {
+        print('===== username: ${event.username}, pass: ${event.password} =======');
         final cred = await login(event.username, event.password);
+        print('===== from loginBloc: ${cred.token ?? ''}');
         if (cred.token != null) {
           authenticationBloc.add(LoggedIn(token: cred.token, email: cred.email));
           yield LoginInitial();

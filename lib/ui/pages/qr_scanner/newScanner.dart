@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:HackRU/models/cred_manager.dart';
 import 'package:HackRU/styles.dart';
 import 'package:HackRU/defaults.dart';
 import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/exceptions.dart';
 import 'package:HackRU/models/models.dart';
-import 'package:HackRU/ui/pages/scanner.dart';
+import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -255,7 +256,9 @@ class _NewScannerState extends State<NewScanner>
   }
 
   Future<String> _lcsHandle(String userEmailOrId) async {
-    String result;
+    var _storedEmail = await getEmail();
+    var _authToken = await getAuthToken();
+    var result;
     print("***** Called `lcsHandle` with qr:" + userEmailOrId);
     var user;
     var numUserScanned;
@@ -265,7 +268,7 @@ class _NewScannerState extends State<NewScanner>
         // HANDLE CHECK_IN EVENT, potentially link
         if (event == "check-in" || event == "check-in-no-delayed") {
           if (_isEmailAddress(userEmailOrId)) {
-            user = await getUser(BASE_URL, QRScanner.cred, userEmailOrId);
+            user = await getUser(_authToken, _storedEmail, userEmailOrId);
             if (event == "check-in-no-delayed") {
               if (user.isDelayedEntry()) {
                 if (!await _scanDialogWarning(

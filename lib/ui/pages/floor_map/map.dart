@@ -15,11 +15,13 @@ class _HackRUMapState extends State<HackRUMap> {
   Widget build(BuildContext context) {
     Orientation currentOrientation = MediaQuery.of(context).orientation;
 
-    return Container(
-      color: white,
-      alignment: Alignment(0, 0),
-      child: PinchZoomImage(
-        image: currentOrientation == Orientation.portrait
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Container(
+        color: MediaQuery.of(context).platformBrightness == Brightness.light ? white : charcoal,
+        alignment: Alignment(0, 0),
+        child: PinchZoomImage(
+          image: currentOrientation == Orientation.portrait
             ? Stack(
                 children: <Widget>[
                   Center(child: FancyLoadingIndicator()),
@@ -42,8 +44,9 @@ class _HackRUMapState extends State<HackRUMap> {
                   ),
                 ],
               ),
-        zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
-        hideStatusBarWhileZooming: false,
+          zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
+          hideStatusBarWhileZooming: false,
+        ),
       ),
     );
   }
