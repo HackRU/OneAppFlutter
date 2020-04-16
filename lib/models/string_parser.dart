@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class LinkTextSpan extends TextSpan {
-  LinkTextSpan({TextStyle style, String url, String text})
-      : super(
-            style: style,
-            text: text ?? url,
-            recognizer: new TapGestureRecognizer()
-              ..onTap = () => launcher.launch(url));
+  LinkTextSpan({TextStyle style, String url, String text}) : super(
+    style: style,
+    text: text ?? url,
+    recognizer: new TapGestureRecognizer()
+      ..onTap = () => launcher.launch(url),
+  );
 }
 
 class StringParser extends StatelessWidget {
@@ -67,25 +67,27 @@ class StringParser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Brightness _brightnessValue = MediaQuery.of(context).platformBrightness;
+
     final _style = TextStyle(
-      fontSize: 15.0,
-      color: off_white,
-      fontWeight: FontWeight.w400,
+      fontSize: 18.0,
+      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      fontWeight: FontWeight.w700,
     );
     final _boldStyle = TextStyle(
-      fontSize: 15.0,
-      color: off_white,
-      fontWeight: FontWeight.w800,
+      fontSize: 18.0,
+      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      fontWeight: FontWeight.bold,
     );
     final _italicsStyle = TextStyle(
-      fontSize: 15.0,
-      color: off_white,
-      fontWeight: FontWeight.w400,
+      fontSize: 18.0,
+      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic,
     );
     final _strikeThroughStyle = TextStyle(
-      fontSize: 15.0,
-      color: off_white,
+      fontSize: 18.0,
+      color: _brightnessValue == Brightness.light ? charcoal_light : white,
       fontWeight: FontWeight.w400,
       decoration: TextDecoration.lineThrough,
     );
@@ -98,8 +100,8 @@ class StringParser extends StatelessWidget {
         var eWord = word.replaceAll(new RegExp(r'[<>]'), '');
         span.add(new LinkTextSpan(
           style: _style.copyWith(
-            color: web_link,
-            fontWeight: FontWeight.w500,
+            color: _brightnessValue == Brightness.light ? pink : yellow,
+            fontWeight: FontWeight.w700,
             decoration: TextDecoration.underline,
           ),
           url: eWord,
@@ -140,7 +142,7 @@ class StringParser extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 15.0,
-          color: pink_dark,
+          color: _brightnessValue == Brightness.light ? pink_dark : yellow,
         ),
       );
     }

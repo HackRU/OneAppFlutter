@@ -79,7 +79,7 @@ Future<List<String>> qrEvents(String miscUrl) async {
 Future<List<Announcement>> slackResources() async {
   var response = await getLcs('/dayof-slack');
   var resources = json.decode(response.body);
-  print(resources);
+//  print(resources);
   if (resources["body"] == null) {
     var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
     return [
@@ -98,7 +98,7 @@ Future<List<Announcement>> slackResources() async {
 Future<List<Event>> dayofEventsResources() async {
   var response = await getLcs('/dayof-events');
   var resources = json.decode(response.body);
-  print(resources);
+//  print(resources);
   if (resources["body"] == null) {
     return [
       Event(
@@ -137,19 +137,19 @@ Future<LcsCredential> login(
   }
 }
 
-Future<User> getUser(String lcsUrl, LcsCredential credential,
+Future<User> getUser(String authToken, String emailAddress,
     [String targetEmail = "MAGIC_MAN"]) async {
   if (targetEmail == null) {
     throw ArgumentError("null email");
   }
   if (targetEmail == "MAGIC_MAN") {
-    targetEmail = credential.email;
+    targetEmail = emailAddress;
   }
   var result = await postLcs(
       "/read",
       {
-        "email": credential.email,
-        "token": credential.token,
+        "email": emailAddress,
+        "token": authToken,
         "query": {"email": targetEmail}
       });
   if (result.statusCode == 200) {

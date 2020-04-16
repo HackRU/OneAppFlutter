@@ -1,25 +1,19 @@
-import 'package:HackRU/blocs/auth/authentication.dart';
-import 'package:HackRU/blocs/bloc_delegate.dart';
 import 'package:HackRU/defaults.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/hackru_app.dart';
-import 'package:HackRU/ui/pages/map.dart';
-import 'package:HackRU/ui/widgets/SplashScreen.dart';
-import 'package:HackRU/ui/widgets/loading_indicator.dart';
+import 'package:HackRU/ui/pages/floor_map/map.dart';
 import 'package:HackRU/ui/widgets/page_not_found.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'blocs/auth/authentication_bloc.dart';
 import 'blocs/login/login.dart';
 import 'styles.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: pink,
-    statusBarIconBrightness: Brightness.dark,
+//    statusBarColor: Colors.white,
+//    statusBarIconBrightness: Brightness.light,
     systemNavigationBarColor: Colors.black,
     systemNavigationBarIconBrightness: Brightness.light,
   ));
@@ -38,10 +32,11 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: kLightTheme,
       darkTheme: kDarkTheme,
-      home: HackRUApp(lcsCredential: lcsCredential),
+      home: HackRUApp(),
       routes: <String, WidgetBuilder>{
         '/login': (BuildContext context) => new LoginPage(),
-        '/hackRUApp': (BuildContext context) => new HackRUMap(),
+        '/home': (BuildContext context) => new HackRUApp(),
+        '/floorMap': (BuildContext context) => new HackRUMap(),
       },
       onUnknownRoute: (RouteSettings setting) {
         String unknownRoute = setting.name;

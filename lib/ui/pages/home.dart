@@ -1,12 +1,12 @@
 import 'package:HackRU/blocs/login/login.dart';
 import 'package:HackRU/models/cred_manager.dart';
-import 'package:HackRU/models/models.dart';
 import 'package:HackRU/styles.dart';
-import 'package:HackRU/ui/pages/tabs/announcements.dart' as _firstTab;
-import 'package:HackRU/ui/pages/tabs/events.dart' as _thirdTab;
-import 'package:HackRU/ui/pages/tabs/timer.dart' as _secondTab;
+import 'package:HackRU/ui/hackru_app.dart';
+import 'package:HackRU/ui/pages/dashboard/dashboard.dart';
+import 'package:HackRU/ui/pages/events/events.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -19,164 +19,167 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  BottomNavigationBarType _type = BottomNavigationBarType.shifting;
-  int _tab = 0;
-  var _title_app = null;
-  var _title_icon = null;
-  PageController _tabController;
-  String userEmailAddr;
-  LcsCredential _credentials;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int _currentBottomNavItemIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _tabController = new PageController();
-    this._title_app = TabItems[0].title;
-
-    getEmail().then((email) {
-      if (email != null) {
-        userEmailAddr = email;
-      }
-    });
   }
 
-  void onTap(int tab) {
-    _tabController.jumpToPage(tab);
-  }
+  ///===========================================================
+  ///                     BOTTOM NAV PAGES
+  ///===========================================================
+  final _kBottomNavPages = <Widget>[
+    Dashboard(),
+    Events(),
+  ];
 
-  void onTabChanged(int tab) {
-    setState(() {
-      this._tab = tab;
-    });
-
-    switch (tab) {
-      case 0:
-        this._title_app = TabItems[0].title;
-        break;
-      case 1:
-        this._title_app = TabItems[1].title;
-        break;
-      case 2:
-        this._title_app = TabItems[2].title;
-        break;
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final BottomNavigationBar bottomNavBar = BottomNavigationBar(
-      items: TabItems.map((TabItem) {
-        return new BottomNavigationBarItem(
-          backgroundColor: off_white,
-          title: new Text(
-            TabItem.title,
-          ),
-          icon: new Icon(
-            TabItem.icon,
-            color: pink,
-          ),
-        );
-      }).toList(),
-      currentIndex: _tab,
-      type: _type,
-      onTap: onTap,
-      fixedColor: pink,
-    );
-
-    return Scaffold(
-      body: new PageView(
-        controller: _tabController,
-        onPageChanged: onTabChanged,
+  ///===========================================================
+  ///                      BOTTOM APP BAR
+  ///===========================================================
+  BottomAppBar _buildBottomAppBar(BuildContext context){
+    return BottomAppBar(
+      shape: CircularNotchedRectangle(),
+      elevation: 25.0,
+      notchMargin: 6.0,
+      color: Theme.of(context).primaryColor,
+      child: Row(
         children: <Widget>[
-          new _firstTab.Announcements(),
-          new _secondTab.Timer(),
-          new _thirdTab.Events(),
+          Expanded(
+            flex: 2,
+            child: InkResponse(
+              onTap: (){ setState(() { _currentBottomNavItemIndex = 0; }); },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.home, size: 25.0, color: _currentBottomNavItemIndex == 0 ? white : charcoal_dark,),
+                    Text('Dashboard', style: TextStyle(fontSize: _currentBottomNavItemIndex == 0 ? 14.0 : 12.0, color: _currentBottomNavItemIndex == 0 ? white : charcoal_dark, fontWeight: FontWeight.w700,),),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const Expanded(child: SizedBox()),
+          Expanded(
+            flex: 2,
+            child: InkResponse(
+              onTap: (){ setState(() { _currentBottomNavItemIndex = 1; }); },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(GroovinMaterialIcons.calendar_clock, size: 25.0, color: _currentBottomNavItemIndex == 1 ? white : charcoal_dark,),
+                    Text('Events', style: TextStyle(fontSize: _currentBottomNavItemIndex == 1 ? 14.0 : 12.0, color: _currentBottomNavItemIndex == 1 ? white : charcoal_dark, fontWeight: FontWeight.w700,),),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var hasCred = await hasCredentials();
-          (hasCred) ? _qrCode()
-            : Navigator.push(context, MaterialPageRoute(
-            builder: (context) => LoginPage(),
-          ));
-        },
-        tooltip: 'QR Code',
-        child: Icon(
-          GroovinMaterialIcons.qrcode,
-          size: 30,
-        ),
-        foregroundColor: black,
-        backgroundColor: Theme.of(context).accentColor,
-      ),
-      bottomNavigationBar: Theme.of(context).platform == TargetPlatform.iOS
-          ? new CupertinoTabBar(
-              backgroundColor: off_white,
-              activeColor: pink,
-              currentIndex: _tab,
-              onTap: onTap,
-              inactiveColor: grey,
-              items: TabItems.map((TabItem) {
-                return new BottomNavigationBarItem(
-                  title: new Text(TabItem.title),
-                  icon: new Icon(TabItem.icon),
-                );
-              }).toList(),
-            )
-          : bottomNavBar,
     );
   }
 
-  Future<Null> _qrCode() async {
+  ///===========================================================
+  ///                      SHOW QR-CODE
+  ///===========================================================
+  void _showQrCode() async {
+    var userEmail = await getEmail();
     switch (await showDialog(
       context: context,
       builder: (BuildContext context) {
         return new SimpleDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
           children: <Widget>[
             Container(
-              height: 300.0,
-              width: 300.0,
-              child: Center(
-                child: QrImage(
-                  version: 4,
-                  data: userEmailAddr,
-                  gapless: true,
-                  foregroundColor: pink,
-                ),
+              height: 340.0,
+              width: 400.0,
+              child: ListView(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: QrImage(
+                      version: 4,
+                      data: userEmail ?? '',
+                      gapless: true,
+                      foregroundColor: charcoal,
+                    ),
+                  ),
+                  Center(
+                    child: Text(userEmail ?? ''),
+                  ),
+                ],
               ),
             ),
           ],
-          backgroundColor: off_white,
+          backgroundColor: white,
         );
       },
-    )) {
-    }
+    )) {}
+  }
+
+  ///===========================================================
+  ///                     BUILD FUNCTION
+  ///===========================================================
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomPadding: false,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: _kBottomNavPages[_currentBottomNavItemIndex],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var loginResponse;
+          var hasCred = await hasCredentials();
+          if(hasCred){
+            _showQrCode();
+          }
+          else{
+            loginResponse = await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+                fullscreenDialog: true,
+              ),
+            );
+          }
+          if(loginResponse != null && loginResponse != ''){
+            _scaffoldKey.currentState
+              ..removeCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                content: Text(loginResponse ?? ''),
+                backgroundColor: green,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        },
+        child: Icon(
+          GroovinMaterialIcons.qrcode,
+          size: 34,
+        ),
+        tooltip: 'QR Code',
+        elevation: 4.0,
+        splashColor: white,
+        isExtended: false,
+        foregroundColor: black,
+        backgroundColor: Theme.of(context).accentColor,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: _buildBottomAppBar(context),
+    );
   }
 }
-
-class TabItem {
-  const TabItem({this.title, this.icon});
-  final String title;
-  final IconData icon;
-}
-
-const List<TabItem> TabItems = const <TabItem>[
-  const TabItem(
-    title: 'Announcements',
-    icon: GroovinMaterialIcons.message_alert,
-  ),
-  const TabItem(
-    title: 'Timer',
-    icon: GroovinMaterialIcons.timer,
-  ),
-  const TabItem(
-    title: 'Events',
-    icon: GroovinMaterialIcons.calendar_today,
-  ),
-];

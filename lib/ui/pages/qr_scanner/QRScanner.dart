@@ -1,5 +1,5 @@
 import 'package:HackRU/styles.dart';
-import 'package:HackRU/ui/pages/newScanner.dart';
+import 'package:HackRU/ui/pages/qr_scanner/newScanner.dart';
 import 'package:HackRU/ui/widgets/custom_expansion_tile.dart';
 import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
@@ -10,7 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:meta/meta.dart';
 
-import '../../defaults.dart';
+import '../../../defaults.dart';
 
 const NOT_SCANNED = "NOT SCANNED";
 
@@ -28,7 +28,7 @@ class _QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: pink,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: FutureBuilder(
         future: qrEvents(MISC_URL),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -41,7 +41,7 @@ class _QRScannerState extends State<QRScanner> {
                   height: 400.0,
                   width: 400.0,
                   child: FlareActor(
-                    'flare/loading_indicator.flr',
+                    'assets/flare/loading_indicator.flr',
                     alignment: Alignment.center,
                     fit: BoxFit.contain,
                     animation: "idle",
@@ -76,16 +76,16 @@ class _QRScannerState extends State<QRScanner> {
                 tooltip: 'QRCode Reader',
                 icon: Center(
                   child: Icon(
-                    FontAwesomeIcons.camera,
-                    color: pink,
-                    semanticLabel: 'Camera Icon',
+                    GroovinMaterialIcons.qrcode_scan,
+                    color: charcoal_dark,
+                    semanticLabel: 'QR Scanner Icon',
                   ),
                 ),
                 label: Text(
-                  'Scan',
+                  'Scan QR Codes',
                   style: TextStyle(
                     fontSize: 18.0,
-                    color: pink,
+                    color: charcoal_dark,
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
@@ -124,7 +124,7 @@ class _CardExpansionState extends State<CardExpansion> {
           margin: const EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
           child: Card(
             elevation: 0.0,
-            color: (isExpanded == true) ? off_white : pink_light,
+            color: (isExpanded == true) ? Theme.of(context).primaryColor : Theme.of(context).dividerColor,
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
@@ -142,7 +142,7 @@ class _CardExpansionState extends State<CardExpansion> {
                 title: new Text(
                   this._selectedEvent,
                   style: new TextStyle(
-                    color: isExpanded ? pink : off_white,
+                    color: isExpanded ? white : charcoal,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
                   ),
@@ -151,8 +151,8 @@ class _CardExpansionState extends State<CardExpansion> {
                   'Scanning: ',
                   style: TextStyle(
                     fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                    color: isExpanded ? pink_dark : off_white,
+                    fontWeight: FontWeight.w700,
+                    color: isExpanded ? white : charcoal,
                   ),
                 ),
                 children: <Widget>[
@@ -168,9 +168,9 @@ class _CardExpansionState extends State<CardExpansion> {
                           title: Text(
                             widget.events[index],
                             style: new TextStyle(
-                              color: isExpanded ? pink : off_white,
+                              color: isExpanded ? charcoal : Theme.of(context).primaryColor,
                               fontSize: 20.0,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           onTap: () {
@@ -195,18 +195,21 @@ class _CardExpansionState extends State<CardExpansion> {
           height: 20.0,
         ),
         !isExpanded
-            ? Container(
-                alignment: Alignment(0.0, 0.0),
-                height:
-                    currentOrientation == Orientation.portrait ? 300.0 : 0.0,
+          ? Padding(
+            padding: const EdgeInsets.only(top: 50.0),
+            child: Center(
+              child: Container(
+                height: currentOrientation == Orientation.portrait ? 300.0 : 0.0,
                 child: FlareActor(
-                  'flare/forever_wondering.flr',
+                  'assets/flare/forever_wondering.flr',
                   alignment: Alignment.center,
                   fit: BoxFit.contain,
                   animation: "idle",
                 ),
-              )
-            : Container(),
+                ),
+            ),
+          )
+          : Container(),
       ],
     );
   }
