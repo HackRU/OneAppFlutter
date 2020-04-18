@@ -27,8 +27,9 @@ We had started using an inhouse hybrid mobile application to keep track of analy
 We use `dartfmt` style guide for this project. Follow these guidelines for the IDE setup --> [Dart Formatting](https://flutter.dev/docs/development/tools/formatting)
 
 Dartfmt: (format dart code)
-——————————————————————————————————
+
 $ `pub global activate dart_style`
+
 $ `dartfmt file.dart` (for a specific file)
 
 
