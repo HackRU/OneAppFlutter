@@ -1,12 +1,10 @@
-import 'package:HackRU/blocs/login/login.dart';
 import 'package:HackRU/models/cred_manager.dart';
 import 'package:HackRU/styles.dart';
-import 'package:HackRU/ui/hackru_app.dart';
 import 'package:HackRU/ui/pages/dashboard/dashboard.dart';
 import 'package:HackRU/ui/pages/events/events.dart';
+import 'package:HackRU/ui/pages/login/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
