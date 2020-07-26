@@ -6,6 +6,7 @@ import 'package:HackRU/ui/pages/help/help.dart';
 import 'package:HackRU/ui/pages/home.dart';
 import 'package:HackRU/ui/pages/floor_map/map.dart';
 import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
+import 'package:HackRU/ui/pages/settings/settings.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
@@ -93,6 +94,16 @@ class _HackRUAppState extends State<HackRUApp> {
 
     items.add(new ScreenHiddenDrawer(
       new ItemHiddenMenu(
+        name: "QR Scanner",
+        baseStyle: _nonSelectedDrawerItem,
+        colorLineSelected: yellow,
+        selectedStyle: _selectedDrawerItem,
+      ),
+      QRScanner(),
+    ));
+
+    items.add(new ScreenHiddenDrawer(
+      new ItemHiddenMenu(
         name: "Help",
         baseStyle: _nonSelectedDrawerItem,
         colorLineSelected: yellow,
@@ -113,12 +124,12 @@ class _HackRUAppState extends State<HackRUApp> {
 
     items.add(new ScreenHiddenDrawer(
       new ItemHiddenMenu(
-        name: "QR Scanner",
+        name: "Settings",
         baseStyle: _nonSelectedDrawerItem,
         colorLineSelected: yellow,
         selectedStyle: _selectedDrawerItem,
       ),
-      QRScanner(),
+      Settings(),
     ));
 
     /// TODO: Fix this
