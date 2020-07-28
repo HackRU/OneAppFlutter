@@ -8,7 +8,7 @@ Feel free to show some :heart: and :star: the repo to support the project.
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/HackRU/OneAppFlutter?color=eb8810)
 ![Github Last Commit](https://img.shields.io/github/last-commit/HackRU/OneAppFlutter/master?color=red&label=last%20commit%20%7C%202020)
 ![Top Language](https://img.shields.io/github/languages/top/HackRU/OneAppflutter?logo=Dart)
-![Flutter SDK](https://img.shields.io/badge/Flutter%20SDK-%3E%201.19.0-blue?logo=flutter)
+![Flutter SDK](https://img.shields.io/badge/Flutter%20SDK%20[BETA]-1.20.0--7.2.pre-blue?logo=flutter)
 ![GitHub contributors](https://img.shields.io/github/contributors/HackRU/OneAppFlutter?color=ed53bc)
 ![GitHub](https://img.shields.io/github/license/HackRU/OneAppFlutter)
 
