@@ -102,9 +102,9 @@ First, install *Flutter* and *Dart* on your machine by following these guideline
 3. `flutter pub get`   (it's like `npm install`)
 4. `flutter run`       (it's like `npm start`)
 
-### Want to Contribute?:
-- Creat a new `branch` and then make a pull request.
-- Make sure you follow `dartfmt` style guides as mentioned above
+### Want to Contribute?: [Only Open to Rutgers University Students]
+- Creat a new `git branch <name-branch>` + `git commit -am "new updates"` + `git push origin <name-branch>` and then make a pull request.
+- Make sure you follow [Style Guides](https://github.com/HackRU/OneAppFlutter#style-guide) as mentioned above
 - Contributors should also follow [Git Style Guide](https://github.com/agis/git-style-guide)
 
 To learn about Flutter App Development:
