@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart' as url_launcher;
 class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView(
         children: <Widget>[
@@ -33,8 +33,8 @@ class About extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(25.0),
             child: Center(
-              child: new RichText(
-                text: new TextSpan(
+              child: RichText(
+                text: TextSpan(
                   children: [
                     TextSpan(
                       text: 'Made with',
@@ -99,7 +99,8 @@ class About extends StatelessWidget {
 class SocialMediaCard extends StatelessWidget {
   final VoidCallback onPressed;
   final IconData iconData;
-  const SocialMediaCard({Key key, this.onPressed, this.iconData}) : super(key: key);
+  const SocialMediaCard({Key key, this.onPressed, this.iconData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,4 +124,3 @@ class SocialMediaCard extends StatelessWidget {
     );
   }
 }
-

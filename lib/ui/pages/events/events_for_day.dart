@@ -1,7 +1,6 @@
 import 'package:HackRU/styles.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:pinch_zoom_image_updated/pinch_zoom_image_updated.dart';
 
@@ -17,27 +16,34 @@ class EventCard extends StatefulWidget {
 class _EventCardState extends State<EventCard> {
   bool isExpanded = false;
 
+  @override
   Widget build(BuildContext context) {
-    Brightness _brightnessValue = MediaQuery.of(context).platformBrightness;
-    var time = new DateFormat('hh:mm a').format(widget.resource.start.toLocal());
-    var date = new DateFormat.d().format(widget.resource.start.toLocal());
+    var _brightnessValue = MediaQuery.of(context).platformBrightness;
+    var time = DateFormat('hh:mm a').format(widget.resource.start.toLocal());
+    var date = DateFormat.d().format(widget.resource.start.toLocal());
     var today = DateTime.now().day.toString();
     if (date == widget.day || date == today) {
       return Container(
-        child: new Card(
+        child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
           elevation: 0.0,
-          color: (isExpanded) ? Theme.of(context).primaryColor : Theme.of(context).dividerColor,
+          color: (isExpanded)
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).dividerColor,
           child: ExpansionTile(
             onExpansionChanged: (bool expanding) =>
-                setState(() => this.isExpanded = expanding),
-            leading: new Text(
+                setState(() => isExpanded = expanding),
+            leading: Text(
               time ?? '',
               textAlign: TextAlign.center,
-              style: new TextStyle(
-                color: isExpanded ? (_brightnessValue == Brightness.light ? Colors.yellow.shade500 : charcoal_dark) : Theme.of(context).primaryColor,
+              style: TextStyle(
+                color: isExpanded
+                    ? (_brightnessValue == Brightness.light
+                        ? Colors.yellow.shade500
+                        : charcoal_dark)
+                    : Theme.of(context).primaryColor,
                 textBaseline: TextBaseline.alphabetic,
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700,
@@ -45,24 +51,35 @@ class _EventCardState extends State<EventCard> {
             ),
             trailing: Icon(
               isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: isExpanded ? white : (_brightnessValue == Brightness.light ? charcoal_light : white),
+              color: isExpanded
+                  ? white
+                  : (_brightnessValue == Brightness.light
+                      ? charcoal_light
+                      : white),
               size: 35.0,
             ),
-            title: new Text(
+            title: Text(
               widget?.resource?.summary ?? '',
-              style: new TextStyle(
-                color: isExpanded ? white : (_brightnessValue == Brightness.light ? charcoal_light : white),
+              style: TextStyle(
+                color: isExpanded
+                    ? white
+                    : (_brightnessValue == Brightness.light
+                        ? charcoal_light
+                        : white),
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700,
               ),
             ),
             children: <Widget>[
-              new Container(
-                padding: EdgeInsets.only(right: 15.0, left: 15.0, bottom: 15.0,),
+              Container(
+                padding: EdgeInsets.only(
+                  right: 15.0,
+                  left: 15.0,
+                  bottom: 15.0,
+                ),
                 child: PinchZoomImage(
-                  image: Image.asset('assets/map/' +
-                      widget.resource.location +
-                      '.png'),
+                  image: Image.asset(
+                      'assets/map/' + widget.resource.location + '.png'),
                   zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
                   hideStatusBarWhileZooming: false,
                 ),
@@ -79,21 +96,24 @@ class _EventCardState extends State<EventCard> {
 class EventsForDay extends StatelessWidget {
   final String day;
   final List<Event> events;
-  EventsForDay({Key key, @required this.day, @required this.events,})
-      : super(key: key);
+  EventsForDay({
+    Key key,
+    @required this.day,
+    @required this.events,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
-        child: new ListView.builder(
+        child: ListView.builder(
           padding: EdgeInsets.all(15.0),
           itemCount: events == null ? 1 : events.length,
           itemBuilder: (BuildContext context, int index) {
-            return new EventCard(
+            return EventCard(
               resource: events[index],
-              day: this.day,
+              day: day,
             );
           },
         ),

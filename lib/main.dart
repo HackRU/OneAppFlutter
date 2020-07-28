@@ -12,8 +12,8 @@ import 'styles.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-//    statusBarColor: Colors.white,
-//    statusBarIconBrightness: Brightness.light,
+    statusBarColor: Colors.white,
+    statusBarIconBrightness: Brightness.light,
     systemNavigationBarColor: Colors.black,
     systemNavigationBarIconBrightness: Brightness.light,
   ));
@@ -21,7 +21,6 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
-
   final LcsCredential lcsCredential;
   const MainApp({Key key, this.lcsCredential}) : super(key: key);
 
@@ -34,13 +33,13 @@ class MainApp extends StatelessWidget {
       darkTheme: kDarkTheme,
       home: HackRUApp(),
       routes: <String, WidgetBuilder>{
-        '/login': (BuildContext context) => new LoginPage(),
-        '/home': (BuildContext context) => new HackRUApp(),
-        '/floorMap': (BuildContext context) => new HackRUMap(),
+        '/login': (BuildContext context) => LoginPage(),
+        '/home': (BuildContext context) => HackRUApp(),
+        '/floorMap': (BuildContext context) => HackRUMap(),
       },
       onUnknownRoute: (RouteSettings setting) {
-        String unknownRoute = setting.name;
-        return new MaterialPageRoute(
+        var unknownRoute = setting.name;
+        return MaterialPageRoute(
           builder: (context) => PageNotFound(
             title: unknownRoute,
           ),

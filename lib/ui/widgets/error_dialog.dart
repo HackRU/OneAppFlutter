@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../styles.dart';
 
-
 class ErrorDialog extends StatelessWidget {
   final String body;
 
@@ -10,7 +9,7 @@ class ErrorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new AlertDialog(
+    return AlertDialog(
       backgroundColor: Theme.of(context).backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),

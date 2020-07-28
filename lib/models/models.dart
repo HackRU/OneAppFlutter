@@ -22,12 +22,12 @@ class LcsCredential {
 
   /// Verify if auth token is expired or not
   bool isExpired() {
-    return this.expiration.isBefore(DateTime.now());
+    return expiration.isBefore(DateTime.now());
   }
 
-  factory LcsCredential.fromJson(Map<String, dynamic> json) => _$LcsCredentialFromJson(json);
+  factory LcsCredential.fromJson(Map<String, dynamic> json) =>
+      _$LcsCredentialFromJson(json);
   Map<String, dynamic> toJson() => _$LcsCredentialToJson(this);
-
 }
 
 /// Help Page Resource
@@ -46,9 +46,9 @@ class HelpResource {
 
   HelpResource(this.name, this.description, this.url);
 
-  factory HelpResource.fromJson(Map<String, dynamic> json) => _$HelpResourceFromJson(json);
+  factory HelpResource.fromJson(Map<String, dynamic> json) =>
+      _$HelpResourceFromJson(json);
   Map<String, dynamic> toJson() => _$HelpResourceToJson(this);
-
 }
 
 /// Announcement Resource
@@ -62,14 +62,8 @@ class Announcement {
 
   Announcement({this.text, this.ts});
 
-  @override
-  String toString() {
-    return '{"text": ${json.encode(this.text)}' +
-        ',"ts": ${json.encode(this.ts)}}';
-  }
-
   Announcement.fromJson(Map<String, dynamic> json)
-      : text = json["text"],
+      : text = json['text'],
         ts = json['ts'];
 }
 
@@ -127,24 +121,41 @@ class User {
 
   List<Auth> auth;
 
-  User(this.email, this.role, this.votes, this.github, this.major, this.shortAnswer, this.shirtSize, this.firstName, this.lastName, this.dietaryRestrictions, this.specialNeeds, this.dateOfBirth, this.school, this.gradYear, this.gender, this.registrationStatus, this.levelOfStudy, this.dayOf);
+  User(
+      this.email,
+      this.role,
+      this.votes,
+      this.github,
+      this.major,
+      this.shortAnswer,
+      this.shirtSize,
+      this.firstName,
+      this.lastName,
+      this.dietaryRestrictions,
+      this.specialNeeds,
+      this.dateOfBirth,
+      this.school,
+      this.gradYear,
+      this.gender,
+      this.registrationStatus,
+      this.levelOfStudy,
+      this.dayOf);
 
   /// check if a hacker has already attended an event
   bool alreadyDid(String event) {
-    if (!this.dayOf.containsKey(event)) {
+    if (!dayOf.containsKey(event)) {
       return false;
     } else {
-      return this.dayOf[event];
+      return dayOf[event];
     }
   }
 
   bool isDelayedEntry() {
-    return this.registrationStatus == "waitlist";
+    return registrationStatus == 'waitlist';
   }
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
-
 }
 
 @JsonSerializable(nullable: false)
@@ -157,11 +168,11 @@ class Role {
   final bool organizer;
   final bool director;
 
-  Role(this.hacker, this.volunteer, this.judge, this.sponsor, this.mentor, this.organizer, this.director);
+  Role(this.hacker, this.volunteer, this.judge, this.sponsor, this.mentor,
+      this.organizer, this.director);
 
   factory Role.fromJson(Map<String, dynamic> json) => _$RoleFromJson(json);
   Map<String, dynamic> toJson() => _$RoleToJson(this);
-
 }
 
 @JsonSerializable(nullable: false)
@@ -175,7 +186,6 @@ class Auth {
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
   Map<String, dynamic> toJson() => _$AuthToJson(this);
-
 }
 
 /// LCS Error
@@ -186,16 +196,17 @@ class LcsError implements Exception {
   String lcsError;
   int code;
   LcsError(http.Response res) {
-    this.code = res.statusCode;
+    code = res.statusCode;
     if (res.statusCode >= 500) {
-      this.lcsError = "internal error with lcs";
+      lcsError = 'internal error with lcs';
     } else {
       var body = jsonDecode(res.body);
-      this.code = body["statusCode"];
-      this.lcsError = body["body"];
+      code = body['statusCode'];
+      lcsError = body['body'];
     }
   }
-  String errorMessage() => "LCS error $code: $lcsError";
+  String errorMessage() => 'LCS error $code: $lcsError';
+  @override
   String toString() => errorMessage();
 }
 
@@ -216,5 +227,4 @@ class Event {
       : summary = json['summary'],
         location = json['location'],
         start = DateTime.parse(json['start']['dateTime']);
-
 }

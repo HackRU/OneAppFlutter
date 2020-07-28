@@ -2,65 +2,65 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Palette
-const pink_light = const Color(0xFFe06969);
-const pink = const Color(0xFFC85151);
-const web_link = const Color(0xFF732d2d);
-const pink_dark = const Color(0xFF592323);
-const green = const Color(0xFF4FAB5F);
-const yellow = const Color(0xFFf1ba43);
+const pink_light = Color(0xFFe06969);
+const pink = Color(0xFFC85151);
+const web_link = Color(0xFF732d2d);
+const pink_dark = Color(0xFF592323);
+const green = Color(0xFF4FAB5F);
+const yellow = Color(0xFFf1ba43);
 var yellowLight = Colors.yellow.shade500;
 
 /// Black & White
 const white = Colors.white;
-const off_white = const Color(0xFFfff5e8);
-const grey_light = const Color(0xFFe1e6e8);
-const grey = const Color(0xFF898c8c);
-const charcoal_light = const Color(0xFF4a4a4a);
-const charcoal = const Color(0xFF292929);
-const charcoal_dark = const Color(0xFF1A1A1A);
+const off_white = Color(0xFFfff5e8);
+const grey_light = Color(0xFFe1e6e8);
+const grey = Color(0xFF898c8c);
+const charcoal_light = Color(0xFF4a4a4a);
+const charcoal = Color(0xFF292929);
+const charcoal_dark = Color(0xFF1A1A1A);
 const black = Colors.black;
 const semi_transparent = Colors.black87;
-const transparent = const Color(0x00ffffff);
-const box_shadow = const Color(0x0d000000);
-const overlay = const Color.fromRGBO(0, 0, 0, 80);
+const transparent = Color(0x00ffffff);
+const box_shadow = Color(0x0d000000);
+const overlay = Color.fromRGBO(0, 0, 0, 80);
 
-const ada_pink = const Color(0xFFB94B4B);
-const ada_green = const Color(0xFF3D854A);
+const ada_pink = Color(0xFFB94B4B);
+const ada_green = Color(0xFF3D854A);
 
-const g_pink_yellow = const LinearGradient(
-    colors: [yellow, pink],
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    stops: [0.0, 1.0],
-    tileMode: TileMode.clamp,
+const g_pink_yellow = LinearGradient(
+  colors: [yellow, pink],
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  stops: [0.0, 1.0],
+  tileMode: TileMode.clamp,
 );
 
 /*
-NAME       SIZE   WEIGHT   SPACING  2018 NAME
-display4   112.0  thin     0.0      headline1
-display3   56.0   normal   0.0      headline2
-display2   45.0   normal   0.0      headline3
-display1   34.0   normal   0.0      headline4
-headline   24.0   normal   0.0      headline5
-title      20.0   medium   0.0      headline6
-subhead    16.0   normal   0.0      subtitle1
-body2      14.0   medium   0.0      body1
-body1      14.0   normal   0.0      body2
-caption    12.0   normal   0.0      caption
-button     14.0   medium   0.0      button
-subtitle   14.0   medium   0.0      subtitle2
-overline   10.0   normal   0.0      overline
+<< OLD >>  SIZE   WEIGHT    << NEW >>
+display4   112.0  thin      headline1
+display3   56.0   normal    headline2
+display2   45.0   normal    headline3
+display1   34.0   normal    headline4
+headline   24.0   normal    headline5
+title      20.0   medium    headline6
+subhead    16.0   normal    subtitle1
+subtitle   14.0   medium    subtitle2
+body2      14.0   medium    bodyText1
+body1      14.0   normal    bodyText2
+caption    12.0   normal    caption
+button     14.0   medium    button
+overline   10.0   normal    overline
 */
 
 /// Themes
 final kLightTheme = _buildLightTheme();
 final kDarkTheme = _buildDarkTheme();
 
-///---------------------------------------
+///======================================
 ///             LIGHT THEME
-///---------------------------------------
+///======================================
 ThemeData _buildLightTheme() {
-  final ThemeData base = ThemeData(
+  final base = ThemeData(
     brightness: Brightness.light,
     primaryColor: pink,
     primaryColorLight: white,
@@ -84,48 +84,138 @@ ThemeData _buildLightTheme() {
       ),
     ),
     textTheme: TextTheme(
-      display4: TextStyle(fontSize: 100.0, color: white, fontWeight: FontWeight.w600,),
-      display3: TextStyle(fontSize: 90.0, color: white, fontWeight: FontWeight.bold,),
-      display2: TextStyle(fontSize: 45.0, color: white,),
-      display1: TextStyle(fontSize: 35.0, color: white,),
-      headline: TextStyle(fontSize: 25.0, color: charcoal_light, fontWeight: FontWeight.w700,),
-      title: TextStyle(fontSize: 20.0, color: charcoal_light, fontWeight: FontWeight.w700,),
-      subhead: TextStyle(fontSize: 18.0, color: charcoal_light, fontWeight: FontWeight.w700,),
-      body2: TextStyle(color: charcoal_light,),
-      body1: TextStyle(color: charcoal_light,),
+      headline1: TextStyle(
+        fontSize: 100.0,
+        color: white,
+        fontWeight: FontWeight.w600,
+      ),
+      headline2: TextStyle(
+        fontSize: 90.0,
+        color: white,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: 45.0,
+        color: white,
+      ),
+      headline4: TextStyle(
+        fontSize: 35.0,
+        color: white,
+      ),
+      headline5: TextStyle(
+        fontSize: 25.0,
+        color: charcoal_light,
+        fontWeight: FontWeight.w700,
+      ),
+      headline6: TextStyle(
+        fontSize: 20.0,
+        color: charcoal_light,
+        fontWeight: FontWeight.w700,
+      ),
+      subtitle1: TextStyle(
+        fontSize: 18.0,
+        color: charcoal_light,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyText1: TextStyle(
+        color: charcoal_light,
+      ),
+      bodyText2: TextStyle(
+        color: charcoal_light,
+      ),
     ),
     primaryTextTheme: TextTheme(
-      display4: TextStyle(fontSize: 100.0, color: pink, fontWeight: FontWeight.w600,),
-      display3: TextStyle(fontSize: 90.0, color: pink, fontWeight: FontWeight.bold,),
-      display2: TextStyle(fontSize: 45.0, color: pink,),
-      display1: TextStyle(fontSize: 35.0, color: pink,),
-      headline: TextStyle(fontSize: 25.0, color: pink, fontWeight: FontWeight.w700,),
-      title: TextStyle(fontSize: 20.0, color: pink, fontWeight: FontWeight.w700,),
-      subhead: TextStyle(fontSize: 18.0, color: pink, fontWeight: FontWeight.w700,),
-      body2: TextStyle(color: pink,),
-      body1: TextStyle(color: pink,),
+      headline1: TextStyle(
+        fontSize: 100.0,
+        color: pink,
+        fontWeight: FontWeight.w600,
+      ),
+      headline2: TextStyle(
+        fontSize: 90.0,
+        color: pink,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: 45.0,
+        color: pink,
+      ),
+      headline4: TextStyle(
+        fontSize: 35.0,
+        color: pink,
+      ),
+      headline5: TextStyle(
+        fontSize: 25.0,
+        color: pink,
+        fontWeight: FontWeight.w700,
+      ),
+      headline6: TextStyle(
+        fontSize: 20.0,
+        color: pink,
+        fontWeight: FontWeight.w700,
+      ),
+      subtitle1: TextStyle(
+        fontSize: 18.0,
+        color: pink,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyText1: TextStyle(
+        color: pink,
+      ),
+      bodyText2: TextStyle(
+        color: pink,
+      ),
     ),
     accentTextTheme: TextTheme(
-      display4: TextStyle(fontSize: 100.0, color: yellow, fontWeight: FontWeight.w600,),
-      display3: TextStyle(fontSize: 90.0, color: yellow, fontWeight: FontWeight.bold,),
-      display2: TextStyle(fontSize: 45.0, color: yellow,),
-      display1: TextStyle(fontSize: 35.0, color: yellow,),
-      headline: TextStyle(fontSize: 25.0, color: charcoal_light, fontWeight: FontWeight.w700,),
-      title: TextStyle(fontSize: 20.0, color: yellow, fontWeight: FontWeight.w700,),
-      subhead: TextStyle(fontSize: 18.0, color: yellow, fontWeight: FontWeight.w700,),
-      body2: TextStyle(color: yellow,),
-      body1: TextStyle(color: yellow,),
+      headline1: TextStyle(
+        fontSize: 100.0,
+        color: yellow,
+        fontWeight: FontWeight.w600,
+      ),
+      headline2: TextStyle(
+        fontSize: 90.0,
+        color: yellow,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: 45.0,
+        color: yellow,
+      ),
+      headline4: TextStyle(
+        fontSize: 35.0,
+        color: yellow,
+      ),
+      headline5: TextStyle(
+        fontSize: 25.0,
+        color: charcoal_light,
+        fontWeight: FontWeight.w700,
+      ),
+      headline6: TextStyle(
+        fontSize: 20.0,
+        color: yellow,
+        fontWeight: FontWeight.w700,
+      ),
+      subtitle1: TextStyle(
+        fontSize: 18.0,
+        color: yellow,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyText1: TextStyle(
+        color: yellow,
+      ),
+      bodyText2: TextStyle(
+        color: yellow,
+      ),
     ),
   );
 
   return base;
 }
 
-///---------------------------------------
+///======================================
 ///             DARK THEME
-///---------------------------------------
+///======================================
 ThemeData _buildDarkTheme() {
-  final ThemeData base = ThemeData(
+  final base = ThemeData(
     brightness: Brightness.dark,
     primaryColor: pink_light,
     primaryColorLight: pink_light,
@@ -150,37 +240,124 @@ ThemeData _buildDarkTheme() {
       ),
     ),
     textTheme: TextTheme(
-      display4: TextStyle(fontSize: 100.0, color: white, fontWeight: FontWeight.w200,),
-      display3: TextStyle(fontSize: 90.0, color: white, fontWeight: FontWeight.bold,),
-      display2: TextStyle(fontSize: 45.0, color: white,),
-      display1: TextStyle(fontSize: 35.0, color: white,),
-      headline: TextStyle(fontSize: 25.0, color: white, fontWeight: FontWeight.w200,),
-      title: TextStyle(fontSize: 20.0, color: white, fontWeight: FontWeight.w200,),
-      subhead: TextStyle(fontSize: 18.0, color: white,),
-      body2: TextStyle(color: white,),
-      body1: TextStyle(color: white,),
+      headline1: TextStyle(
+        fontSize: 100.0,
+        color: white,
+        fontWeight: FontWeight.w200,
+      ),
+      headline2: TextStyle(
+        fontSize: 90.0,
+        color: white,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: 45.0,
+        color: white,
+      ),
+      headline4: TextStyle(
+        fontSize: 35.0,
+        color: white,
+      ),
+      headline5: TextStyle(
+        fontSize: 25.0,
+        color: white,
+        fontWeight: FontWeight.w200,
+      ),
+      headline6: TextStyle(
+        fontSize: 20.0,
+        color: white,
+        fontWeight: FontWeight.w200,
+      ),
+      subtitle1: TextStyle(
+        fontSize: 18.0,
+        color: white,
+      ),
+      bodyText1: TextStyle(
+        color: white,
+      ),
+      bodyText2: TextStyle(
+        color: white,
+      ),
     ),
     primaryTextTheme: TextTheme(
-      display4: TextStyle(fontSize: 100.0, color: pink_light, fontWeight: FontWeight.w200,),
-      display3: TextStyle(fontSize: 90.0, color: pink_light, fontWeight: FontWeight.bold,),
-      display2: TextStyle(fontSize: 45.0, color: pink_light,),
-      display1: TextStyle(fontSize: 35.0, color: pink_light,),
-      headline: TextStyle(fontSize: 25.0, color: pink_light, fontWeight: FontWeight.w200,),
-      title: TextStyle(fontSize: 20.0, color: pink_light, fontWeight: FontWeight.w200,),
-      subhead: TextStyle(fontSize: 18.0, color: pink_light,),
-      body2: TextStyle(color: pink_light,),
-      body1: TextStyle(color: pink_light,),
+      headline1: TextStyle(
+        fontSize: 100.0,
+        color: pink_light,
+        fontWeight: FontWeight.w200,
+      ),
+      headline2: TextStyle(
+        fontSize: 90.0,
+        color: pink_light,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: 45.0,
+        color: pink_light,
+      ),
+      headline4: TextStyle(
+        fontSize: 35.0,
+        color: pink_light,
+      ),
+      headline5: TextStyle(
+        fontSize: 25.0,
+        color: pink_light,
+        fontWeight: FontWeight.w200,
+      ),
+      headline6: TextStyle(
+        fontSize: 20.0,
+        color: pink_light,
+        fontWeight: FontWeight.w200,
+      ),
+      subtitle1: TextStyle(
+        fontSize: 18.0,
+        color: pink_light,
+      ),
+      bodyText1: TextStyle(
+        color: pink_light,
+      ),
+      bodyText2: TextStyle(
+        color: pink_light,
+      ),
     ),
     accentTextTheme: TextTheme(
-      display4: TextStyle(fontSize: 100.0, color: yellow, fontWeight: FontWeight.w200,),
-      display3: TextStyle(fontSize: 90.0, color: yellow, fontWeight: FontWeight.bold,),
-      display2: TextStyle(fontSize: 45.0, color: yellow,),
-      display1: TextStyle(fontSize: 35.0, color: yellow,),
-      headline: TextStyle(fontSize: 25.0, color: yellow, fontWeight: FontWeight.w200,),
-      title: TextStyle(fontSize: 20.0, color: yellow, fontWeight: FontWeight.w200,),
-      subhead: TextStyle(fontSize: 18.0, color: yellow,),
-      body2: TextStyle(color: yellow,),
-      body1: TextStyle(color: yellow,),
+      headline1: TextStyle(
+        fontSize: 100.0,
+        color: yellow,
+        fontWeight: FontWeight.w200,
+      ),
+      headline2: TextStyle(
+        fontSize: 90.0,
+        color: yellow,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: TextStyle(
+        fontSize: 45.0,
+        color: yellow,
+      ),
+      headline4: TextStyle(
+        fontSize: 35.0,
+        color: yellow,
+      ),
+      headline5: TextStyle(
+        fontSize: 25.0,
+        color: yellow,
+        fontWeight: FontWeight.w200,
+      ),
+      headline6: TextStyle(
+        fontSize: 20.0,
+        color: yellow,
+        fontWeight: FontWeight.w200,
+      ),
+      subtitle1: TextStyle(
+        fontSize: 18.0,
+        color: yellow,
+      ),
+      bodyText1: TextStyle(
+        color: yellow,
+      ),
+      bodyText2: TextStyle(
+        color: yellow,
+      ),
     ),
   );
 

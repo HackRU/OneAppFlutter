@@ -9,12 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 class Help extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: new FutureBuilder<List<HelpResource>>(
+      body: FutureBuilder<List<HelpResource>>(
         future: helpResources(MISC_URL),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<HelpResource>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
@@ -27,7 +27,7 @@ class Help extends StatelessWidget {
                     'assets/flare/loading_indicator.flr',
                     alignment: Alignment.center,
                     fit: BoxFit.contain,
-                    animation: "idle",
+                    animation: 'idle',
                   ),
                 ),
               );
@@ -35,11 +35,11 @@ class Help extends StatelessWidget {
               print(snapshot.hasError);
               var resources = snapshot.data;
 //              print(resources);
-              return new Container(
-                child: new ListView.builder(
+              return Container(
+                child: ListView.builder(
                   itemCount: resources.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return new HelpButton(resource: resources[index]);
+                    return HelpButton(resource: resources[index]);
                   },
                 ),
               );
@@ -58,11 +58,12 @@ class HelpButton extends StatelessWidget {
     if (await canLaunch(resource.url)) {
       await launch(resource.url);
     } else {
-      print("failed to launch url");
+      print('failed to launch url');
     }
   }
 
-  Widget build(BuildContext context) => new Card(
+  @override
+  Widget build(BuildContext context) => Card(
         color: Theme.of(context).primaryColor,
         margin: EdgeInsets.all(10.0),
         shape: RoundedRectangleBorder(
@@ -74,14 +75,14 @@ class HelpButton extends StatelessWidget {
           child: InkWell(
             splashColor: yellow,
             onTap: _open,
-            child: new Column(
+            child: Column(
               children: <Widget>[
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      new Text(
+                      Text(
                         resource.name.toUpperCase(),
                         style: TextStyle(
                           color: white,
@@ -92,7 +93,7 @@ class HelpButton extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 3.0),
-                        child: new Text(
+                        child: Text(
                           resource.description,
                           style: TextStyle(
                             color: Theme.of(context).backgroundColor,

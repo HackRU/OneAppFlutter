@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
-import 'package:hidden_drawer_menu/menu/item_hidden_menu_right.dart';
+import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
+import 'package:hidden_drawer_menu/menu/hidden_menu_widget.dart';
 import 'package:hidden_drawer_menu/simple_hidden_drawer/animated_drawer_content.dart';
-import 'package:hidden_drawer_menu/simple_hidden_drawer/provider/simple_hidden_drawer_provider.dart';
 
 class CustomHiddenMenu extends StatefulWidget {
   /// Decocator that allows us to add backgroud in the menu(img)
@@ -27,13 +26,13 @@ class CustomHiddenMenu extends StatefulWidget {
 
   CustomHiddenMenu(
       {Key key,
-        this.background,
-        this.itens,
-        this.selectedListern,
-        this.initPositionSelected,
-        this.backgroundColorMenu,
-        this.enableShadowItensMenu = false,
-        this.typeOpen = TypeOpen.FROM_LEFT})
+      this.background,
+      this.itens,
+      this.selectedListern,
+      this.initPositionSelected,
+      this.backgroundColorMenu,
+      this.enableShadowItensMenu = false,
+      this.typeOpen = TypeOpen.FROM_LEFT})
       : super(key: key);
 
   @override
@@ -42,7 +41,7 @@ class CustomHiddenMenu extends StatefulWidget {
 
 class _CustomHiddenMenuState extends State<CustomHiddenMenu> {
   int _indexSelected;
-  bool isconfiguredListern = false;
+  SimpleHiddenDrawerController controller;
 
   @override
   void initState() {
@@ -50,88 +49,81 @@ class _CustomHiddenMenuState extends State<CustomHiddenMenu> {
     super.initState();
   }
 
+  void _listenerController() {
+    setState(() {
+      _indexSelected = controller.position;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    controller = SimpleHiddenDrawerController.of(context);
+    controller.addListener(_listenerController);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(_listenerController);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (!isconfiguredListern) {
-      confListern();
-      isconfiguredListern = true;
-    }
-
     return Scaffold(
       body: Container(
-          child: new Stack(
-            children: <Widget>[
-              Container(
-                child: widget.background,
-              ),
-              Center(
-                child: Container(
-                  padding: EdgeInsets.only(top: 40.0, bottom: 40.0),
-                  decoration: BoxDecoration(
-                    boxShadow: widget.enableShadowItensMenu ? [
-                      new BoxShadow(
-                        color: const Color(0x44000000),
-                        offset: const Offset(0.0, 5.0),
-                        blurRadius: 50.0,
-                        spreadRadius: 30.0,
-                      ),
-                    ] : []),
-                  child: NotificationListener<OverscrollIndicatorNotification>(
-                    onNotification: (scroll) {
-                      scroll.disallowGlow();
-                      return;
+        child: Stack(
+          children: <Widget>[
+            Container(
+              child: widget.background,
+            ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.only(top: 40.0, bottom: 40.0),
+                decoration: BoxDecoration(
+                    boxShadow: widget.enableShadowItensMenu
+                        ? [
+                            BoxShadow(
+                              color: const Color(0x44000000),
+                              offset: const Offset(0.0, 5.0),
+                              blurRadius: 50.0,
+                              spreadRadius: 30.0,
+                            ),
+                          ]
+                        : []),
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (scroll) {
+                    scroll.disallowGlow();
+                    return;
+                  },
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.all(0.0),
+                    itemCount: widget.itens.length,
+                    itemBuilder: (context, index) {
+                      return HiddenMenuWidget(
+                        name: widget.itens[index].name,
+                        selected: index == _indexSelected,
+                        colorLineSelected:
+                            widget.itens[index].colorLineSelected,
+                        baseStyle: widget.itens[index].baseStyle,
+                        selectedStyle: widget.itens[index].selectedStyle,
+                        typeOpen: widget.typeOpen,
+                        onTap: () {
+                          if (widget.itens[index].onTap != null) {
+                            widget.itens[index].onTap();
+                          }
+                          controller.setSelectedMenuPosition(index);
+                        },
+                      );
                     },
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(0.0),
-                      itemCount: widget.itens.length,
-                      itemBuilder: (context, index) {
-                        if (widget.typeOpen == TypeOpen.FROM_LEFT) {
-                          return ItemHiddenMenu(
-                            name: widget.itens[index].name,
-                            selected: index == _indexSelected,
-                            colorLineSelected:
-                            widget.itens[index].colorLineSelected,
-                            baseStyle: widget.itens[index].baseStyle,
-                            selectedStyle: widget.itens[index].selectedStyle,
-                            onTap: () {
-                              SimpleHiddenDrawerProvider.of(context)
-                                  .setSelectedMenuPosition(index);
-                            },
-                          );
-                        } else {
-                          return ItemHiddenMenuRight(
-                            name: widget.itens[index].name,
-                            selected: index == _indexSelected,
-                            colorLineSelected:
-                            widget.itens[index].colorLineSelected,
-                            baseStyle: widget.itens[index].baseStyle,
-                            selectedStyle: widget.itens[index].selectedStyle,
-                            onTap: () {
-                              SimpleHiddenDrawerProvider.of(context)
-                                  .setSelectedMenuPosition(index);
-                            },
-                          );
-                        }
-                      },
-                    ),
                   ),
                 ),
               ),
-            ],
-          ),
-//        ),
+            ),
+          ],
+        ),
       ),
     );
-  }
-
-  void confListern() {
-    SimpleHiddenDrawerProvider.of(context)
-        .getPositionSelectedListener()
-        .listen((position) {
-      setState(() {
-        _indexSelected = position;
-      });
-    });
   }
 }

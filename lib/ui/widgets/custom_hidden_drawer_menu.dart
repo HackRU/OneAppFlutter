@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hidden_drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
-//import 'package:hidden_drawer_menu/menu/hidden_menu.dart';
-import 'package:hidden_drawer_menu/menu/item_hidden_menu.dart';
+import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/simple_hidden_drawer/animated_drawer_content.dart';
-import 'package:hidden_drawer_menu/simple_hidden_drawer/bloc/simple_hidden_drawer_bloc.dart';
 import 'package:hidden_drawer_menu/simple_hidden_drawer/simple_hidden_drawer.dart';
 
 import 'custom_hidden_menu.dart';
@@ -31,8 +28,8 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
   ///Change elevation of the AppBar
   final double elevationAppBar;
 
-  ///Change iconmenu of the AppBar
-  final Widget iconMenuAppBar;
+  ///Change leading of the AppBar
+  final Widget leadingAppBar;
 
   /// Add actions in the AppBar
   final List<Widget> actionsAppBar;
@@ -44,7 +41,7 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
   final bool isTitleCentered;
 
   //Menu
-  /// Decocator that allows us to add backgroud in the menu(img)
+  ///==== Custom Widget Allowed
   final Widget backgroundMenu;
 
   /// that allows us to add backgroud in the menu(color)
@@ -66,11 +63,13 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
   /// radius applied to the content when active
   final double contentCornerRadius;
 
-  /// anable animation Scale
-  final bool enableScaleAnimin;
+  /// enable animation Scale
+  final bool enableScaleAnimation;
 
-  /// anable animation borderRadius
-  final bool enableCornerAnimin;
+  /// enable animation borderRadius
+  final bool enableCornerAnimation;
+
+  final bool disableAppBarDefault;
 
   final TypeOpen typeOpen;
 
@@ -79,7 +78,7 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
     this.initPositionSelected = 0,
     this.backgroundColorAppBar,
     this.elevationAppBar = 4.0,
-    this.iconMenuAppBar = const Icon(Icons.menu),
+    this.leadingAppBar = const Icon(Icons.menu),
     this.backgroundMenu,
     this.backgroundColorMenu,
     this.backgroundColorContent = Colors.white,
@@ -94,8 +93,9 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
     this.slidePercent = 80.0,
     this.verticalScalePercent = 80.0,
     this.contentCornerRadius = 10.0,
-    this.enableScaleAnimin = true,
-    this.enableCornerAnimin = true,
+    this.enableScaleAnimation = true,
+    this.enableCornerAnimation = true,
+    this.disableAppBarDefault = false,
     this.typeOpen = TypeOpen.FROM_LEFT,
   });
 
@@ -107,29 +107,28 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
       slidePercent: slidePercent,
       verticalScalePercent: verticalScalePercent,
       contentCornerRadius: contentCornerRadius,
-      enableCornerAnimin: enableCornerAnimin,
-      enableScaleAnimin: enableScaleAnimin,
+      enableCornerAnimation: enableCornerAnimation,
+      enableScaleAnimation: enableScaleAnimation,
       menu: buildMenu(),
       typeOpen: typeOpen,
       initPositionSelected: initPositionSelected,
       screenSelectedBuilder: (position, bloc) {
-        List<Widget> actions = List();
-
-        if (typeOpen == TypeOpen.FROM_RIGHT) {
-          actions.add(IconButton(
-              icon: iconMenuAppBar,
-              onPressed: () {
-                bloc.toggle();
-              }));
-        }
-
-        if (actionsAppBar != null) {
-          actions.addAll(actionsAppBar);
-        }
+        // var actions = <Widget>[];
+        // if (typeOpen == TypeOpen.FROM_RIGHT) {
+        //   actions.add(IconButton(
+        //       icon: iconMenuAppBar,
+        //       onPressed: () {
+        //         bloc.toggle();
+        //       }));
+        // }
+        // if (actionsAppBar != null) {
+        //   actions.addAll(actionsAppBar);
+        // }
 
         return Scaffold(
           backgroundColor: backgroundColorContent,
           appBar: AppBar(
+            brightness: Brightness.light,
             backgroundColor: backgroundColorAppBar,
             elevation: elevationAppBar,
             title: getTittleAppBar(position),
@@ -143,21 +142,21 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
     );
   }
 
-  getTittleAppBar(int position) {
+  Widget getTittleAppBar(int position) {
     if (tittleAppBar == null) {
       return whithAutoTittleName
           ? Text(
-        screens[position].itemMenu.name,
-        style: styleAutoTittleName,
-      )
+              screens[position].itemMenu.name,
+              style: styleAutoTittleName,
+            )
           : Container();
     } else {
       return tittleAppBar;
     }
   }
 
-  buildMenu() {
-    List<ItemHiddenMenu> _itensMenu = new List();
+  Widget buildMenu() {
+    var _itensMenu = <ItemHiddenMenu>[];
 
     screens.forEach((item) {
       _itensMenu.add(item.itemMenu);
@@ -173,15 +172,41 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
     );
   }
 
-  Widget _buildLeading(SimpleHiddenDrawerBloc bloc) {
+  Widget _buildLeading(SimpleHiddenDrawerController bloc) {
     if (typeOpen == TypeOpen.FROM_LEFT) {
-      return IconButton(
-          icon: iconMenuAppBar,
-          onPressed: () {
-            bloc.toggle();
-          });
+      return IconButton(icon: leadingAppBar, onPressed: () => bloc.toggle());
     } else {
-      return null;
+      return SizedBox.shrink();
     }
   }
+
+  ///==== maybe use this if needed =====
+  // PreferredSizeWidget _getAppbar(
+  //   int position,
+  //   SimpleHiddenDrawerController bloc,
+  // ) {
+  //   if (disableAppBarDefault) return null;
+  //   var actions = <Widget>[];
+  //   if (typeOpen == TypeOpen.FROM_RIGHT) {
+  //     actions.add(
+  //       IconButton(
+  //         icon: leadingAppBar,
+  //         onPressed: () {
+  //           bloc.toggle();
+  //         },
+  //       ),
+  //     );
+  //   }
+  //   if (actionsAppBar != null) {
+  //     actions.addAll(actionsAppBar);
+  //   }
+  //   return AppBar(
+  //     backgroundColor: backgroundColorAppBar,
+  //     elevation: elevationAppBar,
+  //     title: getTittleAppBar(position),
+  //     centerTitle: isTitleCentered,
+  //     leading: _buildLeading(bloc),
+  //     actions: actions,
+  //   );
+  // }
 }

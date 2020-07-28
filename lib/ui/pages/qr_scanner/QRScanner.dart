@@ -1,18 +1,17 @@
 import 'package:HackRU/styles.dart';
-import 'package:HackRU/ui/pages/qr_scanner/newScanner.dart';
 import 'package:HackRU/ui/widgets/custom_expansion_tile.dart';
 import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:meta/meta.dart';
 
 import '../../../defaults.dart';
+import 'newScanner.dart';
 
-const NOT_SCANNED = "NOT SCANNED";
+const NOT_SCANNED = 'NOT SCANNED';
 
 class QRScanner extends StatefulWidget {
   static LcsCredential cred;
@@ -27,7 +26,7 @@ class _QRScannerState extends State<QRScanner> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: FutureBuilder(
         future: qrEvents(MISC_URL),
@@ -44,7 +43,7 @@ class _QRScannerState extends State<QRScanner> {
                     'assets/flare/loading_indicator.flr',
                     alignment: Alignment.center,
                     fit: BoxFit.contain,
-                    animation: "idle",
+                    animation: 'idle',
                   ),
                 ),
               );
@@ -63,13 +62,13 @@ class _QRScannerState extends State<QRScanner> {
         margin: EdgeInsets.symmetric(horizontal: 20.0),
         child: _isVisible == false
             ? null
-            : new FloatingActionButton.extended(
+            : FloatingActionButton.extended(
                 backgroundColor: yellow,
                 splashColor: pink,
                 onPressed: () async {
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => NewScanner(),
+                      builder: (context) => Scanner(),
                     ),
                   );
                 },
@@ -110,13 +109,12 @@ class CardExpansion extends StatefulWidget {
 
 class _CardExpansionState extends State<CardExpansion> {
   bool isExpanded = false;
-  var _isVisible;
-  final GlobalKey<CustomExpansionTileState> expansionTileKey = new GlobalKey();
+  final GlobalKey<CustomExpansionTileState> expansionTileKey = GlobalKey();
   var _selectedEvent = '--none--';
 
   @override
   Widget build(BuildContext context) {
-    Orientation currentOrientation = MediaQuery.of(context).orientation;
+    var currentOrientation = MediaQuery.of(context).orientation;
 
     return Column(
       children: <Widget>[
@@ -124,14 +122,16 @@ class _CardExpansionState extends State<CardExpansion> {
           margin: const EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
           child: Card(
             elevation: 0.0,
-            color: (isExpanded == true) ? Theme.of(context).primaryColor : Theme.of(context).dividerColor,
+            color: (isExpanded == true)
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).dividerColor,
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
               child: CustomExpansionTile(
                 key: expansionTileKey,
                 onExpansionChanged: (bool expanding) =>
-                    setState(() => this.isExpanded = expanding),
+                    setState(() => isExpanded = expanding),
                 trailing: Icon(
                   isExpanded
                       ? GroovinMaterialIcons.chevron_up
@@ -139,9 +139,9 @@ class _CardExpansionState extends State<CardExpansion> {
                   color: isExpanded ? grey : pink_dark,
                   size: 28.0,
                 ),
-                title: new Text(
-                  this._selectedEvent,
-                  style: new TextStyle(
+                title: Text(
+                  _selectedEvent,
+                  style: TextStyle(
                     color: isExpanded ? white : charcoal,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
@@ -156,7 +156,7 @@ class _CardExpansionState extends State<CardExpansion> {
                   ),
                 ),
                 children: <Widget>[
-                  new Container(
+                  Container(
                     height: currentOrientation == Orientation.portrait
                         ? 300.0
                         : 120.0,
@@ -164,11 +164,13 @@ class _CardExpansionState extends State<CardExpansion> {
                     child: ListView.builder(
                       itemCount: widget.events.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return new ListTile(
+                        return ListTile(
                           title: Text(
                             widget.events[index],
-                            style: new TextStyle(
-                              color: isExpanded ? charcoal : Theme.of(context).primaryColor,
+                            style: TextStyle(
+                              color: isExpanded
+                                  ? charcoal
+                                  : Theme.of(context).primaryColor,
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
                             ),
@@ -177,8 +179,8 @@ class _CardExpansionState extends State<CardExpansion> {
                             var selectedEvent = widget.events[index];
                             print('**** Selected Event: $selectedEvent\n');
                             setState(() {
-                              this._selectedEvent = widget.events[index];
-                              CardExpansion.event = this._selectedEvent;
+                              _selectedEvent = widget.events[index];
+                              CardExpansion.event = _selectedEvent;
                             });
                             expansionTileKey.currentState.collapse();
                           },
@@ -195,21 +197,23 @@ class _CardExpansionState extends State<CardExpansion> {
           height: 20.0,
         ),
         !isExpanded
-          ? Padding(
-            padding: const EdgeInsets.only(top: 50.0),
-            child: Center(
-              child: Container(
-                height: currentOrientation == Orientation.portrait ? 300.0 : 0.0,
-                child: FlareActor(
-                  'assets/flare/forever_wondering.flr',
-                  alignment: Alignment.center,
-                  fit: BoxFit.contain,
-                  animation: "idle",
+            ? Padding(
+                padding: const EdgeInsets.only(top: 50.0),
+                child: Center(
+                  child: Container(
+                    height: currentOrientation == Orientation.portrait
+                        ? 300.0
+                        : 0.0,
+                    child: FlareActor(
+                      'assets/flare/forever_wondering.flr',
+                      alignment: Alignment.center,
+                      fit: BoxFit.contain,
+                      animation: 'idle',
+                    ),
+                  ),
                 ),
-                ),
-            ),
-          )
-          : Container(),
+              )
+            : Container(),
       ],
     );
   }

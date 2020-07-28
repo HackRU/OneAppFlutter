@@ -19,7 +19,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    controller = new TabController(length: 2, vsync: this);
+    controller = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -29,10 +29,10 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
   }
 
   TabBar getTabBar() {
-    return new TabBar(
+    return TabBar(
       tabs: <Tab>[
-        new Tab(text: 'Saturday'),
-        new Tab(text: 'Sunday'),
+        Tab(text: 'Saturday'),
+        Tab(text: 'Sunday'),
       ],
       indicator: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
@@ -41,14 +41,20 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
       indicatorWeight: 2.0,
       indicatorSize: TabBarIndicatorSize.tab,
       controller: controller,
-      unselectedLabelColor: MediaQuery.of(context).platformBrightness == Brightness.light ? charcoal_light : white,
+      unselectedLabelColor:
+          MediaQuery.of(context).platformBrightness == Brightness.light
+              ? charcoal_light
+              : white,
       labelColor: black,
-      labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0,),
+      labelStyle: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 20.0,
+      ),
     );
   }
 
   TabBarView getTabBarView(var tabs) {
-    return new TabBarView(children: tabs, controller: controller);
+    return TabBarView(children: tabs, controller: controller);
   }
 
   static List<Event> cachedEvents;
@@ -59,7 +65,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
       streamctl.sink.add(cachedEvents);
     }
     if (cacheTTL.isBefore(DateTime.now())) {
-      print("cache miss");
+      print('cache miss');
       dayofEventsResources().then((events) {
         streamctl.sink.add(events);
         cachedEvents = events;
@@ -71,9 +77,9 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: new AppBar(
+      appBar: AppBar(
         title: getTabBar(),
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
@@ -94,7 +100,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
                     'assets/flare/loading_indicator.flr',
                     alignment: Alignment.center,
                     fit: BoxFit.contain,
-                    animation: "idle",
+                    animation: 'idle',
                   ),
                 ),
               );

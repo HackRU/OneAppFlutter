@@ -19,7 +19,7 @@ class LoginFormState extends State<LoginForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _inputIsValid = true;
+  bool isInputValid = true;
   bool _isLoginPressed = false;
   var _isEmailEntered = false;
   static var credStr = '';
@@ -33,9 +33,8 @@ class LoginFormState extends State<LoginForm> {
   }
 
   @override
-  Widget build(BuildContext context){
-
-    _launchUrl() async {
+  Widget build(BuildContext context) {
+    void _launchUrl() async {
       const url = HACKRU_SIGN_UP;
       if (await canLaunch(url)) {
         await launch(url);
@@ -47,23 +46,24 @@ class LoginFormState extends State<LoginForm> {
     void _errorDialog(String body) async {
       switch (await showDialog(
         context: context,
-        builder: (BuildContext context, {barrierDismissible: false}) {
-          return new ErrorDialog(body: body);
+        builder: (BuildContext context, {barrierDismissible = false}) {
+          return ErrorDialog(body: body);
         },
-      )) {}
+      )) {
+      }
     }
 
-    _onLoginButtonPressed() async {
-      if(_emailController.text.isEmpty || _passwordController.text.isEmpty){
+    void _onLoginButtonPressed() async {
+      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
         var error = 'Error:\n Missing username and/or password!';
         _errorDialog(error);
-      }
-      else{
+      } else {
         try {
           setState(() {
             _isLoginPressed = true;
           });
-          final cred = await login(_emailController.text, _passwordController.text);
+          final cred =
+              await login(_emailController.text, _passwordController.text);
           if (cred != null) {
             LoginForm.gotCred = true;
             await persistCredentials(cred.token, cred.email);
@@ -77,10 +77,11 @@ class LoginFormState extends State<LoginForm> {
             });
             _scaffoldKey.currentState
               ..removeCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                content: Text('Error: Incorrect email or password!'),
-                backgroundColor: Colors.red,
-              ),
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Error: Incorrect email or password!'),
+                  backgroundColor: Colors.red,
+                ),
               );
           }
         } catch (error) {
@@ -89,122 +90,155 @@ class LoginFormState extends State<LoginForm> {
           });
           _scaffoldKey.currentState
             ..removeCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-              content: Text(error ?? ''),
-            ),
+            ..showSnackBar(
+              SnackBar(
+                content: Text(error ?? ''),
+              ),
             );
         }
       }
     }
 
-    Widget kForm(){
-      List<TextSpan> span = [];
+    Widget kForm() {
+      var span = <TextSpan>[];
 
-      span.add(new TextSpan(text: 'HACK', style: Theme.of(context).primaryTextTheme.display3,));
-      span.add(new TextSpan(text: 'RU', style: Theme.of(context).accentTextTheme.display3,));
+      span.add(TextSpan(
+        text: 'HACK',
+        style: Theme.of(context).primaryTextTheme.headline2,
+      ));
+      span.add(TextSpan(
+        text: 'RU',
+        style: Theme.of(context).accentTextTheme.headline2,
+      ));
 
       return _isLoginPressed
           ? Center(
-        child: FancyLoadingIndicator(),
-      )
+              child: FancyLoadingIndicator(),
+            )
           : Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.all(25.0),
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0, bottom: 25.0),
-              child: Column(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.all(25.0),
                 children: <Widget>[
-                  new RichText(
-                    text: new TextSpan(
-                      children: span,
-                      style: DefaultTextStyle.of(context).style,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0, bottom: 25.0),
+                    child: Column(
+                      children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                            children: span,
+                            style: DefaultTextStyle.of(context).style,
+                          ),
+                        ),
+                        Text(
+                          kSeasonTitle,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ],
                     ),
                   ),
-                  Text(kSeasonTitle, style: Theme.of(context).textTheme.headline,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      controller: _emailController,
+                      onChanged: (value) {
+                        value.isNotEmpty
+                            ? setState(() {
+                                _isEmailEntered = true;
+                              })
+                            : setState(() {
+                                _isEmailEntered = false;
+                              });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Email Address',
+                        fillColor: Theme.of(context).primaryColor,
+                        errorText: isInputValid
+                            ? null
+                            : 'Please enter valid email address',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: charcoal_light, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        focusColor: charcoal_light,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        fillColor: Theme.of(context).primaryColor,
+                        enabled: _isEmailEntered ? true : false,
+                        errorText:
+                            isInputValid ? null : 'Please enter valid password',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: charcoal_light, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        focusColor: charcoal_light,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 40.0, horizontal: 10.0),
+                    child: RaisedButton(
+                      elevation: 1.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15.0,
+                        horizontal: 50.0,
+                      ),
+                      splashColor: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).primaryColor,
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Theme.of(context).backgroundColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      onPressed: () {
+                        _onLoginButtonPressed();
+                      },
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: _launchUrl,
+                    child: Text(
+                      'Forgot Password / Signup?',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w700,
+                        decoration: TextDecoration.underline,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                style: TextStyle(fontSize: 20, color: Theme.of(context).primaryColor,),
-                controller: _emailController,
-                onChanged: (value){
-                  value.isNotEmpty ?
-                  setState(() { _isEmailEntered = true; })
-                      : setState(() { _isEmailEntered = false; });
-                },
-                decoration: InputDecoration(
-                  labelText: "Email Address",
-                  fillColor: Theme.of(context).primaryColor,
-                  errorText: _inputIsValid ? null : 'Please enter valid email address',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: charcoal_light, width: 2.0),
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  ),
-                  focusColor: charcoal_light,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: TextField(
-                style: TextStyle(fontSize: 20, color: Theme.of(context).primaryColor,),
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Password",
-                  fillColor: Theme.of(context).primaryColor,
-                  enabled: _isEmailEntered ? true : false,
-                  errorText: _inputIsValid ? null : 'Please enter valid password',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: charcoal_light, width: 2.0),
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  ),
-                  focusColor: charcoal_light,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 10.0),
-              child: RaisedButton(
-                elevation: 1.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50.0,),
-                splashColor: Theme.of(context).backgroundColor,
-                color: Theme.of(context).primaryColor,
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 25, color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700,),
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: (){
-                  _onLoginButtonPressed();
-                },
-              ),
-            ),
-            GestureDetector(
-              onTap: _launchUrl,
-              child: Text(
-                'Forgot Password / Signup?',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w700,
-                  decoration: TextDecoration.underline,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      );
+            );
     }
 
     return Scaffold(
@@ -213,5 +247,4 @@ class LoginFormState extends State<LoginForm> {
       body: kForm(),
     );
   }
-
 }
