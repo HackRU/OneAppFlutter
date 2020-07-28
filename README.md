@@ -4,8 +4,12 @@ The Official HackRU Flutter App
 
 Feel free to show some :heart: and :star: the repo to support the project.
 
-![GitHub closed issues](https://img.shields.io/github/issues-closed/HackRU/OneAppFlutter)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/HackRU/OneAppFlutter)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/HackRU/OneAppFlutter?color=1ab8aa)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/HackRU/OneAppFlutter?color=eb8810)
+![Github Last Commit](https://img.shields.io/github/last-commit/HackRU/OneAppFlutter/master?color=red&label=last%20commit%20%7C%202020)
+![Top Language](https://img.shields.io/github/languages/top/HackRU/OneAppflutter?logo=Dart)
+![Flutter SDK](https://img.shields.io/badge/Flutter%20SDK-%3E%201.19.0-blue?logo=flutter)
+![GitHub contributors](https://img.shields.io/github/contributors/HackRU/OneAppFlutter?color=ed53bc)
 ![GitHub](https://img.shields.io/github/license/HackRU/OneAppFlutter)
 
 <img align="right" src="./screenshots/hackru_red.png" height="200">
@@ -24,13 +28,69 @@ A cross-platform mobile application for hackers, organizers, mentors, and sponso
 We had started using an inhouse hybrid mobile application to keep track of analytics to get a better idea of how certain aspects of the hackathon were running such as food consumption and optimization for checkin. This project expanded into a public native mobile application so hackers had easier access to their QR code as well as organizers with their scanners. Additional information of the hackathon were incorporated so that everyone would be able to stay up to date on events that are happeneing wherever they may be in the venue.
 
 ## Style Guide
-We use `dartfmt` style guide for this project. Follow these guidelines for the IDE setup --> [Dart Formatting](https://flutter.dev/docs/development/tools/formatting)
+Most of the recommended lints directly implement the guidelines set out in [Effective Dart](https://dart.dev/guides/language/effective-dart). In a few cases the lints are stricter than the style guide for the sake of consistency.
 
-Dartfmt: (format dart code)
+<details>
+<summary>List of <code>Linter Rules</code></summary>
+<p>
 
+```yaml
+linter:
+  rules:
+    - always_declare_return_types
+    - always_require_non_null_named_parameters
+    - annotate_overrides
+    - avoid_empty_else
+    - avoid_init_to_null
+    - avoid_null_checks_in_equality_operators
+    - avoid_relative_lib_imports
+    - avoid_return_types_on_setters
+    - avoid_shadowing_type_parameters
+    - avoid_types_as_parameter_names
+    - camel_case_extensions
+    - curly_braces_in_flow_control_structures
+    - empty_catches
+    - empty_constructor_bodies
+    - library_names
+    - library_prefixes
+    - no_duplicate_case_values
+    - null_closures
+    - omit_local_variable_types
+    - prefer_adjacent_string_concatenation
+    - prefer_collection_literals
+    - prefer_conditional_assignment
+    - prefer_contains
+    - prefer_equal_for_default_values
+    - prefer_final_fields
+    - prefer_for_elements_to_map_fromIterable
+    - prefer_generic_function_type_aliases
+    - prefer_if_null_operators
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - prefer_iterable_whereType
+    - prefer_single_quotes
+    - prefer_spread_collections
+    - recursive_getters
+    - slash_for_doc_comments
+    - type_init_formals
+    - unawaited_futures
+    - unnecessary_const
+    - unnecessary_new
+    - unnecessary_null_in_if_null_operators
+    - unnecessary_this
+    - unrelated_type_equality_checks
+    - use_function_type_syntax_for_parameters
+    - use_rethrow_when_possible
+    - valid_regexps
+```
+
+</p>
+</details>
+
+##### Enable `Dartfmt`: (standard Dart formatter)
 $ `pub global activate dart_style`
 
-$ `dartfmt file.dart` (for a specific file)
+$ `dartfmt <file_name>.dart` (for a specific file)
 
 
 ## Installation Guide
@@ -49,16 +109,16 @@ First, install *Flutter* and *Dart* on your machine by following these guideline
 
 To learn about Flutter App Development:
 
-- [Flutter Website: https://flutter.io]
-- [Libraries: https://pub.dartlang.org/]
+- [Flutter Website: https://flutter.dev](https://flutter.dev/)
+- [Libraries: https://pub.dev](https://pub.dev/)
 - [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
 - [Official Documentation: (https://flutter.io/docs)], which offers tutorials,
 - [Learn Flutter Class: (https://www.appbrewery.co/courses/intro-to-flutter)]
 samples, guidance on mobile development, and a full API reference.
-- ⭑ Working Examples+Tutorials+Libraries [https://github.com/Solido/awesome-flutter]
+- ⭑ (Recommended) Working Examples+Tutorials+Libraries [https://github.com/Solido/awesome-flutter]
 
-### Running Backend tests
+### Running Backend Tests (HackRU LCS)
 1. also have command line dart installed
 2. setup test users and use the test endpoint in hackru-service
 3. `export LCS_USER="<username>"` for LCS_USER, LCS_PASSWORD, LCS_USER2, LCS_PASSWORD2
