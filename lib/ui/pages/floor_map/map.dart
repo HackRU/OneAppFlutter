@@ -13,37 +13,39 @@ class HackRUMap extends StatefulWidget {
 class _HackRUMapState extends State<HackRUMap> {
   @override
   Widget build(BuildContext context) {
-    Orientation currentOrientation = MediaQuery.of(context).orientation;
+    var currentOrientation = MediaQuery.of(context).orientation;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light ? white : charcoal,
+        color: MediaQuery.of(context).platformBrightness == Brightness.light
+            ? white
+            : charcoal,
         alignment: Alignment(0, 0),
         child: PinchZoomImage(
           image: currentOrientation == Orientation.portrait
-            ? Stack(
-                children: <Widget>[
-                  Center(child: FancyLoadingIndicator()),
-                  Center(
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: FLOOR_MAP_VER,
+              ? Stack(
+                  children: <Widget>[
+                    Center(child: FancyLoadingIndicator()),
+                    Center(
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: FLOOR_MAP_VER,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            : Stack(
-                children: <Widget>[
-                  Center(child: FancyLoadingIndicator()),
-                  Center(
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: FLOOR_MAP_HOR,
+                  ],
+                )
+              : Stack(
+                  children: <Widget>[
+                    Center(child: FancyLoadingIndicator()),
+                    Center(
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: FLOOR_MAP_HOR,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
           zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
           hideStatusBarWhileZooming: false,
         ),

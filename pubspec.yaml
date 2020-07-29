@@ -1,11 +1,11 @@
 name: HackRU
 description: The Official HackRU Flutter App
-version: 1.1.1
-author: HackRU RnD Flutter Team [Dhruvil Patel, Paul John, Mickey J. Winters, Sean Lane]
+version: 1.2.0
+author: HackRU RnD Flutter Team [Dhruvil Patel, Paul John, Mickey J. Winters]
 homepage: https://github.com/HackRU/OneAppFlutter
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -13,36 +13,36 @@ dependencies:
 
   # App Dependencies from (https://pub.dev/)
   cupertino_icons: ^0.1.3
-  font_awesome_flutter: ^8.5.0
+  font_awesome_flutter: ^8.8.1
   groovin_material_icons: ^1.1.6
-  hidden_drawer_menu: ^1.1.2
+  hidden_drawer_menu: ^2.0.1
   qr_flutter: ^3.2.0
-  qr_code_scanner: ^0.0.12
-  http: ^0.12.0+4
-  url_launcher: ^5.4.2
+  qr_code_scanner: ^0.0.13
+  http: ^0.12.2
+  url_launcher: ^5.5.0
   rubber: ^0.4.0
-  webview_flutter: ^0.3.19+9
+  webview_flutter: ^0.3.22+1
   pinch_zoom_image_updated: ^0.2.6
-  flare_flutter: ^2.0.1
-  flutter_linkify: ^3.1.0
-  equatable: ^1.1.1
+  flare_flutter: ^2.0.5
+  flutter_linkify: ^3.1.3
+  equatable: ^1.2.3
   meta: ^1.1.8
   intl: ^0.16.1
-  path_provider: ^1.6.5
-  flutter_launcher_icons: ^0.7.4
-  flutter_bloc: ^3.2.0
+  path_provider: ^1.6.11
+  flutter_launcher_icons: ^0.7.5
   json_annotation: ^3.0.1
-  provider: ^4.0.2
-  shared_preferences: ^0.5.2+1
-  firebase_messaging: ^6.0.12
+  provider: ^4.3.1
+  shared_preferences: ^0.5.8
+  firebase_messaging: ^6.0.16
 #  dart_lcs_client: ^0.0.3
 
 dev_dependencies:
-  test: ^1.6.1
+  test: ^1.15.2
   flutter_test:
     sdk: flutter
-  build_runner: ^1.7.3
-  json_serializable: ^3.2.5
+  build_runner: ^1.10.0
+  json_serializable: ^3.3.0
+  pedantic: ^1.9.0
 
 flutter_icons:
   android: true

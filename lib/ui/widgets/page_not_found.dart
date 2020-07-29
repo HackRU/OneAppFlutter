@@ -40,7 +40,7 @@ class _PageNotFoundState extends State<PageNotFound> {
               'flare/Filip.flr',
               alignment: Alignment.topRight,
               fit: BoxFit.contain,
-              animation: "idle",
+              animation: 'idle',
             ),
           ),
         ],

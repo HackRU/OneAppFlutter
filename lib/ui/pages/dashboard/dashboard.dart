@@ -4,20 +4,15 @@ import 'package:HackRU/models/cred_manager.dart';
 import 'package:HackRU/styles.dart';
 import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
-import 'package:HackRU/models/string_parser.dart';
 import 'package:HackRU/ui/pages/dashboard/announcement_card.dart';
-import 'package:HackRU/ui/widgets/flip_panel.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
 
 class Dashboard extends StatefulWidget {
   @override
-  DashboardState createState() => new DashboardState();
+  DashboardState createState() => DashboardState();
 }
 
 class DashboardState extends State<Dashboard> {
@@ -48,7 +43,14 @@ class DashboardState extends State<Dashboard> {
               _displayTimerBanner = false;
             });
           },
-          child: Text('Dismiss', style: TextStyle(color: white, fontSize: 14.0, fontWeight: FontWeight.w700,),),
+          child: Text(
+            'Dismiss',
+            style: TextStyle(
+              color: white,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ),
       ],
       backgroundColor: transparent,
@@ -61,7 +63,7 @@ class DashboardState extends State<Dashboard> {
   Stream<List<Announcement>> _getSlacks() {
     var streamCtrl = StreamController<List<Announcement>>();
     try {
-      getStoredSlacks().then((storedSlacks) {
+      getSlackAnnouncements().then((storedSlacks) {
         if (storedSlacks != null) {
           streamCtrl.sink.add(storedSlacks);
         }
@@ -73,13 +75,13 @@ class DashboardState extends State<Dashboard> {
       }).then((networkSlacks) {
         if (networkSlacks != null) {
           streamCtrl.sink.add(networkSlacks);
-          setStoredSlacks(networkSlacks);
-          cacheTTL = DateTime.now().add(Duration(minutes: 9));
+          persistSlackAnnouncements(networkSlacks);
+          cacheTTL = DateTime.now().add(Duration(minutes: 5));
           streamCtrl.close();
         }
       });
     } catch (e) {
-      print("***********************\nSlack data stream ctrl error: " + e);
+      print('***********************\nSlack data stream ctrl error: ' + e);
     }
     return streamCtrl.stream;
   }
@@ -88,10 +90,10 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: new StreamBuilder<List<Announcement>>(
+      body: StreamBuilder<List<Announcement>>(
         stream: _getSlacks(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<Announcement>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
@@ -104,49 +106,64 @@ class DashboardState extends State<Dashboard> {
                     'assets/flare/loading_indicator.flr',
                     alignment: Alignment.center,
                     fit: BoxFit.contain,
-                    animation: "idle",
+                    animation: 'idle',
                   ),
                 ),
               );
             default:
-              print(snapshot.hasError);
+              print('ERROR-->DASHBOARD: ${snapshot.hasError}');
               var resources = snapshot.data;
-              return new Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0,),
-                child: new ListView.builder(
-                  padding: EdgeInsets.only(bottom: 25.0,),
-                  itemCount: _displayTimerBanner ? resources.length+2 : resources.length,
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                ),
+                child: ListView.builder(
+                  padding: EdgeInsets.only(
+                    bottom: 25.0,
+                  ),
+                  itemCount: _displayTimerBanner
+                      ? resources.length + 2
+                      : resources.length,
                   itemBuilder: (context, index) {
-                    if(index == 0 && _displayTimerBanner){
+                    if (index == 0 && _displayTimerBanner) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Container(
                           decoration: BoxDecoration(
                             color: green,
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
                           ),
                           child: _timerBanner(),
                         ),
                       );
                     }
-                    if(_displayTimerBanner ? index == 1 : index == 0){
+                    if (_displayTimerBanner ? index == 1 : index == 0) {
                       return ListTile(
                         contentPadding: EdgeInsets.symmetric(horizontal: 5.0),
                         title: Text(
                           'Announcements',
-                          style: Theme.of(context).textTheme.subhead,
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
-                        trailing: !_displayTimerBanner ? IconButton(
-                          icon: Icon(Icons.timer, color: Theme.of(context).primaryColor,),
-                          onPressed: (){
-                            setState(() {
-                              _displayTimerBanner = true;
-                            });
-                          },
-                        ) : null,
+                        trailing: !_displayTimerBanner
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.timer,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _displayTimerBanner = true;
+                                  });
+                                },
+                              )
+                            : null,
                       );
                     }
-                    return new AnnouncementCard(resource: _displayTimerBanner ? resources[index-2] : resources[index-1]);
+                    return AnnouncementCard(
+                        resource: _displayTimerBanner
+                            ? resources[index - 2]
+                            : resources[index - 1]);
                   },
                 ),
               );
@@ -198,7 +215,10 @@ class _TimerTextState extends State<TimerText> {
   Widget build(BuildContext context) {
     return Text(
       DateFormat('HH:mm:ss').format(_dateTime),
-      style: TextStyle(fontSize: 45.0, color: white,),
+      style: TextStyle(
+        fontSize: 45.0,
+        color: white,
+      ),
     );
   }
 }

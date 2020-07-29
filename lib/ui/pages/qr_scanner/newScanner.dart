@@ -11,35 +11,31 @@ import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 
 var popup = true;
-const NOT_SCANNED = "NOT SCANNED";
+const NOT_SCANNED = 'NOT SCANNED';
 
-class NewScanner extends StatefulWidget {
-  const NewScanner({Key key}) : super(key: key);
+class Scanner extends StatefulWidget {
+  const Scanner({Key key}) : super(key: key);
   static String userEmail;
 
   @override
-  State<StatefulWidget> createState() => _NewScannerState();
+  State<StatefulWidget> createState() => _ScannerState();
 }
 
-class _NewScannerState extends State<NewScanner>
-    with SingleTickerProviderStateMixin {
-  var qrText = "";
-  var scanned = "";
+class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
+  var qrText = '';
+  var scanned = '';
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   AnimationController _animationController;
   bool isPlaying = false;
-  Future<String> _message;
 
   @override
   void initState() {
     super.initState();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _message = Future<String>.sync(() => ' ');
   }
 
   @override
@@ -77,7 +73,7 @@ class _NewScannerState extends State<NewScanner>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  new Text(
+                  Text(
                     CardExpansion.event,
                     style: TextStyle(
                       fontSize: 14.0,
@@ -85,7 +81,7 @@ class _NewScannerState extends State<NewScanner>
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  new Text(
+                  Text(
                     scanned,
                     style: TextStyle(
                       fontSize: 16.0,
@@ -93,7 +89,7 @@ class _NewScannerState extends State<NewScanner>
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  new Container(
+                  Container(
                     child: IconButton(
                       iconSize: 80,
                       icon: Icon(
@@ -125,10 +121,10 @@ class _NewScannerState extends State<NewScanner>
         if (scanData != prevQR) {
           qrText = scanData;
           prevQR = scanData;
-          scanned = "";
+          scanned = '';
           _qrRequest(scanData);
         } else {
-//          scanned = "ALREADY SCANNED!";
+//          scanned = 'ALREADY SCANNED!';
         }
       });
     });
@@ -151,20 +147,20 @@ class _NewScannerState extends State<NewScanner>
     print('************* qrRequest made ***********');
     var message;
     message = await _lcsHandle(scanData);
-    if (message == "SCANNED!" ||
-        message == "EMAIL SCANNED!" ||
-        message == "DAY-OF QR LINKED!") {
+    if (message == 'SCANNED!' ||
+        message == 'EMAIL SCANNED!' ||
+        message == 'DAY-OF QR LINKED!') {
       _scanDialogSuccess(message);
     } else {
-      _scanDialogWarning(message);
+      await _scanDialogWarning(message);
     }
   }
 
   void _scanDialogSuccess(String body) async {
     switch (await showDialog(
       context: context,
-      builder: (BuildContext context, {barrierDismissible: false}) {
-        return new AlertDialog(
+      builder: (BuildContext context, {barrierDismissible = false}) {
+        return AlertDialog(
           backgroundColor: pink,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -206,8 +202,8 @@ class _NewScannerState extends State<NewScanner>
   Future<bool> _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
-      builder: (BuildContext context, {barrierDismissible: false}) {
-        return new AlertDialog(
+      builder: (BuildContext context, {barrierDismissible = false}) {
+        return AlertDialog(
           backgroundColor: pink,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -259,65 +255,65 @@ class _NewScannerState extends State<NewScanner>
     var _storedEmail = await getEmail();
     var _authToken = await getAuthToken();
     var result;
-    print("***** Called `lcsHandle` with qr:" + userEmailOrId);
+    print('***** Called `lcsHandle` with qr:' + userEmailOrId);
     var user;
     var numUserScanned;
     try {
       if (userEmailOrId != null) {
-        String event = CardExpansion.event;
+        var event = CardExpansion.event;
         // HANDLE CHECK_IN EVENT, potentially link
-        if (event == "check-in" || event == "check-in-no-delayed") {
+        if (event == 'check-in' || event == 'check-in-no-delayed') {
           if (_isEmailAddress(userEmailOrId)) {
             user = await getUser(_authToken, _storedEmail, userEmailOrId);
-            if (event == "check-in-no-delayed") {
+            if (event == 'check-in-no-delayed') {
               if (user.isDelayedEntry()) {
                 if (!await _scanDialogWarning(
-                    "HACKER IS DELAYED ENTRY! SCAN ANYWAY?")) {
+                    'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
                   return NOT_SCANNED;
                 }
               }
-              event = "check-in";
+              event = 'check-in';
             }
-            NewScanner.userEmail = userEmailOrId;
+            Scanner.userEmail = userEmailOrId;
           }
 
           print('****** User: $user');
-          result = "EMAIL SCANNED!";
+          result = 'EMAIL SCANNED!';
         }
 
         // ATTEND THE EVENT
         try {
           numUserScanned = await attendEvent(
               BASE_URL, QRScanner.cred, userEmailOrId, event, false);
-          print("********** user event count: $numUserScanned");
-          result = "SCANNED!";
+          print('********** user event count: $numUserScanned');
+          result = 'SCANNED!';
         } on UserCheckedEvent {
-          print("already " + userEmailOrId);
-          if (await _scanDialogWarning("ALREADY SCANNED! RESCAN?")) {
+          print('already ' + userEmailOrId);
+          if (await _scanDialogWarning('ALREADY SCANNED! RESCAN?')) {
             numUserScanned = await attendEvent(
                 BASE_URL, QRScanner.cred, userEmailOrId, event, true);
-            print("********** user event count: $numUserScanned");
-            result = "SCANNED!";
+            print('********** user event count: $numUserScanned');
+            result = 'SCANNED!';
           } else {
             return NOT_SCANNED;
           }
-        } on UserNotFound catch (e) {
+        } on UserNotFound {
           print('h ' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
-            if (NewScanner.userEmail != '') {
+            if (Scanner.userEmail != '') {
               linkQR(
-                  BASE_URL, QRScanner.cred, NewScanner.userEmail, userEmailOrId);
-              print("**** Day-of QR linked!");
-              return "DAY-OF QR LINKED!";
+                  BASE_URL, QRScanner.cred, Scanner.userEmail, userEmailOrId);
+              print('**** Day-of QR linked!');
+              return 'DAY-OF QR LINKED!';
             } else {
-              _scanDialogWarning('Scan Email First!');
+              await _scanDialogWarning('Scan Email First!');
             }
           } else {
-            throw e;
+            rethrow;
           }
         }
       } else {
-        print("attempt to scan null");
+        print('attempt to scan null');
       }
     } on LcsLoginFailed {
       result = 'LCS LOGIN FAILED!';
@@ -330,7 +326,7 @@ class _NewScannerState extends State<NewScanner>
     } on LcsError {
       result = 'LCS ERROR';
     } on LabelPrintingError {
-      result = "ERROR PRINTING LABEL";
+      result = 'ERROR PRINTING LABEL';
     } on ArgumentError catch (e) {
       result = 'UNEXPECTED ERROR';
       print(result);
@@ -339,7 +335,7 @@ class _NewScannerState extends State<NewScanner>
       print(e.message);
       print(e.name);
     } on SocketException {
-      result = "NETWORK ERROR";
+      result = 'NETWORK ERROR';
     } catch (e) {
       result = 'UNEXPECTED ERROR';
       print(e);
@@ -348,7 +344,7 @@ class _NewScannerState extends State<NewScanner>
   }
 
   bool _isEmailAddress(String input) {
-    final matcher = new RegExp(
+    final matcher = RegExp(
       r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
     );
     return matcher.hasMatch(input);

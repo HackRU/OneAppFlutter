@@ -36,7 +36,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   ///===========================================================
   ///                      BOTTOM APP BAR
   ///===========================================================
-  BottomAppBar _buildBottomAppBar(BuildContext context){
+  BottomAppBar _buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
       shape: CircularNotchedRectangle(),
       elevation: 25.0,
@@ -47,7 +47,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Expanded(
             flex: 2,
             child: InkResponse(
-              onTap: (){ setState(() { _currentBottomNavItemIndex = 0; }); },
+              onTap: () {
+                setState(() {
+                  _currentBottomNavItemIndex = 0;
+                });
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: Column(
@@ -55,8 +59,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(Icons.home, size: 25.0, color: _currentBottomNavItemIndex == 0 ? white : charcoal_dark,),
-                    Text('Dashboard', style: TextStyle(fontSize: _currentBottomNavItemIndex == 0 ? 14.0 : 12.0, color: _currentBottomNavItemIndex == 0 ? white : charcoal_dark, fontWeight: FontWeight.w700,),),
+                    Icon(
+                      Icons.home,
+                      size: 25.0,
+                      color: _currentBottomNavItemIndex == 0
+                          ? white
+                          : charcoal_dark,
+                    ),
+                    Text(
+                      'Dashboard',
+                      style: TextStyle(
+                        fontSize: _currentBottomNavItemIndex == 0 ? 14.0 : 12.0,
+                        color: _currentBottomNavItemIndex == 0
+                            ? white
+                            : charcoal_dark,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -66,7 +85,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Expanded(
             flex: 2,
             child: InkResponse(
-              onTap: (){ setState(() { _currentBottomNavItemIndex = 1; }); },
+              onTap: () {
+                setState(() {
+                  _currentBottomNavItemIndex = 1;
+                });
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: Column(
@@ -74,8 +97,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(GroovinMaterialIcons.calendar_clock, size: 25.0, color: _currentBottomNavItemIndex == 1 ? white : charcoal_dark,),
-                    Text('Events', style: TextStyle(fontSize: _currentBottomNavItemIndex == 1 ? 14.0 : 12.0, color: _currentBottomNavItemIndex == 1 ? white : charcoal_dark, fontWeight: FontWeight.w700,),),
+                    Icon(
+                      GroovinMaterialIcons.calendar_clock,
+                      size: 25.0,
+                      color: _currentBottomNavItemIndex == 1
+                          ? white
+                          : charcoal_dark,
+                    ),
+                    Text(
+                      'Events',
+                      style: TextStyle(
+                        fontSize: _currentBottomNavItemIndex == 1 ? 14.0 : 12.0,
+                        color: _currentBottomNavItemIndex == 1
+                            ? white
+                            : charcoal_dark,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -94,7 +132,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     switch (await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return new SimpleDialog(
+        return SimpleDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(15.0),
@@ -125,7 +163,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           backgroundColor: white,
         );
       },
-    )) {}
+    )) {
+    }
   }
 
   ///===========================================================
@@ -143,10 +182,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         onPressed: () async {
           var loginResponse;
           var hasCred = await hasCredentials();
-          if(hasCred){
+          if (hasCred) {
             _showQrCode();
-          }
-          else{
+          } else {
             loginResponse = await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => LoginPage(),
@@ -154,15 +192,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ),
             );
           }
-          if(loginResponse != null && loginResponse != ''){
+          if (loginResponse != null && loginResponse != '') {
             _scaffoldKey.currentState
               ..removeCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                content: Text(loginResponse ?? ''),
-                backgroundColor: green,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(loginResponse ?? ''),
+                  backgroundColor: green,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
           }
         },
         child: Icon(
