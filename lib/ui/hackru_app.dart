@@ -4,7 +4,6 @@ import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/ui/pages/about_app/about.dart';
 import 'package:HackRU/ui/pages/help/help.dart';
 import 'package:HackRU/ui/pages/home.dart';
-import 'package:HackRU/ui/pages/floor_map/map.dart';
 import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -82,15 +81,15 @@ class _HackRUAppState extends State<HackRUApp> {
       Home(),
     ));
 
-    items.add(ScreenHiddenDrawer(
-      ItemHiddenMenu(
-        name: 'Map',
-        baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: yellow,
-        selectedStyle: _selectedDrawerItem,
-      ),
-      HackRUMap(),
-    ));
+    // items.add(ScreenHiddenDrawer(
+    //   ItemHiddenMenu(
+    //     name: 'Map',
+    //     baseStyle: _nonSelectedDrawerItem,
+    //     colorLineSelected: yellow,
+    //     selectedStyle: _selectedDrawerItem,
+    //   ),
+    //   HackRUMap(),
+    // ));
 
     items.add(ScreenHiddenDrawer(
       ItemHiddenMenu(
