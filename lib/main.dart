@@ -1,7 +1,6 @@
 import 'package:HackRU/defaults.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/hackru_app.dart';
-import 'package:HackRU/ui/pages/floor_map/map.dart';
 import 'package:HackRU/ui/pages/login/login_page.dart';
 import 'package:HackRU/ui/widgets/page_not_found.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,7 +34,7 @@ class MainApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/login': (BuildContext context) => LoginPage(),
         '/home': (BuildContext context) => HackRUApp(),
-        '/floorMap': (BuildContext context) => HackRUMap(),
+        // '/floorMap': (BuildContext context) => HackRUMap(),
       },
       onUnknownRoute: (RouteSettings setting) {
         var unknownRoute = setting.name;

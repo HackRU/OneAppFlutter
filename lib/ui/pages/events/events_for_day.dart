@@ -2,7 +2,6 @@ import 'package:HackRU/styles.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pinch_zoom_image_updated/pinch_zoom_image_updated.dart';
 
 class EventCard extends StatefulWidget {
   EventCard({@required this.resource, @required this.day});
@@ -77,12 +76,14 @@ class _EventCardState extends State<EventCard> {
                   left: 15.0,
                   bottom: 15.0,
                 ),
-                child: PinchZoomImage(
-                  image: Image.asset(
-                      'assets/map/' + widget.resource.location + '.png'),
-                  zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
-                  hideStatusBarWhileZooming: false,
-                ),
+                child: Image.asset(
+                    'assets/map/' + widget.resource.location + '.png'),
+                // child: PinchZoomImage(
+                //   image: Image.asset(
+                //       'assets/map/' + widget.resource.location + '.png'),
+                //   zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
+                //   hideStatusBarWhileZooming: false,
+                // ),
               ),
             ],
           ),
