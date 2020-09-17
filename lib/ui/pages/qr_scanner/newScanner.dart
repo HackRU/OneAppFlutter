@@ -11,6 +11,7 @@ import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 
 var popup = true;
 const NOT_SCANNED = 'NOT SCANNED';
