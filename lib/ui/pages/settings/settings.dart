@@ -7,6 +7,8 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  bool isDarkMode = false;
+  bool allowPushNotifications = false;
 
   @override
   void initState() {
@@ -24,9 +26,30 @@ class _SettingsState extends State<Settings> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      //TODO @Shambhavi Pls work on adding content to the list view
-      // Hint: https://api.flutter.dev/flutter/material/SwitchListTile-class.html
-      body: ListView(),
+      body: ListView(        scrollDirection: Axis.vertical,
+        padding: EdgeInsets.all(15.0),
+        children: <Widget>[
+          SwitchListTile(
+            title: Text('Dark Mode'),
+            secondary: Icon(Icons.lightbulb_outline, size: 30,),
+            value: isDarkMode,
+            onChanged: (value) {
+              setState(() {
+                isDarkMode = value;
+              });
+            }
+          ),
+          SwitchListTile(
+            title: Text('Push Notifications'),
+            secondary: Icon(Icons.notifications, size: 30,),
+            value: allowPushNotifications,
+            onChanged: (value) {
+              setState(() {
+                allowPushNotifications = value;
+              });
+            }
+          ),
+        ],),
     );
   }
 }
