@@ -36,6 +36,19 @@ Map<String, dynamic> _$HelpResourceToJson(HelpResource instance) =>
       'desc': instance.description,
     };
 
+Announcement _$AnnouncementFromJson(Map<String, dynamic> json) {
+  return Announcement(
+    text: json['text'] as String,
+    ts: json['ts'] as String,
+  );
+}
+
+Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
+    <String, dynamic>{
+      'text': instance.text,
+      'ts': instance.ts,
+    };
+
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     json['email'] as String,

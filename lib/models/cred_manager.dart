@@ -53,7 +53,7 @@ Future<void> persistSlackAnnouncements(List<Announcement> slacks) async {
 
   final prefs = await _prefs;
   var slacksMsgs = slacks.length > 1
-      ? '[' + slacks.map((slack) => slack.toString()).toList().join(',') + ']'
+      ? jsonEncode(slacks)
       : '[{"text": "Error: Unable to retrieve messages!", "ts": "$tsNow"}]';
   await prefs.setString('SLACK_ANNOUNCEMENTS', slacksMsgs);
   await Future.delayed(Duration(seconds: 1));

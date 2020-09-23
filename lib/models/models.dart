@@ -55,16 +55,16 @@ class HelpResource {
 ///
 /// @param text announcement description
 /// @param ts time stamp when an announcement was made
-
+@JsonSerializable(nullable: false)
 class Announcement {
   final String text;
   final String ts;
 
   Announcement({this.text, this.ts});
 
-  Announcement.fromJson(Map<String, dynamic> json)
-      : text = json['text'],
-        ts = json['ts'];
+  factory Announcement.fromJson(Map<String, dynamic> json) =>
+      _$AnnouncementFromJson(json);
+  Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
 }
 
 /// User Profile
