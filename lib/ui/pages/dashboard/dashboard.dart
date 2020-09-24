@@ -132,7 +132,7 @@ class DashboardState extends State<Dashboard> {
       },
     );
 
-    await _firebaseMessaging.subscribeToTopic('testTopic');
+    await _firebaseMessaging.subscribeToTopic('announcements');
   }
 
   void onPushNotificationClick(String title, String body) async {
