@@ -111,7 +111,7 @@ Future<List<Event>> dayofEventsResources() async {
   var response = await getLcs('/dayof-events');
   var resources = json.decode(response.body);
 //  print(resources);
-  if (resources['body'] == null) {
+  if (resources['body'] == null || (resources['body'] as List).isEmpty) {
     return [
       Event(
         summary: 'Coming Soon',
