@@ -7,6 +7,7 @@ import 'package:HackRU/styles.dart';
 import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/pages/dashboard/announcement_card.dart';
+import 'package:HackRU/ui/widgets/dialog/notification_onclick.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -139,81 +140,7 @@ class DashboardState extends State<Dashboard> {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0)),
-            backgroundColor: Colors.transparent,
-            child: Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    top: 86,
-                    bottom: 16,
-                    left: 16,
-                    right: 16,
-                  ),
-                  margin: EdgeInsets.only(top: 66),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(16),
-                    /*boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10.0,
-                        offset: const Offset(0.0, 10.0),
-                      ),
-                    ],*/
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        'Message: $body',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      SizedBox(height: 24.0),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: RaisedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          color: Theme.of(context).primaryColor,
-                          child: Text(
-                            'OK',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 16,
-                  right: 16,
-                  child: CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Image.asset('assets/hackru-logos/hackru_white.png',
-                          height: 100, width: 100),
-                      radius: 66),
-                )
-              ],
-            ),
-          );
+          return NotificationOnClickDialog(title: title, body: body,);
         });
   }
 

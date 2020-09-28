@@ -2,7 +2,7 @@ import 'package:HackRU/models/cred_manager.dart';
 import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/styles.dart';
 import 'package:HackRU/defaults.dart';
-import 'package:HackRU/ui/widgets/error_dialog.dart';
+import 'package:HackRU/ui/widgets/dialog/error_dialog.dart';
 import 'package:HackRU/ui/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../styles.dart';
+import '../../../styles.dart';
 
 class ErrorDialog extends StatelessWidget {
   final String body;
