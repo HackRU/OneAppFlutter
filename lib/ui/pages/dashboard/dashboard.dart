@@ -42,12 +42,12 @@ class DashboardState extends State<Dashboard> {
   void _requestIOSPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()
+            IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
   void _configureDidReceiveLocalNotificationSubject() {
@@ -108,7 +108,7 @@ class DashboardState extends State<Dashboard> {
             playSound: false,
             styleInformation: DefaultStyleInformation(true, true));
         var iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(presentSound: false);
+            IOSNotificationDetails(presentSound: false);
         var platformChannelSpecifics = NotificationDetails(
             androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
         await flutterLocalNotificationsPlugin.show(
@@ -139,23 +139,80 @@ class DashboardState extends State<Dashboard> {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('Message: $body'),
-                ],
-              ),
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 86,
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
+                  ),
+                  margin: EdgeInsets.only(top: 66),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10.0,
+                        offset: const Offset(0.0, 10.0),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        'Message: $body',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      SizedBox(height: 24.0),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: RaisedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            'OK',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 16,
+                  right: 16,
+                  child: CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: Image.asset('assets/hackru-logos/hackru_white.png',
+                          height: 100, width: 100),
+                      radius: 66),
+                )
+              ],
             ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
           );
         });
   }
