@@ -70,7 +70,7 @@ class _EventCardState extends State<EventCard> {
               ),
             ),
             children: <Widget>[
-              Container(
+              /*Container(
                 padding: EdgeInsets.only(
                   right: 15.0,
                   left: 15.0,
@@ -84,7 +84,7 @@ class _EventCardState extends State<EventCard> {
                 //   zoomedBackgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
                 //   hideStatusBarWhileZooming: false,
                 // ),
-              ),
+              ),*/
             ],
           ),
         ),

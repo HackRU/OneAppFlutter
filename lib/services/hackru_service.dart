@@ -116,7 +116,7 @@ Future<List<Event>> dayofEventsResources() async {
       Event(
         summary: 'Coming Soon',
         start: DateTime.now(),
-        location: 'hackru_logo',
+        //location: 'hackru_logo',
       )
     ];
   }
