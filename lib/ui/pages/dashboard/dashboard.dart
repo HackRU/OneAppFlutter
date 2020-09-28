@@ -157,13 +157,13 @@ class DashboardState extends State<Dashboard> {
                     color: Colors.white,
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
+                    /*boxShadow: [
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 10.0,
                         offset: const Offset(0.0, 10.0),
                       ),
-                    ],
+                    ],*/
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
