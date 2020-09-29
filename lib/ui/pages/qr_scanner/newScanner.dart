@@ -10,8 +10,8 @@ import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
+//import 'package:qr_code_scanner/qr_code_scanner.dart';
+//import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 
 var popup = true;
 const NOT_SCANNED = 'NOT SCANNED';
@@ -27,7 +27,7 @@ class Scanner extends StatefulWidget {
 class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   var qrText = '';
   var scanned = '';
-  QRViewController controller;
+  //QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   AnimationController _animationController;
   bool isPlaying = false;
@@ -41,7 +41,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.dispose();
+    //controller.dispose();
     super.dispose();
     _animationController.dispose();
   }
@@ -54,7 +54,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         children: <Widget>[
           Expanded(
             child: Center(
-              child: QRView(
+              child: /*QRView(
                 key: qrKey,
                 onQRViewCreated: _onQRViewCreated,
                 overlay: QrScannerOverlayShape(
@@ -64,7 +64,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                   borderWidth: 10,
                   cutOutSize: 300,
                 ),
-              ),
+              ),*/
+              Text("Temporarily Removed QR Scanner")
             ),
             flex: 5,
           ),
@@ -112,7 +113,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  /*void _onQRViewCreated(QRViewController controller) {
     var prevQR = 'xxx@xxx.com';
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
@@ -129,17 +130,17 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         }
       });
     });
-  }
+  }*/
 
   void _handleOnPressed() {
     setState(() {
       isPlaying = !isPlaying;
       if (isPlaying) {
         _animationController.forward();
-        controller?.pauseCamera();
+        //controller?.pauseCamera();
       } else {
         _animationController.reverse();
-        controller?.resumeCamera();
+        //controller?.resumeCamera();
       }
     });
   }
