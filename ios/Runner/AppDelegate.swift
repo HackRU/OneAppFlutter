@@ -1,9 +1,5 @@
 import UIKit
 import Flutter
-import Firebase
-import FirebaseFirestore
-import FirebaseMessaging
-import UserNotifications
 
 
 @UIApplicationMain
