@@ -1,14 +1,21 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:HackRU/models/cred_manager.dart';
 import 'package:HackRU/styles.dart';
 import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/pages/dashboard/announcement_card.dart';
+import 'package:HackRU/ui/widgets/dialog/notification_onclick.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:HackRU/main.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -18,6 +25,124 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   var _displayTimerBanner = true;
   static DateTime cacheTTL = DateTime.now();
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    setupPushNotifications();
+    _requestIOSPermissions();
+    _configureDidReceiveLocalNotificationSubject();
+    _configureSelectNotificationSubject();
+  }
+
+  /// ===========================================================
+  ///                     PUSH NOTIFICATIONS
+  /// ===========================================================
+
+  void _requestIOSPermissions() {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+  }
+
+  void _configureDidReceiveLocalNotificationSubject() {
+    didReceiveLocalNotificationSubject.stream
+        .listen((ReceivedNotification receivedNotification) async {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: receivedNotification.title != null
+              ? Text(receivedNotification.title)
+              : null,
+          content: receivedNotification.body != null
+              ? Text(receivedNotification.body)
+              : null,
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text('Ok'),
+              onPressed: () async {
+                print('Not implemented Yet');
+              },
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationSubject.stream.listen((String payload) async {
+      print('Payload: $payload');
+      Map<String, dynamic> message = json.decode(payload);
+      String title = message['data']['title'];
+      String body = message['data']['body'];
+      onPushNotificationClick(title, body);
+    });
+  }
+
+  void setupPushNotifications() async {
+    if (Platform.isIOS) {
+      _firebaseMessaging.requestNotificationPermissions(
+          IosNotificationSettings(sound: true, badge: true, alert: true));
+      _firebaseMessaging.onIosSettingsRegistered
+          .listen((IosNotificationSettings settings) {
+        print('Settings registered: $settings');
+      });
+    }
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+
+        //TODO Configure notification channel
+        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+            'silent channel id',
+            'silent channel name',
+            'silent channel description',
+            playSound: false,
+            styleInformation: DefaultStyleInformation(true, true));
+        var iOSPlatformChannelSpecifics =
+            IOSNotificationDetails(presentSound: false);
+        var platformChannelSpecifics = NotificationDetails(
+            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        await flutterLocalNotificationsPlugin.show(
+            0,
+            message['notification']['title'],
+            message['notification']['body'],
+            platformChannelSpecifics,
+            payload: json.encode(message));
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+        String title = message['data']['title'];
+        String body = message['data']['body'];
+        onPushNotificationClick(title, body);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+        String title = message['data']['title'];
+        String body = message['data']['body'];
+        onPushNotificationClick(title, body);
+      },
+    );
+
+    await _firebaseMessaging.subscribeToTopic('announcements');
+  }
+
+  void onPushNotificationClick(String title, String body) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return NotificationOnClickDialog(title: title, body: body,);
+        });
+  }
 
   /// =================================================
   ///                SHOW TIMER BANNER

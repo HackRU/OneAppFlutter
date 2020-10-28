@@ -16,8 +16,8 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   groovin_material_icons: ^1.1.6
   hidden_drawer_menu: ^2.0.1
-  qr_flutter: ^3.2.0
-  qr_code_scanner: ^0.0.12
+  #qr_flutter: ^3.2.0
+  #qr_code_scanner: ^0.0.12
   http: ^0.12.2
   url_launcher: ^5.4.2
   rubber: ^0.4.0
@@ -33,7 +33,9 @@ dependencies:
   json_annotation: ^3.0.1
   provider: ^4.3.1
   shared_preferences: ^0.5.8
-  # firebase_messaging: ^6.0.16
+  flutter_local_notifications: ^1.4.4+4
+  rxdart: ^0.24.1
+  firebase_messaging: ^7.0.0
 #  dart_lcs_client: ^0.0.3
 
 dev_dependencies:

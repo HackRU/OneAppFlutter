@@ -6,7 +6,7 @@ import 'package:HackRU/ui/pages/login/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+//import 'package:qr_flutter/qr_flutter.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
@@ -128,7 +128,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   ///                      SHOW QR-CODE
   ///===========================================================
   void _showQrCode() async {
-    var userEmail = await getEmail();
+    /*var userEmail = await getEmail();
     switch (await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -164,7 +164,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         );
       },
     )) {
-    }
+    }*/
   }
 
   ///===========================================================
