@@ -175,7 +175,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomPadding: false,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: _kBottomNavPages[_currentBottomNavItemIndex],
       floatingActionButton: FloatingActionButton(
