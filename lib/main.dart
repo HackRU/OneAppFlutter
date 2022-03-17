@@ -3,7 +3,6 @@ import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/hackru_app.dart';
 import 'package:HackRU/ui/pages/login/login_page.dart';
 import 'package:HackRU/ui/widgets/page_not_found.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -12,44 +11,44 @@ import 'package:rxdart/rxdart.dart';
 import 'styles.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-BehaviorSubject<ReceivedNotification>();
+    BehaviorSubject<ReceivedNotification>();
 
 final BehaviorSubject<String> selectNotificationSubject =
-BehaviorSubject<String>();
+    BehaviorSubject<String>();
 
-NotificationAppLaunchDetails notificationAppLaunchDetails;
+NotificationAppLaunchDetails? notificationAppLaunchDetails;
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  notificationAppLaunchDetails = await flutterLocalNotificationsPlugin
-      .getNotificationAppLaunchDetails();
+  // notificationAppLaunchDetails = await flutterLocalNotificationsPlugin
+  //     .getNotificationAppLaunchDetails();
 
-  var initializationSettingsAndroid =
-  AndroidInitializationSettings('app_icon_transparent');
+  // var initializationSettingsAndroid =
+  // AndroidInitializationSettings('app_icon_transparent');
 
-  var initializationSettingsIOS = IOSInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-      onDidReceiveLocalNotification:
-          (int id, String title, String body, String payload) async {
-        didReceiveLocalNotificationSubject.add(ReceivedNotification(
-            id: id, title: title, body: body, payload: payload));
-      });
+  // var initializationSettingsIOS = IOSInitializationSettings(
+  //     requestAlertPermission: false,
+  //     requestBadgePermission: false,
+  //     requestSoundPermission: false,
+  //     onDidReceiveLocalNotification:
+  //         (int id, String title, String body, String payload) async {
+  //       didReceiveLocalNotificationSubject.add(ReceivedNotification(
+  //           id: id, title: title, body: body, payload: payload));
+  //     });
 
-  var initializationSettings = InitializationSettings(
-      initializationSettingsAndroid, initializationSettingsIOS);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
-        if (payload != null) {
-          debugPrint('notification payload: ' + payload);
-        }
-        selectNotificationSubject.add(payload);
-      });
+  // var initializationSettings = InitializationSettings(
+  //     initializationSettingsAndroid, initializationSettingsIOS);
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  //     onSelectNotification: (String payload) async {
+  //       if (payload != null) {
+  //         debugPrint('notification payload: ' + payload);
+  //       }
+  //       selectNotificationSubject.add(payload);
+  //     });
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.white,
@@ -65,10 +64,10 @@ void main() async{
 /// =======================================================
 
 class ReceivedNotification {
-  final int id;
-  final String title;
-  final String body;
-  final String payload;
+  final int? id;
+  final String? title;
+  final String? body;
+  final String? payload;
 
   ReceivedNotification({
     @required this.id,
@@ -79,8 +78,8 @@ class ReceivedNotification {
 }
 
 class MainApp extends StatelessWidget {
-  final LcsCredential lcsCredential;
-  const MainApp({Key key, this.lcsCredential}) : super(key: key);
+  final LcsCredential? lcsCredential;
+  const MainApp({Key? key, this.lcsCredential}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

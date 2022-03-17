@@ -13,17 +13,19 @@ final kHeader = {'Content-Type': 'application/json'};
 ///========================================================
 
 Future<http.Response> getMisc(String endpoint) {
-  return client.get(MISC_URL + endpoint);
+  return client.get(Uri.parse(MISC_URL + endpoint));
 }
 
 Future<http.Response> getLcs(String endpoint) {
-  return client.get(BASE_URL + endpoint).timeout(const Duration(seconds: 10));
+  return client
+      .get(Uri.parse(BASE_URL + endpoint))
+      .timeout(const Duration(seconds: 10));
 }
 
 Future<http.Response> postLcs(String endpoint, dynamic kBody) async {
   var encodedBody = jsonEncode(kBody);
   var result = await client
-      .post(BASE_URL + endpoint, headers: kHeader, body: encodedBody)
+      .post(Uri.parse(BASE_URL + endpoint), headers: kHeader, body: encodedBody)
       .timeout(const Duration(seconds: 10));
 
   var decoded = jsonDecode(result.body);

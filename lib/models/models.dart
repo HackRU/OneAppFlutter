@@ -10,7 +10,7 @@ part 'models.g.dart';
 /// @param token authentication token
 /// @param time auth token expire time
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class LcsCredential {
   final String email;
   final String token;
@@ -57,8 +57,8 @@ class HelpResource {
 /// @param ts time stamp when an announcement was made
 @JsonSerializable(nullable: false)
 class Announcement {
-  final String text;
-  final String ts;
+  final String? text;
+  final String? ts;
 
   Announcement({this.text, this.ts});
 
@@ -119,7 +119,7 @@ class User {
 
   final Map<String, dynamic> dayOf;
 
-  List<Auth> auth;
+  List<Auth>? auth;
 
   User(
       this.email,
@@ -193,8 +193,8 @@ class Auth {
 /// @param error handle lcs errors
 
 class LcsError implements Exception {
-  String lcsError;
-  int code;
+  String? lcsError;
+  int? code;
   LcsError(http.Response res) {
     code = res.statusCode;
     if (res.statusCode >= 500) {
@@ -217,9 +217,9 @@ class LcsError implements Exception {
 /// @param start event time
 
 class Event {
-  final String summary;
+  final String? summary;
   //final String location;
-  final DateTime start;
+  final DateTime? start;
 
   Event({this.summary, /*this.location,*/ this.start});
 

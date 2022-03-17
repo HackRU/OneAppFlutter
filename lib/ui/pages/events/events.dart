@@ -5,7 +5,6 @@ import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/pages/events/events_for_day.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Events extends StatefulWidget {
@@ -14,7 +13,7 @@ class Events extends StatefulWidget {
 }
 
 class EventsState extends State<Events> with SingleTickerProviderStateMixin {
-  TabController controller;
+  TabController? controller;
 
   @override
   void initState() {
@@ -24,7 +23,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -57,12 +56,12 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
     return TabBarView(children: tabs, controller: controller);
   }
 
-  static List<Event> cachedEvents;
+  static List<Event>? cachedEvents;
   static DateTime cacheTTL = DateTime.now();
   Stream<List<Event>> _getEvents() {
     var streamctl = StreamController<List<Event>>();
     if (cachedEvents != null) {
-      streamctl.sink.add(cachedEvents);
+      streamctl.sink.add(cachedEvents!);
     }
     if (cacheTTL.isBefore(DateTime.now())) {
       print('cache miss');

@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class LoginForm extends StatefulWidget {
   static bool gotCred = false;
-  const LoginForm({Key key}) : super(key: key);
+  const LoginForm({Key? key}) : super(key: key);
 
   @override
   LoginFormState createState() => LoginFormState();
@@ -75,26 +75,24 @@ class LoginFormState extends State<LoginForm> {
             setState(() {
               _isLoginPressed = false;
             });
-            _scaffoldKey.currentState
-              ..removeCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text('Error: Incorrect email or password!'),
-                  backgroundColor: Colors.red,
-                ),
-              );
+            ScaffoldMessengerState().clearSnackBars();
+            ScaffoldMessengerState().showSnackBar(
+              SnackBar(
+                content: Text('Error: Incorrect email or password!'),
+                backgroundColor: Colors.red,
+              ),
+            );
           }
         } catch (error) {
           setState(() {
             _isLoginPressed = false;
           });
-          _scaffoldKey.currentState
-            ..removeCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(error ?? ''),
-              ),
-            );
+          ScaffoldMessengerState().clearSnackBars();
+          ScaffoldMessengerState().showSnackBar(
+            SnackBar(
+              content: Text(error.toString()),
+            ),
+          );
         }
       }
     }
@@ -199,17 +197,24 @@ class LoginFormState extends State<LoginForm> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 40.0, horizontal: 10.0),
-                    child: RaisedButton(
-                      elevation: 1.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(1.0),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 50.0,
+                          ),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor,
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 50.0,
-                      ),
-                      splashColor: Theme.of(context).backgroundColor,
-                      color: Theme.of(context).primaryColor,
                       child: Text(
                         'Login',
                         style: TextStyle(

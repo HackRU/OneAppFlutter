@@ -9,7 +9,8 @@ import 'package:HackRU/models/exceptions.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 //import 'package:qr_code_scanner/qr_code_scanner.dart';
 //import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 
@@ -17,8 +18,10 @@ var popup = true;
 const NOT_SCANNED = 'NOT SCANNED';
 
 class Scanner extends StatefulWidget {
-  const Scanner({Key key}) : super(key: key);
-  static String userEmail;
+  const Scanner({
+    Key? key,
+  }) : super(key: key);
+  static String? userEmail;
 
   @override
   State<StatefulWidget> createState() => _ScannerState();
@@ -29,7 +32,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   var scanned = '';
   //QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  AnimationController _animationController;
+  AnimationController? _animationController;
   bool isPlaying = false;
 
   @override
@@ -43,7 +46,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   void dispose() {
     //controller.dispose();
     super.dispose();
-    _animationController.dispose();
+    _animationController?.dispose();
   }
 
   @override
@@ -53,8 +56,9 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       body: Column(
         children: <Widget>[
           Expanded(
+            flex: 5,
             child: Center(
-              child: /*QRView(
+                child: /*QRView(
                 key: qrKey,
                 onQRViewCreated: _onQRViewCreated,
                 overlay: QrScannerOverlayShape(
@@ -65,18 +69,17 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                   cutOutSize: 300,
                 ),
               ),*/
-              Text("Temporarily Removed QR Scanner")
-            ),
-            flex: 5,
+                    Text('Temporarily Removed QR Scanner')),
           ),
           Flexible(
+            flex: 1,
             child: FittedBox(
               fit: BoxFit.contain,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text(
-                    CardExpansion.event,
+                    CardExpansion.event!,
                     style: TextStyle(
                       fontSize: 14.0,
                       color: white,
@@ -96,8 +99,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                       iconSize: 80,
                       icon: Icon(
                         isPlaying
-                            ? GroovinMaterialIcons.play_circle
-                            : GroovinMaterialIcons.pause_circle,
+                            ? FontAwesomeIcons.playCircle
+                            : FontAwesomeIcons.pauseCircle,
                         color: isPlaying ? yellow : pink_light,
                       ),
                       onPressed: () => _handleOnPressed(),
@@ -106,7 +109,6 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                 ],
               ),
             ),
-            flex: 1,
           )
         ],
       ),
@@ -136,10 +138,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     setState(() {
       isPlaying = !isPlaying;
       if (isPlaying) {
-        _animationController.forward();
+        _animationController?.forward();
         //controller?.pauseCamera();
       } else {
-        _animationController.reverse();
+        _animationController?.reverse();
         //controller?.resumeCamera();
       }
     });
@@ -201,7 +203,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future<bool> _scanDialogWarning(String body) async {
+  Future<Future> _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
       builder: (BuildContext context, {barrierDismissible = false}) {
@@ -219,15 +221,20 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               style: TextStyle(fontSize: 25, color: off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
-            FlatButton(
-              child: Text('CANCEL',
-                  style: TextStyle(fontSize: 20, color: pink_dark),
-                  textAlign: TextAlign.center),
-              padding: const EdgeInsets.all(15.0),
-              splashColor: off_white,
+            TextButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.all(15.0),
+                ),
+              ),
               onPressed: () {
                 Navigator.pop(context, false);
               },
+              child: Text(
+                'CANCEL',
+                style: TextStyle(fontSize: 20, color: pink_dark),
+                textAlign: TextAlign.center,
+              ),
             ),
             MaterialButton(
               shape: RoundedRectangleBorder(
@@ -243,7 +250,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               child: const Text(
                 'OK',
                 style: TextStyle(
-                    fontSize: 20, color: pink, fontWeight: FontWeight.w500),
+                  fontSize: 20,
+                  color: pink,
+                  fontWeight: FontWeight.w500,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -266,13 +276,15 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         // HANDLE CHECK_IN EVENT, potentially link
         if (event == 'check-in' || event == 'check-in-no-delayed') {
           if (_isEmailAddress(userEmailOrId)) {
-            user = await getUser(_authToken, _storedEmail, userEmailOrId);
+            user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
             if (event == 'check-in-no-delayed') {
               if (user.isDelayedEntry()) {
-                if (!await _scanDialogWarning(
-                    'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
-                  return NOT_SCANNED;
-                }
+                return NOT_SCANNED;
+                // *** TODO: FIX THIS LOGIC
+                // if (_scanDialogWarning(
+                //     'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
+                //   return NOT_SCANNED;
+                // }
               }
               event = 'check-in';
             }
@@ -286,29 +298,41 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         // ATTEND THE EVENT
         try {
           numUserScanned = await attendEvent(
-              BASE_URL, QRScanner.cred, userEmailOrId, event, false);
+            BASE_URL,
+            QRScanner.cred!,
+            userEmailOrId,
+            event!,
+            false,
+          );
           print('********** user event count: $numUserScanned');
           result = 'SCANNED!';
         } on UserCheckedEvent {
           print('already ' + userEmailOrId);
-          if (await _scanDialogWarning('ALREADY SCANNED! RESCAN?')) {
-            numUserScanned = await attendEvent(
-                BASE_URL, QRScanner.cred, userEmailOrId, event, true);
-            print('********** user event count: $numUserScanned');
-            result = 'SCANNED!';
-          } else {
-            return NOT_SCANNED;
-          }
+          //** TODO: FIX THIS LOGIC AS WELL */
+          // if (await _scanDialogWarning('ALREADY SCANNED! RESCAN?')) {
+          //   numUserScanned = await attendEvent(
+          //       BASE_URL, QRScanner.cred, userEmailOrId, event, true);
+          //   print('********** user event count: $numUserScanned');
+          //   result = 'SCANNED!';
+          // }
+          // else {
+          //   return NOT_SCANNED;
+          // }
         } on UserNotFound {
           print('h ' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
             if (Scanner.userEmail != '') {
               linkQR(
-                  BASE_URL, QRScanner.cred, Scanner.userEmail, userEmailOrId);
+                BASE_URL,
+                QRScanner.cred!,
+                Scanner.userEmail!,
+                userEmailOrId,
+              );
               print('**** Day-of QR linked!');
               return 'DAY-OF QR LINKED!';
             } else {
-              await _scanDialogWarning('Scan Email First!');
+              // *** TODO: also fix this, looks weird
+              await await _scanDialogWarning('Scan Email First!');
             }
           } else {
             rethrow;

@@ -1,12 +1,11 @@
 import 'package:HackRU/styles.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PageNotFound extends StatefulWidget {
-  PageNotFound({Key key, this.title}) : super(key: key);
+  PageNotFound({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _PageNotFoundState createState() => _PageNotFoundState();

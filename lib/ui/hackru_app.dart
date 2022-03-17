@@ -7,14 +7,15 @@ import 'package:HackRU/ui/pages/home.dart';
 import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:HackRU/ui/widgets/custom_hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 
 import '../styles.dart';
 
 class HackRUApp extends StatefulWidget {
-  HackRUApp({Key key}) : super(key: key);
+  HackRUApp({Key? key}) : super(key: key);
 
   @override
   _HackRUAppState createState() => _HackRUAppState();
@@ -23,7 +24,7 @@ class HackRUApp extends StatefulWidget {
 class _HackRUAppState extends State<HackRUApp> {
   List<ScreenHiddenDrawer> items = [];
   bool _hasAuthToken = false;
-  User user;
+  User? user;
 
   final _selectedDrawerItem =
       TextStyle(color: pink, fontWeight: FontWeight.w700);
@@ -57,7 +58,7 @@ class _HackRUAppState extends State<HackRUApp> {
   void _getUserProfile() async {
     var _storedEmail = await getEmail();
     var _authToken = await getAuthToken();
-    var userProfile = await getUser(_authToken, _storedEmail);
+    var userProfile = await getUser(_authToken!, _storedEmail!);
     print('====== Email: ${userProfile.email} ======');
     if (userProfile != null) {
       setState(() {
@@ -173,7 +174,7 @@ class _HackRUAppState extends State<HackRUApp> {
         _hasAuthToken
             ? IconButton(
                 icon: Icon(
-                  GroovinMaterialIcons.logout,
+                  FontAwesomeIcons.signOutAlt,
                   color: Theme.of(context).primaryColor,
                 ),
                 color: transparent,

@@ -3,14 +3,13 @@ import 'package:HackRU/styles.dart';
 import 'package:HackRU/ui/pages/dashboard/dashboard.dart';
 import 'package:HackRU/ui/pages/events/events.dart';
 import 'package:HackRU/ui/pages/login/login_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:qr_flutter/qr_flutter.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
-  static String userEmail;
+  static String? userEmail;
 
   @override
   _HomeState createState() => _HomeState();
@@ -98,7 +97,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(
-                      GroovinMaterialIcons.calendar_clock,
+                      FontAwesomeIcons.calendarAlt,
                       size: 25.0,
                       color: _currentBottomNavItemIndex == 1
                           ? white
@@ -192,27 +191,26 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             );
           }
           if (loginResponse != null && loginResponse != '') {
-            _scaffoldKey.currentState
-              ..removeCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text(loginResponse ?? ''),
-                  backgroundColor: green,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+            ScaffoldMessengerState().clearSnackBars();
+            ScaffoldMessengerState().showSnackBar(
+              SnackBar(
+                content: Text(loginResponse ?? ''),
+                backgroundColor: green,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           }
         },
-        child: Icon(
-          GroovinMaterialIcons.qrcode,
-          size: 34,
-        ),
         tooltip: 'QR Code',
         elevation: 4.0,
         splashColor: white,
         isExtended: false,
         foregroundColor: black,
         backgroundColor: Theme.of(context).accentColor,
+        child: Icon(
+          FontAwesomeIcons.qrcode,
+          size: 34,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _buildBottomAppBar(context),

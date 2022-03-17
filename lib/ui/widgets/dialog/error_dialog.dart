@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../styles.dart';
 
 class ErrorDialog extends StatelessWidget {
-  final String body;
+  final String? body;
 
-  const ErrorDialog({Key key, this.body}) : super(key: key);
+  const ErrorDialog({Key? key, this.body}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class ErrorDialog extends StatelessWidget {
         size: 80.0,
       ),
       content: Text(
-        body,
+        body!,
         style: TextStyle(
           fontSize: 18,
           color: pink,

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EventCard extends StatefulWidget {
-  EventCard({@required this.resource, @required this.day});
+  EventCard({required this.resource, required this.day});
   final Event resource;
   final String day;
 
@@ -18,8 +18,8 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     var _brightnessValue = MediaQuery.of(context).platformBrightness;
-    var time = DateFormat('hh:mm a').format(widget.resource.start.toLocal());
-    var date = DateFormat.d().format(widget.resource.start.toLocal());
+    var time = DateFormat('hh:mm a').format(widget.resource.start!.toLocal());
+    var date = DateFormat.d().format(widget.resource.start!.toLocal());
     var today = DateTime.now().day.toString();
     if (date == widget.day || date == today) {
       return Container(
@@ -58,7 +58,7 @@ class _EventCardState extends State<EventCard> {
               size: 35.0,
             ),
             title: Text(
-              widget?.resource?.summary ?? '',
+              widget.resource.summary ?? '',
               style: TextStyle(
                 color: isExpanded
                     ? white
@@ -95,10 +95,10 @@ class _EventCardState extends State<EventCard> {
 }
 
 class EventsForDay extends StatelessWidget {
-  final String day;
-  final List<Event> events;
+  final String? day;
+  final List<Event>? events;
   EventsForDay({
-    Key key,
+    Key? key,
     @required this.day,
     @required this.events,
   }) : super(key: key);
@@ -110,11 +110,11 @@ class EventsForDay extends StatelessWidget {
       body: Container(
         child: ListView.builder(
           padding: EdgeInsets.all(15.0),
-          itemCount: events == null ? 1 : events.length,
+          itemCount: events == null ? 1 : events?.length,
           itemBuilder: (BuildContext context, int index) {
             return EventCard(
-              resource: events[index],
-              day: day,
+              resource: events![index],
+              day: day!,
             );
           },
         ),

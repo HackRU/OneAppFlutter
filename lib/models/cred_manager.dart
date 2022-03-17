@@ -30,7 +30,7 @@ Future<bool> hasCredentials() async {
   return false;
 }
 
-Future<String> getAuthToken() async {
+Future<String?> getAuthToken() async {
   final prefs = await _prefs;
   if (prefs.containsKey('AUTH_TOKEN')) {
     return prefs.getString('AUTH_TOKEN');
@@ -39,7 +39,7 @@ Future<String> getAuthToken() async {
   return '';
 }
 
-Future<String> getEmail() async {
+Future<String?> getEmail() async {
   final prefs = await _prefs;
   if (prefs.containsKey('EMAIL')) {
     return prefs.getString('EMAIL');
@@ -59,10 +59,10 @@ Future<void> persistSlackAnnouncements(List<Announcement> slacks) async {
   await Future.delayed(Duration(seconds: 1));
 }
 
-Future<List<Announcement>> getSlackAnnouncements() async {
+Future<List<Announcement>?> getSlackAnnouncements() async {
   final prefs = await _prefs;
   if (prefs.containsKey('SLACK_ANNOUNCEMENTS')) {
-    var decoded = json.decode(prefs.getString('SLACK_ANNOUNCEMENTS'));
+    var decoded = json.decode(prefs.getString('SLACK_ANNOUNCEMENTS')!);
     return decoded
         .map<Announcement>((slack) => Announcement.fromJson(slack))
         .toList();

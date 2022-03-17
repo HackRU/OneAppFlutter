@@ -37,9 +37,9 @@ class Help extends StatelessWidget {
 //              print(resources);
               return Container(
                 child: ListView.builder(
-                  itemCount: resources.length,
+                  itemCount: resources?.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return HelpButton(resource: resources[index]);
+                    return HelpButton(resource: resources![index]);
                   },
                 ),
               );
@@ -51,7 +51,7 @@ class Help extends StatelessWidget {
 }
 
 class HelpButton extends StatelessWidget {
-  HelpButton({@required this.resource});
+  HelpButton({required this.resource});
   final HelpResource resource;
 
   void _open() async {

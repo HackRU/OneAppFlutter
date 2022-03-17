@@ -2,7 +2,7 @@ import 'package:HackRU/styles.dart';
 import 'package:HackRU/defaults.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
+
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class About extends StatelessWidget {
@@ -73,7 +73,7 @@ class About extends StatelessWidget {
               children: <Widget>[
                 SocialMediaCard(
                   onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
-                  iconData: GroovinMaterialIcons.web,
+                  iconData: FontAwesomeIcons.link,
                 ),
                 SocialMediaCard(
                   onPressed: () => url_launcher.launch(REPOSITORY_URL),
@@ -97,9 +97,9 @@ class About extends StatelessWidget {
 }
 
 class SocialMediaCard extends StatelessWidget {
-  final VoidCallback onPressed;
-  final IconData iconData;
-  const SocialMediaCard({Key key, this.onPressed, this.iconData})
+  final VoidCallback? onPressed;
+  final IconData? iconData;
+  const SocialMediaCard({Key? key, this.onPressed, this.iconData})
       : super(key: key);
 
   @override

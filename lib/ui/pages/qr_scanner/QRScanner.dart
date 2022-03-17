@@ -4,18 +4,14 @@ import 'package:HackRU/services/hackru_service.dart';
 import 'package:HackRU/models/models.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:meta/meta.dart';
-
 import '../../../defaults.dart';
 import 'newScanner.dart';
 
 const NOT_SCANNED = 'NOT SCANNED';
 
 class QRScanner extends StatefulWidget {
-  static LcsCredential cred;
-  static String userEmail, userPassword;
+  static LcsCredential? cred;
+  static String? userEmail, userPassword;
 
   @override
   _QRScannerState createState() => _QRScannerState();
@@ -75,7 +71,7 @@ class _QRScannerState extends State<QRScanner> {
                 tooltip: 'QRCode Reader',
                 icon: Center(
                   child: Icon(
-                    GroovinMaterialIcons.qrcode_scan,
+                    Icons.qr_code_scanner,
                     color: charcoal_dark,
                     semanticLabel: 'QR Scanner Icon',
                   ),
@@ -98,10 +94,10 @@ class _QRScannerState extends State<QRScanner> {
 }
 
 class CardExpansion extends StatefulWidget {
-  CardExpansion({@required this.events});
+  CardExpansion({required this.events});
   static const String routeName = '/material/expansion_panels';
   final List events;
-  static String event;
+  static String? event;
 
   @override
   _CardExpansionState createState() => _CardExpansionState();
@@ -134,8 +130,8 @@ class _CardExpansionState extends State<CardExpansion> {
                     setState(() => isExpanded = expanding),
                 trailing: Icon(
                   isExpanded
-                      ? GroovinMaterialIcons.chevron_up
-                      : GroovinMaterialIcons.chevron_down,
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                   color: isExpanded ? grey : pink_dark,
                   size: 28.0,
                 ),
@@ -182,7 +178,7 @@ class _CardExpansionState extends State<CardExpansion> {
                               _selectedEvent = widget.events[index];
                               CardExpansion.event = _selectedEvent;
                             });
-                            expansionTileKey.currentState.collapse();
+                            expansionTileKey.currentState?.collapse();
                           },
                         );
                       },
