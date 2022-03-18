@@ -32,7 +32,7 @@ class _QRScannerState extends State<QRScanner> {
             case ConnectionState.waiting:
               return Center(
                 child: Container(
-                  color: transparent,
+                  color: HackRUColors.transparent,
                   height: 400.0,
                   width: 400.0,
                   child: FlareActor(
@@ -59,8 +59,8 @@ class _QRScannerState extends State<QRScanner> {
         child: _isVisible == false
             ? null
             : FloatingActionButton.extended(
-                backgroundColor: yellow,
-                splashColor: pink,
+                backgroundColor: HackRUColors.yellow,
+                splashColor: HackRUColors.pink,
                 onPressed: () async {
                   await Navigator.of(context).push(
                     MaterialPageRoute(
@@ -72,7 +72,7 @@ class _QRScannerState extends State<QRScanner> {
                 icon: Center(
                   child: Icon(
                     Icons.qr_code_scanner,
-                    color: charcoal_dark,
+                    color: HackRUColors.charcoal_dark,
                     semanticLabel: 'QR Scanner Icon',
                   ),
                 ),
@@ -80,7 +80,7 @@ class _QRScannerState extends State<QRScanner> {
                   'Scan QR Codes',
                   style: TextStyle(
                     fontSize: 18.0,
-                    color: charcoal_dark,
+                    color: HackRUColors.charcoal_dark,
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
@@ -132,13 +132,15 @@ class _CardExpansionState extends State<CardExpansion> {
                   isExpanded
                       ? Icons.keyboard_arrow_up
                       : Icons.keyboard_arrow_down,
-                  color: isExpanded ? grey : pink_dark,
+                  color:
+                      isExpanded ? HackRUColors.grey : HackRUColors.pink_dark,
                   size: 28.0,
                 ),
                 title: Text(
                   _selectedEvent,
                   style: TextStyle(
-                    color: isExpanded ? white : charcoal,
+                    color:
+                        isExpanded ? HackRUColors.white : HackRUColors.charcoal,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
                   ),
@@ -148,7 +150,8 @@ class _CardExpansionState extends State<CardExpansion> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
-                    color: isExpanded ? white : charcoal,
+                    color:
+                        isExpanded ? HackRUColors.white : HackRUColors.charcoal,
                   ),
                 ),
                 children: <Widget>[
@@ -165,7 +168,7 @@ class _CardExpansionState extends State<CardExpansion> {
                             widget.events[index],
                             style: TextStyle(
                               color: isExpanded
-                                  ? charcoal
+                                  ? HackRUColors.charcoal
                                   : Theme.of(context).primaryColor,
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,

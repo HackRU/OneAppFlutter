@@ -15,7 +15,7 @@ class _PageNotFoundState extends State<PageNotFound> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: off_white,
+      backgroundColor: HackRUColors.off_white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -27,7 +27,9 @@ class _PageNotFoundState extends State<PageNotFound> {
               child: Text(
                 '404! \n Page not found!',
                 style: TextStyle(
-                    fontSize: 25.0, color: pink, fontWeight: FontWeight.w700),
+                    fontSize: 25.0,
+                    color: HackRUColors.pink,
+                    fontWeight: FontWeight.w700),
                 textAlign: TextAlign.center,
               ),
             ),

@@ -71,23 +71,31 @@ class StringParser extends StatelessWidget {
 
     final _style = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.w700,
     );
     final _boldStyle = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.bold,
     );
     final _italicsStyle = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic,
     );
     final _strikeThroughStyle = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.w400,
       decoration: TextDecoration.lineThrough,
     );
@@ -100,7 +108,9 @@ class StringParser extends StatelessWidget {
         var eWord = word.replaceAll(RegExp(r'[<>]'), '');
         span.add(LinkTextSpan(
           style: _style.copyWith(
-            color: _brightnessValue == Brightness.light ? pink : yellow,
+            color: _brightnessValue == Brightness.light
+                ? HackRUColors.pink
+                : HackRUColors.yellow,
             fontWeight: FontWeight.w700,
             decoration: TextDecoration.underline,
           ),
@@ -142,7 +152,9 @@ class StringParser extends StatelessWidget {
         text!,
         style: TextStyle(
           fontSize: 15.0,
-          color: _brightnessValue == Brightness.light ? pink_dark : yellow,
+          color: _brightnessValue == Brightness.light
+              ? HackRUColors.pink_dark
+              : HackRUColors.yellow,
         ),
       );
     }

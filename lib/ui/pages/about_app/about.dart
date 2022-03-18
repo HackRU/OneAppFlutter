@@ -116,7 +116,7 @@ class SocialMediaCard extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Icon(
             iconData,
-            color: black,
+            color: HackRUColors.black,
             size: 30.0,
           ),
         ),

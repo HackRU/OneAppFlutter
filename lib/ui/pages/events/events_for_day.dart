@@ -35,13 +35,13 @@ class _EventCardState extends State<EventCard> {
             onExpansionChanged: (bool expanding) =>
                 setState(() => isExpanded = expanding),
             leading: Text(
-              time ?? '',
+              time,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: isExpanded
                     ? (_brightnessValue == Brightness.light
                         ? Colors.yellow.shade500
-                        : charcoal_dark)
+                        : HackRUColors.charcoal_dark)
                     : Theme.of(context).primaryColor,
                 textBaseline: TextBaseline.alphabetic,
                 fontSize: 20.0,
@@ -51,20 +51,20 @@ class _EventCardState extends State<EventCard> {
             trailing: Icon(
               isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
               color: isExpanded
-                  ? white
+                  ? HackRUColors.white
                   : (_brightnessValue == Brightness.light
-                      ? charcoal_light
-                      : white),
+                      ? HackRUColors.charcoal_light
+                      : HackRUColors.white),
               size: 35.0,
             ),
             title: Text(
               widget.resource.summary ?? '',
               style: TextStyle(
                 color: isExpanded
-                    ? white
+                    ? HackRUColors.white
                     : (_brightnessValue == Brightness.light
-                        ? charcoal_light
-                        : white),
+                        ? HackRUColors.charcoal_light
+                        : HackRUColors.white),
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700,
               ),

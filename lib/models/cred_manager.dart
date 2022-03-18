@@ -59,15 +59,16 @@ Future<void> persistSlackAnnouncements(List<Announcement> slacks) async {
   await Future.delayed(Duration(seconds: 1));
 }
 
-Future<List<Announcement>?> getSlackAnnouncements() async {
+Future<List<Announcement>> getSlackAnnouncements() async {
   final prefs = await _prefs;
+  var messages = List<Announcement>.empty();
   if (prefs.containsKey('SLACK_ANNOUNCEMENTS')) {
     var decoded = json.decode(prefs.getString('SLACK_ANNOUNCEMENTS')!);
-    return decoded
+    messages = decoded
         .map<Announcement>((slack) => Announcement.fromJson(slack))
         .toList();
   }
-  return null;
+  return messages;
 }
 
 Future<void> deleteSlackAnnouncements() async {

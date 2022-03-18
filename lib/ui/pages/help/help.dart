@@ -20,7 +20,7 @@ class Help extends StatelessWidget {
             case ConnectionState.waiting:
               return Center(
                 child: Container(
-                  color: transparent,
+                  color: HackRUColors.transparent,
                   height: 400.0,
                   width: 400.0,
                   child: FlareActor(
@@ -73,7 +73,7 @@ class HelpButton extends StatelessWidget {
         child: Container(
           height: 100.0,
           child: InkWell(
-            splashColor: yellow,
+            splashColor: HackRUColors.yellow,
             onTap: _open,
             child: Column(
               children: <Widget>[
@@ -85,7 +85,7 @@ class HelpButton extends StatelessWidget {
                       Text(
                         resource.name.toUpperCase(),
                         style: TextStyle(
-                          color: white,
+                          color: HackRUColors.white,
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),

@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: transparent,
+        backgroundColor: HackRUColors.transparent,
         elevation: 0.0,
         iconTheme: IconThemeData(
           color: Theme.of(context).primaryColor,

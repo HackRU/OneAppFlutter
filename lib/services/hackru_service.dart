@@ -85,6 +85,7 @@ Future<List<Announcement>> slackResources() async {
   try {
     var response = await getLcs('/dayof-slack');
     resources = json.decode(response.body);
+    // print('======== res: ' + response.body);
   } on TimeoutException catch (_) {
     return [
       Announcement(

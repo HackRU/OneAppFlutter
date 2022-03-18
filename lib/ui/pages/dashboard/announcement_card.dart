@@ -54,7 +54,7 @@ class AnnouncementCard extends StatelessWidget {
       child: Card(
         elevation: 0.0,
         color: resource.text == _errorLoadingDataText
-            ? pink
+            ? HackRUColors.pink
             : Theme.of(context).dividerColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),

@@ -42,9 +42,9 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
       controller: controller,
       unselectedLabelColor:
           MediaQuery.of(context).platformBrightness == Brightness.light
-              ? charcoal_light
-              : white,
-      labelColor: black,
+              ? HackRUColors.charcoal_light
+              : HackRUColors.white,
+      labelColor: HackRUColors.black,
       labelStyle: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 20.0,
@@ -58,6 +58,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
 
   static List<Event>? cachedEvents;
   static DateTime cacheTTL = DateTime.now();
+
   Stream<List<Event>> _getEvents() {
     var streamctl = StreamController<List<Event>>();
     if (cachedEvents != null) {
@@ -92,7 +93,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
             case ConnectionState.waiting:
               return Center(
                 child: Container(
-                  color: transparent,
+                  color: HackRUColors.transparent,
                   height: 400.0,
                   width: 400.0,
                   child: FlareActor(

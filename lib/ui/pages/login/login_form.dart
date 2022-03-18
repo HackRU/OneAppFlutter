@@ -162,11 +162,11 @@ class LoginFormState extends State<LoginForm> {
                             ? null
                             : 'Please enter valid email address',
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: charcoal_light, width: 2.0),
+                          borderSide: BorderSide(
+                              color: HackRUColors.charcoal_light, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
-                        focusColor: charcoal_light,
+                        focusColor: HackRUColors.charcoal_light,
                       ),
                     ),
                   ),
@@ -186,11 +186,11 @@ class LoginFormState extends State<LoginForm> {
                         errorText:
                             isInputValid ? null : 'Please enter valid password',
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: charcoal_light, width: 2.0),
+                          borderSide: BorderSide(
+                              color: HackRUColors.charcoal_light, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
-                        focusColor: charcoal_light,
+                        focusColor: HackRUColors.charcoal_light,
                       ),
                     ),
                   ),

@@ -153,7 +153,7 @@ class DashboardState extends State<Dashboard> {
       leadingPadding: EdgeInsets.symmetric(horizontal: 10.0),
       leading: Icon(
         Icons.timer,
-        color: white,
+        color: HackRUColors.white,
         size: 50.0,
       ),
       content: Padding(
@@ -170,41 +170,39 @@ class DashboardState extends State<Dashboard> {
           child: Text(
             'Dismiss',
             style: TextStyle(
-              color: white,
+              color: HackRUColors.white,
               fontSize: 14.0,
               fontWeight: FontWeight.w700,
             ),
           ),
         ),
       ],
-      backgroundColor: transparent,
+      backgroundColor: HackRUColors.transparent,
     );
   }
 
   /// =================================================
   ///                GET SLACK MESSAGES
   /// =================================================
+  static List<Announcement>? cachedMsgs;
+
   Stream<List<Announcement>> _getSlacks() {
     var streamCtrl = StreamController<List<Announcement>>();
+    if (cachedMsgs != null) {
+      streamCtrl.sink.add(cachedMsgs!);
+    }
     try {
-      getSlackAnnouncements().then((storedSlacks) {
-        if (storedSlacks != null) {
-          streamCtrl.sink.add(storedSlacks);
-        }
-        if (cacheTTL.isBefore(DateTime.now())) {
-          return slackResources();
-        } else {
-          return null;
-        }
-      }).then((networkSlacks) {
-        if (networkSlacks != null) {
-          var announcements = networkSlacks as List<Announcement>;
-          streamCtrl.sink.add(announcements);
-          persistSlackAnnouncements(announcements);
+      getSlackAnnouncements().then((slackMsgs) {
+        streamCtrl.sink.add(slackMsgs);
+      });
+      if (cacheTTL.isBefore(DateTime.now())) {
+        slackResources().then((slackMsgs) {
+          streamCtrl.sink.add(slackMsgs);
+          persistSlackAnnouncements(slackMsgs);
           cacheTTL = DateTime.now().add(Duration(minutes: 5));
           streamCtrl.close();
-        }
-      });
+        });
+      }
     } catch (e) {
       print('***********************\nSlack data stream ctrl error: ' +
           e.toString());
@@ -216,16 +214,16 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: StreamBuilder<List<Announcement>>(
+      body: StreamBuilder<List<Announcement>?>(
         stream: _getSlacks(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Announcement>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<Announcement>?> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
               return Center(
                 child: Container(
-                  color: transparent,
+                  color: HackRUColors.transparent,
                   height: 400.0,
                   width: 400.0,
                   child: FlareActor(
@@ -256,9 +254,10 @@ class DashboardState extends State<Dashboard> {
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: green,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                            color: HackRUColors.green,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15.0),
+                            ),
                           ),
                           child: _timerBanner(),
                         ),
@@ -287,9 +286,10 @@ class DashboardState extends State<Dashboard> {
                       );
                     }
                     return AnnouncementCard(
-                        resource: _displayTimerBanner
-                            ? resources[index - 2]
-                            : resources[index - 1]);
+                      resource: _displayTimerBanner
+                          ? resources[index - 2]
+                          : resources[index - 1],
+                    );
                   },
                 ),
               );
@@ -343,7 +343,7 @@ class _TimerTextState extends State<TimerText> {
       DateFormat('HH:mm:ss').format(_dateTime),
       style: TextStyle(
         fontSize: 45.0,
-        color: white,
+        color: HackRUColors.white,
       ),
     );
   }

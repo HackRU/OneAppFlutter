@@ -52,7 +52,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: black,
+      backgroundColor: HackRUColors.black,
       body: Column(
         children: <Widget>[
           Expanded(
@@ -82,7 +82,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                     CardExpansion.event!,
                     style: TextStyle(
                       fontSize: 14.0,
-                      color: white,
+                      color: HackRUColors.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -90,7 +90,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                     scanned,
                     style: TextStyle(
                       fontSize: 16.0,
-                      color: pink_light,
+                      color: HackRUColors.pink_light,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -101,7 +101,9 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                         isPlaying
                             ? FontAwesomeIcons.playCircle
                             : FontAwesomeIcons.pauseCircle,
-                        color: isPlaying ? yellow : pink_light,
+                        color: isPlaying
+                            ? HackRUColors.yellow
+                            : HackRUColors.pink_light,
                       ),
                       onPressed: () => _handleOnPressed(),
                     ),
@@ -165,26 +167,26 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       context: context,
       builder: (BuildContext context, {barrierDismissible = false}) {
         return AlertDialog(
-          backgroundColor: pink,
+          backgroundColor: HackRUColors.pink,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
           title: Icon(
             Icons.check_circle_outline,
-            color: off_white,
+            color: HackRUColors.off_white,
             size: 80.0,
           ),
           content: Text(body,
-              style: TextStyle(fontSize: 25, color: off_white),
+              style: TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
             MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              splashColor: yellow,
+              splashColor: HackRUColors.yellow,
               height: 40.0,
-              color: off_white,
+              color: HackRUColors.off_white,
               onPressed: () {
                 Navigator.pop(context, true);
               },
@@ -192,7 +194,9 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               child: const Text(
                 'OK',
                 style: TextStyle(
-                    fontSize: 20, color: pink, fontWeight: FontWeight.w500),
+                    fontSize: 20,
+                    color: HackRUColors.pink,
+                    fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -208,17 +212,17 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       context: context,
       builder: (BuildContext context, {barrierDismissible = false}) {
         return AlertDialog(
-          backgroundColor: pink,
+          backgroundColor: HackRUColors.pink,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
           title: Icon(
             Icons.warning,
-            color: off_white,
+            color: HackRUColors.off_white,
             size: 80.0,
           ),
           content: Text(body,
-              style: TextStyle(fontSize: 25, color: off_white),
+              style: TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
             TextButton(
@@ -232,7 +236,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               },
               child: Text(
                 'CANCEL',
-                style: TextStyle(fontSize: 20, color: pink_dark),
+                style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -240,9 +244,9 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              splashColor: yellow,
+              splashColor: HackRUColors.yellow,
               height: 40.0,
-              color: off_white,
+              color: HackRUColors.off_white,
               onPressed: () async {
                 Navigator.pop(context, true);
               },
@@ -251,7 +255,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                 'OK',
                 style: TextStyle(
                   fontSize: 20,
-                  color: pink,
+                  color: HackRUColors.pink,
                   fontWeight: FontWeight.w500,
                 ),
                 textAlign: TextAlign.center,

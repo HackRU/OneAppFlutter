@@ -164,7 +164,7 @@ class CustomHiddenDrawerMenu extends StatelessWidget {
     });
 
     return CustomHiddenMenu(
-      itens: _itensMenu,
+      menuItems: _itensMenu,
       background: backgroundMenu!,
       backgroundColorMenu: backgroundColorMenu!,
       initPositionSelected: initPositionSelected!,

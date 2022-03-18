@@ -5,25 +5,26 @@ import 'package:HackRU/ui/pages/login/login_page.dart';
 import 'package:HackRU/ui/widgets/page_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/rxdart.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'styles.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// ====== TODO: update following configs
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
-final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-    BehaviorSubject<ReceivedNotification>();
+// final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+//     BehaviorSubject<ReceivedNotification>();
 
-final BehaviorSubject<String> selectNotificationSubject =
-    BehaviorSubject<String>();
+// final BehaviorSubject<String> selectNotificationSubject =
+//     BehaviorSubject<String>();
 
-NotificationAppLaunchDetails? notificationAppLaunchDetails;
+// NotificationAppLaunchDetails? notificationAppLaunchDetails;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // ====== TODO: update following configs
   // notificationAppLaunchDetails = await flutterLocalNotificationsPlugin
   //     .getNotificationAppLaunchDetails();
 
@@ -50,12 +51,15 @@ void main() async {
   //       selectNotificationSubject.add(payload);
   //     });
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.white,
-    statusBarIconBrightness: Brightness.light,
-    systemNavigationBarColor: Colors.black,
-    systemNavigationBarIconBrightness: Brightness.light,
-  ));
+  /** ========================================================
+   *  SYSTEM UI OVERLAY STYLING (ANDROID)
+   *  ======================================================== */
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: HackRUColors.black,
+    ),
+  );
+
   runApp(MainApp());
 }
 
@@ -63,19 +67,19 @@ void main() async {
 ///                    RECEIVED NOTIFICATION
 /// =======================================================
 
-class ReceivedNotification {
-  final int? id;
-  final String? title;
-  final String? body;
-  final String? payload;
+// class ReceivedNotification {
+//   final int? id;
+//   final String? title;
+//   final String? body;
+//   final String? payload;
 
-  ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
-  });
-}
+//   ReceivedNotification({
+//     @required this.id,
+//     @required this.title,
+//     @required this.body,
+//     @required this.payload,
+//   });
+// }
 
 class MainApp extends StatelessWidget {
   final LcsCredential? lcsCredential;

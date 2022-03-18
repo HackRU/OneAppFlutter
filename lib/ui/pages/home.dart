@@ -62,16 +62,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       Icons.home,
                       size: 25.0,
                       color: _currentBottomNavItemIndex == 0
-                          ? white
-                          : charcoal_dark,
+                          ? HackRUColors.white
+                          : HackRUColors.charcoal_dark,
                     ),
                     Text(
                       'Dashboard',
                       style: TextStyle(
                         fontSize: _currentBottomNavItemIndex == 0 ? 14.0 : 12.0,
                         color: _currentBottomNavItemIndex == 0
-                            ? white
-                            : charcoal_dark,
+                            ? HackRUColors.white
+                            : HackRUColors.charcoal_dark,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -100,16 +100,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       FontAwesomeIcons.calendarAlt,
                       size: 25.0,
                       color: _currentBottomNavItemIndex == 1
-                          ? white
-                          : charcoal_dark,
+                          ? HackRUColors.white
+                          : HackRUColors.charcoal_dark,
                     ),
                     Text(
                       'Events',
                       style: TextStyle(
                         fontSize: _currentBottomNavItemIndex == 1 ? 14.0 : 12.0,
                         color: _currentBottomNavItemIndex == 1
-                            ? white
-                            : charcoal_dark,
+                            ? HackRUColors.white
+                            : HackRUColors.charcoal_dark,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -195,7 +195,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ScaffoldMessengerState().showSnackBar(
               SnackBar(
                 content: Text(loginResponse ?? ''),
-                backgroundColor: green,
+                backgroundColor: HackRUColors.green,
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -203,9 +203,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         },
         tooltip: 'QR Code',
         elevation: 4.0,
-        splashColor: white,
+        splashColor: HackRUColors.white,
         isExtended: false,
-        foregroundColor: black,
+        foregroundColor: HackRUColors.black,
         backgroundColor: Theme.of(context).accentColor,
         child: Icon(
           FontAwesomeIcons.qrcode,

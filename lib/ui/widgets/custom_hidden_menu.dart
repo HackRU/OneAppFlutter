@@ -1,3 +1,4 @@
+import 'package:HackRU/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/simple_hidden_drawer/animated_drawer_content.dart';
@@ -13,7 +14,7 @@ class CustomHiddenMenu extends StatefulWidget {
   final Color? backgroundColorMenu;
 
   /// Items of the menu
-  final List<ItemHiddenMenu>? itens;
+  final List<ItemHiddenMenu>? menuItems;
 
   /// Callback to recive item selected for user
   final Function(int)? selectedListern;
@@ -26,7 +27,7 @@ class CustomHiddenMenu extends StatefulWidget {
   CustomHiddenMenu(
       {Key? key,
       this.background,
-      this.itens,
+      this.menuItems,
       this.selectedListern,
       this.initPositionSelected,
       this.backgroundColorMenu,
@@ -98,29 +99,36 @@ class _CustomHiddenMenuState extends State<CustomHiddenMenu> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
-                    itemCount: widget.itens?.length,
+                    itemCount: widget.menuItems?.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        leading: Text(widget.itens![index].name),
+                        selectedColor: HackRUColors.yellow,
+                        textColor: Colors.white30,
+                        leading: Text(
+                          widget.menuItems![index].name,
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
+                        ),
                         selected: index == _indexSelected,
                         onTap: () {
-                          if (widget.itens![index].onTap != null) {
-                            widget.itens![index].onTap!();
+                          if (widget.menuItems![index].onTap != null) {
+                            widget.menuItems![index].onTap!();
                           }
                           controller?.setSelectedMenuPosition(index);
                         },
                       );
                       // return HiddenMenuWidget(
-                      //   name: widget.itens![index].name,
+                      //   name: widget.menuItems![index].name,
                       //   selected: index == _indexSelected,
                       //   colorLineSelected:
-                      //       widget.itens![index].colorLineSelected,
-                      //   baseStyle: widget.itens![index].baseStyle,
-                      //   selectedStyle: widget.itens![index].selectedStyle,
+                      //       widget.menuItems![index].colorLineSelected,
+                      //   baseStyle: widget.menuItems![index].baseStyle,
+                      //   selectedStyle: widget.menuItems![index].selectedStyle,
                       //   typeOpen: widget.typeOpen,
                       //   onTap: () {
-                      //     if (widget.itens![index].onTap != null) {
-                      //       widget.itens![index].onTap!();
+                      //     if (widget.menuItems![index].onTap != null) {
+                      //       widget.menuItems![index].onTap!();
                       //     }
                       //     controller?.setSelectedMenuPosition(index);
                       //   },

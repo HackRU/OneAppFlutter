@@ -27,9 +27,9 @@ class _HackRUAppState extends State<HackRUApp> {
   User? user;
 
   final _selectedDrawerItem =
-      TextStyle(color: pink, fontWeight: FontWeight.w700);
-  final _nonSelectedDrawerItem =
-      TextStyle(color: grey, fontSize: 28.0, fontWeight: FontWeight.w500);
+      TextStyle(color: HackRUColors.pink, fontWeight: FontWeight.w700);
+  final _nonSelectedDrawerItem = TextStyle(
+      color: HackRUColors.grey, fontSize: 28.0, fontWeight: FontWeight.w500);
 
   @override
   void initState() {
@@ -76,7 +76,7 @@ class _HackRUAppState extends State<HackRUApp> {
       ItemHiddenMenu(
         name: 'Home',
         baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: yellow,
+        colorLineSelected: HackRUColors.yellow,
         selectedStyle: _selectedDrawerItem,
       ),
       Home(),
@@ -86,7 +86,7 @@ class _HackRUAppState extends State<HackRUApp> {
     //   ItemHiddenMenu(
     //     name: 'Map',
     //     baseStyle: _nonSelectedDrawerItem,
-    //     colorLineSelected: yellow,
+    //     colorLineSelected: HackRUColors.yellow,
     //     selectedStyle: _selectedDrawerItem,
     //   ),
     //   HackRUMap(),
@@ -96,7 +96,7 @@ class _HackRUAppState extends State<HackRUApp> {
       ItemHiddenMenu(
         name: 'Help',
         baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: yellow,
+        colorLineSelected: HackRUColors.yellow,
         selectedStyle: _selectedDrawerItem,
       ),
       Help(),
@@ -106,7 +106,7 @@ class _HackRUAppState extends State<HackRUApp> {
       ItemHiddenMenu(
         name: 'About',
         baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: yellow,
+        colorLineSelected: HackRUColors.yellow,
         selectedStyle: _selectedDrawerItem,
       ),
       About(),
@@ -116,7 +116,7 @@ class _HackRUAppState extends State<HackRUApp> {
       ItemHiddenMenu(
         name: 'QR Scanner',
         baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: yellow,
+        colorLineSelected: HackRUColors.yellow,
         selectedStyle: _selectedDrawerItem,
       ),
       QRScanner(),
@@ -131,7 +131,7 @@ class _HackRUAppState extends State<HackRUApp> {
 //          new ItemHiddenMenu(
 //            name: "QR Scanner",
 //            baseStyle: _nonSelectedDrawerItem,
-//            colorLineSelected: yellow,
+//            colorLineSelected: HackRUColors.yellow,
 //            selectedStyle: _selectedDrawerItem,
 //          ),
 //          QRScanner(),
@@ -144,7 +144,7 @@ class _HackRUAppState extends State<HackRUApp> {
         ItemHiddenMenu(
           name: 'Logout',
           baseStyle: _nonSelectedDrawerItem,
-          colorLineSelected: yellow,
+          colorLineSelected: HackRUColors.yellow,
           selectedStyle: _selectedDrawerItem,
           onTap: () async {
             await deleteCredentials();
@@ -177,8 +177,8 @@ class _HackRUAppState extends State<HackRUApp> {
                   FontAwesomeIcons.signOutAlt,
                   color: Theme.of(context).primaryColor,
                 ),
-                color: transparent,
-                splashColor: yellow,
+                color: HackRUColors.transparent,
+                splashColor: HackRUColors.yellow,
                 onPressed: () async {
                   await deleteCredentials();
                   setState(() {
@@ -197,14 +197,14 @@ class _HackRUAppState extends State<HackRUApp> {
       ],
       leadingAppBar: Icon(
         Icons.menu,
-        color: grey,
+        color: HackRUColors.grey,
       ),
       styleAutoTittleName: Theme.of(context).textTheme.headline6,
-      backgroundColorMenu: grey,
+      backgroundColorMenu: HackRUColors.grey,
       backgroundColorAppBar: Theme.of(context).backgroundColor,
       elevationAppBar: 0.0,
       backgroundMenu: Container(
-        color: charcoal,
+        color: HackRUColors.charcoal,
         child: FlareActor(
           'assets/flare/party.flr',
           alignment: Alignment.center,
