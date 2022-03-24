@@ -11,8 +11,7 @@ import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-//import 'package:qr_code_scanner/qr_code_scanner.dart';
-//import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 var popup = true;
 const NOT_SCANNED = 'NOT SCANNED';
@@ -28,9 +27,8 @@ class Scanner extends StatefulWidget {
 }
 
 class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
-  var qrText = '';
   var scanned = '';
-  //QRViewController controller;
+  late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   AnimationController? _animationController;
   bool isPlaying = false;
@@ -42,9 +40,21 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   }
 
+  // In order to get hot reload to work we need to pause the camera if the platform
+  // is android, or resume the camera if the platform is iOS.
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller.resumeCamera();
+    }
+  }
+
   @override
   void dispose() {
-    //controller.dispose();
+    controller.dispose();
     super.dispose();
     _animationController?.dispose();
   }
@@ -58,7 +68,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           Expanded(
             flex: 5,
             child: Center(
-                child: /*QRView(
+              child: QRView(
                 key: qrKey,
                 onQRViewCreated: _onQRViewCreated,
                 overlay: QrScannerOverlayShape(
@@ -68,8 +78,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                   borderWidth: 10,
                   cutOutSize: 300,
                 ),
-              ),*/
-                    Text('Temporarily Removed QR Scanner')),
+              ),
+            ),
           ),
           Flexible(
             flex: 1,
@@ -117,34 +127,33 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     );
   }
 
-  /*void _onQRViewCreated(QRViewController controller) {
-    var prevQR = 'xxx@xxx.com';
+  void _onQRViewCreated(QRViewController controller) {
+    var defaultCode = 'xxx@xxx.com';
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      print('-------------');
-      print(scanData);
+      print(
+          '======= SCANDATA: {code: ${scanData.code}, barcodeType: ${scanData.format.formatName}\n');
       setState(() {
-        if (scanData != prevQR) {
-          qrText = scanData;
-          prevQR = scanData;
+        if (scanData.code != defaultCode) {
+          defaultCode = scanData.code!;
           scanned = '';
-          _qrRequest(scanData);
+          // _qrRequest(scanData.code!);  // TODO: uncomment this later
         } else {
 //          scanned = 'ALREADY SCANNED!';
         }
       });
     });
-  }*/
+  }
 
   void _handleOnPressed() {
     setState(() {
       isPlaying = !isPlaying;
       if (isPlaying) {
         _animationController?.forward();
-        //controller?.pauseCamera();
+        controller.pauseCamera();
       } else {
         _animationController?.reverse();
-        //controller?.resumeCamera();
+        controller.resumeCamera();
       }
     });
   }
@@ -158,7 +167,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         message == 'DAY-OF QR LINKED!') {
       _scanDialogSuccess(message);
     } else {
-      await _scanDialogWarning(message);
+      await await _scanDialogWarning(message);
     }
   }
 

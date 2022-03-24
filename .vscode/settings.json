@@ -4,6 +4,7 @@
         "dayof",
         "prefs",
         "qrcode",
-        "streamctl"
+        "streamctl",
+        "vsync"
     ]
 }
