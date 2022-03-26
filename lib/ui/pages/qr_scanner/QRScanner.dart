@@ -69,14 +69,14 @@ class _QRScannerState extends State<QRScanner> {
                   );
                 },
                 tooltip: 'QRCode Reader',
-                icon: Center(
+                icon: const Center(
                   child: Icon(
                     Icons.qr_code_scanner,
                     color: HackRUColors.charcoal_dark,
                     semanticLabel: 'QR Scanner Icon',
                   ),
                 ),
-                label: Text(
+                label: const Text(
                   'Scan QR Codes',
                   style: TextStyle(
                     fontSize: 18.0,

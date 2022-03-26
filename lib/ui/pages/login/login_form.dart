@@ -56,6 +56,7 @@ class LoginFormState extends State<LoginForm> {
     void _onLoginButtonPressed() async {
       if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
         var error = 'Error:\n Missing username and/or password!';
+        debugPrint("====== LOGIN_FORM_VALIDATION_ERROR: $error");
         _errorDialog(error);
       } else {
         try {
@@ -64,9 +65,10 @@ class LoginFormState extends State<LoginForm> {
           });
           final cred =
               await login(_emailController.text, _passwordController.text);
+          debugPrint("==== CRED_LOGIN: ${cred.token}");
           if (cred != null) {
             LoginForm.gotCred = true;
-            await persistCredentials(cred.token, cred.email);
+            await persistCredentials(cred.token, _emailController.text);
             setState(() {
               _isLoginPressed = false;
             });
@@ -110,8 +112,8 @@ class LoginFormState extends State<LoginForm> {
       ));
 
       return _isLoginPressed
-          ? Center(
-              child: FancyLoadingIndicator(),
+          ? const Center(
+              child: CircularProgressIndicator(),
             )
           : Padding(
               padding: EdgeInsets.only(

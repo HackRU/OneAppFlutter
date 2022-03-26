@@ -9,16 +9,12 @@ part of 'models.dart';
 LcsCredential _$LcsCredentialFromJson(Map<String, dynamic> json) {
   return LcsCredential(
     json['email'] as String,
-    json['token'] as String,
-    DateTime.parse(json['valid_until'] as String),
   );
 }
 
 Map<String, dynamic> _$LcsCredentialToJson(LcsCredential instance) =>
     <String, dynamic>{
-      'email': instance.email,
       'token': instance.token,
-      'valid_until': instance.expiration.toIso8601String(),
     };
 
 HelpResource _$HelpResourceFromJson(Map<String, dynamic> json) {

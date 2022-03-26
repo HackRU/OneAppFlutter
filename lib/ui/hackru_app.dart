@@ -112,32 +112,20 @@ class _HackRUAppState extends State<HackRUApp> {
       About(),
     ));
 
-    items.add(ScreenHiddenDrawer(
-      ItemHiddenMenu(
-        name: 'QR Scanner',
-        baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: HackRUColors.yellow,
-        selectedStyle: _selectedDrawerItem,
-      ),
-      QRScanner(),
-    ));
-
-    /// TODO: Fix this
-//    if (!_hasAuthToken) {
-//      if (user?.role?.director == true ||
-//          user?.role?.volunteer == true ||
-//          user?.role?.organizer == true) {
-//        items.add(new ScreenHiddenDrawer(
-//          new ItemHiddenMenu(
-//            name: "QR Scanner",
-//            baseStyle: _nonSelectedDrawerItem,
-//            colorLineSelected: HackRUColors.yellow,
-//            selectedStyle: _selectedDrawerItem,
-//          ),
-//          QRScanner(),
-//        ));
-//      }
-//    }
+    //NOTE: only show QR_SCANNER button to authorized users
+    if (_hasAuthToken) {
+      if (user?.role.hacker != true) {
+        items.add(ScreenHiddenDrawer(
+          ItemHiddenMenu(
+            name: "QR Scanner",
+            baseStyle: _nonSelectedDrawerItem,
+            colorLineSelected: HackRUColors.yellow,
+            selectedStyle: _selectedDrawerItem,
+          ),
+          QRScanner(),
+        ));
+      }
+    }
 
     if (_hasAuthToken) {
       items.add(ScreenHiddenDrawer(

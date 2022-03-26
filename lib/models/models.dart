@@ -12,18 +12,18 @@ part 'models.g.dart';
 
 @JsonSerializable()
 class LcsCredential {
-  final String email;
+  // final String email;
   final String token;
 
-  @JsonKey(name: 'valid_until')
-  final DateTime expiration;
+  // @JsonKey(name: 'valid_until')
+  // final DateTime expiration;
 
-  LcsCredential(this.email, this.token, this.expiration);
+  LcsCredential(this.token);
 
   /// Verify if auth token is expired or not
-  bool isExpired() {
-    return expiration.isBefore(DateTime.now());
-  }
+  // bool isExpired() {
+  //   return expiration.isBefore(DateTime.now());
+  // }
 
   factory LcsCredential.fromJson(Map<String, dynamic> json) =>
       _$LcsCredentialFromJson(json);

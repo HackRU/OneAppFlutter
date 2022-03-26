@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/exceptions.dart';
 import 'package:hackru/models/models.dart';
@@ -134,6 +135,11 @@ Future<List<Event>> dayofEventsResources() async {
 
 /// TODO: Fix this
 // authorize can give wrong status codes
+// Look at LcsCredential class and figure out a way to enable commented code
+// because you'll need "email" and "token_expiry_dateTime"
+// if LCS doesn't return these info, then you'd have to call /read userData
+// right after successful /login call here and retrieve necessary userData from
+// there.
 Future<LcsCredential> login(String email, String password) async {
   var result = await postLcs('/authorize', {
     'email': email,
@@ -142,8 +148,10 @@ Future<LcsCredential> login(String email, String password) async {
   var body = jsonDecode(result.body);
   // quirk with lcs where it puts the actual result as a string
   // inside the normal body
+  debugPrint('==== TOKEN: ${json.encode(body['body']['token'])}');
   if (body['statusCode'] == 200) {
-    return LcsCredential.fromJson(body['body']['auth']);
+    return LcsCredential(json.encode(body['body']['token']));
+    // return LcsCredential.fromJson(body['body']['token']);
   } else if (body['statusCode'] == 403) {
     throw LcsLoginFailed();
   } else {
@@ -188,8 +196,8 @@ void updateUserDayOf(
       '\$set': {'day_of.$event': true}
     },
     'user_email': user.email,
-    'auth_email': credential.email,
-    'auth': credential.token,
+    'auth_email': user.email,
+    'token': credential.token,
   });
 
   var decoded = jsonDecode(result.body);
@@ -207,7 +215,7 @@ Future<int> attendEvent(String lcsUrl, LcsCredential credential,
     String userEmailOrId, String event, bool again) async {
   print(event);
   var result = await postLcs('/attend-event', {
-    'auth_email': credential.email,
+    'auth_email': 'a@a.com', //TODO: figure out how to get auth_email here
     'qr': userEmailOrId,
     'token': credential.token,
     'event': event,
@@ -230,7 +238,7 @@ void linkQR(String lcsUrl, LcsCredential credential, String userEmailOrId,
     String hashQR) async {
   print(hashQR);
   var result = await postLcs('/link-qr', {
-    'auth_email': credential.email,
+    'auth_email': 'a@a.com', // figure out how to get auth email here
     'email': userEmailOrId,
     'token': credential.token,
     'qr_code': hashQR
