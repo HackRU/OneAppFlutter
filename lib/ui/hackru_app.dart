@@ -26,15 +26,20 @@ class _HackRUAppState extends State<HackRUApp> {
   bool _hasAuthToken = false;
   User? user;
 
-  final _selectedDrawerItem =
-      TextStyle(color: HackRUColors.pink, fontWeight: FontWeight.w700);
-  final _nonSelectedDrawerItem = TextStyle(
-      color: HackRUColors.grey, fontSize: 28.0, fontWeight: FontWeight.w500);
+  final _selectedDrawerItem = const TextStyle(
+    color: HackRUColors.pink,
+    fontWeight: FontWeight.w700,
+  );
+  final _nonSelectedDrawerItem = const TextStyle(
+    color: HackRUColors.grey,
+    fontSize: 28.0,
+    fontWeight: FontWeight.w500,
+  );
 
   @override
   void initState() {
     _hasToken();
-    if (_hasAuthToken != null) _drawerItems();
+    _drawerItems();
     super.initState();
   }
 
@@ -57,13 +62,14 @@ class _HackRUAppState extends State<HackRUApp> {
 
   void _getUserProfile() async {
     var _storedEmail = await getEmail();
-    var _authToken = await getAuthToken();
-    var userProfile = await getUser(_authToken!, _storedEmail!);
-    print('====== Email: ${userProfile.email} ======');
-    if (userProfile != null) {
-      setState(() {
-        user = userProfile;
-      });
+    if (_storedEmail != "") {
+      var _authToken = await getAuthToken();
+      var userProfile = await getUser(_authToken!, _storedEmail!);
+      if (userProfile != null) {
+        setState(() {
+          user = userProfile;
+        });
+      }
     }
   }
 
@@ -92,61 +98,65 @@ class _HackRUAppState extends State<HackRUApp> {
     //   HackRUMap(),
     // ));
 
-    items.add(ScreenHiddenDrawer(
-      ItemHiddenMenu(
-        name: 'Help',
-        baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: HackRUColors.yellow,
-        selectedStyle: _selectedDrawerItem,
-      ),
-      Help(),
-    ));
-
-    items.add(ScreenHiddenDrawer(
-      ItemHiddenMenu(
-        name: 'About',
-        baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: HackRUColors.yellow,
-        selectedStyle: _selectedDrawerItem,
-      ),
-      About(),
-    ));
-
-    //NOTE: only show QR_SCANNER button to authorized users
-    if (_hasAuthToken) {
-      if (user?.role.organizer == true || user?.role.organizer == true) {
-        items.add(ScreenHiddenDrawer(
-          ItemHiddenMenu(
-            name: "QR Scanner",
-            baseStyle: _nonSelectedDrawerItem,
-            colorLineSelected: HackRUColors.yellow,
-            selectedStyle: _selectedDrawerItem,
-          ),
-          QRScanner(),
-        ));
-      }
-    }
-
-    if (_hasAuthToken) {
-      items.add(ScreenHiddenDrawer(
+    items.add(
+      ScreenHiddenDrawer(
         ItemHiddenMenu(
-          name: 'Logout',
+          name: 'Help',
           baseStyle: _nonSelectedDrawerItem,
           colorLineSelected: HackRUColors.yellow,
           selectedStyle: _selectedDrawerItem,
-          onTap: () async {
-            await deleteCredentials();
-            await Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (BuildContext context) => HackRUApp(),
-                maintainState: false,
-              ),
-              ModalRoute.withName('/main'),
-            );
-          },
         ),
-        Container(),
-      ));
+        Help(),
+      ),
+    );
+
+    items.add(
+      ScreenHiddenDrawer(
+        ItemHiddenMenu(
+          name: 'About',
+          baseStyle: _nonSelectedDrawerItem,
+          colorLineSelected: HackRUColors.yellow,
+          selectedStyle: _selectedDrawerItem,
+        ),
+        About(),
+      ),
+    );
+
+    //NOTE: only show QR_SCANNER button to authorized users
+    items.add(
+      ScreenHiddenDrawer(
+        ItemHiddenMenu(
+          name: "QR Scanner",
+          baseStyle: _nonSelectedDrawerItem,
+          colorLineSelected: HackRUColors.yellow,
+          selectedStyle: _selectedDrawerItem,
+        ),
+        QRScanner(),
+      ),
+    );
+
+    if (_hasAuthToken) {
+      items.add(
+        ScreenHiddenDrawer(
+          ItemHiddenMenu(
+            name: 'Logout',
+            baseStyle: _nonSelectedDrawerItem,
+            colorLineSelected: HackRUColors.yellow,
+            selectedStyle: _selectedDrawerItem,
+            onTap: () async {
+              await deleteCredentials();
+              await Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => HackRUApp(),
+                  maintainState: false,
+                ),
+                ModalRoute.withName('/main'),
+              );
+            },
+          ),
+          Container(),
+        ),
+      );
     }
   }
 
@@ -156,14 +166,31 @@ class _HackRUAppState extends State<HackRUApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('==**==== HAS_AUTH_TOKEN: $_hasAuthToken ===**===');
+    debugPrint('==**==== HAS_AUTH_TOKEN: $_hasAuthToken ===**===');
     return CustomHiddenDrawerMenu(
       actionsAppBar: <Widget>[
+        // ====== REFRESH DATA - MANUALLY
+        IconButton(
+          tooltip: 'Refresh page',
+          icon: Icon(
+            Icons.refresh_rounded,
+            color: Colors.grey[500],
+          ),
+          color: HackRUColors.transparent,
+          splashColor: HackRUColors.yellow,
+          onPressed: () {
+            _hasToken();
+          },
+        ),
+        const SizedBox(width: 8),
+        // ====== LOGOUT BUTTON
         _hasAuthToken
             ? IconButton(
+                tooltip: 'Logout',
                 icon: Icon(
                   FontAwesomeIcons.signOutAlt,
                   color: Theme.of(context).primaryColor,
+                  size: 20,
                 ),
                 color: HackRUColors.transparent,
                 splashColor: HackRUColors.yellow,
@@ -183,7 +210,7 @@ class _HackRUAppState extends State<HackRUApp> {
               )
             : Container(),
       ],
-      leadingAppBar: Icon(
+      leadingAppBar: const Icon(
         Icons.menu,
         color: HackRUColors.grey,
       ),
@@ -193,7 +220,7 @@ class _HackRUAppState extends State<HackRUApp> {
       elevationAppBar: 0.0,
       backgroundMenu: Container(
         color: HackRUColors.charcoal,
-        child: FlareActor(
+        child: const FlareActor(
           'assets/flare/party.flr',
           alignment: Alignment.center,
           fit: BoxFit.contain,

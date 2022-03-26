@@ -7,6 +7,8 @@ import 'package:hackru/ui/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../models/models.dart';
+
 class LoginForm extends StatefulWidget {
   static bool gotCred = false;
   const LoginForm({Key? key}) : super(key: key);
@@ -65,10 +67,10 @@ class LoginFormState extends State<LoginForm> {
           });
           final cred =
               await login(_emailController.text, _passwordController.text);
-          debugPrint("==== CRED_LOGIN: ${cred.token}");
-          if (cred != null) {
+          User userData = await getUser(cred.token, _emailController.text);
+          if (cred.token != null) {
             LoginForm.gotCred = true;
-            await persistCredentials(cred.token, _emailController.text);
+            await persistCredentials(cred.token, userData.email);
             setState(() {
               _isLoginPressed = false;
             });
@@ -79,7 +81,7 @@ class LoginFormState extends State<LoginForm> {
             });
             ScaffoldMessengerState().clearSnackBars();
             ScaffoldMessengerState().showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Error: Incorrect email or password!'),
                 backgroundColor: Colors.red,
               ),

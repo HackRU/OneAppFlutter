@@ -9,7 +9,6 @@ part 'models.g.dart';
 /// @param email user's email address
 /// @param token authentication token
 /// @param time auth token expire time
-
 @JsonSerializable()
 class LcsCredential {
   // final String email;
@@ -36,7 +35,7 @@ class LcsCredential {
 /// @param description resource description
 /// @param url resource url
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class HelpResource {
   final String name;
   final String url;
@@ -55,7 +54,8 @@ class HelpResource {
 ///
 /// @param text announcement description
 /// @param ts time stamp when an announcement was made
-@JsonSerializable(nullable: false)
+
+@JsonSerializable()
 class Announcement {
   final String? text;
   final String? ts;
@@ -75,7 +75,7 @@ class Announcement {
 /// @param role user role (director, admin, organizer)
 /// @param dayof user data (whether scanned for an event or not)
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class User {
   final String email;
   final Role role;
@@ -117,29 +117,32 @@ class User {
   @JsonKey(name: 'level_of_study')
   final String levelOfStudy;
 
+  @JsonKey(name: 'day_of')
   final Map<String, dynamic> dayOf;
 
-  List<Auth>? auth;
+  List<String>? qrcode;
 
   User(
-      this.email,
-      this.role,
-      this.votes,
-      this.github,
-      this.major,
-      this.shortAnswer,
-      this.shirtSize,
-      this.firstName,
-      this.lastName,
-      this.dietaryRestrictions,
-      this.specialNeeds,
-      this.dateOfBirth,
-      this.school,
-      this.gradYear,
-      this.gender,
-      this.registrationStatus,
-      this.levelOfStudy,
-      this.dayOf);
+    this.email,
+    this.role,
+    this.votes,
+    this.github,
+    this.major,
+    this.shortAnswer,
+    this.shirtSize,
+    this.firstName,
+    this.lastName,
+    this.dietaryRestrictions,
+    this.specialNeeds,
+    this.dateOfBirth,
+    this.school,
+    this.gradYear,
+    this.gender,
+    this.registrationStatus,
+    this.levelOfStudy,
+    this.dayOf,
+    this.qrcode,
+  );
 
   /// check if a hacker has already attended an event
   bool alreadyDid(String event) {
@@ -158,7 +161,7 @@ class User {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class Role {
   final bool hacker;
   final bool volunteer;
@@ -175,7 +178,7 @@ class Role {
   Map<String, dynamic> toJson() => _$RoleToJson(this);
 }
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class Auth {
   final String token;
 
@@ -216,6 +219,7 @@ class LcsError implements Exception {
 /// @param location event location which can be used to fetch event map
 /// @param start event time
 
+@JsonSerializable()
 class Event {
   final String? summary;
   //final String location;

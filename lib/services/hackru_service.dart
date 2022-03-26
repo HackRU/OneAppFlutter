@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/exceptions.dart';
 import 'package:hackru/models/models.dart';
@@ -148,10 +147,10 @@ Future<LcsCredential> login(String email, String password) async {
   var body = jsonDecode(result.body);
   // quirk with lcs where it puts the actual result as a string
   // inside the normal body
-  debugPrint('==== TOKEN: ${json.encode(body['body']['token'])}');
+  // print('==== TOKEN: ${json.encode(body['body']['token'])}');
   if (body['statusCode'] == 200) {
-    return LcsCredential(json.encode(body['body']['token']));
-    // return LcsCredential.fromJson(body['body']['token']);
+    // return LcsCredential(json.encode(body['body']['token']));
+    return LcsCredential.fromJson(body['body']);
   } else if (body['statusCode'] == 403) {
     throw LcsLoginFailed();
   } else {
@@ -172,6 +171,7 @@ Future<User> getUser(String authToken, String emailAddress,
     'token': authToken,
     'query': {'email': targetEmail}
   });
+  // print('===##==== user: ${jsonDecode(result.body)}');
   if (result.statusCode == 200) {
     var users = jsonDecode(result.body)['body'];
     if (users.length < 1) {
@@ -252,4 +252,26 @@ void linkQR(String lcsUrl, LcsCredential credential, String userEmailOrId,
   } else if (decoded['statusCode'] != 200) {
     throw LcsError(result);
   }
+}
+
+Future<bool> isAuthorizedForQRScanner(String token, String email) async {
+  var userProfile = await getUser(token, email);
+  if (userProfile.role.organizer == true ||
+      userProfile.role.organizer == true) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void main() {
+  Future<void> testCall(email, password) async {
+    LcsCredential cred = await login(email, password);
+    print('====== token/email: ${cred.token} / $email');
+
+    User user = await getUser(cred.token, email);
+    print('====== user: ${user.toJson()}');
+  }
+
+  testCall('a@a.com', 'a');
 }
