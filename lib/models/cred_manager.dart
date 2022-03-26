@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:HackRU/models/models.dart';
+import 'package:hackru/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<SharedPreferences> _prefs = SharedPreferences.getInstance();

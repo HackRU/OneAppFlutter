@@ -1,7 +1,7 @@
-// import 'package:HackRU/styles.dart';
-// import 'package:HackRU/defaults.dart';
-// import 'package:HackRU/ui/widgets/loading_indicator.dart';
-// import 'package:HackRU/ui/widgets/transparent_image.dart';
+// import 'package:hackru/styles.dart';
+// import 'package:hackru/defaults.dart';
+// import 'package:hackru/ui/widgets/loading_indicator.dart';
+// import 'package:hackru/ui/widgets/transparent_image.dart';
 // import 'package:flutter/material.dart';
 // import 'package:pinch_zoom_image_updated/pinch_zoom_image_updated.dart';
 

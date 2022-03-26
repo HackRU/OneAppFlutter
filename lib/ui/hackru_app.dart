@@ -1,15 +1,15 @@
-import 'package:HackRU/models/cred_manager.dart';
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/ui/pages/about_app/about.dart';
-import 'package:HackRU/ui/pages/help/help.dart';
-import 'package:HackRU/ui/pages/home.dart';
-import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
+import 'package:hackru/models/cred_manager.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/ui/pages/about_app/about.dart';
+import 'package:hackru/ui/pages/help/help.dart';
+import 'package:hackru/ui/pages/home.dart';
+import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:HackRU/ui/widgets/custom_hidden_drawer_menu.dart';
+import 'package:hackru/ui/widgets/custom_hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 
 import '../styles.dart';

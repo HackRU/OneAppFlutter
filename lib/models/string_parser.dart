@@ -1,4 +1,4 @@
-import 'package:HackRU/styles.dart';
+import 'package:hackru/styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;

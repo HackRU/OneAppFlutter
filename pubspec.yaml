@@ -1,11 +1,12 @@
-name: HackRU
+name: hackru
 description: The Official HackRU Flutter App
 version: 1.2.0
 homepage: http://hackru.org/
 repository: https://github.com/HackRU/OneAppFlutter
 
 environment:
-  sdk: ">=2.13.0 <3.0.0"
+  # sdk: ">=2.13.0 <3.0.0"
+  sdk: ">=2.17.0-69.2.beta <3.0.0"
 
 dependencies:
   flutter:
@@ -21,12 +22,14 @@ dependencies:
   # flutter_local_notifications: ^9.4.0
   font_awesome_flutter: ^9.2.0
   hidden_drawer_menu: ^3.0.1
+  jsqr: ^0.1.4
   #qr_flutter: ^3.2.0
-  qr_code_scanner: ^0.7.0
+  # qr_code_scanner: ^0.7.0
   http: ^0.13.4
   intl: ^0.17.0
   json_annotation: ^4.4.0
   meta: ^1.7.0
+  mobile_scanner: ^1.0.0
   # path_provider: ^2.0.9
   provider: ^6.0.2
   rubber: ^1.0.1
@@ -41,7 +44,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.1.8
   json_serializable: ^6.1.5
-  pedantic: ^1.11.1
+  flutter_lints: ^1.0.0
 
 flutter_icons:
   android: true

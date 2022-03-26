@@ -1,5 +1,5 @@
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/defaults.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/defaults.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

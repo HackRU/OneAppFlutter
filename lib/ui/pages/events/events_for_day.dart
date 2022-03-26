@@ -1,5 +1,5 @@
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/models/models.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

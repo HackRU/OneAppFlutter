@@ -1,7 +1,7 @@
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/defaults.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/models/models.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/defaults.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/models/models.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

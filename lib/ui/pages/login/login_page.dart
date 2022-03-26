@@ -1,5 +1,5 @@
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/ui/pages/login/login_form.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/ui/pages/login/login_form.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

@@ -1,8 +1,8 @@
-import 'package:HackRU/defaults.dart';
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/ui/hackru_app.dart';
-import 'package:HackRU/ui/pages/login/login_page.dart';
-import 'package:HackRU/ui/widgets/page_not_found.dart';
+import 'package:hackru/defaults.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/ui/hackru_app.dart';
+import 'package:hackru/ui/pages/login/login_page.dart';
+import 'package:hackru/ui/widgets/page_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';

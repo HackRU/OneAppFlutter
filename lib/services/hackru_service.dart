@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:HackRU/defaults.dart';
-import 'package:HackRU/models/exceptions.dart';
-import 'package:HackRU/models/models.dart';
+import 'package:hackru/defaults.dart';
+import 'package:hackru/models/exceptions.dart';
+import 'package:hackru/models/models.dart';
 import 'package:http/http.dart' as http;
 
 var client = http.Client();

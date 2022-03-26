@@ -1,4 +1,4 @@
-import 'package:HackRU/styles.dart';
+import 'package:hackru/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/simple_hidden_drawer/animated_drawer_content.dart';

@@ -1,5 +1,5 @@
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/models/string_parser.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/models/string_parser.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

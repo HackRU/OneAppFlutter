@@ -2,17 +2,17 @@ import 'dart:async';
 // import 'dart:convert';
 // import 'dart:io';
 
-import 'package:HackRU/models/cred_manager.dart';
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/ui/pages/dashboard/announcement_card.dart';
-// import 'package:HackRU/ui/widgets/dialog/notification_onclick.dart';
+import 'package:hackru/models/cred_manager.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/ui/pages/dashboard/announcement_card.dart';
+// import 'package:hackru/ui/widgets/dialog/notification_onclick.dart';
 import 'package:flare_flutter/flare_actor.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:HackRU/main.dart';
+// import 'package:hackru/main.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

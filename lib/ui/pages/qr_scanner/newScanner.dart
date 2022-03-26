@@ -1,17 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:HackRU/models/cred_manager.dart';
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/defaults.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/models/exceptions.dart';
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hackru/models/cred_manager.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/defaults.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/models/exceptions.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 var popup = true;
 const NOT_SCANNED = 'NOT SCANNED';
@@ -28,35 +30,40 @@ class Scanner extends StatefulWidget {
 
 class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   var scanned = '';
-  late QRViewController controller;
+  // late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   AnimationController? _animationController;
   bool isPlaying = false;
+  late MobileScannerController cameraController;
 
   @override
   void initState() {
     super.initState();
+    cameraController = MobileScannerController();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   }
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller.resumeCamera();
-    }
-  }
+  // @override
+  // void reassemble() {
+  //   super.reassemble();
+  //   if (Platform.isAndroid) {
+  //     // controller.pauseCamera();
+  //   } else if (Platform.isIOS) {
+  //     // controller.resumeCamera();
+  //   } else if (kIsWeb) {
+  //     cameraController.stop();
+  //   }
+  // }
 
   @override
   void dispose() {
-    controller.dispose();
+    // controller.dispose();
     super.dispose();
     _animationController?.dispose();
+    cameraController.dispose();
   }
 
   @override
@@ -68,16 +75,13 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           Expanded(
             flex: 5,
             child: Center(
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: _onQRViewCreated,
-                overlay: QrScannerOverlayShape(
-                  borderColor: Colors.yellow,
-                  borderRadius: 10,
-                  borderLength: 30,
-                  borderWidth: 10,
-                  cutOutSize: 300,
-                ),
+              child: MobileScanner(
+                allowDuplicates: true,
+                onDetect: (barcode, args) {
+                  final String code = barcode.rawValue!;
+                  debugPrint('qr_code found: $code');
+                  // _qrRequest(code); // to call backend API
+                },
               ),
             ),
           ),
@@ -90,7 +94,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                 children: <Widget>[
                   Text(
                     CardExpansion.event!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14.0,
                       color: HackRUColors.white,
                       fontWeight: FontWeight.w500,
@@ -98,7 +102,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                   ),
                   Text(
                     scanned,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16.0,
                       color: HackRUColors.pink_light,
                       fontWeight: FontWeight.w500,
@@ -127,33 +131,35 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    var defaultCode = 'xxx@xxx.com';
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      print(
-          '======= SCANDATA: {code: ${scanData.code}, barcodeType: ${scanData.format.formatName}\n');
-      setState(() {
-        if (scanData.code != defaultCode) {
-          defaultCode = scanData.code!;
-          scanned = '';
-          // _qrRequest(scanData.code!);  // TODO: uncomment this later
-        } else {
-//          scanned = 'ALREADY SCANNED!';
-        }
-      });
-    });
-  }
+//   void _onQRViewCreated(QRViewController controller) {
+//     var defaultCode = 'xxx@xxx.com';
+//     this.controller = controller;
+//     controller.scannedDataStream.listen((scanData) {
+//       print(
+//           '======= SCANDATA: {code: ${scanData.code}, barcodeType: ${scanData.format.formatName}\n');
+//       setState(() {
+//         if (scanData.code != defaultCode) {
+//           defaultCode = scanData.code!;
+//           scanned = '';
+//           // _qrRequest(scanData.code!);  // TODO: uncomment this later
+//         } else {
+// //          scanned = 'ALREADY SCANNED!';
+//         }
+//       });
+//     });
+//   }
 
   void _handleOnPressed() {
     setState(() {
       isPlaying = !isPlaying;
       if (isPlaying) {
         _animationController?.forward();
-        controller.pauseCamera();
+        // controller.pauseCamera();
+        cameraController.stop();
       } else {
         _animationController?.reverse();
-        controller.resumeCamera();
+        // controller.resumeCamera();
+        cameraController.start();
       }
     });
   }
@@ -180,13 +186,14 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          title: Icon(
+          title: const Icon(
             Icons.check_circle_outline,
             color: HackRUColors.off_white,
             size: 80.0,
           ),
           content: Text(body,
-              style: TextStyle(fontSize: 25, color: HackRUColors.off_white),
+              style:
+                  const TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
             MaterialButton(
@@ -225,25 +232,26 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          title: Icon(
+          title: const Icon(
             Icons.warning,
             color: HackRUColors.off_white,
             size: 80.0,
           ),
           content: Text(body,
-              style: TextStyle(fontSize: 25, color: HackRUColors.off_white),
+              style:
+                  const TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
             TextButton(
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(
-                  EdgeInsets.all(15.0),
+                  const EdgeInsets.all(15.0),
                 ),
               ),
               onPressed: () {
                 Navigator.pop(context, false);
               },
-              child: Text(
+              child: const Text(
                 'CANCEL',
                 style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
                 textAlign: TextAlign.center,
