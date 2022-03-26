@@ -114,7 +114,7 @@ class _HackRUAppState extends State<HackRUApp> {
 
     //NOTE: only show QR_SCANNER button to authorized users
     if (_hasAuthToken) {
-      if (user?.role.hacker != true) {
+      if (user?.role.organizer == true || user?.role.organizer == true) {
         items.add(ScreenHiddenDrawer(
           ItemHiddenMenu(
             name: "QR Scanner",
