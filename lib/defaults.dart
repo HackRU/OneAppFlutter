@@ -46,7 +46,7 @@ final String kSplashScreen = 'assets/splashScreen.png';
 ///=======================================
 
 const String kAppTitle = 'HackRU';
-const String kSeasonTitle = 'Fall 2020';
+const String kSeasonTitle = 'Spring 2022';
 const kAboutHackRU =
     'HackRU is a 24-hour hackathon at Rutgers University. We welcome hundreds of students to join us in building awesome tech projects. Industry experts and mentors help foster an atmosphere of learning through tech-talks and one-on-one guidance. We encourage all students, no matter their experience level or educational background, to challenge themselves and expand their creative, technical, and collaboration skills at HackRU.';
 const kAboutApp =

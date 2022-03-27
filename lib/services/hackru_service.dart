@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/exceptions.dart';
 import 'package:hackru/models/models.dart';
@@ -24,11 +25,13 @@ Future<http.Response> getLcs(String endpoint) {
 
 Future<http.Response> postLcs(String endpoint, dynamic kBody) async {
   var encodedBody = jsonEncode(kBody);
+  // debugPrint('try: kBody');
   var result = await client
       .post(Uri.parse(BASE_URL + endpoint), headers: kHeader, body: encodedBody)
       .timeout(const Duration(seconds: 10));
 
   var decoded = jsonDecode(result.body);
+  // debugPrint('${result.statusCode} $decoded');
   if (decoded['statusCode'] != result.statusCode) {
     print(decoded);
     print(
@@ -225,20 +228,24 @@ void updateUserDayOf(
   }
 }
 
-Future<int> attendEvent(String lcsUrl, LcsCredential credential,
+Future<int> attendEvent(String lcsUrl, String _authE, String _authT,
     String userEmailOrId, String event, bool again) async {
-  print(event);
+  debugPrint(event);
+  debugPrint(
+      'Attend even called with \n auth: $_authE \n token: $_authT \n for user: $userEmailOrId \n for the event: $event');
   var result = await postLcs('/attend-event', {
-    'auth_email': 'a@a.com', //TODO: figure out how to get auth_email here
+    'auth_email': _authE, //TODO: figure out how to get auth_email here
     'qr': userEmailOrId,
-    'token': credential.token,
+    'token': _authT,
     'event': event,
     'again': again
   });
-
-  var body = jsonDecode(result.body);
+  // debugPrint('Attend event received ${result.body}');
+  var body = json.decode(result.body);
   if (body['statusCode'] == 200) {
-    return body['body']['_count'];
+    var resp = body['body']['new_count'];
+    debugPrint('====== in 200 responsebody $resp');
+    return resp;
   } else if (body['statusCode'] == 402) {
     throw UserCheckedEvent();
   } else if (body['statusCode'] == 404) {
@@ -248,13 +255,14 @@ Future<int> attendEvent(String lcsUrl, LcsCredential credential,
   }
 }
 
-void linkQR(String lcsUrl, LcsCredential credential, String userEmailOrId,
+void linkQR(String lcsUrl, String _authE, String _authT, String userEmailOrId,
     String hashQR) async {
-  print(hashQR);
+  debugPrint('linkQR called: $hashQR');
+  debugPrint('$_authE $_authT $userEmailOrId');
   var result = await postLcs('/link-qr', {
-    'auth_email': 'a@a.com', // figure out how to get auth email here
+    'auth_email': _authE, // figure out how to get auth email here
     'email': userEmailOrId,
-    'token': credential.token,
+    'token': _authT,
     'qr_code': hashQR
   });
 

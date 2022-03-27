@@ -168,6 +168,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     print('************* qrRequest made ***********');
     var message;
     message = await _lcsHandle(scanData);
+    debugPrint(message);
     if (message == 'SCANNED!' ||
         message == 'EMAIL SCANNED!' ||
         message == 'DAY-OF QR LINKED!') {
@@ -223,7 +224,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future<Future> _scanDialogWarning(String body) async {
+  Future _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
       builder: (BuildContext context, {barrierDismissible = false}) {
@@ -287,8 +288,9 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   Future<String> _lcsHandle(String userEmailOrId) async {
     var _storedEmail = await getEmail();
     var _authToken = await getAuthToken();
-    var result;
+    var result = 'NULL';
     print('***** Called `lcsHandle` with qr:' + userEmailOrId);
+    // debugPrint('${QRScanner.cred}');
     var user;
     var numUserScanned;
     try {
@@ -318,42 +320,58 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
 
         // ATTEND THE EVENT
         try {
+          // debugPrint('${Scanner.userEmail}');
           numUserScanned = await attendEvent(
             BASE_URL,
-            QRScanner.cred!,
+            _storedEmail!,
+            _authToken!,
             userEmailOrId,
             event!,
             false,
           );
-          print('********** user event count: $numUserScanned');
+          debugPrint('********** user event count: $numUserScanned');
           result = 'SCANNED!';
         } on UserCheckedEvent {
-          print('already ' + userEmailOrId);
-          //** TODO: FIX THIS LOGIC AS WELL */
-          // if (await _scanDialogWarning('ALREADY SCANNED! RESCAN?')) {
-          //   numUserScanned = await attendEvent(
-          //       BASE_URL, QRScanner.cred, userEmailOrId, event, true);
-          //   print('********** user event count: $numUserScanned');
-          //   result = 'SCANNED!';
-          // }
-          // else {
-          //   return NOT_SCANNED;
-          // }
+          // var prev = numUserScanned;
+          debugPrint('already ' + userEmailOrId);
+          result = 'ALREADY SCANNED';
+          var rescan = await _scanDialogWarning('ALREADY SCANNED! RESCAN?');
+          debugPrint('$rescan');
+          if (rescan) {
+            numUserScanned = await attendEvent(
+              BASE_URL,
+              _storedEmail!,
+              _authToken!,
+              userEmailOrId,
+              event!,
+              true,
+            );
+            int test = numUserScanned as int;
+            debugPrint('********** user event count: $test');
+            // if (prev > numUserScanned) {
+            result = 'SCANNED!';
+            // }
+          } else {
+            return NOT_SCANNED;
+          }
         } on UserNotFound {
-          print('h ' + userEmailOrId);
+          debugPrint('h ' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
             if (Scanner.userEmail != '') {
+              debugPrint('test ${Scanner.userEmail}');
               linkQR(
                 BASE_URL,
-                QRScanner.cred!,
+                _storedEmail!,
+                _authToken!,
                 Scanner.userEmail!,
                 userEmailOrId,
               );
-              print('**** Day-of QR linked!');
+              debugPrint('**** Day-of QR linked!');
               return 'DAY-OF QR LINKED!';
             } else {
               // *** TODO: also fix this, looks weird
-              await await _scanDialogWarning('Scan Email First!');
+              // await await _scanDialogWarning('Scan Email First!');
+              result = 'SCAN EMAIL FIRST';
             }
           } else {
             rethrow;
@@ -361,6 +379,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         }
       } else {
         print('attempt to scan null');
+        result = 'NULL ERROR';
       }
     } on LcsLoginFailed {
       result = 'LCS LOGIN FAILED!';
@@ -376,16 +395,22 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       result = 'ERROR PRINTING LABEL';
     } on ArgumentError catch (e) {
       result = 'UNEXPECTED ERROR';
+      debugPrint('======================');
       print(result);
       print(e);
       print(e.invalidValue);
       print(e.message);
       print(e.name);
+      print(e.stackTrace);
+      debugPrint('======================');
     } on SocketException {
       result = 'NETWORK ERROR';
     } catch (e) {
       result = 'UNEXPECTED ERROR';
+      debugPrint('===== TRY CATCH =====');
+      print(result);
       print(e);
+      debugPrint('======= TRY CATCH ======');
     }
     return result;
   }
