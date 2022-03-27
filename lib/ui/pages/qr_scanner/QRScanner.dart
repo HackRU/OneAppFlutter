@@ -194,7 +194,7 @@ class _CardExpansionState extends State<CardExpansion> {
                   size: 28.0,
                 ),
                 title: Text(
-                  _selectedEvent.toUpperCase(),
+                  _selectedEvent,
                   style: TextStyle(
                     color:
                         isExpanded ? HackRUColors.white : HackRUColors.charcoal,
@@ -222,7 +222,7 @@ class _CardExpansionState extends State<CardExpansion> {
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           title: Text(
-                            widget.events[index].toString().toUpperCase(),
+                            widget.events[index],
                             style: TextStyle(
                               color: isExpanded
                                   ? HackRUColors.charcoal

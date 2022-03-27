@@ -188,21 +188,22 @@ class DashboardState extends State<Dashboard> {
 
   Stream<List<Announcement>> _getSlacks() {
     var streamCtrl = StreamController<List<Announcement>>();
-    if (cachedMsgs != null) {
-      streamCtrl.sink.add(cachedMsgs!);
-    }
+    // if (cachedMsgs != null) {
+    //   streamCtrl.sink.add(cachedMsgs!);
+    // }
     try {
-      getSlackAnnouncements().then((slackMsgs) {
+      slackResources().then((slackMsgs) {
+        debugPrint('======= slacks: $slackMsgs');
         streamCtrl.sink.add(slackMsgs);
       });
-      if (cacheTTL.isBefore(DateTime.now())) {
-        slackResources().then((slackMsgs) {
-          streamCtrl.sink.add(slackMsgs);
-          persistSlackAnnouncements(slackMsgs);
-          cacheTTL = DateTime.now().add(Duration(minutes: 5));
-          streamCtrl.close();
-        });
-      }
+      // if (cacheTTL.isBefore(DateTime.now())) {
+      //   slackResources().then((slackMsgs) {
+      //     streamCtrl.sink.add(slackMsgs);
+      //     persistSlackAnnouncements(slackMsgs);
+      //     cacheTTL = DateTime.now().add(Duration(minutes: 5));
+      //     streamCtrl.close();
+      //   });
+      // }
     } catch (e) {
       print('***********************\nSlack data stream ctrl error: ' +
           e.toString());
