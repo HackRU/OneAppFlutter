@@ -1,5 +1,4 @@
 import 'package:hackru/styles.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
 class PageNotFound extends StatefulWidget {
@@ -37,12 +36,13 @@ class _PageNotFoundState extends State<PageNotFound> {
           Container(
             margin: EdgeInsets.only(left: 50.0, bottom: 35.0),
             height: 400.0,
-            child: FlareActor(
-              'flare/Filip.flr',
-              alignment: Alignment.topRight,
-              fit: BoxFit.contain,
-              animation: 'idle',
-            ),
+            child: const Text('Oops, page not found!'),
+            // child: const RiveAnimation.asset(
+            //   'flare/Filip.flr',
+            //   alignment: Alignment.center,
+            //   fit: BoxFit.contain,
+            //   animations: ['idle'],
+            // ),
           ),
         ],
       ),

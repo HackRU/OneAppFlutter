@@ -2,50 +2,84 @@ import 'package:hackru/styles.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+
 import 'package:url_launcher/url_launcher.dart';
+
+const helpResources = [
+  {"name": "MentorQ", "desc": "mentorship", "url": "http://mentorq.hackru.org"},
+  {
+    "name": "Slack",
+    "desc": "talk to friends at hackru",
+    "url": "http://tinyurl.com/hackru-f19"
+  },
+  {
+    "name": "Devpost",
+    "desc": "submit your projects",
+    "url": "https://hackru-s22.devpost.com/"
+  },
+  {
+    "name": "Food Menu",
+    "desc": "breakfast, lunch, and dinner",
+    "url": "https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf"
+  }
+];
 
 class Help extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: FutureBuilder<List<HelpResource>>(
-        future: helpResources(MISC_URL),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return Center(
-                child: Container(
-                  color: HackRUColors.transparent,
-                  height: 400.0,
-                  width: 400.0,
-                  child: FlareActor(
-                    'assets/flare/loading_indicator.flr',
-                    alignment: Alignment.center,
-                    fit: BoxFit.contain,
-                    animation: 'idle',
-                  ),
-                ),
-              );
-            default:
-              print(snapshot.hasError);
-              var resources = snapshot.data;
-//              print(resources);
-              return Container(
-                child: ListView.builder(
-                  itemCount: resources?.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return HelpButton(resource: resources![index]);
-                  },
-                ),
-              );
-          }
+      body: ListView.builder(
+        itemCount: helpResources.length,
+        itemBuilder: (BuildContext context, int index) {
+          HelpResource helpResource =
+              HelpResource.fromJson(helpResources[index]);
+          return HelpButton(
+            resource: helpResource,
+          );
         },
       ),
+//       body: FutureBuilder<List<HelpResource>>(
+//         future: helpResources(MISC_URL),
+//         builder:
+//             (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
+//           switch (snapshot.connectionState) {
+//             case ConnectionState.none:
+//             case ConnectionState.waiting:
+//               return const Center(
+//                 child: CircularProgressIndicator(),
+//                 // child: Container(
+//                 //   color: HackRUColors.transparent,
+//                 //   height: 400.0,
+//                 //   width: 400.0,
+//                 //   child: const RiveAnimation.asset(
+//                 //     'assets/flare/loading_indicator.flr',
+//                 //     alignment: Alignment.center,
+//                 //     fit: BoxFit.contain,
+//                 //     animations: ['idle'],
+//                 //   ),
+//                 // ),
+//               );
+//             default:
+//               print(snapshot.hasError);
+//               var resources = snapshot.data;
+// //              print(resources);
+//               return !snapshot.hasError
+//                   ? ListView.builder(
+//                       itemCount: resources?.length,
+//                       itemBuilder: (BuildContext context, int index) {
+//                         return HelpButton(resource: resources![index]);
+//                       },
+//                     )
+//                   : const Center(
+//                       child: Text(
+//                         'An error occurred while fetching help resources!',
+//                       ),
+//                     );
+//           }
+//         },
+//       ),
     );
   }
 }

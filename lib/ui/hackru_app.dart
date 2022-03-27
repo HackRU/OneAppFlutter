@@ -5,7 +5,6 @@ import 'package:hackru/ui/pages/about_app/about.dart';
 import 'package:hackru/ui/pages/help/help.dart';
 import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -220,12 +219,12 @@ class _HackRUAppState extends State<HackRUApp> {
       elevationAppBar: 0.0,
       backgroundMenu: Container(
         color: HackRUColors.charcoal,
-        child: const FlareActor(
-          'assets/flare/party.flr',
-          alignment: Alignment.center,
-          fit: BoxFit.contain,
-          animation: 'idle',
-        ),
+        // child: const RiveAnimation.asset(
+        //   'assets/flare/party.flr',
+        //   alignment: Alignment.center,
+        //   fit: BoxFit.contain,
+        //   animations: ['idle'],
+        // ),
       ),
       screens: items,
       typeOpen: TypeOpen.FROM_LEFT,

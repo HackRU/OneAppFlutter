@@ -2,13 +2,28 @@ import 'package:hackru/styles.dart';
 import 'package:hackru/ui/widgets/custom_expansion_tile.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+
 import '../../../defaults.dart';
 import '../../../models/cred_manager.dart';
 import 'newScanner.dart';
 
 const NOT_SCANNED = 'NOT SCANNED';
+
+const qrEvents = [
+  "check-in",
+  "check-in-no-delayed",
+  "lunch-1",
+  "dinner",
+  "t-shirts",
+  "midnight-meal",
+  "midnight-surprise",
+  "breakfast",
+  "lunch-2",
+  "raffle",
+  "ctf-1",
+  "ctf-2"
+];
 
 class QRScanner extends StatefulWidget {
   static LcsCredential? cred;
@@ -50,35 +65,41 @@ class _QRScannerState extends State<QRScanner> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : (isAuthorized
-              ? FutureBuilder(
-                  future: qrEvents(MISC_URL),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Center(
-                          child: Container(
-                            color: HackRUColors.transparent,
-                            height: 400.0,
-                            width: 400.0,
-                            child: const FlareActor(
-                              'assets/flare/loading_indicator.flr',
-                              alignment: Alignment.center,
-                              fit: BoxFit.contain,
-                              animation: 'idle',
-                            ),
-                          ),
-                        );
-                      default:
-                        print(snapshot.hasError);
-                        return ListView(
-                          children: <Widget>[
-                            CardExpansion(events: snapshot.data),
-                          ],
-                        );
-                    }
-                  },
+              ? ListView(
+                  children: <Widget>[
+                    CardExpansion(events: qrEvents),
+                  ],
                 )
+              // ? FutureBuilder(
+              //     future: qrEvents(MISC_URL),
+              //     builder: (BuildContext context, AsyncSnapshot snapshot) {
+              //       switch (snapshot.connectionState) {
+              //         case ConnectionState.none:
+              //         case ConnectionState.waiting:
+              //           return const Center(
+              //             child: CircularProgressIndicator(),
+              //             // child: Container(
+              //             //   color: HackRUColors.transparent,
+              //             //   height: 400.0,
+              //             //   width: 400.0,
+              //             //   child: const RiveAnimation.asset(
+              //             //     'assets/flare/loading_indicator.flr',
+              //             //     alignment: Alignment.center,
+              //             //     fit: BoxFit.contain,
+              //             //     animations: ['idle'],
+              //             //   ),
+              //             // ),
+              //           );
+              //         default:
+              //           print(snapshot.hasError);
+              //           return ListView(
+              //             children: <Widget>[
+              //               CardExpansion(events: snapshot.data),
+              //             ],
+              //           );
+              //       }
+              //     },
+              //   )
               : const Center(
                   child: Text(
                     "Sorry, you are not authorized to use this feature! Please login if you haven't!",
@@ -173,7 +194,7 @@ class _CardExpansionState extends State<CardExpansion> {
                   size: 28.0,
                 ),
                 title: Text(
-                  _selectedEvent,
+                  _selectedEvent.toUpperCase(),
                   style: TextStyle(
                     color:
                         isExpanded ? HackRUColors.white : HackRUColors.charcoal,
@@ -201,7 +222,7 @@ class _CardExpansionState extends State<CardExpansion> {
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           title: Text(
-                            widget.events[index],
+                            widget.events[index].toString().toUpperCase(),
                             style: TextStyle(
                               color: isExpanded
                                   ? HackRUColors.charcoal
@@ -239,12 +260,8 @@ class _CardExpansionState extends State<CardExpansion> {
                     height: currentOrientation == Orientation.portrait
                         ? 300.0
                         : 0.0,
-                    child: FlareActor(
-                      'assets/flare/forever_wondering.flr',
-                      alignment: Alignment.center,
-                      fit: BoxFit.contain,
-                      animation: 'idle',
-                    ),
+                    child: const Text(
+                        'Select event and above and scan for QR codes by clicking the button below'),
                   ),
                 ),
               )

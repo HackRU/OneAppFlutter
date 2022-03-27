@@ -4,7 +4,6 @@ import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/ui/pages/events/events_for_day.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
 class Events extends StatefulWidget {
@@ -91,18 +90,19 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Center(
-                child: Container(
-                  color: HackRUColors.transparent,
-                  height: 400.0,
-                  width: 400.0,
-                  child: FlareActor(
-                    'assets/flare/loading_indicator.flr',
-                    alignment: Alignment.center,
-                    fit: BoxFit.contain,
-                    animation: 'idle',
-                  ),
-                ),
+              return const Center(
+                child: CircularProgressIndicator(),
+                // child: Container(
+                //   color: HackRUColors.transparent,
+                //   height: 400.0,
+                //   width: 400.0,
+                //   child: const RiveAnimation.asset(
+                //     'assets/flare/loading_indicator.flr',
+                //     alignment: Alignment.center,
+                //     fit: BoxFit.contain,
+                //     animations: ['idle'],
+                //   ),
+                // ),
               );
             default:
               print(snapshot.hasError);

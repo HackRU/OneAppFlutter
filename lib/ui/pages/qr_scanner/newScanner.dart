@@ -76,11 +76,11 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             flex: 5,
             child: Center(
               child: MobileScanner(
-                allowDuplicates: true,
+                allowDuplicates: false,
                 onDetect: (barcode, args) {
                   final String code = barcode.rawValue!;
                   debugPrint('qr_code found: $code');
-                  // _qrRequest(code); // to call backend API
+                  _qrRequest(code); // to call backend API
                 },
               ),
             ),

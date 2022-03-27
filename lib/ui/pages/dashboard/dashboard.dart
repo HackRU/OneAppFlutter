@@ -8,10 +8,10 @@ import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/ui/pages/dashboard/announcement_card.dart';
 // import 'package:hackru/ui/widgets/dialog/notification_onclick.dart';
-import 'package:flare_flutter/flare_actor.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 // import 'package:hackru/main.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -221,18 +221,19 @@ class DashboardState extends State<Dashboard> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Center(
-                child: Container(
-                  color: HackRUColors.transparent,
-                  height: 400.0,
-                  width: 400.0,
-                  child: FlareActor(
-                    'assets/flare/loading_indicator.flr',
-                    alignment: Alignment.center,
-                    fit: BoxFit.contain,
-                    animation: 'idle',
-                  ),
-                ),
+              return const Center(
+                child: CircularProgressIndicator(),
+                // child: Container(
+                //   color: HackRUColors.transparent,
+                //   height: 400.0,
+                //   width: 400.0,
+                //   child: const RiveAnimation.asset(
+                //     'assets/flare/loading_indicator.flr',
+                //     alignment: Alignment.center,
+                //     fit: BoxFit.contain,
+                //     animations: ['idle'],
+                //   ),
+                // ),
               );
             default:
               print('ERROR-->DASHBOARD: ${snapshot.hasError}');

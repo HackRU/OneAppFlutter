@@ -18,7 +18,8 @@ Future<http.Response> getMisc(String endpoint) {
 
 Future<http.Response> getLcs(String endpoint) {
   return client
-      .get(Uri.parse(BASE_URL + endpoint))
+      .get(
+          Uri.parse(endpoint.contains('dayof') ? PROD_URL : DEV_URL + endpoint))
       .timeout(const Duration(seconds: 10));
 }
 
@@ -66,12 +67,26 @@ Future<List<HelpResource>> helpResources(String miscUrl) async {
       .toList();
 }
 
-Future<List<String>> qrEvents(String miscUrl) async {
-  var response = await getMisc('/events.json');
-  var resources = json.decode(response.body);
-  var qrEvents = List<String>.from(resources);
-  return qrEvents;
-}
+// List<String> qrEvents(String miscUrl) async {
+// var response = await getMisc('/events.json');
+// var events = [
+//   "check-in",
+//   "check-in-no-delayed",
+//   "lunch-1",
+//   "dinner",
+//   "t-shirts",
+//   "midnight-meal",
+//   "midnight-surprise",
+//   "breakfast",
+//   "lunch-2",
+//   "raffle",
+//   "ctf-1",
+//   "ctf-2"
+// ];
+var qrEvents = json.encode(events);
+// var qrEvents = List<String>.from(resources);
+// return qrEvents;
+// }
 
 ///========================================================
 ///                     GET REQUESTS
