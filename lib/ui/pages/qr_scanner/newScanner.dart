@@ -79,7 +79,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                 allowDuplicates: false,
                 onDetect: (barcode, args) {
                   final String code = barcode.rawValue!;
-                  debugPrint('qr_code found: $code');
+                  // debugPrint('qr_code found: $code');
                   _qrRequest(code); // to call backend API
                 },
               ),
@@ -168,7 +168,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     print('************* qrRequest made ***********');
     var message;
     message = await _lcsHandle(scanData);
-    debugPrint(message);
+    // debugPrint(message);
     if (message == 'SCANNED!' ||
         message == 'EMAIL SCANNED!' ||
         message == 'DAY-OF QR LINKED!') {
@@ -289,7 +289,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     var _storedEmail = await getEmail();
     var _authToken = await getAuthToken();
     var result = 'NULL';
-    print('***** Called `lcsHandle` with qr:' + userEmailOrId);
+    // print('***** Called `lcsHandle` with qr:' + userEmailOrId);
     // debugPrint('${QRScanner.cred}');
     var user;
     var numUserScanned;
@@ -314,7 +314,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             Scanner.userEmail = userEmailOrId;
           }
 
-          print('****** User: $user');
+          // print('****** User: $user');
           result = 'EMAIL SCANNED!';
         }
 
@@ -333,7 +333,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           result = 'SCANNED!';
         } on UserCheckedEvent {
           // var prev = numUserScanned;
-          debugPrint('already ' + userEmailOrId);
+          // debugPrint('already ' + userEmailOrId);
           result = 'ALREADY SCANNED';
           var rescan = await _scanDialogWarning('ALREADY SCANNED! RESCAN?');
           debugPrint('$rescan');
@@ -355,10 +355,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             return NOT_SCANNED;
           }
         } on UserNotFound {
-          debugPrint('h ' + userEmailOrId);
+          // debugPrint('h ' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
             if (Scanner.userEmail != '') {
-              debugPrint('test ${Scanner.userEmail}');
+              // debugPrint('test ${Scanner.userEmail}');
               linkQR(
                 BASE_URL,
                 _storedEmail!,

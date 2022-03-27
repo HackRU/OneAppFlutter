@@ -33,10 +33,10 @@ Future<http.Response> postLcs(String endpoint, dynamic kBody) async {
   var decoded = jsonDecode(result.body);
   // debugPrint('${result.statusCode} $decoded');
   if (decoded['statusCode'] != result.statusCode) {
-    print(decoded);
-    print(
-        '!!!!!!!!!!!!WARNING\nBody and Container status code dissagree actual ${result.statusCode} body: ${decoded['statusCode']}\n');
-    print(endpoint);
+    // print(decoded);
+    // print(
+    //     '!!!!!!!!!!!!WARNING\nBody and Container status code dissagree actual ${result.statusCode} body: ${decoded['statusCode']}\n');
+    // print(endpoint);
   }
   return result;
 }
@@ -207,7 +207,7 @@ Future<User> getUser(String authToken, String emailAddress,
 // check if the user credential belongs to is role.director first. or else it will break :(
 void updateUserDayOf(
     String lcsUrl, LcsCredential credential, User user, String event) async {
-  print(event);
+  // print(event);
   var result = await postLcs('/update', {
     'updates': {
       '\$set': {'day_of.$event': true}
@@ -230,9 +230,9 @@ void updateUserDayOf(
 
 Future<int> attendEvent(String lcsUrl, String _authE, String _authT,
     String userEmailOrId, String event, bool again) async {
-  debugPrint(event);
-  debugPrint(
-      'Attend even called with \n auth: $_authE \n token: $_authT \n for user: $userEmailOrId \n for the event: $event');
+  // debugPrint(event);
+  // debugPrint(
+  //     'Attend even called with \n auth: $_authE \n token: $_authT \n for user: $userEmailOrId \n for the event: $event');
   var result = await postLcs('/attend-event', {
     'auth_email': _authE, //TODO: figure out how to get auth_email here
     'qr': userEmailOrId,
@@ -244,7 +244,7 @@ Future<int> attendEvent(String lcsUrl, String _authE, String _authT,
   var body = json.decode(result.body);
   if (body['statusCode'] == 200) {
     var resp = body['body']['new_count'];
-    debugPrint('====== in 200 responsebody $resp');
+    // debugPrint('====== in 200 responsebody $resp');
     return resp;
   } else if (body['statusCode'] == 402) {
     throw UserCheckedEvent();
@@ -257,8 +257,8 @@ Future<int> attendEvent(String lcsUrl, String _authE, String _authT,
 
 void linkQR(String lcsUrl, String _authE, String _authT, String userEmailOrId,
     String hashQR) async {
-  debugPrint('linkQR called: $hashQR');
-  debugPrint('$_authE $_authT $userEmailOrId');
+  // debugPrint('linkQR called: $hashQR');
+  // debugPrint('$_authE $_authT $userEmailOrId');
   var result = await postLcs('/link-qr', {
     'auth_email': _authE, // figure out how to get auth email here
     'email': userEmailOrId,
@@ -289,10 +289,10 @@ Future<bool> isAuthorizedForQRScanner(String token, String email) async {
 void main() {
   Future<void> testCall(email, password) async {
     LcsCredential cred = await login(email, password);
-    print('====== token/email: ${cred.token} / $email');
+    // print('====== token/email: ${cred.token} / $email');
 
     User user = await getUser(cred.token, email);
-    print('====== user: ${user.toJson()}');
+    // print('====== user: ${user.toJson()}');
   }
 
   testCall('a@a.com', 'a');
