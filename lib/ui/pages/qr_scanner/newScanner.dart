@@ -35,6 +35,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
   bool isPlaying = false;
   late MobileScannerController cameraController;
+  final TextEditingController _textFieldController = TextEditingController();
 
   @override
   void initState() {
@@ -165,10 +166,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   }
 
   void _qrRequest(String scanData) async {
-    print('************* qrRequest made ***********');
+    // print('************* qrRequest made ***********');
     var message;
     message = await _lcsHandle(scanData);
-    // debugPrint(message);
+    debugPrint(message);
     if (message == 'SCANNED!' ||
         message == 'EMAIL SCANNED!' ||
         message == 'DAY-OF QR LINKED!') {
@@ -285,6 +286,75 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     );
   }
 
+  String? valueText;
+  String? codeDialog;
+  Future _displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: HackRUColors.pink,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: const Text('Enter email to link'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() {
+                  valueText = value;
+                });
+              },
+              controller: _textFieldController,
+              decoration:
+                  const InputDecoration(hintText: "emailtolink@email.com"),
+            ),
+            actions: <Widget>[
+              TextButton(
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.all(15.0),
+                  ),
+                ),
+                child: const Text(
+                  'CANCEL',
+                  style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              MaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                splashColor: HackRUColors.yellow,
+                height: 40.0,
+                color: HackRUColors.off_white,
+                padding: const EdgeInsets.all(15.0),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: HackRUColors.pink,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () {
+                  setState(() {
+                    codeDialog = valueText;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   Future<String> _lcsHandle(String userEmailOrId) async {
     var _storedEmail = await getEmail();
     var _authToken = await getAuthToken();
@@ -294,7 +364,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     var user;
     var numUserScanned;
     try {
-      if (userEmailOrId != null) {
+      if (userEmailOrId != '') {
         var event = CardExpansion.event;
         // HANDLE CHECK_IN EVENT, potentially link
         if (event == 'check-in' || event == 'check-in-no-delayed') {
@@ -329,14 +399,14 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             event!,
             false,
           );
-          debugPrint('********** user event count: $numUserScanned');
+          // debugPrint('********** user event count: $numUserScanned');
           result = 'SCANNED!';
         } on UserCheckedEvent {
           // var prev = numUserScanned;
           // debugPrint('already ' + userEmailOrId);
           result = 'ALREADY SCANNED';
           var rescan = await _scanDialogWarning('ALREADY SCANNED! RESCAN?');
-          debugPrint('$rescan');
+          // debugPrint('$rescan');
           if (rescan) {
             numUserScanned = await attendEvent(
               BASE_URL,
@@ -346,8 +416,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               event!,
               true,
             );
-            int test = numUserScanned as int;
-            debugPrint('********** user event count: $test');
+            // int test = numUserScanned as int;
+            // debugPrint('********** user event count: $test');
             // if (prev > numUserScanned) {
             result = 'SCANNED!';
             // }
@@ -355,30 +425,37 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             return NOT_SCANNED;
           }
         } on UserNotFound {
-          // debugPrint('h ' + userEmailOrId);
+          // debugPrint('hashqr:' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
-            if (Scanner.userEmail != '') {
-              // debugPrint('test ${Scanner.userEmail}');
-              linkQR(
-                BASE_URL,
-                _storedEmail!,
-                _authToken!,
-                Scanner.userEmail!,
-                userEmailOrId,
-              );
-              debugPrint('**** Day-of QR linked!');
-              return 'DAY-OF QR LINKED!';
+            await _displayTextInputDialog(context);
+            var linkToUser = codeDialog;
+            // debugPrint('linkToUser: $linkToUser');
+            if (!_isEmailAddress(linkToUser!) ||
+                linkToUser == null ||
+                linkToUser == '') {
+              debugPrint('Not an email: $linkToUser');
+              return 'NOT A VALID EMAIL';
             } else {
-              // *** TODO: also fix this, looks weird
-              // await await _scanDialogWarning('Scan Email First!');
-              result = 'SCAN EMAIL FIRST';
+              debugPrint('Email to link: $linkToUser');
+              try {
+                linkQR(
+                  BASE_URL,
+                  _storedEmail!,
+                  _authToken!,
+                  linkToUser,
+                  userEmailOrId,
+                );
+                return 'DAY-OF QR LINKED!';
+              } on UserNotFound {
+                return 'USER NOT FOUND';
+              }
             }
           } else {
             rethrow;
           }
         }
       } else {
-        print('attempt to scan null');
+        // print('attempt to scan null');
         result = 'NULL ERROR';
       }
     } on LcsLoginFailed {
