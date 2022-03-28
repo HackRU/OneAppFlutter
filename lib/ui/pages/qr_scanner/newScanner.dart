@@ -40,7 +40,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    cameraController = MobileScannerController();
+    cameraController = MobileScannerController(facing: CameraFacing.back);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   }
@@ -428,6 +428,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         } on UserNotFound {
           // debugPrint('hashqr:' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
+            codeDialog = '';
             await _displayTextInputDialog(context);
             var linkToUser = codeDialog;
             // debugPrint('linkToUser: $linkToUser');
