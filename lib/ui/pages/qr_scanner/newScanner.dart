@@ -289,6 +289,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   String? valueText;
   String? codeDialog;
   Future _displayTextInputDialog(BuildContext context) async {
+    codeDialog = '';
     return showDialog(
         context: context,
         builder: (context) {
