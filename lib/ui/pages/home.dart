@@ -1,3 +1,4 @@
+import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/ui/pages/dashboard/dashboard.dart';
@@ -5,7 +6,7 @@ import 'package:hackru/ui/pages/events/events.dart';
 import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
@@ -127,43 +128,69 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   ///                      SHOW QR-CODE
   ///===========================================================
   void _showQrCode() async {
-    /*var userEmail = await getEmail();
+    var userEmail = await getEmail();
     switch (await showDialog(
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15.0),
-            ),
-          ),
+          // shape: const RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.all(
+          //     Radius.circular(15.0),
+          //   ),
+          // ),
           children: <Widget>[
             Container(
-              height: 340.0,
-              width: 400.0,
-              child: ListView(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: QrImage(
-                      version: 4,
-                      data: userEmail ?? '',
-                      gapless: true,
-                      foregroundColor: charcoal,
-                    ),
-                  ),
-                  Center(
-                    child: Text(userEmail ?? ''),
-                  ),
-                ],
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15.0),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    HackRUColors.white,
+                    HackRUColors.white,
+                  ],
+                ),
               ),
+              height: 400,
+              width: 400.0,
+              child: Center(
+                child: QrImage(
+                  version: 4,
+                  data: userEmail ?? '',
+                  gapless: true,
+                  embeddedImage: const AssetImage(
+                      'assets/hackru-logos/appIconImageWhite.png'),
+                  embeddedImageStyle: QrEmbeddedImageStyle(
+                    size: const Size(50, 50),
+                  ),
+                  foregroundColor: HackRUColors.charcoal,
+                ),
+              ),
+              // ListView(
+              //   children: <Widget>[
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              //       child: QrImage(
+              //         version: 4,
+              //         data: userEmail ?? '',
+              //         gapless: true,
+              //         foregroundColor: HackRUColors.charcoal,
+              //       ),
+              //     ),
+              //     // Center(
+              //     //   child: Text(userEmail ?? ''),
+              //     // ),
+              //   ],
+              // ),
             ),
           ],
-          backgroundColor: white,
+          backgroundColor: Colors.transparent,
         );
       },
     )) {
-    }*/
+    }
   }
 
   ///===========================================================
@@ -209,7 +236,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         backgroundColor: Theme.of(context).accentColor,
         child: Icon(
           FontAwesomeIcons.qrcode,
-          size: 34,
+          size: 22,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
