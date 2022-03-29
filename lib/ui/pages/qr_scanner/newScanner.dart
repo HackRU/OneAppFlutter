@@ -40,7 +40,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    cameraController = MobileScannerController(facing: CameraFacing.back);
+    cameraController = MobileScannerController();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   }
@@ -78,9 +78,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             child: Center(
               child: MobileScanner(
                 allowDuplicates: false,
+                controller: cameraController,
                 onDetect: (barcode, args) {
                   final String code = barcode.rawValue!;
-                  // debugPrint('qr_code found: $code');
+                  //debugPrint('qr_code found: $code');
                   _qrRequest(code); // to call backend API
                 },
               ),
@@ -109,20 +110,46 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Container(
-                    child: IconButton(
-                      iconSize: 80,
-                      icon: Icon(
-                        isPlaying
-                            ? FontAwesomeIcons.playCircle
-                            : FontAwesomeIcons.pauseCircle,
-                        color: isPlaying
-                            ? HackRUColors.yellow
-                            : HackRUColors.pink_light,
-                      ),
-                      onPressed: () => _handleOnPressed(),
-                    ),
-                  ),
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          iconSize: 80,
+                          icon: Icon(
+                            isPlaying
+                                ? FontAwesomeIcons.playCircle
+                                : FontAwesomeIcons.pauseCircle,
+                            color: isPlaying
+                                ? HackRUColors.yellow
+                                : HackRUColors.pink_light,
+                          ),
+                          onPressed: () => _handleOnPressed(),
+                        ),
+                        IconButton(
+                          iconSize: 80,
+                          icon: ValueListenableBuilder(
+                            valueListenable: cameraController.cameraFacingState,
+                            builder: (context, state, child) {
+                              switch (state as CameraFacing) {
+                                case CameraFacing.front:
+                                  return const Icon(
+                                    Icons.flip_camera_ios_outlined,
+                                    color: HackRUColors.off_white,
+                                    // size: 50,
+                                  );
+                                case CameraFacing.back:
+                                  return const Icon(
+                                    Icons.flip_camera_ios_rounded,
+                                    color: HackRUColors.off_white,
+                                    // size: 50,
+                                  );
+                              }
+                            },
+                          ),
+                          onPressed: () => cameraController.switchCamera(),
+                        ),
+                      ]),
                 ],
               ),
             ),
