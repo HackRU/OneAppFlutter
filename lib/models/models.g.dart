@@ -116,6 +116,7 @@ Map<String, dynamic> _$AuthToJson(Auth instance) => <String, dynamic>{
 
 Event _$EventFromJson(Map<String, dynamic> json) => Event(
       summary: json['summary'] as String?,
+      location: json['location'] as String?,
       start: json['start'] == null
           ? null
           : DateTime.parse(json['start'] as String),
@@ -123,5 +124,6 @@ Event _$EventFromJson(Map<String, dynamic> json) => Event(
 
 Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'summary': instance.summary,
+      'location': instance.location,
       'start': instance.start?.toIso8601String(),
     };

@@ -58,20 +58,27 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
   static List<Event>? cachedEvents;
   static DateTime cacheTTL = DateTime.now();
 
-  Stream<List<Event>> _getEvents() {
-    var streamctl = StreamController<List<Event>>();
-    if (cachedEvents != null) {
-      streamctl.sink.add(cachedEvents!);
-    }
-    if (cacheTTL.isBefore(DateTime.now())) {
-      print('cache miss');
-      dayofEventsResources().then((events) {
-        streamctl.sink.add(events);
-        cachedEvents = events;
-        cacheTTL = DateTime.now().add(Duration(minutes: 30));
+  Future<List<Event>> _getEvents() async {
+    // if (cachedEvents != null) {
+    //   streamctl.sink.add(cachedEvents!);
+    // }
+    // if (cacheTTL.isBefore(DateTime.now())) {
+    //   print('cache miss');
+    //   dayofEventsResources().then((events) {
+    //     streamctl.sink.add(events);
+    //     cachedEvents = events;
+    //     cacheTTL = DateTime.now().add(Duration(minutes: 30));
+    //   });
+    // }
+    var dayofEvents = List<Event>.empty();
+    try {
+      await dayofEventsResources().then((events) {
+        dayofEvents = events;
       });
+    } catch (e) {
+      print('==== \nSlack data stream ctrl error: ' + e.toString());
     }
-    return streamctl.stream;
+    return dayofEvents;
   }
 
   @override
@@ -84,8 +91,8 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
         elevation: 0.0,
         automaticallyImplyLeading: false,
       ),
-      body: StreamBuilder<List<Event>>(
-        stream: _getEvents(),
+      body: FutureBuilder<List<Event>>(
+        future: _getEvents(),
         builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -105,11 +112,11 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
                 // ),
               );
             default:
-              print(snapshot.hasError);
+              print('==== hasSnapshotError: ${snapshot.hasError}');
               var events = snapshot.data;
               return getTabBarView(<Widget>[
-                EventsForDay(day: '18', events: events),
-                EventsForDay(day: '19', events: events),
+                EventsForDay(day: '2', events: events),
+                EventsForDay(day: '3', events: events),
               ]);
           }
         },

@@ -208,15 +208,16 @@ class DashboardState extends State<Dashboard> {
   /// =================================================
   static List<Announcement>? cachedMsgs;
 
-  Stream<List<Announcement>> _getSlacks() {
-    var streamCtrl = StreamController<List<Announcement>>();
+  Future<List<Announcement>> _getSlacks() async {
+    // var streamCtrl = StreamController<List<Announcement>>();
     // if (cachedMsgs != null) {
     //   streamCtrl.sink.add(cachedMsgs!);
     // }
+    var slackMessages = List<Announcement>.empty();
     try {
-      slackResources().then((slackMsgs) {
+      await slackResources().then((slackMsgs) {
         // debugPrint('======= slacks: $slackMsgs');
-        streamCtrl.sink.add(slackMsgs);
+        slackMessages = slackMsgs;
       });
       // if (cacheTTL.isBefore(DateTime.now())) {
       //   slackResources().then((slackMsgs) {
@@ -230,15 +231,15 @@ class DashboardState extends State<Dashboard> {
       print('***********************\nSlack data stream ctrl error: ' +
           e.toString());
     }
-    return streamCtrl.stream;
+    return slackMessages;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: StreamBuilder<List<Announcement>?>(
-        stream: _getSlacks(),
+      body: FutureBuilder<List<Announcement>?>(
+        future: _getSlacks(),
         builder: (BuildContext context,
             AsyncSnapshot<List<Announcement>?> snapshot) {
           switch (snapshot.connectionState) {

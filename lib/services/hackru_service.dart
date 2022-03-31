@@ -111,11 +111,19 @@ Future<List<Announcement>> slackResources() async {
       )
     ];
   }
-  if (resources['body'].length <= 3) {
+  if (resources['body'].length == 0) {
     if (resources['body']['statusCode'] == 400) {
       return [
         Announcement(
           text: 'Error: Unable to retrieve messages!',
+          ts: tsNow,
+        )
+      ];
+    }
+    if (resources['body']['statusCode'] == 200) {
+      return [
+        Announcement(
+          text: 'Nothing to show at the moment, please stay tuned!',
           ts: tsNow,
         )
       ];
