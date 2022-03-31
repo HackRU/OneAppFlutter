@@ -12,6 +12,8 @@ import 'package:hackru/ui/pages/dashboard/announcement_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../widgets/flip_panel.dart';
+
 // import 'package:hackru/main.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -24,6 +26,15 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   var _displayTimerBanner = true;
   static DateTime cacheTTL = DateTime.now();
+
+  final hackRUStartDate = DateTime.utc(1989, DateTime.november, 9);
+  final hackRUEndDate = DateTime.utc(1989, DateTime.november, 9);
+  final currentDate = DateTime.now();
+
+  final diffStartEvent =
+      DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
+  final diffEndEvent =
+      DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
 
   // late final FirebaseMessaging _firebaseMessaging;
 
@@ -148,17 +159,28 @@ class DashboardState extends State<Dashboard> {
   /// =================================================
 
   Widget _timerBanner() {
+    // debugPrint('====== day: ${DateTime.now().day}');
     return MaterialBanner(
-      padding: EdgeInsets.all(10.0),
-      leadingPadding: EdgeInsets.symmetric(horizontal: 10.0),
-      leading: Icon(
+      padding: const EdgeInsets.all(10.0),
+      leadingPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+      leading: const Icon(
         Icons.timer,
         color: HackRUColors.white,
         size: 50.0,
       ),
       content: Padding(
         padding: const EdgeInsets.only(left: 15.0),
-        child: TimerText(),
+        child: FlipClock.reverseCountdown(
+          duration: (DateTime.now().day != 2 &&
+                  DateTime.now().day != 3 &&
+                  DateTime.now().month == DateTime.april)
+              ? Duration(milliseconds: diffStartEvent.inMilliseconds)
+              : Duration(milliseconds: diffEndEvent.inMilliseconds),
+          digitColor: HackRUColors.pink,
+          backgroundColor: HackRUColors.white,
+          digitSize: 25,
+        ),
+        // child: TimerText(),
       ),
       actions: [
         TextButton(
@@ -193,7 +215,7 @@ class DashboardState extends State<Dashboard> {
     // }
     try {
       slackResources().then((slackMsgs) {
-        debugPrint('======= slacks: $slackMsgs');
+        // debugPrint('======= slacks: $slackMsgs');
         streamCtrl.sink.add(slackMsgs);
       });
       // if (cacheTTL.isBefore(DateTime.now())) {
@@ -240,11 +262,11 @@ class DashboardState extends State<Dashboard> {
               print('ERROR-->DASHBOARD: ${snapshot.hasError}');
               var resources = snapshot.data!;
               return Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 10.0,
                 ),
                 child: ListView.builder(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     bottom: 25.0,
                   ),
                   itemCount: _displayTimerBanner
@@ -252,17 +274,34 @@ class DashboardState extends State<Dashboard> {
                       : resources.length,
                   itemBuilder: (context, index) {
                     if (index == 0 && _displayTimerBanner) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: HackRUColors.green,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15.0),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              (DateTime.now().day != 2 &&
+                                      DateTime.now().day != 3 &&
+                                      DateTime.now().month == DateTime.april)
+                                  ? 'Start Hacking In'
+                                  : 'Hacking Ends In',
+                              style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
-                          child: _timerBanner(),
-                        ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: HackRUColors.green,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15.0),
+                                ),
+                              ),
+                              child: _timerBanner(),
+                            ),
+                          ),
+                        ],
                       );
                     }
                     if (_displayTimerBanner ? index == 1 : index == 0) {

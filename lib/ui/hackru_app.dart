@@ -170,7 +170,6 @@ class _HackRUAppState extends State<HackRUApp> {
       actionsAppBar: <Widget>[
         // ====== REFRESH DATA - MANUALLY
         IconButton(
-          tooltip: 'Refresh page',
           icon: Icon(
             Icons.refresh_rounded,
             color: Colors.grey[500],

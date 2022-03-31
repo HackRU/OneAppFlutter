@@ -65,7 +65,7 @@ class FlipClock extends StatelessWidget {
     required Color digitColor,
     required Color backgroundColor,
     required double digitSize,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(0.0)),
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(6.0)),
     this.spacing = const EdgeInsets.symmetric(horizontal: 2.0),
     this.flipDirection = FlipDirection.up,
     this.height = 60.0,
@@ -93,17 +93,17 @@ class FlipClock extends StatelessWidget {
         );
     _separator = Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        // color: backgroundColor,
         borderRadius: borderRadius,
       ),
       width: width! / 2,
       height: height,
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       child: Text(
         ':',
         style: TextStyle(
-          fontSize: digitSize,
-          color: digitColor,
+          fontSize: 25,
+          color: Colors.white,
         ),
       ),
     );
@@ -115,7 +115,7 @@ class FlipClock extends StatelessWidget {
     required Color digitColor,
     required Color backgroundColor,
     required double digitSize,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(0.0)),
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(6.0)),
     this.spacing = const EdgeInsets.symmetric(horizontal: 2.0),
     this.onDone,
     this.flipDirection = FlipDirection.up,
@@ -144,17 +144,17 @@ class FlipClock extends StatelessWidget {
         );
     _separator = Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        // color: backgroundColor,
         borderRadius: borderRadius,
       ),
       width: width! / 2,
       height: height,
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       child: Text(
         ':',
         style: TextStyle(
-          fontSize: digitSize,
-          color: digitColor,
+          fontSize: 25,
+          color: Colors.white,
         ),
       ),
     );
@@ -168,7 +168,7 @@ class FlipClock extends StatelessWidget {
     required Color digitColor,
     required Color backgroundColor,
     required double digitSize,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(0.0)),
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(6.0)),
     this.spacing = const EdgeInsets.symmetric(horizontal: 2.0),
     this.onDone,
     this.flipDirection = FlipDirection.up,
@@ -197,17 +197,17 @@ class FlipClock extends StatelessWidget {
         );
     _separator = Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        // color: backgroundColor,
         borderRadius: borderRadius,
       ),
       width: width! / 2,
       height: height,
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       child: Text(
         ':',
         style: TextStyle(
-          fontSize: digitSize,
-          color: digitColor,
+          fontSize: 25,
+          color: Colors.white,
         ),
       ),
     );
@@ -251,11 +251,11 @@ class FlipClock extends StatelessWidget {
         Column(
           children: <Widget>[
             Padding(
-              padding: spacing!,
+              padding: const EdgeInsets.only(bottom: 25),
               child: _separator,
             ),
             (_showDays!)
-                ? Container(color: Colors.black)
+                ? Container(color: Colors.transparent)
                 : Container(
                     color: Colors.transparent,
                   )
@@ -279,11 +279,11 @@ class FlipClock extends StatelessWidget {
         Column(
           children: <Widget>[
             Padding(
-              padding: spacing!,
+              padding: const EdgeInsets.only(bottom: 25),
               child: _separator,
             ),
             (_showDays!)
-                ? Container(color: Colors.black)
+                ? Container(color: Colors.transparent)
                 : Container(
                     color: Colors.transparent,
                   )
@@ -312,11 +312,11 @@ class FlipClock extends StatelessWidget {
             Column(
               children: <Widget>[
                 Padding(
-                  padding: spacing!,
+                  padding: const EdgeInsets.only(bottom: 25),
                   child: _separator,
                 ),
                 (_showDays!)
-                    ? Container(color: Colors.black)
+                    ? Container(color: Colors.transparent)
                     : Container(
                         color: Colors.transparent,
                       )
@@ -373,14 +373,14 @@ class FlipClock extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(3.0),
                       child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
+                        decoration: const BoxDecoration(
+                          color: Colors.transparent,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Text(
                             id.toUpperCase(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 9.0,
                               fontWeight: FontWeight.bold,
