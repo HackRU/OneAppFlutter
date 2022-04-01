@@ -11,18 +11,20 @@ import 'newScanner.dart';
 const NOT_SCANNED = 'NOT SCANNED';
 
 const qrEvents = [
-  "check-in",
-  "check-in-no-delayed",
-  "lunch-1",
-  "dinner",
-  "t-shirts",
-  "midnight-meal",
-  "midnight-surprise",
-  "breakfast",
-  "lunch-2",
-  "raffle",
-  "ctf-1",
-  "ctf-2"
+  "Check in",
+  "Lunch: Saturday",
+  "Dinner: Saturday",
+  "WS: React",
+  "WS: CogSci Club",
+  "WS: WiCS",
+  "WS: Engg lab CTF",
+  "MLH Cup Stacking",
+  "Breakfast: Sunday",
+  "Lunch: Sunday",
+  "Tshirt",
+  "Swag",
+  "Extra 1",
+  "Extra 2"
 ];
 
 class QRScanner extends StatefulWidget {
