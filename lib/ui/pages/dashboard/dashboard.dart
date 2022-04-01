@@ -10,9 +10,9 @@ import 'package:hackru/ui/pages/dashboard/announcement_card.dart';
 // import 'package:hackru/ui/widgets/dialog/notification_onclick.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
-import '../../widgets/flip_panel.dart';
+// import '../../widgets/flip_panel.dart';
 
 // import 'package:hackru/main.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
@@ -170,17 +170,17 @@ class DashboardState extends State<Dashboard> {
       ),
       content: Padding(
         padding: const EdgeInsets.only(left: 15.0),
-        child: FlipClock.reverseCountdown(
-          duration: (DateTime.now().day != 2 &&
-                  DateTime.now().day != 3 &&
-                  DateTime.now().month == DateTime.april)
-              ? Duration(milliseconds: diffStartEvent.inMilliseconds)
-              : Duration(milliseconds: diffEndEvent.inMilliseconds),
-          digitColor: HackRUColors.pink,
-          backgroundColor: HackRUColors.white,
-          digitSize: 25,
-        ),
-        // child: TimerText(),
+        //child: FlipClock.reverseCountdown(
+        //  duration: (DateTime.now().day != 2 &&
+        //          DateTime.now().day != 3 &&
+        //          DateTime.now().month == DateTime.april)
+        //      ? Duration(milliseconds: diffStartEvent.inMilliseconds)
+        //      : Duration(milliseconds: diffEndEvent.inMilliseconds),
+        //  digitColor: HackRUColors.pink,
+        //  backgroundColor: HackRUColors.white,
+        //  digitSize: 25,
+        //),
+        child: TimerText(),
       ),
       actions: [
         TextButton(
@@ -354,8 +354,12 @@ class TimerText extends StatefulWidget {
 }
 
 class _TimerTextState extends State<TimerText> {
-  DateTime _dateTime = DateTime.now();
+  Duration? _dateTime;
   Timer? _timer;
+  final diffStartEvent =
+      DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
+  final diffEndEvent =
+      DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
 
   @override
   void initState() {
@@ -370,22 +374,203 @@ class _TimerTextState extends State<TimerText> {
   }
 
   void _updateTime() {
+    var diffStartEvent =
+        DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
+    var diffEndEvent =
+        DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
     setState(() {
-      _dateTime = DateTime.now();
+      _dateTime = (((DateTime.now().day != 2 &&
+                  DateTime.now().day != 3 &&
+                  DateTime.now().month == DateTime.april) ||
+              DateTime.now().month == DateTime.march)
+          ? diffStartEvent
+          : diffEndEvent);
       _timer = Timer(
-        Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
+        const Duration(seconds: 1) -
+            Duration(milliseconds: _dateTime!.inMilliseconds),
         _updateTime,
       );
     });
   }
 
+  static String formatDuration(Duration d) {
+    var seconds = d.inSeconds;
+    final days = seconds ~/ Duration.secondsPerDay;
+    seconds -= days * Duration.secondsPerDay;
+    final hours = seconds ~/ Duration.secondsPerHour;
+    seconds -= hours * Duration.secondsPerHour;
+    final minutes = seconds ~/ Duration.secondsPerMinute;
+    seconds -= minutes * Duration.secondsPerMinute;
+
+    final List<String> tokens = [];
+    if (days != 0) {
+      tokens.add('0${days}');
+    }
+    if (tokens.isNotEmpty || hours != 0) {
+      if (hours < 10) {
+        tokens.add('0${hours}');
+      } else {
+        tokens.add('${hours}');
+      }
+    }
+    if (tokens.isNotEmpty || minutes != 0) {
+      if (minutes < 10) {
+        tokens.add('0${minutes}');
+      } else {
+        tokens.add('${minutes}');
+      }
+    }
+    if (seconds < 10) {
+      tokens.add('0${seconds}');
+    } else {
+      tokens.add('${seconds}');
+    }
+
+    return tokens.join(':');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Text(
-      DateFormat('HH:mm:ss').format(_dateTime),
-      style: TextStyle(
-        fontSize: 45.0,
-        color: HackRUColors.white,
+    var displayTime = formatDuration(_dateTime!).split(':');
+    return Align(
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Container(
+              // width: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: HackRUColors.white),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: Text(
+                      displayTime[0],
+                      style: const TextStyle(
+                        fontSize: 25.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: const Text(
+                      'Days',
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Container(
+              // width: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: HackRUColors.white),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: Text(
+                      displayTime[1],
+                      style: const TextStyle(
+                        fontSize: 25.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: const Text(
+                      'Hours',
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Container(
+              // width: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: HackRUColors.white),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: Text(
+                      displayTime[2],
+                      style: const TextStyle(
+                        fontSize: 25.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: const Text(
+                      'Mins',
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Container(
+              // width: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: HackRUColors.white),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: Text(
+                      displayTime[3],
+                      style: const TextStyle(
+                        fontSize: 25.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: const Text(
+                      'Secs',
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        color: HackRUColors.pink,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
