@@ -169,8 +169,8 @@ class DashboardState extends State<Dashboard> {
         color: HackRUColors.white,
         size: 50.0,
       ),
-      content: Padding(
-        padding: const EdgeInsets.only(left: 15.0),
+      content: const Padding(
+        padding: EdgeInsets.only(left: 15.0),
         //child: FlipClock.reverseCountdown(
         //  duration: (DateTime.now().day != 2 &&
         //          DateTime.now().day != 3 &&
@@ -190,7 +190,7 @@ class DashboardState extends State<Dashboard> {
               _displayTimerBanner = false;
             });
           },
-          child: Text(
+          child: const Text(
             'Dismiss',
             style: TextStyle(
               color: HackRUColors.white,
@@ -293,7 +293,7 @@ class DashboardState extends State<Dashboard> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 5.0),
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: HackRUColors.green,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(15.0),
@@ -307,7 +307,8 @@ class DashboardState extends State<Dashboard> {
                     }
                     if (_displayTimerBanner ? index == 1 : index == 0) {
                       return ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 5.0),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 5.0),
                         title: Text(
                           'Announcements',
                           style: Theme.of(context).textTheme.subtitle1,
@@ -471,9 +472,9 @@ class _TimerTextState extends State<TimerText> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: const Text(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3),
+                    child: Text(
                       'Hours',
                       style: TextStyle(
                         fontSize: 10.0,
@@ -506,9 +507,9 @@ class _TimerTextState extends State<TimerText> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: const Text(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3),
+                    child: Text(
                       'Mins',
                       style: TextStyle(
                         fontSize: 10.0,
@@ -541,9 +542,9 @@ class _TimerTextState extends State<TimerText> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: const Text(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3),
+                    child: Text(
                       'Secs',
                       style: TextStyle(
                         fontSize: 10.0,

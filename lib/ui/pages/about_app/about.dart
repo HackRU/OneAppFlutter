@@ -15,11 +15,12 @@ class About extends StatelessWidget {
           Center(
             child: Image.asset(
               'assets/hackru-logos/hackru_red.png',
+              semanticLabel: 'hackru logo',
               height: 250.0,
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: Text(
               kAboutApp,
               style: TextStyle(
@@ -31,7 +32,7 @@ class About extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(25.0),
             child: Center(
               child: RichText(
                 text: TextSpan(
@@ -39,18 +40,18 @@ class About extends StatelessWidget {
                     TextSpan(
                       text: 'Made with',
                       style: TextStyle(
-                        color: Colors.grey.shade600,
+                        color: Colors.grey.shade800,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                       ),
                     ),
-                    WidgetSpan(
+                    const WidgetSpan(
                       child: FlutterLogo(size: 24.0),
                     ),
                     TextSpan(
                       text: 'Flutter & ❤️ by HackRU RnD Team',
                       style: TextStyle(
-                        color: Colors.grey.shade600,
+                        color: Colors.grey.shade800,
                         fontWeight: FontWeight.w700,
                         fontSize: 16.0,
                       ),
@@ -65,11 +66,12 @@ class About extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(45.0),
+          SizedBox(
+            width: 100.0,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 SocialMediaCard(
                   onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
@@ -104,20 +106,23 @@ class SocialMediaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2.0,
-      color: Theme.of(context).accentColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      child: InkWell(
-        onTap: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Icon(
-            iconData,
-            color: HackRUColors.black,
-            size: 30.0,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        elevation: 2.0,
+        color: Theme.of(context).accentColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        child: InkWell(
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(
+              iconData,
+              color: HackRUColors.black,
+              size: 30.0,
+            ),
           ),
         ),
       ),

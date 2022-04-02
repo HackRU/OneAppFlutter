@@ -7,17 +7,35 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const helpResources = [
-  {"name": "MentorQ", "desc": "mentorship", "url": "http://mentorq.hackru.org"},
+  {
+    "name": "MentorQ",
+    "desc": "Get matched with a mentor for help!",
+    "url": "http://mentorq.hackru.org"
+  },
   {
     "name": "Slack",
-    "desc": "talk to friends at hackru",
-    "url": "https://hackruspring2022.slack.com"
+    "desc": "Talk to friends, mentors, and organizers at HackRU",
+    "url":
+        "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=77a8cf5266&e=c9b098417d"
   },
   {
     "name": "Devpost",
-    "desc": "submit your projects",
-    "url": "https://hackru-s22.devpost.com/"
+    "desc": "Submit your projects",
+    "url":
+        "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=f6ef06bd11&e=c9b098417d"
   },
+  {
+    "name": "Rutgers Campus Map",
+    "desc": "Rutgers University - College Ave Campus",
+    "url":
+        "https://maps.rutgers.edu/#/?bus=true&dining=true&healthCare=true&lat=40.503942&lng=-74.450773&parking=true&sidebar=true&zoom=17"
+  },
+  {
+    "name": "Register Your Vehicle",
+    "desc": "Register for free parking permit",
+    "url":
+        "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=704cc129a9&e=c9b098417d"
+  }
   // {
   //   "name": "Food Menu",
   //   "desc": "breakfast, lunch, and dinner",
