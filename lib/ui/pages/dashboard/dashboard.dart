@@ -281,11 +281,7 @@ class DashboardState extends State<Dashboard> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              ((DateTime.now().difference(startTime) >
-                                      Duration.zero))
-                                  ? 'Hacking Starts In'
-                                  : 'Hacking Ends In',
+                            child: Text('Hacking Ends In',
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -381,11 +377,8 @@ class _TimerTextState extends State<TimerText> {
     var diffEndEvent =
         DateTime(2022, DateTime.april, 3, 11, 0, 0).difference(DateTime.now());
     setState(() {
-      if (DateTime.now().difference(startTime) > Duration.zero) {
-        _dateTime = diffStartEvent;
-      } else {
-        _dateTime = diffEndEvent;
-      }
+      _dateTime = diffEndEvent;
+      
       _timer = Timer(
         const Duration(seconds: 1) -
             Duration(milliseconds: _dateTime!.inMilliseconds),
