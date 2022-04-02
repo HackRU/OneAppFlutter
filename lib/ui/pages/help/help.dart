@@ -11,18 +11,18 @@ const helpResources = [
   {
     "name": "Slack",
     "desc": "talk to friends at hackru",
-    "url": "http://tinyurl.com/hackru-f19"
+    "url": "https://hackruspring2022.slack.com"
   },
   {
     "name": "Devpost",
     "desc": "submit your projects",
     "url": "https://hackru-s22.devpost.com/"
   },
-  {
-    "name": "Food Menu",
-    "desc": "breakfast, lunch, and dinner",
-    "url": "https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf"
-  }
+  // {
+  //   "name": "Food Menu",
+  //   "desc": "breakfast, lunch, and dinner",
+  //   "url": "https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf"
+  // }
 ];
 
 class Help extends StatelessWidget {
