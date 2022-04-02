@@ -20,7 +20,7 @@ class _EventCardState extends State<EventCard> {
     var _brightnessValue = MediaQuery.of(context).platformBrightness;
     var time = DateFormat('hh:mm a').format(widget.resource.start!.toLocal());
     var date = DateFormat.d().format(widget.resource.start!.toLocal());
-    var today = DateTime.now().day.toString();
+    var today = DateTime.now().toString();
     if (date == widget.day || date == today) {
       return Card(
         shape: RoundedRectangleBorder(
