@@ -33,9 +33,9 @@ class DashboardState extends State<Dashboard> {
 
   var startTime = DateTime(2022, DateTime.april, 2, 13, 0, 0);
   final diffStartEvent =
-      DateTime(2022, DateTime.april, 2, 13, 0, 0).difference(DateTime.now());
+      DateTime(2022, DateTime.april, 2, 11, 0, 0).difference(DateTime.now());
   final diffEndEvent =
-      DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
+      DateTime(2022, DateTime.april, 3, 11, 0, 0).difference(DateTime.now());
 
   // late final FirebaseMessaging _firebaseMessaging;
 
@@ -377,9 +377,9 @@ class _TimerTextState extends State<TimerText> {
   void _updateTime() {
     var startTime = DateTime(2022, DateTime.april, 2, 13, 0, 0);
     var diffStartEvent =
-        DateTime(2022, DateTime.april, 2, 13, 0, 0).difference(DateTime.now());
+        DateTime(2022, DateTime.april, 2, 11, 0, 0).difference(DateTime.now());
     var diffEndEvent =
-        DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
+        DateTime(2022, DateTime.april, 3, 11, 0, 0).difference(DateTime.now());
     setState(() {
       if (DateTime.now().difference(startTime) < Duration.zero) {
         _dateTime = diffStartEvent;
