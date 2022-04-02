@@ -31,8 +31,9 @@ class DashboardState extends State<Dashboard> {
   final hackRUEndDate = DateTime.utc(1989, DateTime.november, 9);
   final currentDate = DateTime.now();
 
+  var startTime = DateTime(2022, DateTime.april, 2, 13, 0, 0);
   final diffStartEvent =
-      DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
+      DateTime(2022, DateTime.april, 2, 13, 0, 0).difference(DateTime.now());
   final diffEndEvent =
       DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
 
@@ -281,10 +282,9 @@ class DashboardState extends State<Dashboard> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              (DateTime.now().day != 2 &&
-                                      DateTime.now().day != 3 &&
-                                      DateTime.now().month == DateTime.april)
-                                  ? 'Start Hacking In'
+                              ((DateTime.now().difference(startTime) <
+                                      Duration.zero))
+                                  ? 'Hacking Starts In'
                                   : 'Hacking Ends In',
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
@@ -356,10 +356,10 @@ class TimerText extends StatefulWidget {
 class _TimerTextState extends State<TimerText> {
   Duration? _dateTime;
   Timer? _timer;
-  final diffStartEvent =
-      DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
-  final diffEndEvent =
-      DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
+  // final diffStartEvent =
+  //     DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
+  // final diffEndEvent =
+  //     DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
 
   @override
   void initState() {
@@ -374,17 +374,17 @@ class _TimerTextState extends State<TimerText> {
   }
 
   void _updateTime() {
+    var startTime = DateTime(2022, DateTime.april, 2, 13, 0, 0);
     var diffStartEvent =
-        DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
+        DateTime(2022, DateTime.april, 2, 13, 0, 0).difference(DateTime.now());
     var diffEndEvent =
         DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
     setState(() {
-      _dateTime = (((DateTime.now().day != 2 &&
-                  DateTime.now().day != 3 &&
-                  DateTime.now().month == DateTime.april) ||
-              DateTime.now().month == DateTime.march)
-          ? diffStartEvent
-          : diffEndEvent);
+      if (DateTime.now().difference(startTime) < Duration.zero) {
+        _dateTime = diffStartEvent;
+      } else {
+        _dateTime = diffEndEvent;
+      }
       _timer = Timer(
         const Duration(seconds: 1) -
             Duration(milliseconds: _dateTime!.inMilliseconds),
@@ -395,23 +395,29 @@ class _TimerTextState extends State<TimerText> {
 
   static String formatDuration(Duration d) {
     var seconds = d.inSeconds;
-    final days = seconds ~/ Duration.secondsPerDay;
-    seconds -= days * Duration.secondsPerDay;
+    // final days = seconds ~/ Duration.secondsPerDay;
+    // seconds -= days * Duration.secondsPerDay;
     final hours = seconds ~/ Duration.secondsPerHour;
     seconds -= hours * Duration.secondsPerHour;
     final minutes = seconds ~/ Duration.secondsPerMinute;
     seconds -= minutes * Duration.secondsPerMinute;
 
     final List<String> tokens = [];
-    if (days != 0) {
-      tokens.add('0${days}');
-    }
+    // if (days != 0) {
+    //   tokens.add('0${days}');
+    // }
+    // if (days == 0) {
+    //   tokens.add('00');
+    // }
     if (tokens.isNotEmpty || hours != 0) {
       if (hours < 10) {
         tokens.add('0${hours}');
       } else {
         tokens.add('${hours}');
       }
+    }
+    if (hours == 0) {
+      tokens.add('00');
     }
     if (tokens.isNotEmpty || minutes != 0) {
       if (minutes < 10) {
@@ -420,10 +426,16 @@ class _TimerTextState extends State<TimerText> {
         tokens.add('${minutes}');
       }
     }
+    if (minutes == 0) {
+      tokens.add('00');
+    }
     if (seconds < 10) {
       tokens.add('0${seconds}');
     } else {
       tokens.add('${seconds}');
+    }
+    if (seconds == 0) {
+      tokens.add('00');
     }
 
     return tokens.join(':');
@@ -433,7 +445,7 @@ class _TimerTextState extends State<TimerText> {
   Widget build(BuildContext context) {
     var displayTime = formatDuration(_dateTime!).split(':');
     return Align(
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -443,8 +455,9 @@ class _TimerTextState extends State<TimerText> {
             child: Container(
               // width: 40,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: HackRUColors.white),
+                borderRadius: BorderRadius.circular(5),
+                // color: HackRUColors.white,
+              ),
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -452,41 +465,9 @@ class _TimerTextState extends State<TimerText> {
                     child: Text(
                       displayTime[0],
                       style: const TextStyle(
-                        fontSize: 25.0,
-                        color: HackRUColors.pink,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: const Text(
-                      'Days',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: HackRUColors.pink,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              // width: 40,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: HackRUColors.white),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      displayTime[1],
-                      style: const TextStyle(
-                        fontSize: 25.0,
-                        color: HackRUColors.pink,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: HackRUColors.white,
                       ),
                     ),
                   ),
@@ -496,7 +477,7 @@ class _TimerTextState extends State<TimerText> {
                       'Hours',
                       style: TextStyle(
                         fontSize: 10.0,
-                        color: HackRUColors.pink,
+                        color: HackRUColors.white,
                       ),
                     ),
                   )
@@ -509,17 +490,19 @@ class _TimerTextState extends State<TimerText> {
             child: Container(
               // width: 40,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: HackRUColors.white),
+                borderRadius: BorderRadius.circular(5),
+                // color: HackRUColors.white,
+              ),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      displayTime[2],
+                      displayTime[1],
                       style: const TextStyle(
-                        fontSize: 25.0,
-                        color: HackRUColors.pink,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: HackRUColors.white,
                       ),
                     ),
                   ),
@@ -529,7 +512,7 @@ class _TimerTextState extends State<TimerText> {
                       'Mins',
                       style: TextStyle(
                         fontSize: 10.0,
-                        color: HackRUColors.pink,
+                        color: HackRUColors.white,
                       ),
                     ),
                   )
@@ -542,17 +525,19 @@ class _TimerTextState extends State<TimerText> {
             child: Container(
               // width: 40,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: HackRUColors.white),
+                borderRadius: BorderRadius.circular(5),
+                // color: HackRUColors.white,
+              ),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      displayTime[3],
+                      displayTime[2],
                       style: const TextStyle(
-                        fontSize: 25.0,
-                        color: HackRUColors.pink,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: HackRUColors.white,
                       ),
                     ),
                   ),
@@ -562,7 +547,7 @@ class _TimerTextState extends State<TimerText> {
                       'Secs',
                       style: TextStyle(
                         fontSize: 10.0,
-                        color: HackRUColors.pink,
+                        color: HackRUColors.white,
                       ),
                     ),
                   )
