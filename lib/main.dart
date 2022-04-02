@@ -5,6 +5,7 @@ import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:hackru/ui/widgets/page_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_strategy/url_strategy.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'styles.dart';
@@ -60,6 +61,7 @@ void main() async {
     ),
   );
 
+  setPathUrlStrategy();
   runApp(MainApp());
 }
 
