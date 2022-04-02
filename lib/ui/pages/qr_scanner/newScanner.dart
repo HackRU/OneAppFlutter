@@ -398,7 +398,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         if (event == 'check-in' || event == 'check-in-no-delayed') {
           if (_isEmailAddress(userEmailOrId)) {
             user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
-            if (event == 'check-in-no-delayed') {
+            if (event == 'check-in') {
               if (user.isDelayedEntry()) {
                 return NOT_SCANNED;
                 // *** TODO: FIX THIS LOGIC
@@ -407,7 +407,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                 //   return NOT_SCANNED;
                 // }
               }
-              event = 'check-in';
+              event = 'extra-1';
             }
             Scanner.userEmail = userEmailOrId;
           }
