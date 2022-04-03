@@ -281,7 +281,8 @@ class DashboardState extends State<Dashboard> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('Hacking Ends In',
+                            child: Text(
+                              'Hacking Ends In',
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -378,7 +379,7 @@ class _TimerTextState extends State<TimerText> {
         DateTime(2022, DateTime.april, 3, 11, 0, 0).difference(DateTime.now());
     setState(() {
       _dateTime = diffEndEvent;
-      
+
       _timer = Timer(
         const Duration(seconds: 1) -
             Duration(milliseconds: _dateTime!.inMilliseconds),
@@ -457,7 +458,8 @@ class _TimerTextState extends State<TimerText> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      displayTime[0],
+                      '00',
+                      // displayTime[0],
                       style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -492,7 +494,8 @@ class _TimerTextState extends State<TimerText> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      displayTime[1],
+                      '00',
+                      // displayTime[1],
                       style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -527,7 +530,8 @@ class _TimerTextState extends State<TimerText> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      displayTime[2],
+                      '00',
+                      // displayTime[2],
                       style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
