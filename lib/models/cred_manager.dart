@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:HackRU/models/models.dart';
+import 'package:hackru/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -30,7 +30,7 @@ Future<bool> hasCredentials() async {
   return false;
 }
 
-Future<String> getAuthToken() async {
+Future<String?> getAuthToken() async {
   final prefs = await _prefs;
   if (prefs.containsKey('AUTH_TOKEN')) {
     return prefs.getString('AUTH_TOKEN');
@@ -39,7 +39,7 @@ Future<String> getAuthToken() async {
   return '';
 }
 
-Future<String> getEmail() async {
+Future<String?> getEmail() async {
   final prefs = await _prefs;
   if (prefs.containsKey('EMAIL')) {
     return prefs.getString('EMAIL');
@@ -61,13 +61,14 @@ Future<void> persistSlackAnnouncements(List<Announcement> slacks) async {
 
 Future<List<Announcement>> getSlackAnnouncements() async {
   final prefs = await _prefs;
+  var messages = List<Announcement>.empty();
   if (prefs.containsKey('SLACK_ANNOUNCEMENTS')) {
-    var decoded = json.decode(prefs.getString('SLACK_ANNOUNCEMENTS'));
-    return decoded
+    var decoded = json.decode(prefs.getString('SLACK_ANNOUNCEMENTS')!);
+    messages = decoded
         .map<Announcement>((slack) => Announcement.fromJson(slack))
         .toList();
   }
-  return null;
+  return messages;
 }
 
 Future<void> deleteSlackAnnouncements() async {

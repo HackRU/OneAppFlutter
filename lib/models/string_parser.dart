@@ -1,21 +1,20 @@
-import 'package:HackRU/styles.dart';
-import 'package:flutter/foundation.dart';
+import 'package:hackru/styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class LinkTextSpan extends TextSpan {
-  LinkTextSpan({TextStyle style, String url, String text})
+  LinkTextSpan({TextStyle? style, String? url, String? text})
       : super(
           style: style,
           text: text ?? url,
           recognizer: TapGestureRecognizer()
-            ..onTap = () => launcher.launch(url),
+            ..onTap = () => launcher.launch(url!),
         );
 }
 
 class StringParser extends StatelessWidget {
-  final String text;
+  final String? text;
 
   StringParser({@required this.text});
 
@@ -72,36 +71,46 @@ class StringParser extends StatelessWidget {
 
     final _style = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.w700,
     );
     final _boldStyle = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.bold,
     );
     final _italicsStyle = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic,
     );
     final _strikeThroughStyle = TextStyle(
       fontSize: 18.0,
-      color: _brightnessValue == Brightness.light ? charcoal_light : white,
+      color: _brightnessValue == Brightness.light
+          ? HackRUColors.charcoal_light
+          : HackRUColors.white,
       fontWeight: FontWeight.w400,
       decoration: TextDecoration.lineThrough,
     );
 
-    final words = text.split(' ');
+    final words = text?.split(' ');
     var span = <TextSpan>[];
 
-    words.forEach((word) {
+    words?.forEach((word) {
       if (_isLink(word)) {
         var eWord = word.replaceAll(RegExp(r'[<>]'), '');
         span.add(LinkTextSpan(
           style: _style.copyWith(
-            color: _brightnessValue == Brightness.light ? pink : yellow,
+            color: _brightnessValue == Brightness.light
+                ? HackRUColors.pink
+                : HackRUColors.yellow,
             fontWeight: FontWeight.w700,
             decoration: TextDecoration.underline,
           ),
@@ -140,10 +149,12 @@ class StringParser extends StatelessWidget {
       );
     } else {
       return Text(
-        text,
+        text!,
         style: TextStyle(
           fontSize: 15.0,
-          color: _brightnessValue == Brightness.light ? pink_dark : yellow,
+          color: _brightnessValue == Brightness.light
+              ? HackRUColors.pink_dark
+              : HackRUColors.yellow,
         ),
       );
     }

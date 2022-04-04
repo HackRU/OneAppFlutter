@@ -1,160 +1,208 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:HackRU/models/cred_manager.dart';
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/defaults.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/models/exceptions.dart';
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/ui/pages/qr_scanner/QRScanner.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hackru/models/cred_manager.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/defaults.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/models/exceptions.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
-//import 'package:qr_code_scanner/qr_code_scanner.dart';
-//import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 var popup = true;
 const NOT_SCANNED = 'NOT SCANNED';
 
 class Scanner extends StatefulWidget {
-  const Scanner({Key key}) : super(key: key);
-  static String userEmail;
+  const Scanner({
+    Key? key,
+  }) : super(key: key);
+  static String? userEmail;
 
   @override
   State<StatefulWidget> createState() => _ScannerState();
 }
 
 class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
-  var qrText = '';
   var scanned = '';
-  //QRViewController controller;
+  // late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  AnimationController _animationController;
+  AnimationController? _animationController;
   bool isPlaying = false;
+  late MobileScannerController cameraController;
+  final TextEditingController _textFieldController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    cameraController = MobileScannerController();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   }
 
+  // In order to get hot reload to work we need to pause the camera if the platform
+  // is android, or resume the camera if the platform is iOS.
+  // @override
+  // void reassemble() {
+  //   super.reassemble();
+  //   if (Platform.isAndroid) {
+  //     // controller.pauseCamera();
+  //   } else if (Platform.isIOS) {
+  //     // controller.resumeCamera();
+  //   } else if (kIsWeb) {
+  //     cameraController.stop();
+  //   }
+  // }
+
   @override
   void dispose() {
-    //controller.dispose();
+    // controller.dispose();
     super.dispose();
-    _animationController.dispose();
+    _animationController?.dispose();
+    cameraController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: black,
+      backgroundColor: HackRUColors.black,
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Center(
-              child: /*QRView(
-                key: qrKey,
-                onQRViewCreated: _onQRViewCreated,
-                overlay: QrScannerOverlayShape(
-                  borderColor: Colors.yellow,
-                  borderRadius: 10,
-                  borderLength: 30,
-                  borderWidth: 10,
-                  cutOutSize: 300,
-                ),
-              ),*/
-              Text("Temporarily Removed QR Scanner")
-            ),
             flex: 5,
+            child: Center(
+              child: MobileScanner(
+                allowDuplicates: false,
+                controller: cameraController,
+                onDetect: (barcode, args) {
+                  final String code = barcode.rawValue!;
+                  //debugPrint('qr_code found: $code');
+                  _qrRequest(code); // to call backend API
+                },
+              ),
+            ),
           ),
           Flexible(
+            flex: 1,
             child: FittedBox(
               fit: BoxFit.contain,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text(
-                    CardExpansion.event,
-                    style: TextStyle(
+                    CardExpansion.event!,
+                    style: const TextStyle(
                       fontSize: 14.0,
-                      color: white,
+                      color: HackRUColors.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
                     scanned,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16.0,
-                      color: pink_light,
+                      color: HackRUColors.pink_light,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Container(
-                    child: IconButton(
-                      iconSize: 80,
-                      icon: Icon(
-                        isPlaying
-                            ? GroovinMaterialIcons.play_circle
-                            : GroovinMaterialIcons.pause_circle,
-                        color: isPlaying ? yellow : pink_light,
-                      ),
-                      onPressed: () => _handleOnPressed(),
-                    ),
-                  ),
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          iconSize: 80,
+                          icon: Icon(
+                            isPlaying
+                                ? FontAwesomeIcons.playCircle
+                                : FontAwesomeIcons.pauseCircle,
+                            color: isPlaying
+                                ? HackRUColors.yellow
+                                : HackRUColors.pink_light,
+                          ),
+                          onPressed: () => _handleOnPressed(),
+                        ),
+                        IconButton(
+                          iconSize: 80,
+                          icon: ValueListenableBuilder(
+                            valueListenable: cameraController.cameraFacingState,
+                            builder: (context, state, child) {
+                              switch (state as CameraFacing) {
+                                case CameraFacing.front:
+                                  return const Icon(
+                                    Icons.flip_camera_ios_outlined,
+                                    color: HackRUColors.off_white,
+                                    // size: 50,
+                                  );
+                                case CameraFacing.back:
+                                  return const Icon(
+                                    Icons.flip_camera_ios_rounded,
+                                    color: HackRUColors.off_white,
+                                    // size: 50,
+                                  );
+                              }
+                            },
+                          ),
+                          onPressed: () => cameraController.switchCamera(),
+                        ),
+                      ]),
                 ],
               ),
             ),
-            flex: 1,
           )
         ],
       ),
     );
   }
 
-  /*void _onQRViewCreated(QRViewController controller) {
-    var prevQR = 'xxx@xxx.com';
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      print('-------------');
-      print(scanData);
-      setState(() {
-        if (scanData != prevQR) {
-          qrText = scanData;
-          prevQR = scanData;
-          scanned = '';
-          _qrRequest(scanData);
-        } else {
-//          scanned = 'ALREADY SCANNED!';
-        }
-      });
-    });
-  }*/
+//   void _onQRViewCreated(QRViewController controller) {
+//     var defaultCode = 'xxx@xxx.com';
+//     this.controller = controller;
+//     controller.scannedDataStream.listen((scanData) {
+//       print(
+//           '======= SCANDATA: {code: ${scanData.code}, barcodeType: ${scanData.format.formatName}\n');
+//       setState(() {
+//         if (scanData.code != defaultCode) {
+//           defaultCode = scanData.code!;
+//           scanned = '';
+//           // _qrRequest(scanData.code!);  // TODO: uncomment this later
+//         } else {
+// //          scanned = 'ALREADY SCANNED!';
+//         }
+//       });
+//     });
+//   }
 
   void _handleOnPressed() {
     setState(() {
       isPlaying = !isPlaying;
       if (isPlaying) {
-        _animationController.forward();
-        //controller?.pauseCamera();
+        _animationController?.forward();
+        // controller.pauseCamera();
+        cameraController.stop();
       } else {
-        _animationController.reverse();
-        //controller?.resumeCamera();
+        _animationController?.reverse();
+        // controller.resumeCamera();
+        cameraController.start();
       }
     });
   }
 
   void _qrRequest(String scanData) async {
-    print('************* qrRequest made ***********');
+    // print('************* qrRequest made ***********');
     var message;
     message = await _lcsHandle(scanData);
+    debugPrint(message);
     if (message == 'SCANNED!' ||
         message == 'EMAIL SCANNED!' ||
         message == 'DAY-OF QR LINKED!') {
       _scanDialogSuccess(message);
     } else {
-      await _scanDialogWarning(message);
+      await await _scanDialogWarning(message);
     }
   }
 
@@ -163,26 +211,27 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       context: context,
       builder: (BuildContext context, {barrierDismissible = false}) {
         return AlertDialog(
-          backgroundColor: pink,
+          backgroundColor: HackRUColors.pink,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          title: Icon(
+          title: const Icon(
             Icons.check_circle_outline,
-            color: off_white,
+            color: HackRUColors.off_white,
             size: 80.0,
           ),
           content: Text(body,
-              style: TextStyle(fontSize: 25, color: off_white),
+              style:
+                  const TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
             MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              splashColor: yellow,
+              splashColor: HackRUColors.yellow,
               height: 40.0,
-              color: off_white,
+              color: HackRUColors.off_white,
               onPressed: () {
                 Navigator.pop(context, true);
               },
@@ -190,7 +239,9 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               child: const Text(
                 'OK',
                 style: TextStyle(
-                    fontSize: 20, color: pink, fontWeight: FontWeight.w500),
+                    fontSize: 20,
+                    color: HackRUColors.pink,
+                    fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -201,41 +252,47 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future<bool> _scanDialogWarning(String body) async {
+  Future _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
       builder: (BuildContext context, {barrierDismissible = false}) {
         return AlertDialog(
-          backgroundColor: pink,
+          backgroundColor: HackRUColors.pink,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          title: Icon(
+          title: const Icon(
             Icons.warning,
-            color: off_white,
+            color: HackRUColors.off_white,
             size: 80.0,
           ),
           content: Text(body,
-              style: TextStyle(fontSize: 25, color: off_white),
+              style:
+                  const TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
-            FlatButton(
-              child: Text('CANCEL',
-                  style: TextStyle(fontSize: 20, color: pink_dark),
-                  textAlign: TextAlign.center),
-              padding: const EdgeInsets.all(15.0),
-              splashColor: off_white,
+            TextButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  const EdgeInsets.all(15.0),
+                ),
+              ),
               onPressed: () {
                 Navigator.pop(context, false);
               },
+              child: const Text(
+                'CANCEL',
+                style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+                textAlign: TextAlign.center,
+              ),
             ),
             MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              splashColor: yellow,
+              splashColor: HackRUColors.yellow,
               height: 40.0,
-              color: off_white,
+              color: HackRUColors.off_white,
               onPressed: () async {
                 Navigator.pop(context, true);
               },
@@ -243,7 +300,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               child: const Text(
                 'OK',
                 style: TextStyle(
-                    fontSize: 20, color: pink, fontWeight: FontWeight.w500),
+                  fontSize: 20,
+                  color: HackRUColors.pink,
+                  fontWeight: FontWeight.w500,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -253,69 +313,179 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     );
   }
 
+  String? valueText;
+  String? codeDialog;
+  Future _displayTextInputDialog(BuildContext context) async {
+    codeDialog = '';
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: HackRUColors.pink,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: const Text('Enter email to link'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() {
+                  valueText = value;
+                });
+              },
+              controller: _textFieldController,
+              decoration:
+                  const InputDecoration(hintText: "emailtolink@email.com"),
+            ),
+            actions: <Widget>[
+              TextButton(
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.all(15.0),
+                  ),
+                ),
+                child: const Text(
+                  'CANCEL',
+                  style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              MaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                splashColor: HackRUColors.yellow,
+                height: 40.0,
+                color: HackRUColors.off_white,
+                padding: const EdgeInsets.all(15.0),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: HackRUColors.pink,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () {
+                  setState(() {
+                    codeDialog = valueText;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   Future<String> _lcsHandle(String userEmailOrId) async {
     var _storedEmail = await getEmail();
     var _authToken = await getAuthToken();
-    var result;
-    print('***** Called `lcsHandle` with qr:' + userEmailOrId);
+    var result = 'NULL';
+    // print('***** Called `lcsHandle` with qr:' + userEmailOrId);
+    // debugPrint('${QRScanner.cred}');
     var user;
     var numUserScanned;
     try {
-      if (userEmailOrId != null) {
+      if (userEmailOrId != '') {
         var event = CardExpansion.event;
         // HANDLE CHECK_IN EVENT, potentially link
         if (event == 'check-in' || event == 'check-in-no-delayed') {
           if (_isEmailAddress(userEmailOrId)) {
-            user = await getUser(_authToken, _storedEmail, userEmailOrId);
-            if (event == 'check-in-no-delayed') {
+            user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
+            if (event == 'check-in') {
               if (user.isDelayedEntry()) {
-                if (!await _scanDialogWarning(
-                    'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
-                  return NOT_SCANNED;
-                }
+                return NOT_SCANNED;
+                // *** TODO: FIX THIS LOGIC
+                // if (_scanDialogWarning(
+                //     'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
+                //   return NOT_SCANNED;
+                // }
               }
-              event = 'check-in';
+              event = 'extra-1';
             }
             Scanner.userEmail = userEmailOrId;
           }
 
-          print('****** User: $user');
+          // print('****** User: $user');
           result = 'EMAIL SCANNED!';
         }
 
         // ATTEND THE EVENT
         try {
+          // debugPrint('${Scanner.userEmail}');
           numUserScanned = await attendEvent(
-              BASE_URL, QRScanner.cred, userEmailOrId, event, false);
-          print('********** user event count: $numUserScanned');
+            BASE_URL,
+            _storedEmail!,
+            _authToken!,
+            userEmailOrId,
+            event!,
+            false,
+          );
+          // debugPrint('********** user event count: $numUserScanned');
           result = 'SCANNED!';
         } on UserCheckedEvent {
-          print('already ' + userEmailOrId);
-          if (await _scanDialogWarning('ALREADY SCANNED! RESCAN?')) {
+          // var prev = numUserScanned;
+          // debugPrint('already ' + userEmailOrId);
+          result = 'ALREADY SCANNED';
+          var rescan = await _scanDialogWarning('ALREADY SCANNED! RESCAN?');
+          // debugPrint('$rescan');
+          if (rescan) {
             numUserScanned = await attendEvent(
-                BASE_URL, QRScanner.cred, userEmailOrId, event, true);
-            print('********** user event count: $numUserScanned');
+              BASE_URL,
+              _storedEmail!,
+              _authToken!,
+              userEmailOrId,
+              event!,
+              true,
+            );
+            // int test = numUserScanned as int;
+            // debugPrint('********** user event count: $test');
+            // if (prev > numUserScanned) {
             result = 'SCANNED!';
+            // }
           } else {
             return NOT_SCANNED;
           }
         } on UserNotFound {
-          print('h ' + userEmailOrId);
+          // debugPrint('hashqr:' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
-            if (Scanner.userEmail != '') {
-              linkQR(
-                  BASE_URL, QRScanner.cred, Scanner.userEmail, userEmailOrId);
-              print('**** Day-of QR linked!');
-              return 'DAY-OF QR LINKED!';
+            codeDialog = '';
+            await _displayTextInputDialog(context);
+            var linkToUser = codeDialog;
+            // debugPrint('linkToUser: $linkToUser');
+            if (!_isEmailAddress(linkToUser!) ||
+                linkToUser == null ||
+                linkToUser == '') {
+              debugPrint('Not an email: $linkToUser');
+              return 'NOT A VALID EMAIL';
             } else {
-              await _scanDialogWarning('Scan Email First!');
+              debugPrint('Email to link: $linkToUser');
+              try {
+                linkQR(
+                  BASE_URL,
+                  _storedEmail!,
+                  _authToken!,
+                  linkToUser,
+                  userEmailOrId,
+                );
+                return 'DAY-OF QR LINKED!';
+              } on UserNotFound {
+                return 'USER NOT FOUND';
+              }
             }
           } else {
             rethrow;
           }
         }
       } else {
-        print('attempt to scan null');
+        // print('attempt to scan null');
+        result = 'NULL ERROR';
       }
     } on LcsLoginFailed {
       result = 'LCS LOGIN FAILED!';
@@ -331,16 +501,22 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       result = 'ERROR PRINTING LABEL';
     } on ArgumentError catch (e) {
       result = 'UNEXPECTED ERROR';
+      debugPrint('======================');
       print(result);
       print(e);
       print(e.invalidValue);
       print(e.message);
       print(e.name);
+      print(e.stackTrace);
+      debugPrint('======================');
     } on SocketException {
       result = 'NETWORK ERROR';
     } catch (e) {
       result = 'UNEXPECTED ERROR';
+      debugPrint('===== TRY CATCH =====');
+      print(result);
       print(e);
+      debugPrint('======= TRY CATCH ======');
     }
     return result;
   }

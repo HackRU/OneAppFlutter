@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class NotificationOnClickDialog extends StatelessWidget {
-  final String title;
-  final String body;
+  final String? title;
+  final String? body;
 
-  NotificationOnClickDialog({Key key, this.title, this.body});
+  NotificationOnClickDialog({Key? key, this.title, this.body});
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       backgroundColor: Colors.transparent,
       child: Stack(
         children: [
@@ -38,7 +37,7 @@ class NotificationOnClickDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  title,
+                  title!,
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.w700,
@@ -55,16 +54,19 @@ class NotificationOnClickDialog extends StatelessWidget {
                 SizedBox(height: 24.0),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    color: Theme.of(context).primaryColor,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).primaryColor,
+                      ),
+                    ),
                     child: Text(
                       'OK',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700),
+                          color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
                 ),
@@ -76,9 +78,9 @@ class NotificationOnClickDialog extends StatelessWidget {
             right: 16,
             child: CircleAvatar(
                 backgroundColor: Theme.of(context).primaryColor,
+                radius: 66,
                 child: Image.asset('assets/hackru-logos/hackru_white.png',
-                    height: 100, width: 100),
-                radius: 66),
+                    height: 100, width: 100)),
           )
         ],
       ),

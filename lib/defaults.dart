@@ -1,19 +1,22 @@
 ///=======================================
 ///             ENDPOINTS
 ///=======================================
-const BASE_URL = 'https://api.hackru.org/dev';
-// const BASE_URL = 'https://api.hackru.org/prod';
+// const BASE_URL = 'https://api.hackru.org/dev';
+const BASE_URL = 'https://api.hackru.org/prod';
+const DEV_URL = 'https://api.hackru.org/dev';
+const PROD_URL = 'https://api.hackru.org/prod';
 
 const MISC_URL = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 const WAIVER_URL = 'https://hackru.org/resources/waiver.pdf';
-const DEVPOST_URL = 'https://hackru-f19.devpost.com';
-const SLACK_PAGE_URL = 'http://tinyurl.com/hackru-f19';
-const HELP_Q_URL = 'http://helpq.hackru.org/';
+const DEVPOST_URL = 'https://hackru-s22.devpost.com';
+const SLACK_PAGE_URL = 'https://hackru-s22.slack.com/';
+const HELP_Q_URL = 'http://mentorq.hackru.org/';
 const FOOD_MENU_URL = 'https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf';
 const HACKRU_SIGN_UP = 'https://hackru.org/signup';
 
 const REPOSITORY_URL = 'https://github.com/HackRU/OneAppFlutter';
-const HACK_RU_WEBSITE_URL = 'https://hackru.org/';
+const HACK_RU_WEBSITE_URL =
+    'https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=f61e65288f&e=c9b098417d';
 const FACEBOOK_PAGE_URL = 'https://www.facebook.com/theHackRU/';
 const INSTAGRAM_PAGE_URL = 'https://www.instagram.com/thehackru/';
 
@@ -44,11 +47,11 @@ final String kSplashScreen = 'assets/splashScreen.png';
 ///=======================================
 
 const String kAppTitle = 'HackRU';
-const String kSeasonTitle = 'Fall 2020';
+const String kSeasonTitle = 'Spring 2022';
 const kAboutHackRU =
     'HackRU is a 24-hour hackathon at Rutgers University. We welcome hundreds of students to join us in building awesome tech projects. Industry experts and mentors help foster an atmosphere of learning through tech-talks and one-on-one guidance. We encourage all students, no matter their experience level or educational background, to challenge themselves and expand their creative, technical, and collaboration skills at HackRU.';
 const kAboutApp =
-    'The HackRU App is an open source effort made possible by the HackRU Research & Development Team. Hackers would be able to get announcements, a QR code for checking, food, etc. as well as see the schedule and map for the hackathon. Organizers would have an access to the QR Scanner.';
+    'The HackRU App is an open source effort made possible by the HackRU Research & Development Team. OneApp allow HackRU participants to get event announcements, a QR code (for check-in, food, events etc) as well as to see the event schedule and floor maps of the venue. Organizers also use OneApp as QR Scanner throughout the event.';
 const kSlogan = 'Hack All Knight';
 
 ///=======================================

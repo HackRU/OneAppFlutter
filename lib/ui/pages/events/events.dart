@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/ui/pages/events/events_for_day.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/ui/pages/events/events_for_day.dart';
 import 'package:flutter/material.dart';
 
 class Events extends StatefulWidget {
@@ -14,7 +12,7 @@ class Events extends StatefulWidget {
 }
 
 class EventsState extends State<Events> with SingleTickerProviderStateMixin {
-  TabController controller;
+  TabController? controller;
 
   @override
   void initState() {
@@ -24,7 +22,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -43,9 +41,9 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
       controller: controller,
       unselectedLabelColor:
           MediaQuery.of(context).platformBrightness == Brightness.light
-              ? charcoal_light
-              : white,
-      labelColor: black,
+              ? HackRUColors.charcoal_light
+              : HackRUColors.white,
+      labelColor: HackRUColors.black,
       labelStyle: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 20.0,
@@ -57,22 +55,30 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
     return TabBarView(children: tabs, controller: controller);
   }
 
-  static List<Event> cachedEvents;
+  static List<Event>? cachedEvents;
   static DateTime cacheTTL = DateTime.now();
-  Stream<List<Event>> _getEvents() {
-    var streamctl = StreamController<List<Event>>();
-    if (cachedEvents != null) {
-      streamctl.sink.add(cachedEvents);
-    }
-    if (cacheTTL.isBefore(DateTime.now())) {
-      print('cache miss');
-      dayofEventsResources().then((events) {
-        streamctl.sink.add(events);
-        cachedEvents = events;
-        cacheTTL = DateTime.now().add(Duration(minutes: 30));
+
+  Future<List<Event>> _getEvents() async {
+    // if (cachedEvents != null) {
+    //   streamctl.sink.add(cachedEvents!);
+    // }
+    // if (cacheTTL.isBefore(DateTime.now())) {
+    //   print('cache miss');
+    //   dayofEventsResources().then((events) {
+    //     streamctl.sink.add(events);
+    //     cachedEvents = events;
+    //     cacheTTL = DateTime.now().add(Duration(minutes: 30));
+    //   });
+    // }
+    var dayofEvents = List<Event>.empty();
+    try {
+      await dayofEventsResources().then((events) {
+        dayofEvents = events;
       });
+    } catch (e) {
+      print('==== \nSlack data stream ctrl error: ' + e.toString());
     }
-    return streamctl.stream;
+    return dayofEvents;
   }
 
   @override
@@ -85,31 +91,32 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
         elevation: 0.0,
         automaticallyImplyLeading: false,
       ),
-      body: StreamBuilder<List<Event>>(
-        stream: _getEvents(),
+      body: FutureBuilder<List<Event>>(
+        future: _getEvents(),
         builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Center(
-                child: Container(
-                  color: transparent,
-                  height: 400.0,
-                  width: 400.0,
-                  child: FlareActor(
-                    'assets/flare/loading_indicator.flr',
-                    alignment: Alignment.center,
-                    fit: BoxFit.contain,
-                    animation: 'idle',
-                  ),
-                ),
+              return const Center(
+                child: CircularProgressIndicator(),
+                // child: Container(
+                //   color: HackRUColors.transparent,
+                //   height: 400.0,
+                //   width: 400.0,
+                //   child: const RiveAnimation.asset(
+                //     'assets/flare/loading_indicator.flr',
+                //     alignment: Alignment.center,
+                //     fit: BoxFit.contain,
+                //     animations: ['idle'],
+                //   ),
+                // ),
               );
             default:
-              print(snapshot.hasError);
+              print('==== hasSnapshotError: ${snapshot.hasError}');
               var events = snapshot.data;
               return getTabBarView(<Widget>[
-                EventsForDay(day: '18', events: events),
-                EventsForDay(day: '19', events: events),
+                EventsForDay(day: '2', events: events),
+                EventsForDay(day: '3', events: events),
               ]);
           }
         },

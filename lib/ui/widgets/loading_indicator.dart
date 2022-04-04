@@ -20,12 +20,12 @@ class FancyLoadingIndicator extends StatefulWidget {
 
 class _FancyLoadingIndicatorState extends State<FancyLoadingIndicator>
     with TickerProviderStateMixin {
-  Animation<double> animation1;
-  Animation<double> animation2;
-  Animation<double> animation3;
-  AnimationController controller1;
-  AnimationController controller2;
-  AnimationController controller3;
+  Animation<double>? animation1;
+  Animation<double>? animation2;
+  Animation<double>? animation3;
+  AnimationController? controller1;
+  AnimationController? controller2;
+  AnimationController? controller3;
 
   @override
   void initState() {
@@ -41,18 +41,18 @@ class _FancyLoadingIndicatorState extends State<FancyLoadingIndicator>
         duration: const Duration(milliseconds: 2000), vsync: this);
 
     animation1 = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: controller1, curve: Interval(0.0, 1.0, curve: Curves.linear)));
+        parent: controller1!, curve: Interval(0.0, 1.0, curve: Curves.linear)));
 
     animation2 = Tween<double>(begin: -1.0, end: 0.0).animate(CurvedAnimation(
-        parent: controller2, curve: Interval(0.0, 1.0, curve: Curves.easeIn)));
+        parent: controller2!, curve: Interval(0.0, 1.0, curve: Curves.easeIn)));
 
     animation3 = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: controller3,
+        parent: controller3!,
         curve: Interval(0.0, 1.0, curve: Curves.decelerate)));
 
-    controller1.repeat();
-    controller2.repeat();
-    controller3.repeat();
+    controller1!.repeat();
+    controller2!.repeat();
+    controller3!.repeat();
   }
 
   @override
@@ -60,8 +60,8 @@ class _FancyLoadingIndicatorState extends State<FancyLoadingIndicator>
     return Container(
       child: Stack(
         children: <Widget>[
-          new RotationTransition(
-            turns: animation1,
+          RotationTransition(
+            turns: animation1!,
             child: CustomPaint(
               painter: Arc1Painter(widget.color1),
               child: Container(
@@ -70,8 +70,8 @@ class _FancyLoadingIndicatorState extends State<FancyLoadingIndicator>
               ),
             ),
           ),
-          new RotationTransition(
-            turns: animation2,
+          RotationTransition(
+            turns: animation2!,
             child: CustomPaint(
               painter: Arc2Painter(widget.color2),
               child: Container(
@@ -80,8 +80,8 @@ class _FancyLoadingIndicatorState extends State<FancyLoadingIndicator>
               ),
             ),
           ),
-          new RotationTransition(
-            turns: animation3,
+          RotationTransition(
+            turns: animation3!,
             child: CustomPaint(
               painter: Arc3Painter(widget.color3),
               child: Container(
@@ -97,9 +97,9 @@ class _FancyLoadingIndicatorState extends State<FancyLoadingIndicator>
 
   @override
   void dispose() {
-    controller1.dispose();
-    controller2.dispose();
-    controller3.dispose();
+    controller1!.dispose();
+    controller2!.dispose();
+    controller3!.dispose();
     super.dispose();
   }
 }

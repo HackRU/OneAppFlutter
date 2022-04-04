@@ -9,21 +9,20 @@ part 'models.g.dart';
 /// @param email user's email address
 /// @param token authentication token
 /// @param time auth token expire time
-
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class LcsCredential {
-  final String email;
+  // final String email;
   final String token;
 
-  @JsonKey(name: 'valid_until')
-  final DateTime expiration;
+  // @JsonKey(name: 'valid_until')
+  // final DateTime expiration;
 
-  LcsCredential(this.email, this.token, this.expiration);
+  LcsCredential(this.token);
 
   /// Verify if auth token is expired or not
-  bool isExpired() {
-    return expiration.isBefore(DateTime.now());
-  }
+  // bool isExpired() {
+  //   return expiration.isBefore(DateTime.now());
+  // }
 
   factory LcsCredential.fromJson(Map<String, dynamic> json) =>
       _$LcsCredentialFromJson(json);
@@ -36,7 +35,7 @@ class LcsCredential {
 /// @param description resource description
 /// @param url resource url
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class HelpResource {
   final String name;
   final String url;
@@ -55,10 +54,11 @@ class HelpResource {
 ///
 /// @param text announcement description
 /// @param ts time stamp when an announcement was made
-@JsonSerializable(nullable: false)
+
+@JsonSerializable()
 class Announcement {
-  final String text;
-  final String ts;
+  final String? text;
+  final String? ts;
 
   Announcement({this.text, this.ts});
 
@@ -75,7 +75,7 @@ class Announcement {
 /// @param role user role (director, admin, organizer)
 /// @param dayof user data (whether scanned for an event or not)
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class User {
   final String email;
   final Role role;
@@ -117,29 +117,32 @@ class User {
   @JsonKey(name: 'level_of_study')
   final String levelOfStudy;
 
+  @JsonKey(name: 'day_of')
   final Map<String, dynamic> dayOf;
 
-  List<Auth> auth;
+  List<String>? qrcode;
 
   User(
-      this.email,
-      this.role,
-      this.votes,
-      this.github,
-      this.major,
-      this.shortAnswer,
-      this.shirtSize,
-      this.firstName,
-      this.lastName,
-      this.dietaryRestrictions,
-      this.specialNeeds,
-      this.dateOfBirth,
-      this.school,
-      this.gradYear,
-      this.gender,
-      this.registrationStatus,
-      this.levelOfStudy,
-      this.dayOf);
+    this.email,
+    this.role,
+    this.votes,
+    this.github,
+    this.major,
+    this.shortAnswer,
+    this.shirtSize,
+    this.firstName,
+    this.lastName,
+    this.dietaryRestrictions,
+    this.specialNeeds,
+    this.dateOfBirth,
+    this.school,
+    this.gradYear,
+    this.gender,
+    this.registrationStatus,
+    this.levelOfStudy,
+    this.dayOf,
+    this.qrcode,
+  );
 
   /// check if a hacker has already attended an event
   bool alreadyDid(String event) {
@@ -158,7 +161,7 @@ class User {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class Role {
   final bool hacker;
   final bool volunteer;
@@ -175,7 +178,7 @@ class Role {
   Map<String, dynamic> toJson() => _$RoleToJson(this);
 }
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class Auth {
   final String token;
 
@@ -193,8 +196,8 @@ class Auth {
 /// @param error handle lcs errors
 
 class LcsError implements Exception {
-  String lcsError;
-  int code;
+  String? lcsError;
+  int? code;
   LcsError(http.Response res) {
     code = res.statusCode;
     if (res.statusCode >= 500) {
@@ -216,15 +219,16 @@ class LcsError implements Exception {
 /// @param location event location which can be used to fetch event map
 /// @param start event time
 
+@JsonSerializable()
 class Event {
-  final String summary;
-  //final String location;
-  final DateTime start;
+  final String? summary;
+  final String? location;
+  final DateTime? start;
 
-  Event({this.summary, /*this.location,*/ this.start});
+  Event({this.summary, this.location, this.start});
 
   Event.fromJson(Map<String, dynamic> json)
       : summary = json['summary'],
-        /*location = json['location'],*/
+        location = json['location'],
         start = DateTime.parse(json['start']['dateTime']);
 }

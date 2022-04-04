@@ -1,21 +1,34 @@
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/ui/widgets/custom_expansion_tile.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/models/models.dart';
-import 'package:flare_flutter/flare_actor.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/ui/widgets/custom_expansion_tile.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:meta/meta.dart';
 
 import '../../../defaults.dart';
+import '../../../models/cred_manager.dart';
 import 'newScanner.dart';
 
 const NOT_SCANNED = 'NOT SCANNED';
 
+const qrEvents = [
+  "check-in",
+  "lunch-saturday",
+  "dinner-saturday",
+  "ws-react",
+  "ws-cogsci_club",
+  "ws-wics",
+  "engg-lab-ctf",
+  "mlh-cup-stacking",
+  "breakfast-sunday",
+  "lunch-sunday",
+  "t-shirt",
+  "swag",
+  "extra-1",
+  "extra-2"
+];
+
 class QRScanner extends StatefulWidget {
-  static LcsCredential cred;
-  static String userEmail, userPassword;
+  static LcsCredential? cred;
 
   @override
   _QRScannerState createState() => _QRScannerState();
@@ -23,74 +36,116 @@ class QRScanner extends StatefulWidget {
 
 class _QRScannerState extends State<QRScanner> {
   var _isVisible;
+  bool isAuthorized = false;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserProfile();
+  }
+
+  void _getUserProfile() async {
+    var _storedEmail = await getEmail();
+    if (_storedEmail != "") {
+      var _authToken = await getAuthToken();
+      var userProfile = await getUser(_authToken!, _storedEmail!);
+      setState(() {
+        isAuthorized =
+            (userProfile.role.director || userProfile.role.organizer);
+      });
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: FutureBuilder(
-        future: qrEvents(MISC_URL),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return Center(
-                child: Container(
-                  color: transparent,
-                  height: 400.0,
-                  width: 400.0,
-                  child: FlareActor(
-                    'assets/flare/loading_indicator.flr',
-                    alignment: Alignment.center,
-                    fit: BoxFit.contain,
-                    animation: 'idle',
-                  ),
-                ),
-              );
-            default:
-              print(snapshot.hasError);
-              return ListView(
-                children: <Widget>[
-                  CardExpansion(events: snapshot.data),
-                ],
-              );
-          }
-        },
-      ),
-      floatingActionButton: Container(
-        width: MediaQuery.of(context).size.width - 50,
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
-        child: _isVisible == false
-            ? null
-            : FloatingActionButton.extended(
-                backgroundColor: yellow,
-                splashColor: pink,
-                onPressed: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Scanner(),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : (isAuthorized
+              ? ListView(
+                  children: <Widget>[
+                    CardExpansion(events: qrEvents),
+                  ],
+                )
+              // ? FutureBuilder(
+              //     future: qrEvents(MISC_URL),
+              //     builder: (BuildContext context, AsyncSnapshot snapshot) {
+              //       switch (snapshot.connectionState) {
+              //         case ConnectionState.none:
+              //         case ConnectionState.waiting:
+              //           return const Center(
+              //             child: CircularProgressIndicator(),
+              //             // child: Container(
+              //             //   color: HackRUColors.transparent,
+              //             //   height: 400.0,
+              //             //   width: 400.0,
+              //             //   child: const RiveAnimation.asset(
+              //             //     'assets/flare/loading_indicator.flr',
+              //             //     alignment: Alignment.center,
+              //             //     fit: BoxFit.contain,
+              //             //     animations: ['idle'],
+              //             //   ),
+              //             // ),
+              //           );
+              //         default:
+              //           print(snapshot.hasError);
+              //           return ListView(
+              //             children: <Widget>[
+              //               CardExpansion(events: snapshot.data),
+              //             ],
+              //           );
+              //       }
+              //     },
+              //   )
+              : const Center(
+                  child: Text(
+                    "Sorry, you are not authorized to use this feature! Please login if you haven't!",
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
-                  );
-                },
-                tooltip: 'QRCode Reader',
-                icon: Center(
-                  child: Icon(
-                    GroovinMaterialIcons.qrcode_scan,
-                    color: charcoal_dark,
-                    semanticLabel: 'QR Scanner Icon',
                   ),
-                ),
-                label: Text(
-                  'Scan QR Codes',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    color: charcoal_dark,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-      ),
+                )),
+      floatingActionButton: isAuthorized
+          ? Container(
+              width: MediaQuery.of(context).size.width - 50,
+              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: _isVisible == false
+                  ? null
+                  : FloatingActionButton.extended(
+                      backgroundColor: HackRUColors.yellow,
+                      splashColor: HackRUColors.pink,
+                      onPressed: () async {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Scanner(),
+                          ),
+                        );
+                      },
+                      tooltip: 'QRCode Reader',
+                      icon: const Center(
+                        child: Icon(
+                          Icons.qr_code_scanner,
+                          color: HackRUColors.charcoal_dark,
+                          semanticLabel: 'QR Scanner Icon',
+                        ),
+                      ),
+                      label: const Text(
+                        'Scan QR Codes',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: HackRUColors.charcoal_dark,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
     );
@@ -98,10 +153,10 @@ class _QRScannerState extends State<QRScanner> {
 }
 
 class CardExpansion extends StatefulWidget {
-  CardExpansion({@required this.events});
+  CardExpansion({required this.events});
   static const String routeName = '/material/expansion_panels';
   final List events;
-  static String event;
+  static String? event;
 
   @override
   _CardExpansionState createState() => _CardExpansionState();
@@ -134,15 +189,17 @@ class _CardExpansionState extends State<CardExpansion> {
                     setState(() => isExpanded = expanding),
                 trailing: Icon(
                   isExpanded
-                      ? GroovinMaterialIcons.chevron_up
-                      : GroovinMaterialIcons.chevron_down,
-                  color: isExpanded ? grey : pink_dark,
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color:
+                      isExpanded ? HackRUColors.grey : HackRUColors.pink_dark,
                   size: 28.0,
                 ),
                 title: Text(
                   _selectedEvent,
                   style: TextStyle(
-                    color: isExpanded ? white : charcoal,
+                    color:
+                        isExpanded ? HackRUColors.white : HackRUColors.charcoal,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w500,
                   ),
@@ -152,7 +209,8 @@ class _CardExpansionState extends State<CardExpansion> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
-                    color: isExpanded ? white : charcoal,
+                    color:
+                        isExpanded ? HackRUColors.white : HackRUColors.charcoal,
                   ),
                 ),
                 children: <Widget>[
@@ -169,7 +227,7 @@ class _CardExpansionState extends State<CardExpansion> {
                             widget.events[index],
                             style: TextStyle(
                               color: isExpanded
-                                  ? charcoal
+                                  ? HackRUColors.charcoal
                                   : Theme.of(context).primaryColor,
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
@@ -182,7 +240,7 @@ class _CardExpansionState extends State<CardExpansion> {
                               _selectedEvent = widget.events[index];
                               CardExpansion.event = _selectedEvent;
                             });
-                            expansionTileKey.currentState.collapse();
+                            expansionTileKey.currentState?.collapse();
                           },
                         );
                       },
@@ -204,12 +262,8 @@ class _CardExpansionState extends State<CardExpansion> {
                     height: currentOrientation == Orientation.portrait
                         ? 300.0
                         : 0.0,
-                    child: FlareActor(
-                      'assets/flare/forever_wondering.flr',
-                      alignment: Alignment.center,
-                      fit: BoxFit.contain,
-                      animation: 'idle',
-                    ),
+                    child: const Text(
+                        'Select event and above and scan for QR codes by clicking the button below'),
                   ),
                 ),
               )

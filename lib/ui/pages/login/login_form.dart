@@ -1,15 +1,17 @@
-import 'package:HackRU/models/cred_manager.dart';
-import 'package:HackRU/services/hackru_service.dart';
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/defaults.dart';
-import 'package:HackRU/ui/widgets/dialog/error_dialog.dart';
-import 'package:HackRU/ui/widgets/loading_indicator.dart';
+import 'package:hackru/models/cred_manager.dart';
+import 'package:hackru/services/hackru_service.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/defaults.dart';
+import 'package:hackru/ui/widgets/dialog/error_dialog.dart';
+import 'package:hackru/ui/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../models/models.dart';
+
 class LoginForm extends StatefulWidget {
   static bool gotCred = false;
-  const LoginForm({Key key}) : super(key: key);
+  const LoginForm({Key? key}) : super(key: key);
 
   @override
   LoginFormState createState() => LoginFormState();
@@ -56,6 +58,7 @@ class LoginFormState extends State<LoginForm> {
     void _onLoginButtonPressed() async {
       if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
         var error = 'Error:\n Missing username and/or password!';
+        debugPrint("====== LOGIN_FORM_VALIDATION_ERROR: $error");
         _errorDialog(error);
       } else {
         try {
@@ -64,9 +67,10 @@ class LoginFormState extends State<LoginForm> {
           });
           final cred =
               await login(_emailController.text, _passwordController.text);
-          if (cred != null) {
+          User userData = await getUser(cred.token, _emailController.text);
+          if (cred.token != null) {
             LoginForm.gotCred = true;
-            await persistCredentials(cred.token, cred.email);
+            await persistCredentials(cred.token, userData.email);
             setState(() {
               _isLoginPressed = false;
             });
@@ -75,26 +79,24 @@ class LoginFormState extends State<LoginForm> {
             setState(() {
               _isLoginPressed = false;
             });
-            _scaffoldKey.currentState
-              ..removeCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text('Error: Incorrect email or password!'),
-                  backgroundColor: Colors.red,
-                ),
-              );
+            ScaffoldMessengerState().clearSnackBars();
+            ScaffoldMessengerState().showSnackBar(
+              const SnackBar(
+                content: Text('Error: Incorrect email or password!'),
+                backgroundColor: Colors.red,
+              ),
+            );
           }
         } catch (error) {
           setState(() {
             _isLoginPressed = false;
           });
-          _scaffoldKey.currentState
-            ..removeCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(error ?? ''),
-              ),
-            );
+          ScaffoldMessengerState().clearSnackBars();
+          ScaffoldMessengerState().showSnackBar(
+            SnackBar(
+              content: Text(error.toString()),
+            ),
+          );
         }
       }
     }
@@ -112,8 +114,8 @@ class LoginFormState extends State<LoginForm> {
       ));
 
       return _isLoginPressed
-          ? Center(
-              child: FancyLoadingIndicator(),
+          ? const Center(
+              child: CircularProgressIndicator(),
             )
           : Padding(
               padding: EdgeInsets.only(
@@ -164,11 +166,11 @@ class LoginFormState extends State<LoginForm> {
                             ? null
                             : 'Please enter valid email address',
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: charcoal_light, width: 2.0),
+                          borderSide: BorderSide(
+                              color: HackRUColors.charcoal_light, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
-                        focusColor: charcoal_light,
+                        focusColor: HackRUColors.charcoal_light,
                       ),
                     ),
                   ),
@@ -188,28 +190,35 @@ class LoginFormState extends State<LoginForm> {
                         errorText:
                             isInputValid ? null : 'Please enter valid password',
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: charcoal_light, width: 2.0),
+                          borderSide: BorderSide(
+                              color: HackRUColors.charcoal_light, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
-                        focusColor: charcoal_light,
+                        focusColor: HackRUColors.charcoal_light,
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 40.0, horizontal: 10.0),
-                    child: RaisedButton(
-                      elevation: 1.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(1.0),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 50.0,
+                          ),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor,
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 50.0,
-                      ),
-                      splashColor: Theme.of(context).backgroundColor,
-                      color: Theme.of(context).primaryColor,
                       child: Text(
                         'Login',
                         style: TextStyle(

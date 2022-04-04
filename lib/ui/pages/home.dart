@@ -1,16 +1,16 @@
-import 'package:HackRU/models/cred_manager.dart';
-import 'package:HackRU/styles.dart';
-import 'package:HackRU/ui/pages/dashboard/dashboard.dart';
-import 'package:HackRU/ui/pages/events/events.dart';
-import 'package:HackRU/ui/pages/login/login_page.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:hackru/defaults.dart';
+import 'package:hackru/models/cred_manager.dart';
+import 'package:hackru/styles.dart';
+import 'package:hackru/ui/pages/dashboard/dashboard.dart';
+import 'package:hackru/ui/pages/events/events.dart';
+import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
-//import 'package:qr_flutter/qr_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
-  static String userEmail;
+  static String? userEmail;
 
   @override
   _HomeState createState() => _HomeState();
@@ -63,16 +63,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       Icons.home,
                       size: 25.0,
                       color: _currentBottomNavItemIndex == 0
-                          ? white
-                          : charcoal_dark,
+                          ? HackRUColors.white
+                          : HackRUColors.charcoal_dark,
                     ),
                     Text(
                       'Dashboard',
                       style: TextStyle(
                         fontSize: _currentBottomNavItemIndex == 0 ? 14.0 : 12.0,
                         color: _currentBottomNavItemIndex == 0
-                            ? white
-                            : charcoal_dark,
+                            ? HackRUColors.white
+                            : HackRUColors.charcoal_dark,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -98,19 +98,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(
-                      GroovinMaterialIcons.calendar_clock,
+                      FontAwesomeIcons.calendarAlt,
                       size: 25.0,
                       color: _currentBottomNavItemIndex == 1
-                          ? white
-                          : charcoal_dark,
+                          ? HackRUColors.white
+                          : HackRUColors.charcoal_dark,
                     ),
                     Text(
                       'Events',
                       style: TextStyle(
                         fontSize: _currentBottomNavItemIndex == 1 ? 14.0 : 12.0,
                         color: _currentBottomNavItemIndex == 1
-                            ? white
-                            : charcoal_dark,
+                            ? HackRUColors.white
+                            : HackRUColors.charcoal_dark,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -128,43 +128,69 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   ///                      SHOW QR-CODE
   ///===========================================================
   void _showQrCode() async {
-    /*var userEmail = await getEmail();
+    var userEmail = await getEmail();
     switch (await showDialog(
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15.0),
-            ),
-          ),
+          // shape: const RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.all(
+          //     Radius.circular(15.0),
+          //   ),
+          // ),
           children: <Widget>[
             Container(
-              height: 340.0,
-              width: 400.0,
-              child: ListView(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: QrImage(
-                      version: 4,
-                      data: userEmail ?? '',
-                      gapless: true,
-                      foregroundColor: charcoal,
-                    ),
-                  ),
-                  Center(
-                    child: Text(userEmail ?? ''),
-                  ),
-                ],
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15.0),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    HackRUColors.white,
+                    HackRUColors.white,
+                  ],
+                ),
               ),
+              height: 400,
+              width: 400.0,
+              child: Center(
+                child: QrImage(
+                  version: 4,
+                  data: userEmail ?? '',
+                  gapless: true,
+                  embeddedImage: const AssetImage(
+                      'assets/hackru-logos/appIconImageWhite.png'),
+                  embeddedImageStyle: QrEmbeddedImageStyle(
+                    size: const Size(50, 50),
+                  ),
+                  foregroundColor: HackRUColors.charcoal,
+                ),
+              ),
+              // ListView(
+              //   children: <Widget>[
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              //       child: QrImage(
+              //         version: 4,
+              //         data: userEmail ?? '',
+              //         gapless: true,
+              //         foregroundColor: HackRUColors.charcoal,
+              //       ),
+              //     ),
+              //     // Center(
+              //     //   child: Text(userEmail ?? ''),
+              //     // ),
+              //   ],
+              // ),
             ),
           ],
-          backgroundColor: white,
+          backgroundColor: Colors.transparent,
         );
       },
     )) {
-    }*/
+    }
   }
 
   ///===========================================================
@@ -192,27 +218,26 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             );
           }
           if (loginResponse != null && loginResponse != '') {
-            _scaffoldKey.currentState
-              ..removeCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text(loginResponse ?? ''),
-                  backgroundColor: green,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+            ScaffoldMessengerState().clearSnackBars();
+            ScaffoldMessengerState().showSnackBar(
+              SnackBar(
+                content: Text(loginResponse ?? ''),
+                backgroundColor: HackRUColors.green,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           }
         },
-        child: Icon(
-          GroovinMaterialIcons.qrcode,
-          size: 34,
-        ),
         tooltip: 'QR Code',
         elevation: 4.0,
-        splashColor: white,
+        splashColor: HackRUColors.white,
         isExtended: false,
-        foregroundColor: black,
+        foregroundColor: HackRUColors.black,
         backgroundColor: Theme.of(context).accentColor,
+        child: Icon(
+          FontAwesomeIcons.qrcode,
+          size: 22,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _buildBottomAppBar(context),

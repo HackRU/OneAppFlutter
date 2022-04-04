@@ -1,6 +1,5 @@
-import 'package:HackRU/models/models.dart';
-import 'package:HackRU/models/string_parser.dart';
-import 'package:flutter/foundation.dart';
+import 'package:hackru/models/models.dart';
+import 'package:hackru/models/string_parser.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../styles.dart';
 
 class AnnouncementCard extends StatelessWidget {
-  AnnouncementCard({@required this.resource});
+  AnnouncementCard({required this.resource});
   final Announcement resource;
 
   /// =================================================
@@ -45,17 +44,17 @@ class AnnouncementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _errorLoadingDataText = 'Error: Unable to retrieve messages!';
-    var secs = resource.ts.split('.')[0];
+    var secs = resource.ts?.split('.')[0];
     var timeStr =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(secs) * 1000).toLocal();
+        DateTime.fromMillisecondsSinceEpoch(int.parse(secs!) * 1000).toLocal();
     var formattedTime = DateFormat('hh:mm a').format(timeStr);
 
     return Container(
-      key: Key(resource.ts),
+      key: Key(resource.ts!),
       child: Card(
         elevation: 0.0,
         color: resource.text == _errorLoadingDataText
-            ? pink
+            ? HackRUColors.pink
             : Theme.of(context).dividerColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -71,7 +70,7 @@ class AnnouncementCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
-                            .copyWith(color: Colors.white),
+                            ?.copyWith(color: Colors.white),
                       ),
                     )
                   : ListTile(
@@ -114,7 +113,7 @@ class AnnouncementCard extends StatelessWidget {
 
 class PlatformViewVerticalGestureRecognizer
     extends VerticalDragGestureRecognizer {
-  PlatformViewVerticalGestureRecognizer({PointerDeviceKind kind})
+  PlatformViewVerticalGestureRecognizer({PointerDeviceKind? kind})
       : super(kind: kind);
 
   Offset _dragDistance = Offset.zero;
