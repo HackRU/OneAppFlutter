@@ -5,25 +5,20 @@ import 'package:hackru/models/models.dart';
 import 'package:flutter/material.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 const helpResources = [
   {
     "name": "MentorQ",
     "desc": "Get matched with a mentor for help!",
-    "url": "http://mentorq.hackru.org"
+    "url": HELP_Q_URL
   },
   {
     "name": "Slack",
     "desc": "Talk to friends, mentors, and organizers at HackRU",
-    "url":
-        "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=77a8cf5266&e=c9b098417d"
+    "url": SLACK_PAGE_URL
   },
-  {
-    "name": "Devpost",
-    "desc": "Submit your projects",
-    "url":
-        "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=f6ef06bd11&e=c9b098417d"
-  },
+  {"name": "Devpost", "desc": "Submit your projects", "url": DEVPOST_URL},
   {
     "name": "Rutgers Campus Map",
     "desc": "Rutgers University - College Ave Campus",
@@ -49,6 +44,7 @@ class Help extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView.builder(
+        controller: ScrollController(),
         itemCount: helpResources.length,
         itemBuilder: (BuildContext context, int index) {
           HelpResource helpResource =
@@ -107,8 +103,8 @@ class HelpButton extends StatelessWidget {
   final HelpResource resource;
 
   void _open() async {
-    if (await canLaunch(resource.url)) {
-      await launch(resource.url);
+    if (await canLaunchUrlString(resource.url)) {
+      await launchUrlString(resource.url);
     } else {
       print('failed to launch url');
     }
@@ -123,7 +119,7 @@ class HelpButton extends StatelessWidget {
         ),
         elevation: 0.0,
         child: Container(
-          height: 100.0,
+          height: 120.0,
           child: InkWell(
             splashColor: HackRUColors.yellow,
             onTap: _open,
@@ -138,7 +134,7 @@ class HelpButton extends StatelessWidget {
                         resource.name.toUpperCase(),
                         style: TextStyle(
                           color: HackRUColors.white,
-                          fontSize: 30,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,

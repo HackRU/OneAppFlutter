@@ -20,7 +20,7 @@ Future<http.Response> getMisc(String endpoint) {
 Future<http.Response> getLcs(String endpoint) {
   return client
       .get(Uri.parse(PROD_URL + endpoint))
-      .timeout(const Duration(seconds: 10));
+      .timeout(const Duration(seconds: 30));
 }
 
 Future<http.Response> postLcs(String endpoint, dynamic kBody) async {
@@ -210,6 +210,27 @@ Future<User> getUser(String authToken, String emailAddress,
   }
 }
 
+Future updateStatus(String lcsUrl, String authE, String authT,
+    String userEmailOrId, String nextState) async {
+  var result = await postLcs('/update', {
+    'updates': {
+      '\$set': {'registration_status': nextState}
+    },
+    'user_email': userEmailOrId,
+    'auth_email': authE,
+    'token': authT
+  });
+
+  var decoded = jsonDecode(result.body);
+  if (decoded['statusCode'] == 400) {
+    throw UpdateError(decoded['body']);
+  } else if (decoded['statusCode'] == 403) {
+    throw PermissionError();
+  } else if (decoded['statusCode'] != 200) {
+    throw LcsError(result);
+  }
+}
+
 /// TODO: Fix this
 // /update can give wrong status codes
 // check if the user credential belongs to is role.director first. or else it will break :(
@@ -291,6 +312,32 @@ Future<bool> isAuthorizedForQRScanner(String token, String email) async {
     return true;
   } else {
     return false;
+  }
+}
+
+Future<int> getAttending(String _token) async {
+  var result = await postLcs('/read', {
+    'token': _token,
+    'query': {'registration_status': 'checked-in'},
+    'aggregate': false
+  });
+
+  if (result.statusCode == 200) {
+    var users = jsonDecode(result.body)['body'];
+    return users.length;
+  } else {
+    throw LcsError(result);
+  }
+}
+
+Future<int> forgotPassword(String _email) async {
+  var result =
+      await postLcs('/createmagiclink', {'email': _email, 'forgot': true});
+
+  if (result.statusCode == 200) {
+    return 200;
+  } else {
+    throw LcsError(result);
   }
 }
 

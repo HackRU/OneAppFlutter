@@ -1,7 +1,10 @@
 import 'package:hackru/models/cred_manager.dart';
+import 'package:hackru/models/exceptions.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/defaults.dart';
+import 'package:hackru/ui/hackru_app.dart';
+import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/widgets/dialog/error_dialog.dart';
 import 'package:hackru/ui/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,7 @@ class LoginFormState extends State<LoginForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final TextEditingController _textFieldController = TextEditingController();
   bool isInputValid = true;
   bool _isLoginPressed = false;
   var _isEmailEntered = false;
@@ -74,7 +78,15 @@ class LoginFormState extends State<LoginForm> {
             setState(() {
               _isLoginPressed = false;
             });
-            Navigator.of(context).pop('Logged in successfully!');
+            await Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (BuildContext context) => const HackRUApp(),
+                maintainState: false,
+              ),
+              ModalRoute.withName('/main'),
+            );
+            // Navigator.of(context, rootNavigator: false)
+            //     .pop('Logged in successfully!');
           } else {
             setState(() {
               _isLoginPressed = false;
@@ -87,16 +99,222 @@ class LoginFormState extends State<LoginForm> {
               ),
             );
           }
+        } on LcsLoginFailed {
+          setState(() {
+            _isLoginPressed = false;
+          });
+          var error = 'Error:\n Login failed!';
+          _errorDialog(error);
         } catch (error) {
           setState(() {
             _isLoginPressed = false;
           });
+          var _error = error.toString();
+          _errorDialog(_error);
           ScaffoldMessengerState().clearSnackBars();
           ScaffoldMessengerState().showSnackBar(
             SnackBar(
               content: Text(error.toString()),
             ),
           );
+        }
+      }
+    }
+
+    String? valueText;
+    String? codeDialog;
+    Future _displayTextInputDialog(BuildContext context) async {
+      codeDialog = '';
+      return showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: HackRUColors.pink,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              title: const Text('Enter valid email for password reset'),
+              content: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    valueText = value;
+                  });
+                },
+                controller: _textFieldController,
+                decoration:
+                    const InputDecoration(hintText: "emailtolink@email.com"),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                      const EdgeInsets.all(15.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'CANCEL',
+                    style:
+                        TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+                    textAlign: TextAlign.center,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  splashColor: HackRUColors.yellow,
+                  height: 40.0,
+                  color: HackRUColors.off_white,
+                  padding: const EdgeInsets.all(15.0),
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: HackRUColors.pink,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      codeDialog = valueText;
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ],
+            );
+          });
+    }
+
+    void _scanDialogSuccess(String body) async {
+      switch (await showDialog(
+        context: context,
+        builder: (BuildContext context, {barrierDismissible = false}) {
+          return AlertDialog(
+            backgroundColor: HackRUColors.pink,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: const Icon(
+              Icons.check_circle_outline,
+              color: HackRUColors.off_white,
+              size: 80.0,
+            ),
+            content: Text(body,
+                style: const TextStyle(
+                    fontSize: 25, color: HackRUColors.off_white),
+                textAlign: TextAlign.center),
+            actions: <Widget>[
+              MaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                splashColor: HackRUColors.yellow,
+                height: 40.0,
+                color: HackRUColors.off_white,
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                padding: const EdgeInsets.all(15.0),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: HackRUColors.pink,
+                      fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          );
+        },
+      )) {
+      }
+    }
+
+    Future _scanDialogWarning(String body) async {
+      return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context, {barrierDismissible = false}) {
+          return AlertDialog(
+            backgroundColor: HackRUColors.pink,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: const Icon(
+              Icons.warning,
+              color: HackRUColors.off_white,
+              size: 80.0,
+            ),
+            content: Text(body,
+                style: const TextStyle(
+                    fontSize: 25, color: HackRUColors.off_white),
+                textAlign: TextAlign.center),
+            actions: <Widget>[
+              // TextButton(
+              //   style: ButtonStyle(
+              //     padding: MaterialStateProperty.all(
+              //       const EdgeInsets.all(15.0),
+              //     ),
+              //   ),
+              //   onPressed: () {
+              //     Navigator.pop(context, false);
+              //   },
+              //   child: const Text(
+              //     'CANCEL',
+              //     style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
+              MaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                splashColor: HackRUColors.yellow,
+                height: 40.0,
+                color: HackRUColors.off_white,
+                onPressed: () async {
+                  Navigator.pop(context, true);
+                },
+                padding: const EdgeInsets.all(15.0),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: HackRUColors.pink,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    void handleForgotPassword() async {
+      codeDialog = "";
+      await _displayTextInputDialog(context);
+      if (codeDialog != "") {
+        try {
+          debugPrint(codeDialog);
+          var res = await forgotPassword(codeDialog!);
+          if (res == 200) {
+            var result = "A link has been sent to your email.";
+            _scanDialogSuccess(result);
+          }
+        } on LcsError {
+          var result = "Invalid email.";
+          _scanDialogWarning(result);
         }
       }
     }
@@ -121,6 +339,7 @@ class LoginFormState extends State<LoginForm> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: ListView(
+                controller: ScrollController(),
                 scrollDirection: Axis.vertical,
                 padding: EdgeInsets.all(25.0),
                 children: <Widget>[
@@ -200,7 +419,7 @@ class LoginFormState extends State<LoginForm> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 40.0, horizontal: 10.0),
+                        vertical: 30.0, horizontal: 10.0),
                     child: ElevatedButton(
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(1.0),
@@ -234,9 +453,11 @@ class LoginFormState extends State<LoginForm> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: _launchUrl,
-                    child: Text(
-                      'Forgot Password / Signup?',
+                    onTap: () {
+                      handleForgotPassword();
+                    },
+                    child: const Text(
+                      'Forgot Password?',
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,

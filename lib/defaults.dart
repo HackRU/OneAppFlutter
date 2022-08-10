@@ -1,8 +1,8 @@
 ///=======================================
 ///             ENDPOINTS
 ///=======================================
-// const BASE_URL = 'https://api.hackru.org/dev';
-const BASE_URL = 'https://api.hackru.org/prod';
+const BASE_URL = 'https://api.hackru.org/dev';
+// const BASE_URL = 'https://api.hackru.org/prod';
 const DEV_URL = 'https://api.hackru.org/dev';
 const PROD_URL = 'https://api.hackru.org/prod';
 

@@ -14,7 +14,7 @@ import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 import '../styles.dart';
 
 class HackRUApp extends StatefulWidget {
-  HackRUApp({Key? key}) : super(key: key);
+  const HackRUApp({Key? key}) : super(key: key);
 
   @override
   _HackRUAppState createState() => _HackRUAppState();
@@ -77,6 +77,7 @@ class _HackRUAppState extends State<HackRUApp> {
   /// =========================================================
   void _drawerItems() {
     setState(() {});
+    items = [];
     items.add(ScreenHiddenDrawer(
       ItemHiddenMenu(
         name: 'Home',
@@ -133,30 +134,6 @@ class _HackRUAppState extends State<HackRUApp> {
         QRScanner(),
       ),
     );
-
-    if (_hasAuthToken) {
-      items.add(
-        ScreenHiddenDrawer(
-          ItemHiddenMenu(
-            name: 'Logout',
-            baseStyle: _nonSelectedDrawerItem,
-            colorLineSelected: HackRUColors.yellow,
-            selectedStyle: _selectedDrawerItem,
-            onTap: () async {
-              await deleteCredentials();
-              await Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => HackRUApp(),
-                  maintainState: false,
-                ),
-                ModalRoute.withName('/main'),
-              );
-            },
-          ),
-          Container(),
-        ),
-      );
-    }
   }
 
   /// =========================================================
@@ -177,7 +154,9 @@ class _HackRUAppState extends State<HackRUApp> {
           color: HackRUColors.transparent,
           splashColor: HackRUColors.yellow,
           onPressed: () {
+            // setState(() {});
             _hasToken();
+            _drawerItems();
           },
         ),
         const SizedBox(width: 8),
@@ -199,7 +178,7 @@ class _HackRUAppState extends State<HackRUApp> {
                   });
                   await Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => HackRUApp(),
+                      builder: (BuildContext context) => const HackRUApp(),
                       maintainState: false,
                     ),
                     ModalRoute.withName('/main'),

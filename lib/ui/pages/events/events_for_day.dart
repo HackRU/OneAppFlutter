@@ -107,6 +107,7 @@ class EventsForDay extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView.builder(
+        controller: ScrollController(),
         padding: const EdgeInsets.all(15.0),
         itemCount: events == null ? 1 : events?.length,
         itemBuilder: (BuildContext context, int index) {

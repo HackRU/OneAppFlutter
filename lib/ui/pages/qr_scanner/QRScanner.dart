@@ -12,6 +12,7 @@ const NOT_SCANNED = 'NOT SCANNED';
 
 const qrEvents = [
   "check-in",
+  "delayed-check-in",
   "lunch-saturday",
   "dinner-saturday",
   "ws-react",
@@ -68,6 +69,7 @@ class _QRScannerState extends State<QRScanner> {
           ? const Center(child: CircularProgressIndicator())
           : (isAuthorized
               ? ListView(
+                  controller: ScrollController(),
                   children: <Widget>[
                     CardExpansion(events: qrEvents),
                   ],

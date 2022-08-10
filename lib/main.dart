@@ -1,14 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/ui/hackru_app.dart';
 import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:hackru/ui/widgets/page_not_found.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:url_strategy/url_strategy.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'styles.dart';
+
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // ====== TODO: update following configs
 // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -52,17 +52,17 @@ void main() async {
   //       selectNotificationSubject.add(payload);
   //     });
 
-  /** ========================================================
-   *  SYSTEM UI OVERLAY STYLING (ANDROID)
+  /*  ======================================================== *
+   *  SYSTEM UI OVERLAY STYLING (ANDROID)                      *
    *  ======================================================== */
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
+    const SystemUiOverlayStyle(
       statusBarColor: HackRUColors.black,
     ),
   );
 
   setPathUrlStrategy();
-  runApp(MainApp());
+  runApp(const MainApp());
 }
 
 /// =======================================================
@@ -96,7 +96,7 @@ class MainApp extends StatelessWidget {
       darkTheme: kDarkTheme,
       home: HackRUApp(),
       routes: <String, WidgetBuilder>{
-        '/login': (BuildContext context) => LoginPage(),
+        '/login': (BuildContext context) => const LoginPage(),
         '/home': (BuildContext context) => HackRUApp(),
         // '/floorMap': (BuildContext context) => HackRUMap(),
       },
