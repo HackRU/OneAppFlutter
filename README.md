@@ -6,7 +6,7 @@ Feel free to show some :heart: and :star: the repo to support the project.
 
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/HackRU/OneAppFlutter?color=1ab8aa)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/HackRU/OneAppFlutter?color=eb8810)
-![Github Last Commit](https://img.shields.io/github/last-commit/HackRU/OneAppFlutter/master?color=red&label=last%20commit%20%7C%202020)
+![Github Last Commit](https://img.shields.io/github/last-commit/HackRU/OneAppFlutter/master?color=red&label=last%20commit%20%7C)
 ![Top Language](https://img.shields.io/github/languages/top/HackRU/OneAppflutter?logo=Dart)
 ![Flutter SDK](https://img.shields.io/badge/Flutter%20SDK%20[BETA]-1.20.0--7.2.pre-blue?logo=flutter)
 ![GitHub contributors](https://img.shields.io/github/contributors/HackRU/OneAppFlutter?color=ed53bc)
@@ -26,6 +26,10 @@ A cross-platform mobile application for hackers, organizers, mentors, and sponso
 *How did this project come to be?*
 
 We had started using an inhouse hybrid mobile application to keep track of analytics to get a better idea of how certain aspects of the hackathon were running such as food consumption and optimization for checkin. This project expanded into a public native mobile application so hackers had easier access to their QR code as well as organizers with their scanners. Additional information of the hackathon were incorporated so that everyone would be able to stay up to date on events that are happeneing wherever they may be in the venue.
+
+## Dependabot Integrations
+This project utilizes **pub dependabot** to proactively update project dependencies for Flutter/Dart code which use the pub package manager to install/update dependencies.
+Learn more about it here: https://github.blog/changelog/2022-04-05-pub-beta-support-for-dependabot-version-updates/
 
 ## Style Guide
 Most of the recommended lints directly implement the guidelines set out in [Effective Dart](https://dart.dev/guides/language/effective-dart). In a few cases the lints are stricter than the style guide for the sake of consistency.
