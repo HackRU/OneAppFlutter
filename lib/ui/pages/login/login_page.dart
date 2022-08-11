@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Theme.of(context).primaryColor,
         ),
       ),
-      body: Center(
+      body: const Center(
         child: LoginForm(),
       ),
     );

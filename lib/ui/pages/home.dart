@@ -11,18 +11,32 @@ import 'package:qr_flutter/qr_flutter.dart';
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
   static String? userEmail;
-
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _hasAuthToken = false;
   int _currentBottomNavItemIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    _hasToken();
+  }
+
+  void _hasToken() async {
+    var hasToken = await hasCredentials();
+    if (hasToken) {
+      setState(() {
+        _hasAuthToken = hasToken;
+      });
+    } else {
+      setState(() {
+        _hasAuthToken = false;
+      });
+    }
   }
 
   ///===========================================================
@@ -204,41 +218,43 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: _kBottomNavPages[_currentBottomNavItemIndex],
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var loginResponse;
-          var hasCred = await hasCredentials();
-          if (hasCred) {
-            _showQrCode();
-          } else {
-            loginResponse = await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-                fullscreenDialog: true,
-              ),
-            );
-          }
-          if (loginResponse != null && loginResponse != '') {
-            ScaffoldMessengerState().clearSnackBars();
-            ScaffoldMessengerState().showSnackBar(
-              SnackBar(
-                content: Text(loginResponse ?? ''),
-                backgroundColor: HackRUColors.green,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-        },
-        tooltip: 'QR Code',
-        elevation: 4.0,
-        splashColor: HackRUColors.white,
-        isExtended: false,
-        foregroundColor: HackRUColors.black,
-        backgroundColor: Theme.of(context).accentColor,
-        child: Icon(
-          FontAwesomeIcons.qrcode,
-          size: 22,
-        ),
-      ),
+          onPressed: () async {
+            var loginResponse;
+            var hasCred = await hasCredentials();
+            if (hasCred) {
+              _showQrCode();
+            } else {
+              loginResponse = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                  fullscreenDialog: true,
+                ),
+              );
+            }
+            if (loginResponse != null && loginResponse != '' && mounted) {
+              ScaffoldMessengerState().clearSnackBars();
+              ScaffoldMessengerState().showSnackBar(
+                SnackBar(
+                  content: Text(loginResponse ?? ''),
+                  backgroundColor: HackRUColors.green,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+          },
+          tooltip: 'QR Code',
+          elevation: 4.0,
+          splashColor: HackRUColors.white,
+          isExtended: false,
+          foregroundColor: HackRUColors.black,
+          backgroundColor: Theme.of(context).accentColor,
+          child: _hasAuthToken
+              ? const Icon(
+                  FontAwesomeIcons.qrcode,
+                  size: 22,
+                )
+              : Text("Login")),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _buildBottomAppBar(context),
     );

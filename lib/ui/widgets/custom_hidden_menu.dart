@@ -97,6 +97,7 @@ class _CustomHiddenMenuState extends State<CustomHiddenMenu> {
                     return false;
                   },
                   child: ListView.builder(
+                    controller: ScrollController(),
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     itemCount: widget.menuItems?.length,

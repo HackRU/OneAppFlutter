@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/defaults.dart';
@@ -11,12 +9,11 @@ import 'package:hackru/models/models.dart';
 import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 // import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 var popup = true;
-const NOT_SCANNED = 'NOT SCANNED';
+const notScanned = 'NOT SCANNED';
 
 class Scanner extends StatefulWidget {
   const Scanner({
@@ -41,8 +38,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     cameraController = MobileScannerController();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -102,54 +101,55 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Text(
-                    scanned,
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      color: HackRUColors.pink_light,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  // Text(
+                  //   scanned,
+                  //   style: const TextStyle(
+                  //     fontSize: 16.0,
+                  //     color: HackRUColors.pink_light,
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
+                  // ),
                   Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        IconButton(
-                          iconSize: 80,
-                          icon: Icon(
-                            isPlaying
-                                ? FontAwesomeIcons.playCircle
-                                : FontAwesomeIcons.pauseCircle,
-                            color: isPlaying
-                                ? HackRUColors.yellow
-                                : HackRUColors.pink_light,
-                          ),
-                          onPressed: () => _handleOnPressed(),
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      IconButton(
+                        iconSize: 80,
+                        icon: Icon(
+                          isPlaying
+                              ? FontAwesomeIcons.playCircle
+                              : FontAwesomeIcons.pauseCircle,
+                          color: isPlaying
+                              ? HackRUColors.yellow
+                              : HackRUColors.pink_light,
                         ),
-                        IconButton(
-                          iconSize: 80,
-                          icon: ValueListenableBuilder(
-                            valueListenable: cameraController.cameraFacingState,
-                            builder: (context, state, child) {
-                              switch (state as CameraFacing) {
-                                case CameraFacing.front:
-                                  return const Icon(
-                                    Icons.flip_camera_ios_outlined,
-                                    color: HackRUColors.off_white,
-                                    // size: 50,
-                                  );
-                                case CameraFacing.back:
-                                  return const Icon(
-                                    Icons.flip_camera_ios_rounded,
-                                    color: HackRUColors.off_white,
-                                    // size: 50,
-                                  );
-                              }
-                            },
-                          ),
-                          onPressed: () => cameraController.switchCamera(),
+                        onPressed: () => _handleOnPressed(),
+                      ),
+                      IconButton(
+                        iconSize: 80,
+                        icon: ValueListenableBuilder(
+                          valueListenable: cameraController.cameraFacingState,
+                          builder: (context, state, child) {
+                            switch (state as CameraFacing) {
+                              case CameraFacing.front:
+                                return const Icon(
+                                  Icons.flip_camera_ios_outlined,
+                                  color: HackRUColors.off_white,
+                                  // size: 50,
+                                );
+                              case CameraFacing.back:
+                                return const Icon(
+                                  Icons.flip_camera_ios_rounded,
+                                  color: HackRUColors.off_white,
+                                  // size: 50,
+                                );
+                            }
+                          },
                         ),
-                      ]),
+                        onPressed: () => cameraController.switchCamera(),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -255,6 +255,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   Future _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context, {barrierDismissible = false}) {
         return AlertDialog(
           backgroundColor: HackRUColors.pink,
@@ -271,21 +272,21 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                   const TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
-            TextButton(
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all(
-                  const EdgeInsets.all(15.0),
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: const Text(
-                'CANCEL',
-                style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
-                textAlign: TextAlign.center,
-              ),
-            ),
+            // TextButton(
+            //   style: ButtonStyle(
+            //     padding: MaterialStateProperty.all(
+            //       const EdgeInsets.all(15.0),
+            //     ),
+            //   ),
+            //   onPressed: () {
+            //     Navigator.pop(context, false);
+            //   },
+            //   child: const Text(
+            //     'CANCEL',
+            //     style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+            //     textAlign: TextAlign.center,
+            //   ),
+            // ),
             MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
@@ -387,6 +388,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     var _storedEmail = await getEmail();
     var _authToken = await getAuthToken();
     var result = 'NULL';
+
     // print('***** Called `lcsHandle` with qr:' + userEmailOrId);
     // debugPrint('${QRScanner.cred}');
     var user;
@@ -394,26 +396,172 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     try {
       if (userEmailOrId != '') {
         var event = CardExpansion.event;
-        // HANDLE CHECK_IN EVENT, potentially link
-        if (event == 'check-in' || event == 'check-in-no-delayed') {
+
+        // if (event == 'check-in' || event == 'check-in-no-delayed') {
+        //   if (_isEmailAddress(userEmailOrId)) {
+        //     user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
+        //     if (event == 'check-in') {
+        //       if (user.isDelayedEntry()) {
+        //         return notScanned;
+        //         // *** TODO: FIX THIS LOGIC
+        //         // if (_scanDialogWarning(
+        //         //     'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
+        //         //   return notScanned;
+        //         // }
+        //       }
+        //       event = 'extra-1';
+        //     }
+        //     Scanner.userEmail = userEmailOrId;
+        //   }
+
+        //   // print('****** User: $user');
+        //   result = 'EMAIL SCANNED!';
+        // }
+
+        /* ================= HANDLE CHECK_IN EVENT, potentially link ===============
+
+        Logic 
+        - if check-in
+        -- don't let waitlist in. return notScanned
+        -- else if not in waitlist,
+        ---- change user.registrationStatus to checked-in
+        ---- display message for checked in
+
+        - if delayed-check-in, 
+        -- change user.registrationStatus to checked-in
+        -- display message for checked in
+        
+        */
+
+        if (event == 'check-in') {
           if (_isEmailAddress(userEmailOrId)) {
             user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
-            if (event == 'check-in') {
-              if (user.isDelayedEntry()) {
-                return NOT_SCANNED;
-                // *** TODO: FIX THIS LOGIC
-                // if (_scanDialogWarning(
-                //     'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
-                //   return NOT_SCANNED;
-                // }
+            if (user.isDelayedEntry()) {
+              return "EMAIL ON WAITLIST, NOT SCANNED.";
+            } else {
+              if (user.registrationStatus == 'registered') {
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'confirmation');
+                debugPrint('moved to confirmation');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'coming');
+                debugPrint('moved to coming');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'confirmed');
+                debugPrint('moved to confirmed');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'checked-in');
+                debugPrint('moved to checked-in');
               }
-              event = 'extra-1';
+              if (user.registrationStatus == 'confirmation') {
+                debugPrint("confirmation");
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'coming');
+                debugPrint('moved to coming');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'confirmed');
+                debugPrint('moved to confirmed');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'checked-in');
+                debugPrint('moved to checked-in');
+              }
+              if (user.registrationStatus == 'not-coming') {
+                debugPrint("not-coming");
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'coming');
+                debugPrint('moved to coming');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'confirmed');
+                debugPrint('moved to confirmed');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'checked-in');
+                debugPrint('moved to checked-in');
+              }
+              if (user.registrationStatus == 'coming') {
+                debugPrint("coming");
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'confirmed');
+                debugPrint('moved to confirmed');
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'checked-in');
+                debugPrint('moved to checked-in');
+              }
+              if (user.registrationStatus == 'confirmed') {
+                await updateStatus(BASE_URL, _storedEmail, _authToken,
+                    userEmailOrId, 'checked-in');
+                debugPrint('moved to checked-in');
+              }
+              if (user.registrationStatus == 'checked-in') {
+                result = "SCANNED";
+              }
+              // result = "EMAIL SCANNED";
             }
-            Scanner.userEmail = userEmailOrId;
           }
-
-          // print('****** User: $user');
-          result = 'EMAIL SCANNED!';
+        } else if (event == 'delayed-check-in') {
+          if (_isEmailAddress(userEmailOrId)) {
+            user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
+            if (user.registrationStatus == 'registered') {
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'confirmation');
+              debugPrint('moved to confirmation');
+              await updateStatus(
+                  BASE_URL, _storedEmail, _authToken, userEmailOrId, 'coming');
+              debugPrint('moved to coming');
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'confirmed');
+              debugPrint('moved to confirmed');
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'checked-in');
+              debugPrint('moved to checked-in');
+            }
+            if (user.registrationStatus == 'confirmation') {
+              debugPrint("confirmation");
+              await updateStatus(
+                  BASE_URL, _storedEmail, _authToken, userEmailOrId, 'coming');
+              debugPrint('moved to coming');
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'confirmed');
+              debugPrint('moved to confirmed');
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'checked-in');
+              debugPrint('moved to checked-in');
+            }
+            if (user.registrationStatus == 'not-coming') {
+              debugPrint("not-coming");
+              await updateStatus(
+                  BASE_URL, _storedEmail, _authToken, userEmailOrId, 'coming');
+              debugPrint('moved to coming');
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'confirmed');
+              debugPrint('moved to confirmed');
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'checked-in');
+              debugPrint('moved to checked-in');
+            }
+            if (user.registrationStatus == 'coming') {
+              debugPrint("coming");
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'confirmed');
+              debugPrint('moved to confirmed');
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'checked-in');
+              debugPrint('moved to checked-in');
+            }
+            if (user.registrationStatus == 'confirmed') {
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'checked-in');
+              debugPrint('moved to checked-in');
+            }
+            if (user.registrationStatus == 'waitlist') {
+              await updateStatus(BASE_URL, _storedEmail, _authToken,
+                  userEmailOrId, 'checked-in');
+              debugPrint('moved to checked-in');
+            }
+            if (user.registrationStatus == 'checked-in') {
+              result = "SCANNED";
+            }
+            // result = "EMAIL SCANNED";
+          }
         }
 
         // ATTEND THE EVENT
@@ -425,33 +573,38 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             _authToken!,
             userEmailOrId,
             event!,
-            false,
+            true,
           );
+          // updateStatus(
+          //     BASE_URL, _storedEmail, _authToken, userEmailOrId, "checked-in");
           // debugPrint('********** user event count: $numUserScanned');
           result = 'SCANNED!';
         } on UserCheckedEvent {
           // var prev = numUserScanned;
           // debugPrint('already ' + userEmailOrId);
           result = 'ALREADY SCANNED';
-          var rescan = await _scanDialogWarning('ALREADY SCANNED! RESCAN?');
-          // debugPrint('$rescan');
+          var rescan = await _scanDialogWarning('ALREADY SCANNED!');
           if (rescan) {
-            numUserScanned = await attendEvent(
-              BASE_URL,
-              _storedEmail!,
-              _authToken!,
-              userEmailOrId,
-              event!,
-              true,
-            );
-            // int test = numUserScanned as int;
-            // debugPrint('********** user event count: $test');
-            // if (prev > numUserScanned) {
-            result = 'SCANNED!';
-            // }
-          } else {
-            return NOT_SCANNED;
+            return notScanned;
           }
+          // // debugPrint('$rescan');
+          // if (rescan) {
+          //   numUserScanned = await attendEvent(
+          //     BASE_URL,
+          //     _storedEmail!,
+          //     _authToken!,
+          //     userEmailOrId,
+          //     event!,
+          //     true,
+          //   );
+          //   // int test = numUserScanned as int;
+          //   // debugPrint('********** user event count: $test');
+          //   // if (prev > numUserScanned) {
+          //   result = 'SCANNED!';
+          //   // }
+          // } else {
+          //   return notScanned;
+          // }
         } on UserNotFound {
           // debugPrint('hashqr:' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {

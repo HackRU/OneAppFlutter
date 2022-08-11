@@ -1,15 +1,19 @@
 import 'dart:async';
-// import 'dart:convert';
-// import 'dart:io';
+// import 'dart:html';
 
+// import 'package:flutter_countdown_timer/countdown.dart';
+// import 'package:flutter_countdown_timer/index.dart';
+// import 'package:hackru/main.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
+// import 'package:hackru/ui/hackru_app.dart';
 import 'package:hackru/ui/pages/dashboard/announcement_card.dart';
 // import 'package:hackru/ui/widgets/dialog/notification_onclick.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:hackru/ui/pages/home.dart';
 // import 'package:intl/intl.dart';
 
 // import '../../widgets/flip_panel.dart';
@@ -18,33 +22,67 @@ import 'package:flutter/material.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+final hackRUStart = DateTime(2022, DateTime.october, 2, 11, 00, 00);
+final hackRUEnd = DateTime(2022, DateTime.october, 3, 12, 00, 00);
+final currentDate = DateTime.now();
+DateTime today = DateTime(currentDate.year, currentDate.month, currentDate.day);
+
 class Dashboard extends StatefulWidget {
+  const Dashboard({Key? key}) : super(key: key);
+
   @override
   DashboardState createState() => DashboardState();
 }
 
 class DashboardState extends State<Dashboard> {
+  String username = "";
+  String userStatus = "";
+  bool _hasAuthToken = false;
   var _displayTimerBanner = true;
-  static DateTime cacheTTL = DateTime.now();
-
-  final hackRUStartDate = DateTime.utc(1989, DateTime.november, 9);
-  final hackRUEndDate = DateTime.utc(1989, DateTime.november, 9);
-  final currentDate = DateTime.now();
-
-  var startTime = DateTime(2022, DateTime.april, 2, 13, 0, 0);
-  final diffStartEvent =
-      DateTime(2022, DateTime.april, 2, 11, 0, 0).difference(DateTime.now());
-  final diffEndEvent =
-      DateTime(2022, DateTime.april, 3, 11, 0, 0).difference(DateTime.now());
 
   // late final FirebaseMessaging _firebaseMessaging;
 
   @override
   void initState() {
+    super.initState();
+    _hasToken();
+    _getUserName();
     // setupPushNotifications();
     // _requestIOSPermissions();
     // _configureDidReceiveLocalNotificationSubject();
     // _configureSelectNotificationSubject();
+  }
+
+  @override
+  void dispose() {
+    // controller.dispose();
+    super.dispose();
+  }
+
+  void _hasToken() async {
+    var hasToken = await hasCredentials();
+    if (hasToken) {
+      setState(() {
+        _hasAuthToken = true;
+      });
+    } else {
+      setState(() {
+        _hasAuthToken = false;
+      });
+    }
+  }
+
+  void _getUserName() async {
+    var _storedEmail = await getEmail();
+    if (_storedEmail != "") {
+      var _authToken = await getAuthToken();
+      var userProfile = await getUser(_authToken!, _storedEmail!);
+      setState(() {
+        username =
+            "Welcome, " + userProfile.firstName + " " + userProfile.lastName;
+        userStatus = "Current status: " + userProfile.registrationStatus;
+      });
+    }
   }
 
   /// ===========================================================
@@ -159,6 +197,57 @@ class DashboardState extends State<Dashboard> {
   ///                SHOW TIMER BANNER
   /// =================================================
 
+  Widget timerTitle() {
+    if (hackRUStart.difference(DateTime.now()).inDays > 0) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Current Time',
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+      );
+    } else {
+      if (hackRUStart.isAfter(DateTime.now())) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Hacking Begins In',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+        );
+      } else if (hackRUStart.isBefore(DateTime.now()) &&
+          hackRUEnd.isAfter(DateTime.now())) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Hacking Ends In',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+        );
+      } else {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Current Time',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
   Widget _timerBanner() {
     // debugPrint('====== day: ${DateTime.now().day}');
     return MaterialBanner(
@@ -171,16 +260,6 @@ class DashboardState extends State<Dashboard> {
       ),
       content: const Padding(
         padding: EdgeInsets.only(left: 15.0),
-        //child: FlipClock.reverseCountdown(
-        //  duration: (DateTime.now().day != 2 &&
-        //          DateTime.now().day != 3 &&
-        //          DateTime.now().month == DateTime.april)
-        //      ? Duration(milliseconds: diffStartEvent.inMilliseconds)
-        //      : Duration(milliseconds: diffEndEvent.inMilliseconds),
-        //  digitColor: HackRUColors.pink,
-        //  backgroundColor: HackRUColors.white,
-        //  digitSize: 25,
-        //),
         child: TimerText(),
       ),
       actions: [
@@ -239,102 +318,134 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: FutureBuilder<List<Announcement>?>(
-        future: _getSlacks(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<Announcement>?> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return const Center(
-                child: CircularProgressIndicator(),
-                // child: Container(
-                //   color: HackRUColors.transparent,
-                //   height: 400.0,
-                //   width: 400.0,
-                //   child: const RiveAnimation.asset(
-                //     'assets/flare/loading_indicator.flr',
-                //     alignment: Alignment.center,
-                //     fit: BoxFit.contain,
-                //     animations: ['idle'],
-                //   ),
-                // ),
-              );
-            default:
-              print('ERROR-->DASHBOARD: ${snapshot.hasError}');
-              var resources = snapshot.data!;
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                ),
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(
-                    bottom: 25.0,
+      body: SingleChildScrollView(
+        physics: const ScrollPhysics(),
+        child: Column(
+          children: [
+            if (_hasAuthToken) ...[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    username,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
-                  itemCount: _displayTimerBanner
-                      ? resources.length + 2
-                      : resources.length,
-                  itemBuilder: (context, index) {
-                    if (index == 0 && _displayTimerBanner) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Hacking Ends In',
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    userStatus,
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+              ),
+            ],
+            if (_displayTimerBanner) ...[
+              timerTitle(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: HackRUColors.green,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15.0),
+                    ),
+                  ),
+                  child: _timerBanner(),
+                ),
+              ),
+            ],
+            if (!_displayTimerBanner)
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                title: Text(
+                  'Timer',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+                trailing: !_displayTimerBanner
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.timer,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _displayTimerBanner = true;
+                          });
+                        },
+                      )
+                    : null,
+              ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Announcements:',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ),
+            ),
+            FutureBuilder<List<Announcement>?>(
+              future: _getSlacks(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Announcement>?> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: const [
+                          Center(
+                            child: Text("Fetching Announcements from Slack..."),
                           ),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: HackRUColors.green,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15.0),
-                                ),
-                              ),
-                              child: _timerBanner(),
+                            padding: EdgeInsets.all(20.0),
+                            child: Center(
+                              child: CircularProgressIndicator(),
                             ),
                           ),
                         ],
-                      );
-                    }
-                    if (_displayTimerBanner ? index == 1 : index == 0) {
-                      return ListTile(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 5.0),
-                        title: Text(
-                          'Announcements',
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        trailing: !_displayTimerBanner
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.timer,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _displayTimerBanner = true;
-                                  });
-                                },
-                              )
-                            : null,
-                      );
-                    }
-                    return AnnouncementCard(
-                      resource: _displayTimerBanner
-                          ? resources[index - 2]
-                          : resources[index - 1],
+                      ),
                     );
-                  },
-                ),
-              );
-          }
-        },
+                  default:
+                    if (snapshot.hasError) {
+                      debugPrint('ERROR-->DASHBOARD: ${snapshot.hasError}');
+                    }
+
+                    var resources = [];
+                    resources = snapshot.data!;
+                    debugPrint(resources.length.toString());
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(
+                          bottom: 25.0,
+                        ),
+                        // itemCount: resources.length+1,
+                        controller: ScrollController(),
+                        itemCount: resources.length,
+                        itemBuilder: (context, index) {
+                          return AnnouncementCard(
+                            resource: resources[index],
+                          );
+                        },
+                      ),
+                    );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -352,12 +463,9 @@ class TimerText extends StatefulWidget {
 }
 
 class _TimerTextState extends State<TimerText> {
-  Duration? _dateTime;
+  var displayTime = ['00', '00', '00'];
+  Duration _dateTime = today.difference(DateTime.now());
   Timer? _timer;
-  // final diffStartEvent =
-  //     DateTime(2022, DateTime.april, 2, 10, 0, 0).difference(DateTime.now());
-  // final diffEndEvent =
-  //     DateTime(2022, DateTime.april, 3, 10, 0, 0).difference(DateTime.now());
 
   @override
   void initState() {
@@ -367,78 +475,104 @@ class _TimerTextState extends State<TimerText> {
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
+    _timer?.cancel();
   }
 
   void _updateTime() {
-    var startTime = DateTime(2022, DateTime.april, 2, 13, 0, 0);
-    var diffStartEvent =
-        DateTime(2022, DateTime.april, 2, 11, 0, 0).difference(DateTime.now());
-    var diffEndEvent =
-        DateTime(2022, DateTime.april, 3, 11, 0, 0).difference(DateTime.now());
-    setState(() {
-      _dateTime = diffEndEvent;
-
-      _timer = Timer(
-        const Duration(seconds: 1) -
-            Duration(milliseconds: _dateTime!.inMilliseconds),
-        _updateTime,
-      );
-    });
+    if (hackRUStart.difference(DateTime.now()).inDays > 0) {
+      //current time
+      DateTime today =
+          DateTime(currentDate.year, currentDate.month, currentDate.day);
+      setState(() {
+        _dateTime = today.difference(DateTime.now());
+        displayTime = formatDuration(_dateTime).split(':');
+        _timer = Timer(
+          const Duration(seconds: 1) -
+              Duration(milliseconds: currentDate.millisecond),
+          _updateTime,
+        );
+      });
+    } else if (hackRUStart.isAfter(DateTime.now())) {
+      //24 hours to start timer
+      setState(() {
+        _dateTime = hackRUStart.difference(DateTime.now());
+        displayTime = formatDuration(_dateTime).split(':');
+        _timer = Timer(
+          const Duration(seconds: 1) -
+              Duration(milliseconds: currentDate.millisecond),
+          _updateTime,
+        );
+      });
+    } else if (hackRUStart.isBefore(DateTime.now()) &&
+        hackRUEnd.isAfter(DateTime.now())) {
+      // timer during the event
+      setState(() {
+        _dateTime = hackRUEnd.difference(DateTime.now());
+        displayTime = formatDuration(_dateTime).split(':');
+        _timer = Timer(
+          const Duration(seconds: 1) -
+              Duration(milliseconds: currentDate.millisecond),
+          _updateTime,
+        );
+      });
+    } else {
+      // timer after the event
+      DateTime today =
+          DateTime(currentDate.year, currentDate.month, currentDate.day);
+      setState(() {
+        _dateTime = today.difference(DateTime.now());
+        displayTime = formatDuration(_dateTime).split(':');
+        _timer = Timer(
+          const Duration(seconds: 1) -
+              Duration(milliseconds: currentDate.millisecond),
+          _updateTime,
+        );
+      });
+    }
   }
 
-  static String formatDuration(Duration d) {
+  String formatDuration(Duration d) {
     var seconds = d.inSeconds;
-    // final days = seconds ~/ Duration.secondsPerDay;
-    // seconds -= days * Duration.secondsPerDay;
     final hours = seconds ~/ Duration.secondsPerHour;
     seconds -= hours * Duration.secondsPerHour;
     final minutes = seconds ~/ Duration.secondsPerMinute;
     seconds -= minutes * Duration.secondsPerMinute;
 
     final List<String> tokens = [];
-    // if (days != 0) {
-    //   tokens.add('0${days}');
-    // }
-    // if (days == 0) {
-    //   tokens.add('00');
-    // }
-    if (tokens.isNotEmpty || hours != 0) {
-      if (hours < 10) {
-        tokens.add('0${hours}');
-      } else {
-        tokens.add('${hours}');
-      }
-    }
-    if (hours == 0) {
-      tokens.add('00');
-    }
-    if (tokens.isNotEmpty || minutes != 0) {
-      if (minutes < 10) {
-        tokens.add('0${minutes}');
-      } else {
-        tokens.add('${minutes}');
-      }
-    }
-    if (minutes == 0) {
-      tokens.add('00');
-    }
-    if (seconds < 10) {
-      tokens.add('0${seconds}');
-    } else {
-      tokens.add('${seconds}');
-    }
-    if (seconds == 0) {
-      tokens.add('00');
-    }
 
+    if (hours != 0) {
+      if (-10 < hours && hours < 10) {
+        tokens.add('0${hours.abs()}');
+      } else {
+        tokens.add('${hours.abs()}');
+      }
+    } else {
+      tokens.add('00');
+    }
+    if (minutes != 0) {
+      if (-10 < minutes && minutes < 10) {
+        tokens.add('0${minutes.abs()}');
+      } else {
+        tokens.add('${minutes.abs()}');
+      }
+    } else {
+      tokens.add('00');
+    }
+    if (seconds != 0) {
+      if (-10 < seconds && seconds < 10) {
+        tokens.add('0${seconds.abs()}');
+      } else {
+        tokens.add('${seconds.abs()}');
+      }
+    } else {
+      tokens.add('00');
+    }
     return tokens.join(':');
   }
 
   @override
   Widget build(BuildContext context) {
-    var displayTime = formatDuration(_dateTime!).split(':');
     return Align(
       alignment: Alignment.centerLeft,
       child: Row(
@@ -458,8 +592,8 @@ class _TimerTextState extends State<TimerText> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      '00',
-                      // displayTime[0],
+                      // '00',
+                      displayTime[0],
                       style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -494,8 +628,8 @@ class _TimerTextState extends State<TimerText> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      '00',
-                      // displayTime[1],
+                      // '00',
+                      displayTime[1],
                       style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -530,8 +664,8 @@ class _TimerTextState extends State<TimerText> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
-                      '00',
-                      // displayTime[2],
+                      // '00',
+                      displayTime[2],
                       style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
