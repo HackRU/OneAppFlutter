@@ -21,7 +21,7 @@ dependencies:
   flutter_launcher_icons: ^0.10.0
   flutter_linkify: ^5.0.2
   # flutter_local_notifications: ^9.4.0
-  font_awesome_flutter: ^9.2.0
+  font_awesome_flutter: ^10.1.0
   hidden_drawer_menu: ^3.0.1
   jsqr: ^0.1.4
   qr_flutter: ^4.0.0
