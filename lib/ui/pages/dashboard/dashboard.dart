@@ -39,7 +39,9 @@ class DashboardState extends State<Dashboard> {
   String userStatus = "";
   bool _hasAuthToken = false;
   var _displayTimerBanner = true;
-
+  String registrationStatus = "checked in";
+  bool checkedin = false;
+  String tempStatus = "";
   // late final FirebaseMessaging _firebaseMessaging;
 
   @override
@@ -80,7 +82,13 @@ class DashboardState extends State<Dashboard> {
       setState(() {
         username =
             "Welcome, " + userProfile.firstName + " " + userProfile.lastName;
-        userStatus = "Current status: " + userProfile.registrationStatus;
+        //userStatus = "Current status: " + userProfile.registrationStatus;
+        userStatus = "Check-in status: ";
+        tempStatus = userProfile.registrationStatus;
+        //if (userProfile.registrationStatus == "unregistered") {
+        if (userProfile.registrationStatus == "checked-in") {
+          checkedin = true;
+        }
       });
     }
   }
@@ -324,24 +332,57 @@ class DashboardState extends State<Dashboard> {
           children: [
             if (_hasAuthToken) ...[
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
                     username,
                     style: Theme.of(context).textTheme.subtitle1,
+                    //style: TextStyle(fontFamily: 'newFont', fontSize: 25),
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    userStatus,
-                    style: Theme.of(context).textTheme.subtitle1,
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      userStatus,
+                      style: Theme.of(context).textTheme.subtitle1,
+                      //style: TextStyle(fontFamily: 'newFont', fontSize: 25),
+                    ),
                   ),
-                ),
+                  if (checkedin == true) ...[
+                    const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Icon(
+                          
+                          IconData(0xe157, fontFamily: 'MaterialIcons'),
+                          color: Colors.green,
+                          size: 30.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (checkedin == false) ...[
+                    const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Icon(
+                          IconData(0xf68b, fontFamily: 'MaterialIcons'),
+                          color: Colors.red,
+                          size: 30.0,
+                        ),
+                      ),
+                    ),
+                  ]
+                ]),
               ),
             ],
             if (_displayTimerBanner) ...[
