@@ -3,6 +3,7 @@ import 'package:hackru/ui/widgets/custom_expansion_tile.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../defaults.dart';
 import '../../../models/cred_manager.dart';
@@ -39,18 +40,20 @@ class _QRScannerState extends State<QRScanner> {
   var _isVisible;
   bool isAuthorized = false;
   bool isLoading = true;
+  CredManager? credManager;
 
   @override
   void initState() {
+    credManager = Provider.of<CredManager>(context, listen: false);
     super.initState();
     _getUserProfile();
   }
 
   void _getUserProfile() async {
-    var _storedEmail = await getEmail();
+    var _storedEmail = credManager!.getEmail();
     if (_storedEmail != "") {
-      var _authToken = await getAuthToken();
-      var userProfile = await getUser(_authToken!, _storedEmail!);
+      var _authToken = credManager!.getAuthToken();
+      var userProfile = await getUser(_authToken, _storedEmail);
       setState(() {
         isAuthorized =
             (userProfile.role.director || userProfile.role.organizer);
@@ -124,7 +127,8 @@ class _QRScannerState extends State<QRScanner> {
                       onPressed: () async {
                         await Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => Scanner(),
+                            builder: (context) => Provider.value(
+                                value: credManager, child: Scanner()),
                           ),
                         );
                       },

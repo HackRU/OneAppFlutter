@@ -8,6 +8,7 @@ import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/widgets/dialog/error_dialog.dart';
 import 'package:hackru/ui/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/models.dart';
@@ -30,6 +31,13 @@ class LoginFormState extends State<LoginForm> {
   var _isEmailEntered = false;
   static var credStr = '';
   static var guestUser;
+  CredManager? credManager;
+
+  @override
+  void initState() {
+    credManager = Provider.of<CredManager>(context, listen: false);
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -74,13 +82,14 @@ class LoginFormState extends State<LoginForm> {
           User userData = await getUser(cred.token, _emailController.text);
           if (cred.token != null) {
             LoginForm.gotCred = true;
-            await persistCredentials(cred.token, userData.email);
+            credManager!.persistCredentials(cred.token, userData.email);
             setState(() {
               _isLoginPressed = false;
             });
             await Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (BuildContext context) => const HackRUApp(),
+                builder: (BuildContext context) =>
+                    Provider.value(value: CredManager, child: HackRUApp()),
                 maintainState: false,
               ),
               ModalRoute.withName('/main'),

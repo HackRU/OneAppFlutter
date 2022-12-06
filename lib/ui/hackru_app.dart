@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/services/hackru_service.dart';
@@ -10,6 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:hackru/ui/widgets/custom_hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
+import 'package:provider/provider.dart';
 
 import '../styles.dart';
 
@@ -24,6 +26,7 @@ class _HackRUAppState extends State<HackRUApp> {
   List<ScreenHiddenDrawer> items = [];
   bool _hasAuthToken = false;
   User? user;
+  CredManager? credManager;
 
   final _selectedDrawerItem = const TextStyle(
     color: HackRUColors.pink,
@@ -37,6 +40,10 @@ class _HackRUAppState extends State<HackRUApp> {
 
   @override
   void initState() {
+    setState(() {
+      credManager = Provider.of<CredManager>(context, listen: false);
+    });
+
     _hasToken();
     _drawerItems();
     super.initState();
@@ -45,8 +52,8 @@ class _HackRUAppState extends State<HackRUApp> {
   /// =========================================================
   ///                     CREDENTIAL MANAGER
   /// =========================================================
-  void _hasToken() async {
-    var hasToken = await hasCredentials();
+  void _hasToken() {
+    var hasToken = credManager!.hasCredentials();
     if (hasToken) {
       setState(() {
         _hasAuthToken = hasToken;
@@ -60,10 +67,10 @@ class _HackRUAppState extends State<HackRUApp> {
   }
 
   void _getUserProfile() async {
-    var _storedEmail = await getEmail();
+    var _storedEmail = credManager!.getEmail();
     if (_storedEmail != "") {
-      var _authToken = await getAuthToken();
-      var userProfile = await getUser(_authToken!, _storedEmail!);
+      var _authToken = credManager!.getAuthToken();
+      var userProfile = await getUser(_authToken, _storedEmail);
       if (userProfile != null) {
         setState(() {
           user = userProfile;
@@ -79,14 +86,16 @@ class _HackRUAppState extends State<HackRUApp> {
     setState(() {});
     items = [];
     items.add(ScreenHiddenDrawer(
-      ItemHiddenMenu(
-        name: 'Home',
-        baseStyle: _nonSelectedDrawerItem,
-        colorLineSelected: HackRUColors.yellow,
-        selectedStyle: _selectedDrawerItem,
-      ),
-      Home(),
-    ));
+        ItemHiddenMenu(
+          name: 'Home',
+          baseStyle: _nonSelectedDrawerItem,
+          colorLineSelected: HackRUColors.yellow,
+          selectedStyle: _selectedDrawerItem,
+        ),
+        Provider.value(
+          value: credManager,
+          child: Home(),
+        )));
 
     // items.add(ScreenHiddenDrawer(
     //   ItemHiddenMenu(
@@ -100,39 +109,36 @@ class _HackRUAppState extends State<HackRUApp> {
 
     items.add(
       ScreenHiddenDrawer(
-        ItemHiddenMenu(
-          name: 'Help',
-          baseStyle: _nonSelectedDrawerItem,
-          colorLineSelected: HackRUColors.yellow,
-          selectedStyle: _selectedDrawerItem,
-        ),
-        Help(),
-      ),
+          ItemHiddenMenu(
+            name: 'Help',
+            baseStyle: _nonSelectedDrawerItem,
+            colorLineSelected: HackRUColors.yellow,
+            selectedStyle: _selectedDrawerItem,
+          ),
+          Provider.value(value: credManager, child: Help())),
     );
 
     items.add(
       ScreenHiddenDrawer(
-        ItemHiddenMenu(
-          name: 'About',
-          baseStyle: _nonSelectedDrawerItem,
-          colorLineSelected: HackRUColors.yellow,
-          selectedStyle: _selectedDrawerItem,
-        ),
-        About(),
-      ),
+          ItemHiddenMenu(
+            name: 'About',
+            baseStyle: _nonSelectedDrawerItem,
+            colorLineSelected: HackRUColors.yellow,
+            selectedStyle: _selectedDrawerItem,
+          ),
+          Provider.value(value: credManager, child: About())),
     );
 
     //NOTE: only show QR_SCANNER button to authorized users
     items.add(
       ScreenHiddenDrawer(
-        ItemHiddenMenu(
-          name: "QR Scanner",
-          baseStyle: _nonSelectedDrawerItem,
-          colorLineSelected: HackRUColors.yellow,
-          selectedStyle: _selectedDrawerItem,
-        ),
-        QRScanner(),
-      ),
+          ItemHiddenMenu(
+            name: "QR Scanner",
+            baseStyle: _nonSelectedDrawerItem,
+            colorLineSelected: HackRUColors.yellow,
+            selectedStyle: _selectedDrawerItem,
+          ),
+          Provider.value(value: credManager, child: QRScanner())),
     );
   }
 
@@ -172,13 +178,14 @@ class _HackRUAppState extends State<HackRUApp> {
                 color: HackRUColors.transparent,
                 splashColor: HackRUColors.yellow,
                 onPressed: () async {
-                  await deleteCredentials();
+                  credManager!.deleteCredentials();
                   setState(() {
                     _hasAuthToken = false;
                   });
                   await Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const HackRUApp(),
+                      builder: (BuildContext context) => Provider.value(
+                          value: credManager!, child: HackRUApp()),
                       maintainState: false,
                     ),
                     ModalRoute.withName('/main'),

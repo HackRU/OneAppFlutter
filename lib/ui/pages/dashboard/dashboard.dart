@@ -9,10 +9,12 @@ import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
 // import 'package:hackru/ui/hackru_app.dart';
-import 'package:hackru/ui/pages/dashboard/announcement_card.dart';
+import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
 // import 'package:hackru/ui/widgets/dialog/notification_onclick.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:hackru/ui/pages/home.dart';
 // import 'package:intl/intl.dart';
 
@@ -35,6 +37,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class DashboardState extends State<Dashboard> {
+  String _storedEmail = "";
   String username = "";
   String userStatus = "";
   bool _hasAuthToken = false;
@@ -42,10 +45,13 @@ class DashboardState extends State<Dashboard> {
   String registrationStatus = "checked in";
   bool checkedin = false;
   String tempStatus = "";
+  CredManager? credManager;
+
   // late final FirebaseMessaging _firebaseMessaging;
 
   @override
   void initState() {
+    credManager = Provider.of<CredManager>(context, listen: false);
     super.initState();
     _hasToken();
     _getUserName();
@@ -62,34 +68,40 @@ class DashboardState extends State<Dashboard> {
   }
 
   void _hasToken() async {
-    var hasToken = await hasCredentials();
-    if (hasToken) {
-      setState(() {
-        _hasAuthToken = true;
-      });
-    } else {
-      setState(() {
-        _hasAuthToken = false;
-      });
+    var hasToken = await credManager!.hasCredentials();
+    if (this.mounted) {
+      if (hasToken) {
+        setState(() {
+          _hasAuthToken = true;
+        });
+      } else {
+        setState(() {
+          _hasAuthToken = false;
+        });
+      }
     }
   }
 
   void _getUserName() async {
-    var _storedEmail = await getEmail();
+    _storedEmail = credManager!.getEmail();
     if (_storedEmail != "") {
-      var _authToken = await getAuthToken();
-      var userProfile = await getUser(_authToken!, _storedEmail!);
-      setState(() {
-        username =
-            "Welcome, " + userProfile.firstName + " " + userProfile.lastName;
-        //userStatus = "Current status: " + userProfile.registrationStatus;
-        userStatus = "Check-in status: ";
-        tempStatus = userProfile.registrationStatus;
-        //if (userProfile.registrationStatus == "unregistered") {
-        if (userProfile.registrationStatus == "checked-in") {
-          checkedin = true;
-        }
-      });
+      var _authToken = credManager!.getAuthToken();
+      var userProfile = await getUser(_authToken, _storedEmail);
+      if (mounted) {
+        setState(() {
+          username =
+              "Welcome, " + userProfile.firstName + " " + userProfile.lastName;
+          tempStatus = userProfile.registrationStatus;
+          //if (userProfile.registrationStatus == "unregistered") {
+          if (userProfile.registrationStatus == "checked-in") {
+            checkedin = true;
+            userStatus = "You're checked-in!";
+          } else {
+            checkedin = false;
+            userStatus = "You're not checked in yet.";
+          }
+        });
+      }
     }
   }
 
@@ -207,49 +219,37 @@ class DashboardState extends State<Dashboard> {
 
   Widget timerTitle() {
     if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Current Time',
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Current Time',
+          style: Theme.of(context).textTheme.subtitle1,
         ),
       );
     } else {
       if (hackRUStart.isAfter(DateTime.now())) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Hacking Begins In',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Hacking Begins In',
+            style: Theme.of(context).textTheme.subtitle1,
           ),
         );
       } else if (hackRUStart.isBefore(DateTime.now()) &&
           hackRUEnd.isAfter(DateTime.now())) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Hacking Ends In',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Hacking Ends In',
+            style: Theme.of(context).textTheme.subtitle1,
           ),
         );
       } else {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Current Time',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Current Time',
+            style: Theme.of(context).textTheme.subtitle1,
           ),
         );
       }
@@ -257,69 +257,30 @@ class DashboardState extends State<Dashboard> {
   }
 
   Widget _timerBanner() {
-    // debugPrint('====== day: ${DateTime.now().day}');
-    return MaterialBanner(
-      padding: const EdgeInsets.all(10.0),
-      leadingPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-      leading: const Icon(
-        Icons.timer,
-        color: HackRUColors.white,
-        size: 50.0,
+    return Container(
+      padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: HackRUColors.green,
       ),
-      content: const Padding(
-        padding: EdgeInsets.only(left: 15.0),
-        child: TimerText(),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            setState(() {
-              _displayTimerBanner = false;
-            });
-          },
-          child: const Text(
-            'Dismiss',
-            style: TextStyle(
-              color: HackRUColors.white,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w700,
+      child: Row(
+        children: [
+          const Expanded(
+            flex: 1,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Icon(
+                Icons.timer,
+                color: HackRUColors.white,
+                size: 50.0,
+              ),
             ),
           ),
-        ),
-      ],
-      backgroundColor: HackRUColors.transparent,
+          const TimerText(),
+          Expanded(flex: 1, child: Container()),
+        ],
+      ),
     );
-  }
-
-  /// =================================================
-  ///                GET SLACK MESSAGES
-  /// =================================================
-  static List<Announcement>? cachedMsgs;
-
-  Future<List<Announcement>> _getSlacks() async {
-    // var streamCtrl = StreamController<List<Announcement>>();
-    // if (cachedMsgs != null) {
-    //   streamCtrl.sink.add(cachedMsgs!);
-    // }
-    var slackMessages = List<Announcement>.empty();
-    try {
-      await slackResources().then((slackMsgs) {
-        // debugPrint('======= slacks: $slackMsgs');
-        slackMessages = slackMsgs;
-      });
-      // if (cacheTTL.isBefore(DateTime.now())) {
-      //   slackResources().then((slackMsgs) {
-      //     streamCtrl.sink.add(slackMsgs);
-      //     persistSlackAnnouncements(slackMsgs);
-      //     cacheTTL = DateTime.now().add(Duration(minutes: 5));
-      //     streamCtrl.close();
-      //   });
-      // }
-    } catch (e) {
-      print('***********************\nSlack data stream ctrl error: ' +
-          e.toString());
-    }
-    return slackMessages;
   }
 
   @override
@@ -332,158 +293,98 @@ class DashboardState extends State<Dashboard> {
           children: [
             if (_hasAuthToken) ...[
               Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    username,
-                    style: Theme.of(context).textTheme.subtitle1,
-                    //style: TextStyle(fontFamily: 'newFont', fontSize: 25),
+                padding: const EdgeInsets.all(2.0),
+                child: Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      userStatus,
-                      style: Theme.of(context).textTheme.subtitle1,
-                      //style: TextStyle(fontFamily: 'newFont', fontSize: 25),
-                    ),
-                  ),
-                  if (checkedin == true) ...[
-                    const Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          
-                          IconData(0xe157, fontFamily: 'MaterialIcons'),
-                          color: Colors.green,
-                          size: 30.0,
+                  color: Colors.blueGrey[50],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          username,
+                          // style: Theme.of(context).textTheme.subtitle1,
+                          style: TextStyle(fontFamily: 'newFont', fontSize: 25),
                         ),
-                      ),
-                    ),
-                  ],
-                  if (checkedin == false) ...[
-                    const Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          IconData(0xf68b, fontFamily: 'MaterialIcons'),
-                          color: Colors.red,
-                          size: 30.0,
-                        ),
-                      ),
-                    ),
-                  ]
-                ]),
-              ),
-            ],
-            if (_displayTimerBanner) ...[
-              timerTitle(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: HackRUColors.green,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15.0),
-                    ),
-                  ),
-                  child: _timerBanner(),
-                ),
-              ),
-            ],
-            if (!_displayTimerBanner)
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-                title: Text(
-                  'Timer',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                trailing: !_displayTimerBanner
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.timer,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _displayTimerBanner = true;
-                          });
-                        },
-                      )
-                    : null,
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Announcements:',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ),
-            ),
-            FutureBuilder<List<Announcement>?>(
-              future: _getSlacks(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Announcement>?> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: const [
-                          Center(
-                            child: Text("Fetching Announcements from Slack..."),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Center(
-                              child: CircularProgressIndicator(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                userStatus,
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  default:
-                    if (snapshot.hasError) {
-                      debugPrint('ERROR-->DASHBOARD: ${snapshot.hasError}');
-                    }
-
-                    var resources = [];
-                    resources = snapshot.data!;
-                    debugPrint(resources.length.toString());
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                      ),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(
-                          bottom: 25.0,
+                            Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  IconData(checkedin ? 0xe157 : 0xf68b,
+                                      fontFamily: 'MaterialIcons'),
+                                  color: checkedin ? Colors.green : Colors.red,
+                                  size: 30.0,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        // itemCount: resources.length+1,
-                        controller: ScrollController(),
-                        itemCount: resources.length,
-                        itemBuilder: (context, index) {
-                          return AnnouncementCard(
-                            resource: resources[index],
-                          );
-                        },
-                      ),
-                    );
-                }
-              },
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: timerTitle(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: _timerBanner(),
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'QR Code',
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                )),
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15.0),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    HackRUColors.white,
+                    HackRUColors.white,
+                  ],
+                ),
+              ),
+              child: Center(
+                child: QrImage(
+                  padding: EdgeInsets.all(5),
+                  version: 4,
+                  data: _storedEmail,
+                  gapless: true,
+                  embeddedImage: const AssetImage(
+                      'assets/hackru-logos/appIconImageWhite.png'),
+                  embeddedImageStyle: QrEmbeddedImageStyle(
+                    size: const Size(75, 75),
+                  ),
+                  foregroundColor: HackRUColors.charcoal,
+                ),
+              ),
             ),
           ],
         ),

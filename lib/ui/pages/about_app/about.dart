@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hackru/services/hackru_service.dart';
+import 'package:provider/provider.dart';
 
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
@@ -22,8 +23,10 @@ class About extends StatefulWidget {
 class _AboutState extends State<About> {
   bool _hasAuthToken = false;
   bool isAuthorized = false;
+  CredManager? credManager;
   @override
   void initState() {
+    credManager = Provider.of<CredManager>(context, listen: false);
     super.initState();
     _hasToken();
     _getUserProfile();
@@ -36,10 +39,10 @@ class _AboutState extends State<About> {
   }
 
   void _getUserProfile() async {
-    var _storedEmail = await getEmail();
+    var _storedEmail = credManager!.getEmail();
     if (_storedEmail != "") {
-      var _authToken = await getAuthToken();
-      var userProfile = await getUser(_authToken!, _storedEmail!);
+      var _authToken = credManager!.getAuthToken();
+      var userProfile = await getUser(_authToken, _storedEmail);
       if (userProfile.role.director == true ||
           userProfile.role.organizer == true) {
         setState(() {
@@ -49,8 +52,8 @@ class _AboutState extends State<About> {
     }
   }
 
-  void _hasToken() async {
-    var hasToken = await hasCredentials();
+  void _hasToken() {
+    var hasToken = credManager!.hasCredentials();
     if (hasToken) {
       setState(() {
         _hasAuthToken = hasToken;
@@ -235,12 +238,12 @@ class _AboutState extends State<About> {
   }
 
   void _onGetAttending() async {
-    var _storedEmail = await getEmail();
-    var _authToken = await getAuthToken();
+    var _storedEmail = credManager!.getEmail();
+    var _authToken = credManager!.getAuthToken();
     _getUserProfile();
     if (_hasAuthToken) {
       try {
-        count = await getAttending(_authToken!);
+        count = await getAttending(_authToken);
         _scanDialogWarning("Total = " + count.toString());
       } on LcsError {
         var result = "Error Fetching Result.";

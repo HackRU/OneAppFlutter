@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
 
 var popup = true;
 const notScanned = 'NOT SCANNED';
@@ -33,9 +34,11 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   bool isPlaying = false;
   late MobileScannerController cameraController;
   final TextEditingController _textFieldController = TextEditingController();
+  CredManager? credManager;
 
   @override
   void initState() {
+    credManager = Provider.of<CredManager>(context, listen: false);
     super.initState();
     cameraController = MobileScannerController();
     _animationController = AnimationController(
@@ -385,8 +388,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   }
 
   Future<String> _lcsHandle(String userEmailOrId) async {
-    var _storedEmail = await getEmail();
-    var _authToken = await getAuthToken();
+    var _storedEmail = credManager!.getEmail();
+    var _authToken = credManager!.getAuthToken();
     var result = 'NULL';
 
     // print('***** Called `lcsHandle` with qr:' + userEmailOrId);
@@ -435,7 +438,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
 
         if (event == 'check-in') {
           if (_isEmailAddress(userEmailOrId)) {
-            user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
+            user = await getUser(_authToken, _storedEmail, userEmailOrId);
             if (user.isDelayedEntry()) {
               return "EMAIL ON WAITLIST, NOT SCANNED.";
             } else {
@@ -499,7 +502,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           }
         } else if (event == 'delayed-check-in') {
           if (_isEmailAddress(userEmailOrId)) {
-            user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
+            user = await getUser(_authToken, _storedEmail, userEmailOrId);
             if (user.registrationStatus == 'registered') {
               await updateStatus(BASE_URL, _storedEmail, _authToken,
                   userEmailOrId, 'confirmation');
@@ -569,8 +572,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           // debugPrint('${Scanner.userEmail}');
           numUserScanned = await attendEvent(
             BASE_URL,
-            _storedEmail!,
-            _authToken!,
+            _storedEmail,
+            _authToken,
             userEmailOrId,
             event!,
             true,
@@ -622,8 +625,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               try {
                 linkQR(
                   BASE_URL,
-                  _storedEmail!,
-                  _authToken!,
+                  _storedEmail,
+                  _authToken,
                   linkToUser,
                   userEmailOrId,
                 );
