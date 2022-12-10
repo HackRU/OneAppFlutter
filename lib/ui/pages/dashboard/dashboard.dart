@@ -89,8 +89,7 @@ class DashboardState extends State<Dashboard> {
       var userProfile = await getUser(_authToken, _storedEmail);
       if (mounted) {
         setState(() {
-          username =
-              "Welcome, " + userProfile.firstName + " " + userProfile.lastName;
+          username = userProfile.firstName + " " + userProfile.lastName;
           tempStatus = userProfile.registrationStatus;
           //if (userProfile.registrationStatus == "unregistered") {
           if (userProfile.registrationStatus == "checked-in") {
@@ -283,80 +282,21 @@ class DashboardState extends State<Dashboard> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(),
-        child: Column(
-          children: [
-            if (_hasAuthToken) ...[
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  color: Colors.blueGrey[50],
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          username,
-                          // style: Theme.of(context).textTheme.subtitle1,
-                          style: TextStyle(fontFamily: 'newFont', fontSize: 25),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                userStatus,
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  IconData(checkedin ? 0xe157 : 0xf68b,
-                                      fontFamily: 'MaterialIcons'),
-                                  color: checkedin ? Colors.green : Colors.red,
-                                  size: 30.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: timerTitle(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: _timerBanner(),
-            ),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'QR Code',
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                )),
+  ///===========================================================
+  ///                      SHOW QR-CODE
+  ///===========================================================
+  void _showQrCode() async {
+    var userEmail = credManager!.getEmail();
+    switch (await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          // shape: const RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.all(
+          //     Radius.circular(15.0),
+          //   ),
+          // ),
+          children: <Widget>[
             Container(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(
@@ -371,21 +311,127 @@ class DashboardState extends State<Dashboard> {
                   ],
                 ),
               ),
+              height: 400,
+              width: 400.0,
               child: Center(
                 child: QrImage(
-                  padding: EdgeInsets.all(5),
                   version: 4,
-                  data: _storedEmail,
+                  data: userEmail ?? '',
                   gapless: true,
                   embeddedImage: const AssetImage(
                       'assets/hackru-logos/appIconImageWhite.png'),
                   embeddedImageStyle: QrEmbeddedImageStyle(
-                    size: const Size(75, 75),
+                    size: const Size(50, 50),
                   ),
                   foregroundColor: HackRUColors.charcoal,
                 ),
               ),
+              // ListView(
+              //   children: <Widget>[
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              //       child: QrImage(
+              //         version: 4,
+              //         data: userEmail ?? '',
+              //         gapless: true,
+              //         foregroundColor: HackRUColors.charcoal,
+              //       ),
+              //     ),
+              //     // Center(
+              //     //   child: Text(userEmail ?? ''),
+              //     // ),
+              //   ],
+              // ),
             ),
+          ],
+          backgroundColor: Colors.transparent,
+        );
+      },
+    )) {
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SingleChildScrollView(
+        physics: const ScrollPhysics(),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: timerTitle(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: _timerBanner(),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.015,
+            ),
+            if (_hasAuthToken) ...[
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  color: Colors.blueGrey[50],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              username,
+                              // style: Theme.of(context).textTheme.subtitle1,
+                              style: TextStyle(
+                                  fontFamily: 'newFont', fontSize: 25),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    userStatus,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      IconData(checkedin ? 0xe157 : 0xf68b,
+                                          fontFamily: 'MaterialIcons'),
+                                      color:
+                                          checkedin ? Colors.green : Colors.red,
+                                      size: 30.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              _showQrCode();
+                            },
+                            icon: Icon(Icons.qr_code))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
