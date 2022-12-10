@@ -72,9 +72,11 @@ class _HackRUAppState extends State<HackRUApp> {
       var _authToken = credManager!.getAuthToken();
       var userProfile = await getUser(_authToken, _storedEmail);
       if (userProfile != null) {
-        setState(() {
-          user = userProfile;
-        });
+        if (mounted) {
+          setState(() {
+            user = userProfile;
+          });
+        }
       }
     }
   }

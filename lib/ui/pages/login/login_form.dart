@@ -89,7 +89,7 @@ class LoginFormState extends State<LoginForm> {
             await Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    Provider.value(value: CredManager, child: HackRUApp()),
+                    Provider.value(value: credManager, child: HackRUApp()),
                 maintainState: false,
               ),
               ModalRoute.withName('/main'),
