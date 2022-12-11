@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 // import 'dart:html';
 
 // import 'package:flutter_countdown_timer/countdown.dart';
@@ -15,6 +16,8 @@ import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shimmer/shimmer.dart';
+
 // import 'package:hackru/ui/pages/home.dart';
 // import 'package:intl/intl.dart';
 
@@ -46,6 +49,7 @@ class DashboardState extends State<Dashboard> {
   bool checkedin = false;
   String tempStatus = "";
   CredManager? credManager;
+  bool _isLoading = true;
 
   // late final FirebaseMessaging _firebaseMessaging;
 
@@ -68,8 +72,8 @@ class DashboardState extends State<Dashboard> {
   }
 
   void _hasToken() async {
-    var hasToken = await credManager!.hasCredentials();
-    if (this.mounted) {
+    var hasToken = credManager!.hasCredentials();
+    if (mounted) {
       if (hasToken) {
         setState(() {
           _hasAuthToken = true;
@@ -91,7 +95,6 @@ class DashboardState extends State<Dashboard> {
         setState(() {
           username = userProfile.firstName + " " + userProfile.lastName;
           tempStatus = userProfile.registrationStatus;
-          //if (userProfile.registrationStatus == "unregistered") {
           if (userProfile.registrationStatus == "checked-in") {
             checkedin = true;
             userStatus = "You're checked-in!";
@@ -102,6 +105,7 @@ class DashboardState extends State<Dashboard> {
         });
       }
     }
+    _isLoading = false;
   }
 
   /// ===========================================================
@@ -311,12 +315,12 @@ class DashboardState extends State<Dashboard> {
                   ],
                 ),
               ),
-              height: 400,
-              width: 400.0,
+              width: MediaQuery.of(context).size.width * 0.75,
+              padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
               child: Center(
                 child: QrImage(
                   version: 4,
-                  data: userEmail ?? '',
+                  data: userEmail,
                   gapless: true,
                   embeddedImage: const AssetImage(
                       'assets/hackru-logos/appIconImageWhite.png'),
@@ -368,7 +372,7 @@ class DashboardState extends State<Dashboard> {
               child: _timerBanner(),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.015,
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             if (_hasAuthToken) ...[
               Padding(
@@ -381,57 +385,120 @@ class DashboardState extends State<Dashboard> {
                   color: Colors.blueGrey[50],
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              username,
-                              // style: Theme.of(context).textTheme.subtitle1,
-                              style: TextStyle(
-                                  fontFamily: 'newFont', fontSize: 25),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    userStatus,
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1,
+                    child: _isLoading
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Shimmer(
+                                      gradient: LinearGradient(colors: [
+                                        Colors.white,
+                                        Colors.blueGrey.withOpacity(0.2)
+                                      ]),
+                                      child: Container(
+                                          color:
+                                              Colors.blueGrey.withOpacity(0.2),
+                                          height: 33.33,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.6)),
+                                  SizedBox(
+                                    height: 5,
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      IconData(checkedin ? 0xe157 : 0xf68b,
-                                          fontFamily: 'MaterialIcons'),
-                                      color:
-                                          checkedin ? Colors.green : Colors.red,
-                                      size: 30.0,
-                                    ),
+                                  Shimmer(
+                                      gradient: LinearGradient(colors: [
+                                        Colors.white,
+                                        Colors.blueGrey.withOpacity(0.2)
+                                      ]),
+                                      child: Container(
+                                          color:
+                                              Colors.blueGrey.withOpacity(0.2),
+                                          height: 28.33,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5))
+                                ],
+                              ),
+                              Shimmer(
+                                  child: Container(
+                                      height: 35,
+                                      width: 35,
+                                      color: Colors.blueGrey.withOpacity(0.2)),
+                                  gradient: LinearGradient(
+                                      colors: [Colors.white, Colors.blueGrey]))
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    username,
+                                    style: TextStyle(
+                                        fontFamily: 'newFont', fontSize: 25),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              _showQrCode();
-                            },
-                            icon: Icon(Icons.qr_code))
-                      ],
-                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          userStatus,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(4.0),
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            IconData(
+                                                checkedin ? 0xe157 : 0xf68b,
+                                                fontFamily: 'MaterialIcons'),
+                                            color: checkedin
+                                                ? Colors.green
+                                                : Colors.red,
+                                            size: 30.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    _showQrCode();
+                                  },
+                                  icon: Icon(
+                                    Icons.qr_code,
+                                    size: 24,
+                                  ))
+                            ],
+                          ),
                   ),
                 ),
               ),
-            ],
+            ] else
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  color: Colors.blueGrey[50],
+                  child: Container(),
+                ),
+              ),
           ],
         ),
       ),
