@@ -41,7 +41,7 @@ dependencies:
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.20
   url_strategy: ^0.2.0
-  webview_flutter: ^3.0.1
+  webview_flutter: ^4.0.0
   flutter_countdown_timer: ^4.1.0
 
 dev_dependencies:
