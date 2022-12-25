@@ -316,7 +316,7 @@ class DashboardState extends State<Dashboard> {
               child: Center(
                 child: QrImage(
                   version: 4,
-                  data: userEmail ?? '',
+                  data: userEmail,
                   gapless: true,
                   embeddedImage: const AssetImage(
                       'assets/hackru-logos/appIconImageWhite.png'),
