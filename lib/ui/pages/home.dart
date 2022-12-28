@@ -43,6 +43,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
+  PageController _pageController = PageController(initialPage: 1);
+
   ///===========================================================
   ///                     BOTTOM NAV PAGES
   ///===========================================================
@@ -66,6 +68,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 setState(() {
                   _currentBottomNavItemIndex = 0;
                 });
+                _pageController.animateToPage(0,
+                    duration: Duration(milliseconds: 250),
+                    curve: Curves.easeIn);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -103,6 +108,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 setState(() {
                   _currentBottomNavItemIndex = 1;
                 });
+                _pageController.animateToPage(1,
+                    duration: Duration(milliseconds: 250),
+                    curve: Curves.easeIn);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -140,6 +148,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 setState(() {
                   _currentBottomNavItemIndex = 2;
                 });
+                _pageController.animateToPage(2,
+                    duration: Duration(milliseconds: 250),
+                    curve: Curves.easeIn);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -190,7 +201,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: _kBottomNavPages[_currentBottomNavItemIndex],
+          // body: _kBottomNavPages[_currentBottomNavItemIndex],
+          body: PageView(
+            controller: _pageController,
+            children: _kBottomNavPages,
+            onPageChanged: (value) => setState(() {
+              _currentBottomNavItemIndex = value;
+            }),
+          ),
           bottomNavigationBar: _buildBottomAppBar(context),
         ),
       ),

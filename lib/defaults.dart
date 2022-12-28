@@ -38,7 +38,6 @@ final String kHackRUOffWhite = 'assets/hackru_offwhite.png';
 final String kHackRUWhite = 'assets/hackru_white.png';
 final String kHackRUBlack = 'assets/hackru_black.png';
 final String kHackRUAllColor = 'assets/hackru_tri_color.png';
-final String kDrawerBg = 'assets/drawer_bg.png';
 final String kHackRUBanner = 'assets/hackru_banner.png';
 final String kSplashScreen = 'assets/splashScreen.png';
 

@@ -9,7 +9,6 @@ import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 import 'package:provider/provider.dart';
 
 import '../styles.dart';
@@ -22,20 +21,9 @@ class HackRUApp extends StatefulWidget {
 }
 
 class _HackRUAppState extends State<HackRUApp> {
-  List<ScreenHiddenDrawer> items = [];
   bool _hasAuthToken = false;
   User? user;
   CredManager? credManager;
-
-  final _selectedDrawerItem = const TextStyle(
-    color: HackRUColors.pink,
-    fontWeight: FontWeight.w700,
-  );
-  final _nonSelectedDrawerItem = const TextStyle(
-    color: HackRUColors.grey,
-    fontSize: 28.0,
-    fontWeight: FontWeight.w500,
-  );
 
   @override
   void initState() {
