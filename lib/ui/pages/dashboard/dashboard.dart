@@ -1,40 +1,22 @@
 import 'dart:async';
 import 'dart:ui';
-// import 'dart:html';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hackru/ui/pages/dashboard/social_media.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
-
-// import 'package:flutter_countdown_timer/countdown.dart';
-// import 'package:flutter_countdown_timer/index.dart';
-// import 'package:hackru/main.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
-// import 'package:hackru/ui/hackru_app.dart';
 import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
-// import 'package:hackru/ui/widgets/dialog/notification_onclick.dart';
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../hackru_app.dart';
 import '../help/help.dart';
 import '../login/login_page.dart';
 import '../qr_scanner/QRScanner.dart';
-
-// import 'package:hackru/ui/pages/home.dart';
-// import 'package:intl/intl.dart';
-
-// import '../../widgets/flip_panel.dart';
-
-// import 'package:hackru/main.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final hackRUStart = DateTime(2022, DateTime.october, 2, 11, 00, 00);
 final hackRUEnd = DateTime(2022, DateTime.october, 3, 12, 00, 00);
@@ -127,7 +109,8 @@ class DashboardState extends State<Dashboard> {
         alignment: Alignment.centerLeft,
         child: Text(
           'Current Time',
-          style: Theme.of(context).textTheme.subtitle1,
+          style: TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       );
     } else {
@@ -136,7 +119,8 @@ class DashboardState extends State<Dashboard> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Hacking Begins In',
-            style: Theme.of(context).textTheme.subtitle1,
+            style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         );
       } else if (hackRUStart.isBefore(DateTime.now()) &&
@@ -145,7 +129,8 @@ class DashboardState extends State<Dashboard> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Hacking Ends In',
-            style: Theme.of(context).textTheme.subtitle1,
+            style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         );
       } else {
@@ -153,7 +138,8 @@ class DashboardState extends State<Dashboard> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Current Time',
-            style: Theme.of(context).textTheme.subtitle1,
+            style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         );
       }
@@ -169,19 +155,11 @@ class DashboardState extends State<Dashboard> {
       ),
       child: Row(
         children: [
-          const Expanded(
-            flex: 1,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Icon(
-                Icons.timer,
-                color: HackRUColors.white,
-                size: 50.0,
-              ),
-            ),
-          ),
+          SizedBox(width: 5),
+          timerTitle(),
+          Expanded(child: Container()),
           const TimerText(),
-          Expanded(flex: 1, child: Container()),
+          SizedBox(width: 5)
         ],
       ),
     );
@@ -231,22 +209,6 @@ class DashboardState extends State<Dashboard> {
                   foregroundColor: HackRUColors.charcoal,
                 ),
               ),
-              // ListView(
-              //   children: <Widget>[
-              //     Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              //       child: QrImage(
-              //         version: 4,
-              //         data: userEmail ?? '',
-              //         gapless: true,
-              //         foregroundColor: HackRUColors.charcoal,
-              //       ),
-              //     ),
-              //     // Center(
-              //     //   child: Text(userEmail ?? ''),
-              //     // ),
-              //   ],
-              // ),
             ),
           ],
           backgroundColor: Colors.transparent,
@@ -262,10 +224,10 @@ class DashboardState extends State<Dashboard> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: timerTitle(),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          //   child: timerTitle(),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: _timerBanner(),
