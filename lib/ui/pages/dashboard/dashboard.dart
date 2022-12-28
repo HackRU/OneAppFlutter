@@ -473,38 +473,40 @@ class DashboardState extends State<Dashboard> {
               ),
             )
           ]),
-          SizedBox(height: 5),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: HackRUColors.pink,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => Provider.value(
-                          value: credManager, child: QRScanner()))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "QR Scanner",
-                    style: TextStyle(
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                      color: HackRUColors.white,
+          if (credManager!.getAuthorization()) ...[
+            SizedBox(height: 5),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: HackRUColors.pink,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                  )
-                ],
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Provider.value(
+                            value: credManager, child: QRScanner()))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "QR Scanner",
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: HackRUColors.white,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ),
+            )
+          ],
           if (_hasAuthToken) ...[
             SizedBox(height: 5),
             Container(
