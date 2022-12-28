@@ -16,7 +16,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../hackru_app.dart';
 import '../help/help.dart';
 import '../login/login_page.dart';
-import '../qr_scanner/QRScanner.dart';
+import '../qr_scanner/Scanner.dart';
 
 final hackRUStart = DateTime(2022, DateTime.october, 2, 11, 00, 00);
 final hackRUEnd = DateTime(2022, DateTime.october, 3, 12, 00, 00);
@@ -452,7 +452,7 @@ class DashboardState extends State<Dashboard> {
                     context,
                     MaterialPageRoute(
                         builder: (_) => Provider.value(
-                            value: credManager, child: QRScanner()))),
+                            value: credManager, child: Scanner()))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
