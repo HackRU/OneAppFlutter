@@ -21,7 +21,8 @@ class _EventCardState extends State<EventCard> {
     var time = DateFormat('hh:mm a').format(widget.resource.start!.toLocal());
     var date = DateFormat.d().format(widget.resource.start!.toLocal());
     var today = DateTime.now().toString();
-    if (date == widget.day || date == today) {
+    print(DateFormat("MMMd").format(widget.resource.start!));
+    if (DateFormat("EEEE").format(widget.resource.start!) == widget.day) {
       return Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -90,33 +91,5 @@ class _EventCardState extends State<EventCard> {
       );
     }
     return Container();
-  }
-}
-
-class EventsForDay extends StatelessWidget {
-  final String? day;
-  final List<Event>? events;
-  const EventsForDay({
-    Key? key,
-    @required this.day,
-    @required this.events,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: ListView.builder(
-        controller: ScrollController(),
-        padding: const EdgeInsets.all(15.0),
-        itemCount: events == null ? 1 : events?.length,
-        itemBuilder: (BuildContext context, int index) {
-          return EventCard(
-            resource: events![index],
-            day: day!,
-          );
-        },
-      ),
-    );
   }
 }

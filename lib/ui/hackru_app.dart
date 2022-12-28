@@ -153,20 +153,6 @@ class _HackRUAppState extends State<HackRUApp> {
     debugPrint('==**==== HAS_AUTH_TOKEN: $_hasAuthToken ===**===');
     return CustomHiddenDrawerMenu(
       actionsAppBar: <Widget>[
-        // ====== REFRESH DATA - MANUALLY
-        IconButton(
-          icon: Icon(
-            Icons.refresh_rounded,
-            color: Colors.grey[500],
-          ),
-          color: HackRUColors.transparent,
-          splashColor: HackRUColors.yellow,
-          onPressed: () {
-            // setState(() {});
-            _hasToken();
-            _drawerItems();
-          },
-        ),
         const SizedBox(width: 8),
         // ====== LOGOUT BUTTON
         _hasAuthToken

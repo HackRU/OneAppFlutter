@@ -19,7 +19,7 @@ Future<http.Response> getMisc(String endpoint) {
 
 Future<http.Response> getLcs(String endpoint) {
   return client
-      .get(Uri.parse(PROD_URL + endpoint))
+      .get(Uri.parse(DEV_URL + endpoint))
       .timeout(const Duration(seconds: 30));
 }
 

@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../login/login_page.dart';
+
 // import 'package:hackru/ui/pages/home.dart';
 // import 'package:intl/intl.dart';
 
@@ -488,17 +490,59 @@ class DashboardState extends State<Dashboard> {
                 ),
               ),
             ] else
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                decoration: BoxDecoration(),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: HackRUColors.yellow,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 5)),
+                  onPressed: () {
+                    var loginResponse;
+                    var hasCred = credManager!.hasCredentials();
+                    if (hasCred) {
+                    } else {
+                      loginResponse = Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Provider.value(
+                              value: credManager!, child: LoginPage()),
+                          fullscreenDialog: true,
+                        ),
+                      );
+                    }
+                    if (loginResponse != null &&
+                        loginResponse != '' &&
+                        mounted) {
+                      ScaffoldMessengerState().clearSnackBars();
+                      ScaffoldMessengerState().showSnackBar(
+                        SnackBar(
+                          content: Text(loginResponse ?? ''),
+                          backgroundColor: HackRUColors.green,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                          color: HackRUColors.white,
+                        ),
+                      )
+                    ],
                   ),
-                  color: Colors.blueGrey[50],
-                  child: Container(),
                 ),
-              ),
+              )
           ],
         ),
       ),
