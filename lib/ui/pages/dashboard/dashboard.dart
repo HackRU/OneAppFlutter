@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:ui';
 // import 'dart:html';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hackru/ui/pages/dashboard/social_media.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 // import 'package:flutter_countdown_timer/countdown.dart';
 // import 'package:flutter_countdown_timer/index.dart';
 // import 'package:hackru/main.dart';
+import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
@@ -18,7 +22,10 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../hackru_app.dart';
+import '../help/help.dart';
 import '../login/login_page.dart';
+import '../qr_scanner/QRScanner.dart';
 
 // import 'package:hackru/ui/pages/home.dart';
 // import 'package:intl/intl.dart';
@@ -109,114 +116,6 @@ class DashboardState extends State<Dashboard> {
     }
     _isLoading = false;
   }
-
-  /// ===========================================================
-  ///                     PUSH NOTIFICATIONS
-  /// ===========================================================
-
-  // void _requestIOSPermissions() {
-  //   flutterLocalNotificationsPlugin
-  //       .resolvePlatformSpecificImplementation<
-  //           IOSFlutterLocalNotificationsPlugin>()
-  //       ?.requestPermissions(
-  //         alert: true,
-  //         badge: true,
-  //         sound: true,
-  //       );
-  // }
-
-  // void _configureDidReceiveLocalNotificationSubject() {
-  //   didReceiveLocalNotificationSubject.stream
-  //       .listen((ReceivedNotification receivedNotification) async {
-  //     await showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) => CupertinoAlertDialog(
-  //         title: receivedNotification.title != null
-  //             ? Text(receivedNotification.title)
-  //             : null,
-  //         content: receivedNotification.body != null
-  //             ? Text(receivedNotification.body)
-  //             : null,
-  //         actions: [
-  //           CupertinoDialogAction(
-  //             isDefaultAction: true,
-  //             child: Text('Ok'),
-  //             onPressed: () async {
-  //               print('Not implemented Yet');
-  //             },
-  //           )
-  //         ],
-  //       ),
-  //     );
-  //   });
-  // }
-
-  // void _configureSelectNotificationSubject() {
-  //   selectNotificationSubject.stream.listen((String payload) async {
-  //     print('Payload: $payload');
-  //     Map<String, dynamic> message = json.decode(payload);
-  //     String title = message['data']['title'];
-  //     String body = message['data']['body'];
-  //     onPushNotificationClick(title, body);
-  //   });
-  // }
-
-  // void setupPushNotifications() async {
-  //   if (Platform.isIOS) {
-  //     await _firebaseMessaging.requestPermission(
-  //         sound: true, badge: true, alert: true);
-  //     // TODO: complete implementation as of new docs
-  //   }
-
-  //   _firebaseMessaging. configure(
-  //     onMessage: (Map<String, dynamic> message) async {
-  //       print('on message $message');
-
-  //       //TODO Configure notification channel
-  //       var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-  //           'silent channel id',
-  //           'silent channel name',
-  //           'silent channel description',
-  //           playSound: false,
-  //           styleInformation: DefaultStyleInformation(true, true));
-  //       var iOSPlatformChannelSpecifics =
-  //           IOSNotificationDetails(presentSound: false);
-  //       var platformChannelSpecifics = NotificationDetails(
-  //           androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  //       await flutterLocalNotificationsPlugin.show(
-  //           0,
-  //           message['notification']['title'],
-  //           message['notification']['body'],
-  //           platformChannelSpecifics,
-  //           payload: json.encode(message));
-  //     },
-  //     onResume: (Map<String, dynamic> message) async {
-  //       print('on resume $message');
-  //       String title = message['data']['title'];
-  //       String body = message['data']['body'];
-  //       onPushNotificationClick(title, body);
-  //     },
-  //     onLaunch: (Map<String, dynamic> message) async {
-  //       print('on launch $message');
-  //       String title = message['data']['title'];
-  //       String body = message['data']['body'];
-  //       onPushNotificationClick(title, body);
-  //     },
-  //   );
-
-  //   await _firebaseMessaging.subscribeToTopic('announcements');
-  // }
-
-  // void onPushNotificationClick(String title, String body) async {
-  //   await showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return NotificationOnClickDialog(
-  //           title: title,
-  //           body: body,
-  //         );
-  //       });
-  // }
 
   /// =================================================
   ///                SHOW TIMER BANNER
@@ -361,178 +260,207 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(),
-        child: Column(
-          children: [
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: timerTitle(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: _timerBanner(),
+          ),
+          if (_hasAuthToken) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: timerTitle(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: _timerBanner(),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.01,
-            ),
-            if (_hasAuthToken) ...[
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  color: Colors.blueGrey[50],
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _isLoading
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Shimmer(
-                                      gradient: LinearGradient(colors: [
-                                        Colors.white,
-                                        Colors.blueGrey.withOpacity(0.2)
-                                      ]),
-                                      child: Container(
-                                          color:
-                                              Colors.blueGrey.withOpacity(0.2),
-                                          height: 33.33,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.6)),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Shimmer(
-                                      gradient: LinearGradient(colors: [
-                                        Colors.white,
-                                        Colors.blueGrey.withOpacity(0.2)
-                                      ]),
-                                      child: Container(
-                                          color:
-                                              Colors.blueGrey.withOpacity(0.2),
-                                          height: 28.33,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5))
-                                ],
-                              ),
-                              Shimmer(
-                                  child: Container(
-                                      height: 35,
-                                      width: 35,
-                                      color: Colors.blueGrey.withOpacity(0.2)),
-                                  gradient: LinearGradient(
-                                      colors: [Colors.white, Colors.blueGrey]))
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    username,
-                                    style: TextStyle(
-                                        fontFamily: 'newFont', fontSize: 25),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Align(
+              padding: const EdgeInsets.all(2.0),
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                color: Colors.blueGrey[50],
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _isLoading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Shimmer(
+                                    gradient: LinearGradient(colors: [
+                                      Colors.white,
+                                      Colors.blueGrey.withOpacity(0.2)
+                                    ]),
+                                    child: Container(
+                                        color: Colors.blueGrey.withOpacity(0.2),
+                                        height: 33.33,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6)),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Shimmer(
+                                    gradient: LinearGradient(colors: [
+                                      Colors.white,
+                                      Colors.blueGrey.withOpacity(0.2)
+                                    ]),
+                                    child: Container(
+                                        color: Colors.blueGrey.withOpacity(0.2),
+                                        height: 28.33,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5))
+                              ],
+                            ),
+                            Shimmer(
+                                child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    color: Colors.blueGrey.withOpacity(0.2)),
+                                gradient: LinearGradient(
+                                    colors: [Colors.white, Colors.blueGrey]))
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  username,
+                                  style: TextStyle(
+                                      fontFamily: 'newFont', fontSize: 25),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        userStatus,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Align(
                                         alignment: Alignment.center,
-                                        child: Text(
-                                          userStatus,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle1,
+                                        child: Icon(
+                                          IconData(checkedin ? 0xe157 : 0xf68b,
+                                              fontFamily: 'MaterialIcons'),
+                                          color: checkedin
+                                              ? Colors.green
+                                              : Colors.red,
+                                          size: 30.0,
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            IconData(
-                                                checkedin ? 0xe157 : 0xf68b,
-                                                fontFamily: 'MaterialIcons'),
-                                            color: checkedin
-                                                ? Colors.green
-                                                : Colors.red,
-                                            size: 30.0,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    _showQrCode();
-                                  },
-                                  icon: Icon(
-                                    Icons.qr_code,
-                                    size: 24,
-                                  ))
-                            ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  _showQrCode();
+                                },
+                                icon: Icon(
+                                  Icons.qr_code,
+                                  size: 24,
+                                ))
+                          ],
+                        ),
+                ),
+              ),
+            ),
+          ] else
+            SizedBox(height: 5),
+          Row(children: [
+            if (!_hasAuthToken)
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 5,
+                  ),
+                  decoration: BoxDecoration(),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: HackRUColors.yellow,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+                    onPressed: () async {
+                      var loginResponse;
+                      var hasCred = credManager!.hasCredentials();
+                      if (hasCred) {
+                      } else {
+                        loginResponse = Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Provider.value(
+                                value: credManager!, child: LoginPage()),
+                            fullscreenDialog: true,
                           ),
+                        );
+                      }
+                      if (loginResponse != null &&
+                          loginResponse != '' &&
+                          mounted) {
+                        ScaffoldMessengerState().clearSnackBars();
+                        ScaffoldMessengerState().showSnackBar(
+                          SnackBar(
+                            content: Text(await loginResponse ?? ''),
+                            backgroundColor: HackRUColors.green,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                            color: HackRUColors.white,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ] else
-              Container(
+            Expanded(
+              flex: 1,
+              child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: HackRUColors.yellow,
+                      primary: HackRUColors.pink,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 5)),
-                  onPressed: () {
-                    var loginResponse;
-                    var hasCred = credManager!.hasCredentials();
-                    if (hasCred) {
-                    } else {
-                      loginResponse = Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Provider.value(
-                              value: credManager!, child: LoginPage()),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    }
-                    if (loginResponse != null &&
-                        loginResponse != '' &&
-                        mounted) {
-                      ScaffoldMessengerState().clearSnackBars();
-                      ScaffoldMessengerState().showSnackBar(
-                        SnackBar(
-                          content: Text(loginResponse ?? ''),
-                          backgroundColor: HackRUColors.green,
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    }
-                  },
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+                  onPressed: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Help())),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Login",
+                        "Help",
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -542,9 +470,109 @@ class DashboardState extends State<Dashboard> {
                     ],
                   ),
                 ),
-              )
+              ),
+            )
+          ]),
+          SizedBox(height: 5),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: HackRUColors.pink,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Provider.value(
+                          value: credManager, child: QRScanner()))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "QR Scanner",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      color: HackRUColors.white,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          if (_hasAuthToken) ...[
+            SizedBox(height: 5),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: HackRUColors.pink,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+                onPressed: () async {
+                  credManager!.deleteCredentials();
+                  setState(() {
+                    _hasAuthToken = false;
+                  });
+                  await Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => Provider.value(
+                          value: credManager!, child: HackRUApp()),
+                      maintainState: false,
+                    ),
+                    ModalRoute.withName('/main'),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Logout",
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: HackRUColors.white,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ],
-        ),
+          Expanded(child: Container()),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SocialMediaCard(
+                onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
+                iconData: FontAwesomeIcons.link,
+              ),
+              SocialMediaCard(
+                onPressed: () => url_launcher.launch(REPOSITORY_URL),
+                iconData: FontAwesomeIcons.github,
+              ),
+              SocialMediaCard(
+                onPressed: () => url_launcher.launch(FACEBOOK_PAGE_URL),
+                iconData: FontAwesomeIcons.facebookSquare,
+              ),
+              SocialMediaCard(
+                onPressed: () => url_launcher.launch(INSTAGRAM_PAGE_URL),
+                iconData: FontAwesomeIcons.instagram,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

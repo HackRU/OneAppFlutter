@@ -82,7 +82,13 @@ class LoginFormState extends State<LoginForm> {
           User userData = await getUser(cred.token, _emailController.text);
           if (cred.token != null) {
             LoginForm.gotCred = true;
-            credManager!.persistCredentials(cred.token, userData.email);
+            var userProfile = await getUser(cred.token, userData.email);
+            credManager!.persistCredentials(
+                cred.token,
+                userData.email,
+                userProfile.role.director || userProfile.role.organizer
+                    ? "TRUE"
+                    : "FALSE");
             setState(() {
               _isLoginPressed = false;
             });

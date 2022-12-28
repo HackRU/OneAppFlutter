@@ -9,7 +9,6 @@ import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:hackru/ui/widgets/custom_hidden_drawer_menu.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +44,6 @@ class _HackRUAppState extends State<HackRUApp> {
     });
 
     _hasToken();
-    _drawerItems();
     super.initState();
   }
 
@@ -81,126 +79,9 @@ class _HackRUAppState extends State<HackRUApp> {
     }
   }
 
-  /// =========================================================
-  ///                      DRAWER ITEMS
-  /// =========================================================
-  void _drawerItems() {
-    setState(() {});
-    items = [];
-    items.add(ScreenHiddenDrawer(
-        ItemHiddenMenu(
-          name: 'Home',
-          baseStyle: _nonSelectedDrawerItem,
-          colorLineSelected: HackRUColors.yellow,
-          selectedStyle: _selectedDrawerItem,
-        ),
-        Provider.value(
-          value: credManager,
-          child: Home(),
-        )));
-
-    // items.add(ScreenHiddenDrawer(
-    //   ItemHiddenMenu(
-    //     name: 'Map',
-    //     baseStyle: _nonSelectedDrawerItem,
-    //     colorLineSelected: HackRUColors.yellow,
-    //     selectedStyle: _selectedDrawerItem,
-    //   ),
-    //   HackRUMap(),
-    // ));
-
-    items.add(
-      ScreenHiddenDrawer(
-          ItemHiddenMenu(
-            name: 'Help',
-            baseStyle: _nonSelectedDrawerItem,
-            colorLineSelected: HackRUColors.yellow,
-            selectedStyle: _selectedDrawerItem,
-          ),
-          Provider.value(value: credManager, child: Help())),
-    );
-
-    items.add(
-      ScreenHiddenDrawer(
-          ItemHiddenMenu(
-            name: 'About',
-            baseStyle: _nonSelectedDrawerItem,
-            colorLineSelected: HackRUColors.yellow,
-            selectedStyle: _selectedDrawerItem,
-          ),
-          Provider.value(value: credManager, child: About())),
-    );
-
-    //NOTE: only show QR_SCANNER button to authorized users
-    items.add(
-      ScreenHiddenDrawer(
-          ItemHiddenMenu(
-            name: "QR Scanner",
-            baseStyle: _nonSelectedDrawerItem,
-            colorLineSelected: HackRUColors.yellow,
-            selectedStyle: _selectedDrawerItem,
-          ),
-          Provider.value(value: credManager, child: QRScanner())),
-    );
-  }
-
-  /// =========================================================
-  ///                     BUILD FUNCTION
-  /// =========================================================
-
   @override
   Widget build(BuildContext context) {
     debugPrint('==**==== HAS_AUTH_TOKEN: $_hasAuthToken ===**===');
-    return CustomHiddenDrawerMenu(
-      actionsAppBar: <Widget>[
-        const SizedBox(width: 8),
-        // ====== LOGOUT BUTTON
-        _hasAuthToken
-            ? IconButton(
-                tooltip: 'Logout',
-                icon: Icon(
-                  FontAwesomeIcons.signOutAlt,
-                  color: Theme.of(context).primaryColor,
-                  size: 20,
-                ),
-                color: HackRUColors.transparent,
-                splashColor: HackRUColors.yellow,
-                onPressed: () async {
-                  credManager!.deleteCredentials();
-                  setState(() {
-                    _hasAuthToken = false;
-                  });
-                  await Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => Provider.value(
-                          value: credManager!, child: HackRUApp()),
-                      maintainState: false,
-                    ),
-                    ModalRoute.withName('/main'),
-                  );
-                },
-              )
-            : Container(),
-      ],
-      leadingAppBar: const Icon(
-        Icons.menu,
-        color: HackRUColors.grey,
-      ),
-      styleAutoTittleName: Theme.of(context).textTheme.headline6,
-      backgroundColorMenu: HackRUColors.grey,
-      backgroundColorAppBar: Theme.of(context).backgroundColor,
-      elevationAppBar: 0.0,
-      backgroundMenu: Container(
-        color: HackRUColors.charcoal,
-        // child: const RiveAnimation.asset(
-        //   'assets/flare/party.flr',
-        //   alignment: Alignment.center,
-        //   fit: BoxFit.contain,
-        //   animations: ['idle'],
-        // ),
-      ),
-      screens: items,
-      typeOpen: TypeOpen.FROM_LEFT,
-    );
+    return Home();
   }
 }

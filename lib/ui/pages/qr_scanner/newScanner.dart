@@ -72,6 +72,14 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.close, size: 30),
+            onPressed: () => Navigator.pop(context),
+            color: Colors.white,
+          )),
       backgroundColor: HackRUColors.black,
       body: Column(
         children: <Widget>[
@@ -104,14 +112,6 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  // Text(
-                  //   scanned,
-                  //   style: const TextStyle(
-                  //     fontSize: 16.0,
-                  //     color: HackRUColors.pink_light,
-                  //     fontWeight: FontWeight.w500,
-                  //   ),
-                  // ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,24 +161,6 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       ),
     );
   }
-
-//   void _onQRViewCreated(QRViewController controller) {
-//     var defaultCode = 'xxx@xxx.com';
-//     this.controller = controller;
-//     controller.scannedDataStream.listen((scanData) {
-//       print(
-//           '======= SCANDATA: {code: ${scanData.code}, barcodeType: ${scanData.format.formatName}\n');
-//       setState(() {
-//         if (scanData.code != defaultCode) {
-//           defaultCode = scanData.code!;
-//           scanned = '';
-//           // _qrRequest(scanData.code!);  // TODO: uncomment this later
-//         } else {
-// //          scanned = 'ALREADY SCANNED!';
-//         }
-//       });
-//     });
-//   }
 
   void _handleOnPressed() {
     setState(() {

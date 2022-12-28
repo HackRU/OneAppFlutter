@@ -42,6 +42,14 @@ class Help extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.close, size: 30),
+            onPressed: () => Navigator.pop(context),
+            color: Colors.black,
+          )),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView.builder(
         controller: ScrollController(),
@@ -54,46 +62,6 @@ class Help extends StatelessWidget {
           );
         },
       ),
-//       body: FutureBuilder<List<HelpResource>>(
-//         future: helpResources(MISC_URL),
-//         builder:
-//             (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
-//           switch (snapshot.connectionState) {
-//             case ConnectionState.none:
-//             case ConnectionState.waiting:
-//               return const Center(
-//                 child: CircularProgressIndicator(),
-//                 // child: Container(
-//                 //   color: HackRUColors.transparent,
-//                 //   height: 400.0,
-//                 //   width: 400.0,
-//                 //   child: const RiveAnimation.asset(
-//                 //     'assets/flare/loading_indicator.flr',
-//                 //     alignment: Alignment.center,
-//                 //     fit: BoxFit.contain,
-//                 //     animations: ['idle'],
-//                 //   ),
-//                 // ),
-//               );
-//             default:
-//               print(snapshot.hasError);
-//               var resources = snapshot.data;
-// //              print(resources);
-//               return !snapshot.hasError
-//                   ? ListView.builder(
-//                       itemCount: resources?.length,
-//                       itemBuilder: (BuildContext context, int index) {
-//                         return HelpButton(resource: resources![index]);
-//                       },
-//                     )
-//                   : const Center(
-//                       child: Text(
-//                         'An error occurred while fetching help resources!',
-//                       ),
-//                     );
-//           }
-//         },
-//       ),
     );
   }
 }

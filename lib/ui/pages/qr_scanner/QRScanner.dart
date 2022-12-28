@@ -38,84 +38,42 @@ class QRScanner extends StatefulWidget {
 
 class _QRScannerState extends State<QRScanner> {
   var _isVisible;
-  bool isAuthorized = false;
-  bool isLoading = true;
   CredManager? credManager;
 
   @override
   void initState() {
     credManager = Provider.of<CredManager>(context, listen: false);
     super.initState();
-    _getUserProfile();
-  }
-
-  void _getUserProfile() async {
-    var _storedEmail = credManager!.getEmail();
-    if (_storedEmail != "") {
-      var _authToken = credManager!.getAuthToken();
-      var userProfile = await getUser(_authToken, _storedEmail);
-      setState(() {
-        isAuthorized =
-            (userProfile.role.director || userProfile.role.organizer);
-      });
-    }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.close, size: 30),
+            onPressed: () => Navigator.pop(context),
+            color: Colors.black,
+          )),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : (isAuthorized
-              ? ListView(
-                  controller: ScrollController(),
-                  children: <Widget>[
-                    CardExpansion(events: qrEvents),
-                  ],
-                )
-              // ? FutureBuilder(
-              //     future: qrEvents(MISC_URL),
-              //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-              //       switch (snapshot.connectionState) {
-              //         case ConnectionState.none:
-              //         case ConnectionState.waiting:
-              //           return const Center(
-              //             child: CircularProgressIndicator(),
-              //             // child: Container(
-              //             //   color: HackRUColors.transparent,
-              //             //   height: 400.0,
-              //             //   width: 400.0,
-              //             //   child: const RiveAnimation.asset(
-              //             //     'assets/flare/loading_indicator.flr',
-              //             //     alignment: Alignment.center,
-              //             //     fit: BoxFit.contain,
-              //             //     animations: ['idle'],
-              //             //   ),
-              //             // ),
-              //           );
-              //         default:
-              //           print(snapshot.hasError);
-              //           return ListView(
-              //             children: <Widget>[
-              //               CardExpansion(events: snapshot.data),
-              //             ],
-              //           );
-              //       }
-              //     },
-              //   )
-              : const Center(
-                  child: Text(
-                    "Sorry, you are not authorized to use this feature! Please login if you haven't!",
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                )),
-      floatingActionButton: isAuthorized
+      body: (credManager!.getAuthorization()
+          ? ListView(
+              controller: ScrollController(),
+              children: <Widget>[
+                CardExpansion(events: qrEvents),
+              ],
+            )
+          : const Center(
+              child: Text(
+                "Sorry, you are not authorized to use this feature! Please login if you haven't!",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            )),
+      floatingActionButton: credManager!.getAuthorization()
           ? Container(
               width: MediaQuery.of(context).size.width - 50,
               margin: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -162,7 +120,7 @@ class CardExpansion extends StatefulWidget {
   CardExpansion({required this.events});
   static const String routeName = '/material/expansion_panels';
   final List events;
-  static String? event;
+  static String? event = 'check-in';
 
   @override
   _CardExpansionState createState() => _CardExpansionState();
@@ -171,7 +129,7 @@ class CardExpansion extends StatefulWidget {
 class _CardExpansionState extends State<CardExpansion> {
   bool isExpanded = false;
   final GlobalKey<CustomExpansionTileState> expansionTileKey = GlobalKey();
-  var _selectedEvent = '--none--';
+  var _selectedEvent = 'check-in';
 
   @override
   Widget build(BuildContext context) {

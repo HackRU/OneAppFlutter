@@ -181,52 +181,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _kBottomNavPages[_currentBottomNavItemIndex],
-      // floatingActionButton: _hasAuthToken
-      //     ? Container()
-      // : FloatingActionButton(
-      //     onPressed: () async {
-      //       var loginResponse;
-      //       var hasCred = credManager!.hasCredentials();
-      //       if (hasCred) {
-      //       } else {
-      //         loginResponse = await Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => Provider.value(
-      //                 value: credManager!, child: LoginPage()),
-      //             fullscreenDialog: true,
-      //           ),
-      //         );
-      //       }
-      //       if (loginResponse != null && loginResponse != '' && mounted) {
-      //         ScaffoldMessengerState().clearSnackBars();
-      //         ScaffoldMessengerState().showSnackBar(
-      //           SnackBar(
-      //             content: Text(loginResponse ?? ''),
-      //             backgroundColor: HackRUColors.green,
-      //             behavior: SnackBarBehavior.floating,
-      //           ),
-      //         );
-      //       }
-      //     },
-      //     elevation: 4.0,
-      //     splashColor: HackRUColors.white,
-      //     isExtended: false,
-      //     foregroundColor: HackRUColors.black,
-      //     backgroundColor: Theme.of(context).accentColor,
-      //     child: _hasAuthToken
-      //         ? const Icon(
-      //             FontAwesomeIcons.qrcode,
-      //             size: 22,
-      //           )
-      //         : Text("Login")),
-      // Temporarily moving the login button
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: _buildBottomAppBar(context),
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        left: false,
+        right: false,
+        bottom: false,
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: _kBottomNavPages[_currentBottomNavItemIndex],
+          bottomNavigationBar: _buildBottomAppBar(context),
+        ),
+      ),
     );
   }
 }

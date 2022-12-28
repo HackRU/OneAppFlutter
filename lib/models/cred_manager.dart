@@ -11,11 +11,14 @@ class CredManager {
   void deleteCredentials() {
     prefs.delete('AUTH_TOKEN');
     prefs.delete('EMAIL');
+    prefs.delete('AUTHORIZATION');
   }
 
-  void persistCredentials(String kAuthToken, String kEmail) {
+  void persistCredentials(
+      String kAuthToken, String kEmail, String kAuthorization) {
     prefs.put('AUTH_TOKEN', kAuthToken);
     prefs.put('EMAIL', kEmail);
+    prefs.put('AUTHORIZATION', kAuthorization);
   }
 
   bool hasCredentials() {
@@ -37,6 +40,10 @@ class CredManager {
       return prefs.get('EMAIL');
     }
     return '';
+  }
+
+  bool getAuthorization() {
+    return prefs.get('AUTHORIZATION') == "TRUE" ? true : false;
   }
 
   void persistSlackAnnouncements(List<Announcement> slacks) {
