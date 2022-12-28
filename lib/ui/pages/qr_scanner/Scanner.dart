@@ -81,7 +81,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.close, size: 30),
+            icon: Icon(Icons.close, size: 30),
             onPressed: () => Navigator.pop(context),
             color: Colors.white,
           ),
@@ -130,8 +130,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                           iconSize: 80,
                           icon: Icon(
                             isPlaying
-                                ? FontAwesomeIcons.circlePlay
-                                : FontAwesomeIcons.circlePause,
+                                ? FontAwesomeIcons.playCircle
+                                : FontAwesomeIcons.pauseCircle,
                             color: isPlaying
                                 ? HackRUColors.yellow
                                 : HackRUColors.pink_light,
@@ -195,7 +195,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         message == 'DAY-OF QR LINKED!') {
       _scanDialogSuccess(message);
     } else {
-      await await _warningDialog(message);
+      await await _scanDialogWarning(message);
     }
   }
 
@@ -245,7 +245,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future _warningDialog(String body) async {
+  Future _scanDialogWarning(String body) async {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -378,7 +378,6 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   }
 
   Future<String> _lcsHandle(String userEmailOrId) async {
-    // userEmailOrId is the scandata which comes from the qrcode
     var _storedEmail = credManager!.getEmail();
     var _authToken = credManager!.getAuthToken();
     var result = 'NULL';
@@ -542,7 +541,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             _authToken,
             userEmailOrId,
             event,
-            false,
+            true,
           );
           // updateStatus(
           //     BASE_URL, _storedEmail, _authToken, userEmailOrId, "checked-in");
@@ -552,28 +551,28 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           // var prev = numUserScanned;
           // debugPrint('already ' + userEmailOrId);
           result = 'ALREADY SCANNED';
-          var rescan = await _warningDialog('ALREADY SCANNED!');
-          // if (rescan) {
-          //   return notScanned;
-          // }
-          // // debugPrint('$rescan');
+          var rescan = await _scanDialogWarning('ALREADY SCANNED!');
           if (rescan) {
-            numUserScanned = await attendEvent(
-              BASE_URL,
-              _storedEmail,
-              _authToken,
-              userEmailOrId,
-              event,
-              true,
-            );
-            // int test = numUserScanned as int;
-            // debugPrint('********** user event count: $test');
-            // if (prev > numUserScanned) {
-            result = 'SCANNED!';
-            // }
-          } else {
             return notScanned;
           }
+          // // debugPrint('$rescan');
+          // if (rescan) {
+          //   numUserScanned = await attendEvent(
+          //     BASE_URL,
+          //     _storedEmail!,
+          //     _authToken!,
+          //     userEmailOrId,
+          //     event!,
+          //     true,
+          //   );
+          //   // int test = numUserScanned as int;
+          //   // debugPrint('********** user event count: $test');
+          //   // if (prev > numUserScanned) {
+          //   result = 'SCANNED!';
+          //   // }
+          // } else {
+          //   return notScanned;
+          // }
         } on UserNotFound {
           // debugPrint('hashqr:' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
