@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hackru/services/hackru_service.dart';
-import 'package:hackru/ui/pages/dashboard/social_media.dart';
+import 'package:hackru/ui/widgets/social_media.dart';
 import 'package:provider/provider.dart';
 
 import 'package:url_launcher/url_launcher.dart' as url_launcher;

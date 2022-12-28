@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 // import 'dart:html';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hackru/ui/pages/dashboard/social_media.dart';
+import 'package:hackru/ui/widgets/social_media.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 // import 'package:flutter_countdown_timer/countdown.dart';
