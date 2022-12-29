@@ -101,8 +101,16 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: kAppTitle,
       debugShowCheckedModeBanner: false,
-      theme: kTheme,
+      theme: kLightTheme,
+      darkTheme: kDarkTheme,
       home: Provider.value(value: credManager, child: Home()),
+      routes: <String, WidgetBuilder>{
+        '/login': (BuildContext context) =>
+            Provider.value(value: credManager, child: const LoginPage()),
+        '/home': (BuildContext context) =>
+            Provider.value(value: credManager, child: Home()),
+        // '/floorMap': (BuildContext context) => HackRUMap(),
+      },
       onUnknownRoute: (RouteSettings setting) {
         var unknownRoute = setting.name;
         return MaterialPageRoute(

@@ -1,14 +1,9 @@
-import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/ui/pages/annoucements/announcements.dart';
 import 'package:hackru/ui/pages/dashboard/dashboard.dart';
 import 'package:hackru/ui/pages/events/events.dart';
-import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
@@ -19,170 +14,30 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _hasAuthToken = false;
   int _currentBottomNavItemIndex = 1;
   CredManager? credManager;
 
-  @override
-  void initState() {
-    credManager = Provider.of<CredManager>(context, listen: false);
-    super.initState();
-    _hasToken();
-  }
-
-  void _hasToken() async {
-    var hasToken = credManager!.hasCredentials();
-    if (hasToken) {
-      setState(() {
-        _hasAuthToken = hasToken;
-      });
-    } else {
-      setState(() {
-        _hasAuthToken = false;
-      });
-    }
-  }
-
-  PageController _pageController = PageController(initialPage: 1);
+  final PageController _pageController = PageController(initialPage: 1);
 
   ///===========================================================
   ///                     BOTTOM NAV PAGES
   ///===========================================================
   final _kBottomNavPages = <Widget>[Announcements(), Dashboard(), Events()];
+  final _bottomNavNames = ["Announcements", "DashBoard", "Events"];
 
   ///===========================================================
   ///                      BOTTOM APP BAR
   ///===========================================================
   BottomAppBar _buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
-      shape: CircularNotchedRectangle(),
+      shape: const CircularNotchedRectangle(),
       elevation: 25.0,
       notchMargin: 6.0,
       color: Theme.of(context).primaryColor,
       child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: InkResponse(
-              onTap: () {
-                setState(() {
-                  _currentBottomNavItemIndex = 0;
-                });
-                _pageController.animateToPage(0,
-                    duration: Duration(milliseconds: 250),
-                    curve: Curves.easeIn);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.announcement,
-                      size: 25.0,
-                      color: _currentBottomNavItemIndex == 0
-                          ? HackRUColors.white
-                          : HackRUColors.charcoal_dark,
-                    ),
-                    Text(
-                      'Announcements',
-                      style: TextStyle(
-                        fontSize: _currentBottomNavItemIndex == 0 ? 14.0 : 12.0,
-                        color: _currentBottomNavItemIndex == 0
-                            ? HackRUColors.white
-                            : HackRUColors.charcoal_dark,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: InkResponse(
-              onTap: () {
-                setState(() {
-                  _currentBottomNavItemIndex = 1;
-                });
-                _pageController.animateToPage(1,
-                    duration: Duration(milliseconds: 250),
-                    curve: Curves.easeIn);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.home,
-                      size: 25.0,
-                      color: _currentBottomNavItemIndex == 1
-                          ? HackRUColors.white
-                          : HackRUColors.charcoal_dark,
-                    ),
-                    Text(
-                      'Dashboard',
-                      style: TextStyle(
-                        fontSize: _currentBottomNavItemIndex == 1 ? 14.0 : 12.0,
-                        color: _currentBottomNavItemIndex == 1
-                            ? HackRUColors.white
-                            : HackRUColors.charcoal_dark,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: InkResponse(
-              onTap: () {
-                setState(() {
-                  _currentBottomNavItemIndex = 2;
-                });
-                _pageController.animateToPage(2,
-                    duration: Duration(milliseconds: 250),
-                    curve: Curves.easeIn);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      FontAwesomeIcons.calendarAlt,
-                      size: 25.0,
-                      color: _currentBottomNavItemIndex == 2
-                          ? HackRUColors.white
-                          : HackRUColors.charcoal_dark,
-                    ),
-                    Text(
-                      'Events',
-                      style: TextStyle(
-                        fontSize: _currentBottomNavItemIndex == 2 ? 14.0 : 12.0,
-                        color: _currentBottomNavItemIndex == 2
-                            ? HackRUColors.white
-                            : HackRUColors.charcoal_dark,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+          children: [0, 1, 2]
+              .map((idx) => bottNavBarIcon(idx, _bottomNavNames[idx]))
+              .toList()),
     );
   }
 
@@ -201,7 +56,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          // body: _kBottomNavPages[_currentBottomNavItemIndex],
           body: PageView(
             controller: _pageController,
             children: _kBottomNavPages,
@@ -210,6 +64,49 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             }),
           ),
           bottomNavigationBar: _buildBottomAppBar(context),
+        ),
+      ),
+    );
+  }
+
+  Widget bottNavBarIcon(int index, String name) {
+    return Expanded(
+      flex: 2,
+      child: InkResponse(
+        onTap: () {
+          setState(() {
+            _currentBottomNavItemIndex = index;
+          });
+          _pageController.animateToPage(index,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeIn);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.announcement,
+                size: 25.0,
+                color: _currentBottomNavItemIndex == index
+                    ? HackRUColors.white
+                    : HackRUColors.charcoal_dark,
+              ),
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: _currentBottomNavItemIndex == index ? 14.0 : 12.0,
+                  color: _currentBottomNavItemIndex == index
+                      ? HackRUColors.white
+                      : HackRUColors.charcoal_dark,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

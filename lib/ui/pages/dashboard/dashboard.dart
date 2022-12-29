@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../hackru_app.dart';
 import '../help/help.dart';
+import '../home.dart';
 import '../login/login_page.dart';
 import '../qr_scanner/Scanner.dart';
 
@@ -146,6 +146,65 @@ class DashboardState extends State<Dashboard> {
     }
   }
 
+  Future _scanDialogWarning(String body) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context, {barrierDismissible = false}) {
+        return AlertDialog(
+          backgroundColor: HackRUColors.pink,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: const Icon(
+            Icons.people,
+            color: HackRUColors.off_white,
+            size: 50.0,
+          ),
+          content: Text(body,
+              style:
+                  const TextStyle(fontSize: 50, color: HackRUColors.off_white),
+              textAlign: TextAlign.center),
+          actions: <Widget>[
+            MaterialButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              splashColor: HackRUColors.yellow,
+              height: 40.0,
+              color: HackRUColors.off_white,
+              onPressed: () async {
+                Navigator.pop(context, true);
+              },
+              padding: const EdgeInsets.all(15.0),
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: HackRUColors.pink,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onGetAttending() async {
+    var _storedEmail = credManager!.getEmail();
+    var _authToken = credManager!.getAuthToken();
+    var count = 0;
+    try {
+      count = await getAttending(_authToken);
+      _scanDialogWarning("Total = " + count.toString());
+    } on LcsError {
+      var result = "Error Fetching Result.";
+      _scanDialogWarning(result);
+    }
+  }
+
   Widget _timerBanner() {
     return Container(
       padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
@@ -174,11 +233,6 @@ class DashboardState extends State<Dashboard> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          // shape: const RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.all(
-          //     Radius.circular(15.0),
-          //   ),
-          // ),
           children: <Widget>[
             Container(
               decoration: const BoxDecoration(
@@ -489,8 +543,8 @@ class DashboardState extends State<Dashboard> {
                   });
                   await Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => Provider.value(
-                          value: credManager!, child: HackRUApp()),
+                      builder: (BuildContext context) =>
+                          Provider.value(value: credManager!, child: Home()),
                       maintainState: false,
                     ),
                     ModalRoute.withName('/main'),
@@ -501,6 +555,36 @@ class DashboardState extends State<Dashboard> {
                   children: [
                     Text(
                       "Logout",
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: HackRUColors.white,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+          if (credManager!.getAuthorization()) ...[
+            SizedBox(height: 5),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: HackRUColors.pink,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+                onPressed: () => _onGetAttending(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Get Attending",
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
