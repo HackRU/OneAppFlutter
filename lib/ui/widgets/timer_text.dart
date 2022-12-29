@@ -9,62 +9,62 @@ final hackRUEnd = DateTime(2022, DateTime.october, 3, 12, 00, 00);
 final currentDate = DateTime.now();
 DateTime today = DateTime(currentDate.year, currentDate.month, currentDate.day);
 
-Widget timerBanner(Color bgColor, Color textColor) {
+Widget timerBanner() {
   return Container(
     padding: const EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(15),
-      color: bgColor,
+      color: HackRUColors.green,
     ),
     child: Row(
       children: [
         const SizedBox(width: 5),
-        timerTitle(textColor),
+        timerTitle(),
         Expanded(child: Container()),
-        TimerText(textColor: textColor),
+        const TimerText(),
         const SizedBox(width: 5)
       ],
     ),
   );
 }
 
-Widget timerTitle(Color textColor) {
+Widget timerTitle() {
   if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-    return Align(
+    return const Align(
       alignment: Alignment.centerLeft,
       child: Text(
         'Current Time',
         style: TextStyle(
-            fontSize: 28, fontWeight: FontWeight.bold, color: textColor),
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   } else {
     if (hackRUStart.isAfter(DateTime.now())) {
-      return Align(
+      return const Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          'Hacking Starts In',
+          'Hacking Begins In',
           style: TextStyle(
-              fontSize: 28, fontWeight: FontWeight.bold, color: textColor),
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       );
     } else if (hackRUStart.isBefore(DateTime.now()) &&
         hackRUEnd.isAfter(DateTime.now())) {
-      return Align(
+      return const Align(
         alignment: Alignment.centerLeft,
         child: Text(
           'Hacking Ends In',
-          style: TextStyle(
-              fontSize: 28, fontWeight: FontWeight.bold, color: textColor),
+          style: const TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       );
     } else {
-      return Align(
+      return const Align(
         alignment: Alignment.centerLeft,
         child: Text(
           'Current Time',
-          style: TextStyle(
-              fontSize: 28, fontWeight: FontWeight.bold, color: textColor),
+          style: const TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       );
     }
@@ -72,8 +72,7 @@ Widget timerTitle(Color textColor) {
 }
 
 class TimerText extends StatefulWidget {
-  const TimerText({Key? key, required this.textColor}) : super(key: key);
-  final Color textColor;
+  const TimerText({Key? key}) : super(key: key);
 
   @override
   _TimerTextState createState() => _TimerTextState();
@@ -98,6 +97,7 @@ class _TimerTextState extends State<TimerText> {
 
   void _updateTime() {
     if (hackRUStart.difference(DateTime.now()).inDays > 0) {
+      //current time
       DateTime today =
           DateTime(currentDate.year, currentDate.month, currentDate.day);
       setState(() {
@@ -198,29 +198,32 @@ class _TimerTextState extends State<TimerText> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
             child: Container(
+              // width: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
+                // color: HackRUColors.white,
               ),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
+                      // '00',
                       displayTime[0],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
-                        color: widget.textColor,
+                        color: HackRUColors.white,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
                       'Hours',
                       style: TextStyle(
                         fontSize: 10.0,
-                        color: widget.textColor,
+                        color: HackRUColors.white,
                       ),
                     ),
                   )
@@ -231,29 +234,32 @@ class _TimerTextState extends State<TimerText> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
             child: Container(
+              // width: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
+                // color: HackRUColors.white,
               ),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
+                      // '00',
                       displayTime[1],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
-                        color: widget.textColor,
+                        color: HackRUColors.white,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
                       'Mins',
                       style: TextStyle(
                         fontSize: 10.0,
-                        color: widget.textColor,
+                        color: HackRUColors.white,
                       ),
                     ),
                   )
@@ -264,8 +270,10 @@ class _TimerTextState extends State<TimerText> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
             child: Container(
+              // width: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
+                // color: HackRUColors.white,
               ),
               child: Column(
                 children: <Widget>[
@@ -274,20 +282,20 @@ class _TimerTextState extends State<TimerText> {
                     child: Text(
                       // '00',
                       displayTime[2],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
-                        color: widget.textColor,
+                        color: HackRUColors.white,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
                       'Secs',
                       style: TextStyle(
                         fontSize: 10.0,
-                        color: widget.textColor,
+                        color: HackRUColors.white,
                       ),
                     ),
                   )

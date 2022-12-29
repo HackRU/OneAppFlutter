@@ -8,20 +8,16 @@ import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
-import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../widgets/dashboard_button.dart';
+import '../../widgets/timer_text.dart';
 import '../help/help.dart';
 import '../home.dart';
 import '../login/login_page.dart';
 import '../qr_scanner/Scanner.dart';
-
-final hackRUStart = DateTime(2022, DateTime.october, 2, 11, 00, 00);
-final hackRUEnd = DateTime(2022, DateTime.october, 3, 12, 00, 00);
-final currentDate = DateTime.now();
-DateTime today = DateTime(currentDate.year, currentDate.month, currentDate.day);
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -35,14 +31,11 @@ class DashboardState extends State<Dashboard> {
   String username = "";
   String userStatus = "";
   bool _hasAuthToken = false;
-  var _displayTimerBanner = true;
   String registrationStatus = "checked in";
   bool checkedin = false;
   String tempStatus = "";
   CredManager? credManager;
   bool _isLoading = true;
-
-  // late final FirebaseMessaging _firebaseMessaging;
 
   @override
   void initState() {
@@ -50,16 +43,6 @@ class DashboardState extends State<Dashboard> {
     super.initState();
     _hasToken();
     _getUserName();
-    // setupPushNotifications();
-    // _requestIOSPermissions();
-    // _configureDidReceiveLocalNotificationSubject();
-    // _configureSelectNotificationSubject();
-  }
-
-  @override
-  void dispose() {
-    // controller.dispose();
-    super.dispose();
   }
 
   void _hasToken() async {
@@ -97,53 +80,6 @@ class DashboardState extends State<Dashboard> {
       }
     }
     _isLoading = false;
-  }
-
-  /// =================================================
-  ///                SHOW TIMER BANNER
-  /// =================================================
-
-  Widget timerTitle() {
-    if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-      return Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          'Current Time',
-          style: TextStyle(
-              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-      );
-    } else {
-      if (hackRUStart.isAfter(DateTime.now())) {
-        return Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Hacking Begins In',
-            style: TextStyle(
-                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        );
-      } else if (hackRUStart.isBefore(DateTime.now()) &&
-          hackRUEnd.isAfter(DateTime.now())) {
-        return Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Hacking Ends In',
-            style: TextStyle(
-                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        );
-      } else {
-        return Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Current Time',
-            style: TextStyle(
-                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        );
-      }
-    }
   }
 
   Future _scanDialogWarning(String body) async {
@@ -192,6 +128,47 @@ class DashboardState extends State<Dashboard> {
     );
   }
 
+  void _onLogin() async {
+    var loginResponse;
+    var hasCred = credManager!.hasCredentials();
+    if (hasCred) {
+    } else {
+      loginResponse = Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              Provider.value(value: credManager!, child: const LoginPage()),
+          fullscreenDialog: true,
+        ),
+      );
+    }
+    if (loginResponse != null && loginResponse != '' && mounted) {
+      ScaffoldMessengerState().clearSnackBars();
+      ScaffoldMessengerState().showSnackBar(
+        SnackBar(
+          content: Text(await loginResponse ?? ''),
+          backgroundColor: HackRUColors.green,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  void _onLogout() async {
+    credManager!.deleteCredentials();
+    setState(() {
+      _hasAuthToken = false;
+    });
+    await Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (BuildContext context) =>
+            Provider.value(value: credManager!, child: Home()),
+        maintainState: false,
+      ),
+      ModalRoute.withName('/main'),
+    );
+  }
+
   void _onGetAttending() async {
     var _storedEmail = credManager!.getEmail();
     var _authToken = credManager!.getAuthToken();
@@ -205,24 +182,14 @@ class DashboardState extends State<Dashboard> {
     }
   }
 
-  Widget _timerBanner() {
-    return Container(
-      padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: HackRUColors.green,
-      ),
-      child: Row(
-        children: [
-          SizedBox(width: 5),
-          timerTitle(),
-          Expanded(child: Container()),
-          const TimerText(),
-          SizedBox(width: 5)
-        ],
-      ),
-    );
-  }
+  void _onHelp() =>
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Help()));
+
+  void _onScanner() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) =>
+              Provider.value(value: credManager, child: const Scanner())));
 
   ///===========================================================
   ///                      SHOW QR-CODE
@@ -249,7 +216,7 @@ class DashboardState extends State<Dashboard> {
                 ),
               ),
               width: MediaQuery.of(context).size.width * 0.75,
-              padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
               child: Center(
                 child: QrImage(
                   version: 4,
@@ -278,13 +245,9 @@ class DashboardState extends State<Dashboard> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          //   child: timerTitle(),
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: _timerBanner(),
+            child: timerBanner(),
           ),
           if (_hasAuthToken) ...[
             Padding(
@@ -315,7 +278,7 @@ class DashboardState extends State<Dashboard> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.6)),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Shimmer(
@@ -336,7 +299,7 @@ class DashboardState extends State<Dashboard> {
                                     height: 35,
                                     width: 35,
                                     color: Colors.blueGrey.withOpacity(0.2)),
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                     colors: [Colors.white, Colors.blueGrey]))
                           ],
                         )
@@ -348,7 +311,7 @@ class DashboardState extends State<Dashboard> {
                               children: [
                                 Text(
                                   username,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontFamily: 'newFont', fontSize: 25),
                                 ),
                                 Row(
@@ -364,7 +327,7 @@ class DashboardState extends State<Dashboard> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.all(4.0),
+                                      padding: const EdgeInsets.all(4.0),
                                       child: Align(
                                         alignment: Alignment.center,
                                         child: Icon(
@@ -385,7 +348,7 @@ class DashboardState extends State<Dashboard> {
                                 onPressed: () {
                                   _showQrCode();
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.qr_code,
                                   size: 24,
                                 ))
@@ -395,206 +358,42 @@ class DashboardState extends State<Dashboard> {
               ),
             ),
           ] else
-            SizedBox(height: 5),
-          Row(children: [
-            if (!_hasAuthToken)
+            const SizedBox(height: 5),
+          Row(
+            children: [
+              if (!_hasAuthToken)
+                Expanded(
+                  child: DashboardButton(
+                      onPressed: _onLogin,
+                      color: HackRUColors.yellow,
+                      label: "Login"),
+                ),
               Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 5,
-                  ),
-                  decoration: BoxDecoration(),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: HackRUColors.yellow,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
-                    onPressed: () async {
-                      var loginResponse;
-                      var hasCred = credManager!.hasCredentials();
-                      if (hasCred) {
-                      } else {
-                        loginResponse = Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Provider.value(
-                                value: credManager!, child: LoginPage()),
-                            fullscreenDialog: true,
-                          ),
-                        );
-                      }
-                      if (loginResponse != null &&
-                          loginResponse != '' &&
-                          mounted) {
-                        ScaffoldMessengerState().clearSnackBars();
-                        ScaffoldMessengerState().showSnackBar(
-                          SnackBar(
-                            content: Text(await loginResponse ?? ''),
-                            backgroundColor: HackRUColors.green,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                            color: HackRUColors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 5),
-                decoration: BoxDecoration(),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: HackRUColors.pink,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
-                  onPressed: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Help())),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Help",
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                          color: HackRUColors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ]),
+                child: DashboardButton(
+                    onPressed: _onHelp,
+                    color: HackRUColors.pink,
+                    label: "Help"),
+              )
+            ],
+          ),
           if (credManager!.getAuthorization()) ...[
-            SizedBox(height: 5),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: HackRUColors.pink,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => Provider.value(
-                            value: credManager, child: Scanner()))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "QR Scanner",
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
+            const SizedBox(height: 5),
+            DashboardButton(
+                onPressed: _onScanner,
+                color: HackRUColors.pink,
+                label: "QR Scanner")
           ],
           if (_hasAuthToken) ...[
-            SizedBox(height: 5),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: HackRUColors.pink,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
-                onPressed: () async {
-                  credManager!.deleteCredentials();
-                  setState(() {
-                    _hasAuthToken = false;
-                  });
-                  await Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          Provider.value(value: credManager!, child: Home()),
-                      maintainState: false,
-                    ),
-                    ModalRoute.withName('/main'),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Logout",
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            const SizedBox(height: 5),
+            DashboardButton(
+                onPressed: _onLogout, color: HackRUColors.pink, label: "Logout")
           ],
           if (credManager!.getAuthorization()) ...[
-            SizedBox(height: 5),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: HackRUColors.pink,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
-                onPressed: () => _onGetAttending(),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Get Attending",
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            const SizedBox(height: 5),
+            DashboardButton(
+                onPressed: _onGetAttending,
+                color: HackRUColors.pink,
+                label: "Get Attending")
           ],
           Expanded(child: Container()),
           Row(
@@ -619,248 +418,6 @@ class DashboardState extends State<Dashboard> {
                 iconData: FontAwesomeIcons.instagram,
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// ===============================================
-///                   TIMER TEXT
-/// ===============================================
-
-class TimerText extends StatefulWidget {
-  const TimerText({Key? key}) : super(key: key);
-
-  @override
-  _TimerTextState createState() => _TimerTextState();
-}
-
-class _TimerTextState extends State<TimerText> {
-  var displayTime = ['00', '00', '00'];
-  Duration _dateTime = today.difference(DateTime.now());
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateTime();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
-  }
-
-  void _updateTime() {
-    if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-      //current time
-      DateTime today =
-          DateTime(currentDate.year, currentDate.month, currentDate.day);
-      setState(() {
-        _dateTime = today.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    } else if (hackRUStart.isAfter(DateTime.now())) {
-      //24 hours to start timer
-      setState(() {
-        _dateTime = hackRUStart.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    } else if (hackRUStart.isBefore(DateTime.now()) &&
-        hackRUEnd.isAfter(DateTime.now())) {
-      // timer during the event
-      setState(() {
-        _dateTime = hackRUEnd.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    } else {
-      // timer after the event
-      DateTime today =
-          DateTime(currentDate.year, currentDate.month, currentDate.day);
-      setState(() {
-        _dateTime = today.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    }
-  }
-
-  String formatDuration(Duration d) {
-    var seconds = d.inSeconds;
-    final hours = seconds ~/ Duration.secondsPerHour;
-    seconds -= hours * Duration.secondsPerHour;
-    final minutes = seconds ~/ Duration.secondsPerMinute;
-    seconds -= minutes * Duration.secondsPerMinute;
-
-    final List<String> tokens = [];
-
-    if (hours != 0) {
-      if (-10 < hours && hours < 10) {
-        tokens.add('0${hours.abs()}');
-      } else {
-        tokens.add('${hours.abs()}');
-      }
-    } else {
-      tokens.add('00');
-    }
-    if (minutes != 0) {
-      if (-10 < minutes && minutes < 10) {
-        tokens.add('0${minutes.abs()}');
-      } else {
-        tokens.add('${minutes.abs()}');
-      }
-    } else {
-      tokens.add('00');
-    }
-    if (seconds != 0) {
-      if (-10 < seconds && seconds < 10) {
-        tokens.add('0${seconds.abs()}');
-      } else {
-        tokens.add('${seconds.abs()}');
-      }
-    } else {
-      tokens.add('00');
-    }
-    return tokens.join(':');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              // width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                // color: HackRUColors.white,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      // '00',
-                      displayTime[0],
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      'Hours',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              // width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                // color: HackRUColors.white,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      // '00',
-                      displayTime[1],
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      'Mins',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              // width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                // color: HackRUColors.white,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      // '00',
-                      displayTime[2],
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      'Secs',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
           ),
         ],
       ),
