@@ -12,8 +12,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with TickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class _HomeState extends State<Home> {
   int _currentBottomNavItemIndex = 1;
   CredManager? credManager;
 
@@ -54,7 +53,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         right: false,
         bottom: false,
         child: Scaffold(
-          key: _scaffoldKey,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: PageView(
             controller: _pageController,
