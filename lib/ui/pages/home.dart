@@ -4,6 +4,7 @@ import 'package:hackru/ui/pages/annoucements/announcements.dart';
 import 'package:hackru/ui/pages/dashboard/dashboard.dart';
 import 'package:hackru/ui/pages/events/events.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
@@ -21,8 +22,21 @@ class _HomeState extends State<Home> {
   ///===========================================================
   ///                     BOTTOM NAV PAGES
   ///===========================================================
-  final _kBottomNavPages = <Widget>[Announcements(), Dashboard(), Events()];
-  final _bottomNavNames = ["Announcements", "DashBoard", "Events"];
+  final _kBottomNavPages = <Widget>[
+    Announcements(),
+    Dashboard(),
+    Events(),
+  ];
+  final _bottomNavNames = [
+    "Announcements",
+    "DashBoard",
+    "Events",
+  ];
+  final _bottomNavIcons = [
+    Icons.announcement,
+    Icons.dashboard,
+    Icons.calendar_month,
+  ];
 
   ///===========================================================
   ///                      BOTTOM APP BAR
@@ -32,10 +46,11 @@ class _HomeState extends State<Home> {
       shape: const CircularNotchedRectangle(),
       elevation: 25.0,
       notchMargin: 6.0,
-      color: Theme.of(context).primaryColor,
+      color: Colors.transparent,
       child: Row(
           children: [0, 1, 2]
-              .map((idx) => bottNavBarIcon(idx, _bottomNavNames[idx]))
+              .map((idx) => bottNavBarIcon(
+                  idx, _bottomNavNames[idx], _bottomNavIcons[idx]))
               .toList()),
     );
   }
@@ -46,28 +61,29 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        left: false,
-        right: false,
-        bottom: false,
-        child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: PageView(
+    return Stack(children: [
+      WeatherBg(
+          weatherType: WeatherType.sunnyNight,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height),
+      Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Padding(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          child: PageView(
             controller: _pageController,
             children: _kBottomNavPages,
             onPageChanged: (value) => setState(() {
               _currentBottomNavItemIndex = value;
             }),
           ),
-          bottomNavigationBar: _buildBottomAppBar(context),
         ),
-      ),
-    );
+        bottomNavigationBar: _buildBottomAppBar(context),
+      )
+    ]);
   }
 
-  Widget bottNavBarIcon(int index, String name) {
+  Widget bottNavBarIcon(int index, String name, IconData icon) {
     return Expanded(
       flex: 2,
       child: InkResponse(
@@ -87,7 +103,7 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                Icons.announcement,
+                icon,
                 size: 25.0,
                 color: _currentBottomNavItemIndex == index
                     ? HackRUColors.white

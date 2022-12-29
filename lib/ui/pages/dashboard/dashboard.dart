@@ -242,7 +242,7 @@ class DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.transparent,
       body: Column(
         children: [
           Padding(
@@ -411,7 +411,7 @@ class DashboardState extends State<Dashboard> {
               ),
               SocialMediaCard(
                 onPressed: () => url_launcher.launch(FACEBOOK_PAGE_URL),
-                iconData: FontAwesomeIcons.facebookSquare,
+                iconData: FontAwesomeIcons.squareFacebook,
               ),
               SocialMediaCard(
                 onPressed: () => url_launcher.launch(INSTAGRAM_PAGE_URL),
