@@ -3,7 +3,6 @@ import 'package:hackru/models/exceptions.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/defaults.dart';
-import 'package:hackru/ui/hackru_app.dart';
 import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/widgets/dialog/error_dialog.dart';
 import 'package:hackru/ui/widgets/loading_indicator.dart';
@@ -95,7 +94,7 @@ class LoginFormState extends State<LoginForm> {
             await Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    Provider.value(value: credManager, child: HackRUApp()),
+                    Provider.value(value: credManager, child: Home()),
                 maintainState: false,
               ),
               ModalRoute.withName('/main'),

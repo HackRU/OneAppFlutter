@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/models/models.dart';
-import 'package:hackru/ui/hackru_app.dart';
+import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:hackru/ui/widgets/page_not_found.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -103,12 +103,12 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: kLightTheme,
       darkTheme: kDarkTheme,
-      home: Provider.value(value: credManager, child: HackRUApp()),
+      home: Provider.value(value: credManager, child: Home()),
       routes: <String, WidgetBuilder>{
         '/login': (BuildContext context) =>
             Provider.value(value: credManager, child: const LoginPage()),
         '/home': (BuildContext context) =>
-            Provider.value(value: credManager, child: HackRUApp()),
+            Provider.value(value: credManager, child: Home()),
         // '/floorMap': (BuildContext context) => HackRUMap(),
       },
       onUnknownRoute: (RouteSettings setting) {

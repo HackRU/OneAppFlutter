@@ -81,7 +81,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.close, size: 30),
+            icon: const Icon(Icons.close, size: 30),
             onPressed: () => Navigator.pop(context),
             color: Colors.white,
           ),
@@ -130,8 +130,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                           iconSize: 80,
                           icon: Icon(
                             isPlaying
-                                ? FontAwesomeIcons.playCircle
-                                : FontAwesomeIcons.pauseCircle,
+                                ? FontAwesomeIcons.circlePlay
+                                : FontAwesomeIcons.circlePause,
                             color: isPlaying
                                 ? HackRUColors.yellow
                                 : HackRUColors.pink_light,
@@ -378,6 +378,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   }
 
   Future<String> _lcsHandle(String userEmailOrId) async {
+    // userEmailOrId is the scandata which comes from the qrcode
     var _storedEmail = credManager!.getEmail();
     var _authToken = credManager!.getAuthToken();
     var result = 'NULL';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/styles.dart';
-import 'package:hackru/ui/hackru_app.dart';
 import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
 
 class Announcements extends StatefulWidget {
