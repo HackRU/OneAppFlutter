@@ -44,6 +44,7 @@ class AnnouncementsState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.all(8.0),

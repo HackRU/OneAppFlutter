@@ -28,7 +28,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.transparent,
       body: FutureBuilder<List<Event>>(
         future: _getEvents(),
         builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
