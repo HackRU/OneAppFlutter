@@ -247,7 +247,7 @@ class DashboardState extends State<Dashboard> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: timerBanner(),
+            child: timerBanner(Colors.black12, HackRUColors.blue_grey),
           ),
           if (_hasAuthToken) ...[
             Padding(
@@ -257,7 +257,7 @@ class DashboardState extends State<Dashboard> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
-                color: Colors.blueGrey[50],
+                color: Colors.black12,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: _isLoading
@@ -268,12 +268,9 @@ class DashboardState extends State<Dashboard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Shimmer(
-                                    gradient: LinearGradient(colors: [
-                                      Colors.white,
-                                      Colors.blueGrey.withOpacity(0.2)
-                                    ]),
+                                    gradient: HackRUColors.loading_gradient,
                                     child: Container(
-                                        color: Colors.blueGrey.withOpacity(0.2),
+                                        color: HackRUColors.blue_grey,
                                         height: 33.33,
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -282,12 +279,9 @@ class DashboardState extends State<Dashboard> {
                                   height: 5,
                                 ),
                                 Shimmer(
-                                    gradient: LinearGradient(colors: [
-                                      Colors.white,
-                                      Colors.blueGrey.withOpacity(0.2)
-                                    ]),
+                                    gradient: HackRUColors.loading_gradient,
                                     child: Container(
-                                        color: Colors.blueGrey.withOpacity(0.2),
+                                        color: HackRUColors.blue_grey,
                                         height: 28.33,
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -295,12 +289,13 @@ class DashboardState extends State<Dashboard> {
                               ],
                             ),
                             Shimmer(
-                                child: Container(
-                                    height: 35,
-                                    width: 35,
-                                    color: Colors.blueGrey.withOpacity(0.2)),
-                                gradient: const LinearGradient(
-                                    colors: [Colors.white, Colors.blueGrey]))
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                color: HackRUColors.blue_grey,
+                              ),
+                              gradient: HackRUColors.loading_gradient,
+                            )
                           ],
                         )
                       : Row(
@@ -312,7 +307,10 @@ class DashboardState extends State<Dashboard> {
                                 Text(
                                   username,
                                   style: const TextStyle(
-                                      fontFamily: 'newFont', fontSize: 25),
+                                    fontFamily: 'titilliumWeb',
+                                    fontSize: 25,
+                                    color: HackRUColors.blue_grey,
+                                  ),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -321,9 +319,11 @@ class DashboardState extends State<Dashboard> {
                                       alignment: Alignment.center,
                                       child: Text(
                                         userStatus,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
+                                        style: TextStyle(
+                                          fontFamily: 'titilliumWeb',
+                                          fontSize: 18,
+                                          color: HackRUColors.blue_grey,
+                                        ),
                                       ),
                                     ),
                                     Padding(
@@ -365,13 +365,15 @@ class DashboardState extends State<Dashboard> {
                 Expanded(
                   child: DashboardButton(
                       onPressed: _onLogin,
-                      color: HackRUColors.yellow,
+                      bgColor: HackRUColors.blue,
+                      textColor: HackRUColors.blue_grey,
                       label: "Login"),
                 ),
               Expanded(
                 child: DashboardButton(
                     onPressed: _onHelp,
-                    color: HackRUColors.pink,
+                    bgColor: Colors.black12,
+                    textColor: HackRUColors.blue_grey,
                     label: "Help"),
               )
             ],
@@ -380,20 +382,25 @@ class DashboardState extends State<Dashboard> {
             const SizedBox(height: 5),
             DashboardButton(
                 onPressed: _onScanner,
-                color: HackRUColors.pink,
+                bgColor: Colors.black12,
+                textColor: HackRUColors.blue_grey,
                 label: "QR Scanner")
-          ],
-          if (_hasAuthToken) ...[
-            const SizedBox(height: 5),
-            DashboardButton(
-                onPressed: _onLogout, color: HackRUColors.pink, label: "Logout")
           ],
           if (credManager!.getAuthorization()) ...[
             const SizedBox(height: 5),
             DashboardButton(
                 onPressed: _onGetAttending,
-                color: HackRUColors.pink,
+                bgColor: Colors.black12,
+                textColor: HackRUColors.blue_grey,
                 label: "Get Attending")
+          ],
+          if (_hasAuthToken) ...[
+            const SizedBox(height: 5),
+            DashboardButton(
+                onPressed: _onLogout,
+                bgColor: Colors.black12,
+                textColor: HackRUColors.blue_grey,
+                label: "Logout")
           ],
           Expanded(child: Container()),
           Row(
@@ -404,18 +411,26 @@ class DashboardState extends State<Dashboard> {
               SocialMediaCard(
                 onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
                 iconData: FontAwesomeIcons.link,
+                iconColor: HackRUColors.blue_grey,
+                bgColor: Colors.transparent,
               ),
               SocialMediaCard(
                 onPressed: () => url_launcher.launch(REPOSITORY_URL),
                 iconData: FontAwesomeIcons.github,
+                iconColor: HackRUColors.blue_grey,
+                bgColor: Colors.transparent,
               ),
               SocialMediaCard(
                 onPressed: () => url_launcher.launch(FACEBOOK_PAGE_URL),
                 iconData: FontAwesomeIcons.squareFacebook,
+                iconColor: HackRUColors.blue_grey,
+                bgColor: Colors.transparent,
               ),
               SocialMediaCard(
                 onPressed: () => url_launcher.launch(INSTAGRAM_PAGE_URL),
                 iconData: FontAwesomeIcons.instagram,
+                iconColor: HackRUColors.blue_grey,
+                bgColor: Colors.transparent,
               ),
             ],
           ),

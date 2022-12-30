@@ -101,8 +101,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: kAppTitle,
       debugShowCheckedModeBanner: false,
-      theme: kLightTheme,
-      darkTheme: kDarkTheme,
+      theme: kTheme,
       home: Provider.value(value: credManager, child: Home()),
       routes: <String, WidgetBuilder>{
         '/login': (BuildContext context) =>

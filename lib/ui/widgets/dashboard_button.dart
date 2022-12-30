@@ -4,9 +4,13 @@ import '../../styles.dart';
 
 class DashboardButton extends StatelessWidget {
   DashboardButton(
-      {required this.onPressed, required this.color, required this.label});
+      {required this.onPressed,
+      required this.bgColor,
+      required this.textColor,
+      required this.label});
   VoidCallback onPressed;
-  Color color;
+  Color bgColor;
+  Color textColor;
   String label;
 
   @override
@@ -17,7 +21,7 @@ class DashboardButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: color,
+            primary: bgColor,
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -29,10 +33,10 @@ class DashboardButton extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
-                color: HackRUColors.white,
+                color: textColor,
               ),
             )
           ],
