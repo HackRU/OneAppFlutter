@@ -52,7 +52,10 @@ class AnnouncementsState extends State {
             alignment: Alignment.centerLeft,
             child: Text(
               'Announcements:',
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1!
+                  .copyWith(color: Color.fromRGBO(209, 233, 239, 1)),
             ),
           ),
         ),
