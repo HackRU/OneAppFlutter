@@ -542,7 +542,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
             _authToken,
             userEmailOrId,
             event,
-            true,
+            false,
           );
           // updateStatus(
           //     BASE_URL, _storedEmail, _authToken, userEmailOrId, "checked-in");
@@ -553,27 +553,27 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           // debugPrint('already ' + userEmailOrId);
           result = 'ALREADY SCANNED';
           var rescan = await _scanDialogWarning('ALREADY SCANNED!');
-          if (rescan) {
-            return notScanned;
-          }
-          // // debugPrint('$rescan');
           // if (rescan) {
-          //   numUserScanned = await attendEvent(
-          //     BASE_URL,
-          //     _storedEmail!,
-          //     _authToken!,
-          //     userEmailOrId,
-          //     event!,
-          //     true,
-          //   );
-          //   // int test = numUserScanned as int;
-          //   // debugPrint('********** user event count: $test');
-          //   // if (prev > numUserScanned) {
-          //   result = 'SCANNED!';
-          //   // }
-          // } else {
           //   return notScanned;
           // }
+          // // debugPrint('$rescan');
+          if (rescan) {
+            numUserScanned = await attendEvent(
+              BASE_URL,
+              _storedEmail,
+              _authToken,
+              userEmailOrId,
+              event,
+              true,
+            );
+            // int test = numUserScanned as int;
+            // debugPrint('********** user event count: $test');
+            // if (prev > numUserScanned) {
+            result = 'SCANNED!';
+            // }
+          } else {
+            return notScanned;
+          }
         } on UserNotFound {
           // debugPrint('hashqr:' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {

@@ -1,10 +1,11 @@
+import 'package:hackru/weather/utils/weather_type.dart';
+import 'package:hackru/weather/bg/weather_bg.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/ui/pages/annoucements/announcements.dart';
 import 'package:hackru/ui/pages/dashboard/dashboard.dart';
 import 'package:hackru/ui/pages/events/events.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
