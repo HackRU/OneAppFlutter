@@ -4,7 +4,14 @@ import 'package:hackru/styles.dart';
 class SocialMediaCard extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData? iconData;
-  const SocialMediaCard({Key? key, this.onPressed, this.iconData})
+  final Color bgColor;
+  final Color iconColor;
+  const SocialMediaCard(
+      {Key? key,
+      this.onPressed,
+      this.iconData,
+      required this.bgColor,
+      required this.iconColor})
       : super(key: key);
 
   @override
@@ -13,7 +20,7 @@ class SocialMediaCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 2.0,
-        color: Theme.of(context).accentColor,
+        color: bgColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
@@ -23,7 +30,7 @@ class SocialMediaCard extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Icon(
               iconData,
-              color: HackRUColors.black,
+              color: iconColor,
               size: 30.0,
             ),
           ),
