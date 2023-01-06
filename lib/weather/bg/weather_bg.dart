@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hackru/weather/bg/weather_cloud_bg.dart';
 import 'package:hackru/weather/bg/weather_color_bg.dart';
 import 'package:hackru/weather/bg/weather_night_star_bg.dart';
 import 'package:hackru/weather/bg/weather_rain_snow_bg.dart';
@@ -135,9 +134,6 @@ class WeatherItemBg extends StatelessWidget {
         child: Stack(
           children: [
             WeatherColorBg(
-              weatherType: weatherType,
-            ),
-            WeatherCloudBg(
               weatherType: weatherType,
             ),
             _buildRainSnowBg(),

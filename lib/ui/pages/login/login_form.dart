@@ -9,12 +9,14 @@ import 'package:hackru/ui/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:hackru/ui/widgets/dialog/warning_dialog.dart';
 
 import '../../../models/models.dart';
 
 class LoginForm extends StatefulWidget {
   static bool gotCred = false;
-  const LoginForm({Key? key}) : super(key: key);
+  final VoidCallback goToDashboard;
+  const LoginForm({Key? key, required this.goToDashboard}) : super(key: key);
 
   @override
   LoginFormState createState() => LoginFormState();
@@ -24,12 +26,11 @@ class LoginFormState extends State<LoginForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final TextEditingController _textFieldController = TextEditingController();
+  final TextEditingController _emailResetController = TextEditingController();
   bool isInputValid = true;
   bool _isLoginPressed = false;
   var _isEmailEntered = false;
   static var credStr = '';
-  static var guestUser;
   CredManager? credManager;
 
   @override
@@ -91,16 +92,7 @@ class LoginFormState extends State<LoginForm> {
             setState(() {
               _isLoginPressed = false;
             });
-            await Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    Provider.value(value: credManager, child: Home()),
-                maintainState: false,
-              ),
-              ModalRoute.withName('/main'),
-            );
-            // Navigator.of(context, rootNavigator: false)
-            //     .pop('Logged in successfully!');
+            widget.goToDashboard();
           } else {
             setState(() {
               _isLoginPressed = false;
@@ -144,32 +136,39 @@ class LoginFormState extends State<LoginForm> {
           barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
-              backgroundColor: HackRUColors.pink,
+              backgroundColor: HackRUColors.blue,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              title: const Text('Enter valid email for password reset'),
+              title: const Text(
+                'Enter valid email for password reset',
+                style: TextStyle(color: HackRUColors.off_white_blue),
+              ),
               content: TextField(
+                style: const TextStyle(color: HackRUColors.off_white_blue),
                 onChanged: (value) {
                   setState(() {
                     valueText = value;
                   });
                 },
-                controller: _textFieldController,
-                decoration:
-                    const InputDecoration(hintText: "emailtolink@email.com"),
+                controller: _emailResetController,
+                decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: Colors.blueGrey)),
+                    hintText: "john.smith@email.com",
+                    hintStyle:
+                        const TextStyle(color: HackRUColors.off_white_blue)),
               ),
               actions: <Widget>[
                 TextButton(
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                      const EdgeInsets.all(15.0),
-                    ),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(15.0)),
                   ),
-                  child: const Text(
+                  child: Text(
                     'CANCEL',
-                    style:
-                        TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+                    style: TextStyle(fontSize: 20, color: Colors.blueGrey[50]),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
@@ -190,7 +189,7 @@ class LoginFormState extends State<LoginForm> {
                     'OK',
                     style: TextStyle(
                       fontSize: 20,
-                      color: HackRUColors.pink,
+                      color: HackRUColors.blue,
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -253,68 +252,6 @@ class LoginFormState extends State<LoginForm> {
       }
     }
 
-    Future _scanDialogWarning(String body) async {
-      return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context, {barrierDismissible = false}) {
-          return AlertDialog(
-            backgroundColor: HackRUColors.pink,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            title: const Icon(
-              Icons.warning,
-              color: HackRUColors.off_white,
-              size: 80.0,
-            ),
-            content: Text(body,
-                style: const TextStyle(
-                    fontSize: 25, color: HackRUColors.off_white),
-                textAlign: TextAlign.center),
-            actions: <Widget>[
-              // TextButton(
-              //   style: ButtonStyle(
-              //     padding: MaterialStateProperty.all(
-              //       const EdgeInsets.all(15.0),
-              //     ),
-              //   ),
-              //   onPressed: () {
-              //     Navigator.pop(context, false);
-              //   },
-              //   child: const Text(
-              //     'CANCEL',
-              //     style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
-              //     textAlign: TextAlign.center,
-              //   ),
-              // ),
-              MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                splashColor: HackRUColors.yellow,
-                height: 40.0,
-                color: HackRUColors.off_white,
-                onPressed: () async {
-                  Navigator.pop(context, true);
-                },
-                padding: const EdgeInsets.all(15.0),
-                child: const Text(
-                  'OK',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: HackRUColors.pink,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
-
     void handleForgotPassword() async {
       codeDialog = "";
       await _displayTextInputDialog(context);
@@ -328,7 +265,8 @@ class LoginFormState extends State<LoginForm> {
           }
         } on LcsError {
           var result = "Invalid email.";
-          _scanDialogWarning(result);
+          warningDialog(context, result, HackRUColors.blue,
+              HackRUColors.off_white_blue, HackRUColors.blue_grey);
         }
       }
     }
@@ -355,7 +293,7 @@ class LoginFormState extends State<LoginForm> {
               child: ListView(
                 controller: ScrollController(),
                 scrollDirection: Axis.vertical,
-                padding: EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(25.0),
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0, bottom: 25.0),
@@ -378,29 +316,33 @@ class LoginFormState extends State<LoginForm> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextField(
                       keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
-                        color: Theme.of(context).primaryColor,
+                        color: HackRUColors.off_white_blue,
                       ),
                       controller: _emailController,
                       onChanged: (value) {
                         value.isNotEmpty
-                            ? setState(() {
-                                _isEmailEntered = true;
-                              })
-                            : setState(() {
-                                _isEmailEntered = false;
-                              });
+                            ? setState(() => _isEmailEntered = true)
+                            : setState(() => _isEmailEntered = false);
                       },
                       decoration: InputDecoration(
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black26, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        filled: true,
+                        fillColor: Colors.black12,
+                        labelStyle:
+                            const TextStyle(color: HackRUColors.off_white_blue),
                         labelText: 'Email Address',
-                        fillColor: Theme.of(context).primaryColor,
                         errorText: isInputValid
                             ? null
                             : 'Please enter valid email address',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: HackRUColors.charcoal_light, width: 2.0),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black26, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
                         focusColor: HackRUColors.charcoal_light,
@@ -410,21 +352,28 @@ class LoginFormState extends State<LoginForm> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: TextField(
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
-                        color: Theme.of(context).primaryColor,
+                        color: HackRUColors.blue_grey,
                       ),
                       controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black26, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        filled: true,
+                        fillColor: Colors.black12,
+                        labelStyle:
+                            const TextStyle(color: HackRUColors.off_white_blue),
                         labelText: 'Password',
-                        fillColor: Theme.of(context).primaryColor,
-                        enabled: _isEmailEntered ? true : false,
                         errorText:
                             isInputValid ? null : 'Please enter valid password',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: HackRUColors.charcoal_light, width: 2.0),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black12, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
                         focusColor: HackRUColors.charcoal_light,
@@ -443,13 +392,13 @@ class LoginFormState extends State<LoginForm> {
                           ),
                         ),
                         padding: MaterialStateProperty.all(
-                          EdgeInsets.symmetric(
+                          const EdgeInsets.symmetric(
                             vertical: 15.0,
                             horizontal: 50.0,
                           ),
                         ),
                         backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).primaryColor,
+                          HackRUColors.blue_grey,
                         ),
                       ),
                       child: Text(
@@ -487,7 +436,7 @@ class LoginFormState extends State<LoginForm> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.transparent,
       body: kForm(),
     );
   }

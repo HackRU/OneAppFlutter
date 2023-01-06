@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EventCard extends StatefulWidget {
-  EventCard({required this.resource, required this.day});
+  EventCard(
+      {required this.resource,
+      required this.day,
+      required this.titleColor,
+      required this.bgColor,
+      required this.tsColor});
   final Event resource;
   final String day;
+  final Color titleColor;
+  final Color bgColor;
+  final Color tsColor;
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -28,9 +36,7 @@ class _EventCardState extends State<EventCard> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         elevation: 0.0,
-        color: (isExpanded)
-            ? Theme.of(context).primaryColor
-            : Theme.of(context).dividerColor,
+        color: widget.bgColor,
         child: ExpansionTile(
           onExpansionChanged: (bool expanding) =>
               setState(() => isExpanded = expanding),
@@ -38,11 +44,7 @@ class _EventCardState extends State<EventCard> {
             time,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: isExpanded
-                  ? (_brightnessValue == Brightness.light
-                      ? Colors.yellow.shade500
-                      : HackRUColors.charcoal_dark)
-                  : Theme.of(context).primaryColor,
+              color: widget.tsColor,
               textBaseline: TextBaseline.alphabetic,
               fontSize: 20.0,
               fontWeight: FontWeight.w700,
@@ -50,21 +52,13 @@ class _EventCardState extends State<EventCard> {
           ),
           trailing: Icon(
             isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-            color: isExpanded
-                ? HackRUColors.white
-                : (_brightnessValue == Brightness.light
-                    ? HackRUColors.charcoal_light
-                    : HackRUColors.white),
+            color: widget.titleColor,
             size: 35.0,
           ),
           title: Text(
             widget.resource.summary ?? '',
             style: TextStyle(
-              color: isExpanded
-                  ? HackRUColors.white
-                  : (_brightnessValue == Brightness.light
-                      ? HackRUColors.charcoal_light
-                      : HackRUColors.white),
+              color: widget.titleColor,
               fontSize: 20.0,
               fontWeight: FontWeight.w700,
             ),

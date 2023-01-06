@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../widgets/dashboard_button.dart';
+import '../../widgets/dialog/warning_dialog.dart';
 import '../../widgets/timer_text.dart';
 import '../help/help.dart';
 import '../home.dart';
@@ -20,7 +21,9 @@ import '../login/login_page.dart';
 import '../qr_scanner/Scanner.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({required this.goToHelp, required this.goToLogin});
+  final VoidCallback goToHelp;
+  final VoidCallback goToLogin;
 
   @override
   DashboardState createState() => DashboardState();
@@ -82,76 +85,8 @@ class DashboardState extends State<Dashboard> {
     _isLoading = false;
   }
 
-  Future _scanDialogWarning(String body) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context, {barrierDismissible = false}) {
-        return AlertDialog(
-          backgroundColor: HackRUColors.pink,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          title: const Icon(
-            Icons.people,
-            color: HackRUColors.off_white,
-            size: 50.0,
-          ),
-          content: Text(body,
-              style:
-                  const TextStyle(fontSize: 50, color: HackRUColors.off_white),
-              textAlign: TextAlign.center),
-          actions: <Widget>[
-            MaterialButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              splashColor: HackRUColors.yellow,
-              height: 40.0,
-              color: HackRUColors.off_white,
-              onPressed: () async {
-                Navigator.pop(context, true);
-              },
-              padding: const EdgeInsets.all(15.0),
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: HackRUColors.pink,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _onLogin() async {
-    var loginResponse;
-    var hasCred = credManager!.hasCredentials();
-    if (hasCred) {
-    } else {
-      loginResponse = Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              Provider.value(value: credManager!, child: const LoginPage()),
-          fullscreenDialog: true,
-        ),
-      );
-    }
-    if (loginResponse != null && loginResponse != '' && mounted) {
-      ScaffoldMessengerState().clearSnackBars();
-      ScaffoldMessengerState().showSnackBar(
-        SnackBar(
-          content: Text(await loginResponse ?? ''),
-          backgroundColor: HackRUColors.green,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
+    if (!credManager!.hasCredentials()) widget.goToLogin();
   }
 
   void _onLogout() async {
@@ -169,21 +104,22 @@ class DashboardState extends State<Dashboard> {
     );
   }
 
-  void _onGetAttending() async {
+  void _onGetAttending(BuildContext context) async {
     var _storedEmail = credManager!.getEmail();
     var _authToken = credManager!.getAuthToken();
     var count = 0;
     try {
       count = await getAttending(_authToken);
-      _scanDialogWarning("Total = " + count.toString());
+      warningDialog(context, "Total = " + count.toString(), HackRUColors.blue,
+          HackRUColors.off_white_blue, HackRUColors.blue_grey);
     } on LcsError {
       var result = "Error Fetching Result.";
-      _scanDialogWarning(result);
+      warningDialog(context, result, HackRUColors.blue,
+          HackRUColors.off_white_blue, HackRUColors.blue_grey);
     }
   }
 
-  void _onHelp() =>
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Help()));
+  void _onHelp() => widget.goToHelp();
 
   void _onScanner() => Navigator.push(
       context,
@@ -243,21 +179,20 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: timerBanner(Colors.black12, HackRUColors.blue_grey),
-          ),
-          if (_hasAuthToken) ...[
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            timerBanner(Colors.black26, HackRUColors.off_white_blue),
+            const SizedBox(height: 5),
+            if (_hasAuthToken) ...[
+              Container(
+                decoration: ShapeDecoration(
+                  color: Colors.black26,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
-                color: Colors.black12,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: _isLoading
@@ -270,7 +205,7 @@ class DashboardState extends State<Dashboard> {
                                 Shimmer(
                                     gradient: HackRUColors.loading_gradient,
                                     child: Container(
-                                        color: HackRUColors.blue_grey,
+                                        color: HackRUColors.black,
                                         height: 33.33,
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -281,8 +216,8 @@ class DashboardState extends State<Dashboard> {
                                 Shimmer(
                                     gradient: HackRUColors.loading_gradient,
                                     child: Container(
-                                        color: HackRUColors.blue_grey,
-                                        height: 28.33,
+                                        color: HackRUColors.black,
+                                        height: 24,
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.5))
@@ -292,7 +227,7 @@ class DashboardState extends State<Dashboard> {
                               child: Container(
                                 height: 35,
                                 width: 35,
-                                color: HackRUColors.blue_grey,
+                                color: HackRUColors.black,
                               ),
                               gradient: HackRUColors.loading_gradient,
                             )
@@ -307,9 +242,8 @@ class DashboardState extends State<Dashboard> {
                                 Text(
                                   username,
                                   style: const TextStyle(
-                                    fontFamily: 'titilliumWeb',
                                     fontSize: 25,
-                                    color: HackRUColors.blue_grey,
+                                    color: HackRUColors.off_white_blue,
                                   ),
                                 ),
                                 Row(
@@ -320,9 +254,8 @@ class DashboardState extends State<Dashboard> {
                                       child: Text(
                                         userStatus,
                                         style: TextStyle(
-                                          fontFamily: 'titilliumWeb',
                                           fontSize: 18,
-                                          color: HackRUColors.blue_grey,
+                                          color: HackRUColors.off_white_blue,
                                         ),
                                       ),
                                     ),
@@ -348,6 +281,7 @@ class DashboardState extends State<Dashboard> {
                                 onPressed: () {
                                   _showQrCode();
                                 },
+                                color: HackRUColors.off_white_blue,
                                 icon: const Icon(
                                   Icons.qr_code,
                                   size: 24,
@@ -356,85 +290,85 @@ class DashboardState extends State<Dashboard> {
                         ),
                 ),
               ),
-            ),
-          ] else
-            const SizedBox(height: 5),
-          Row(
-            children: [
-              if (!_hasAuthToken)
+              const SizedBox(height: 5),
+            ],
+            Row(
+              children: [
+                if (!_hasAuthToken)
+                  Expanded(
+                    child: DashboardButton(
+                        onPressed: _onLogin,
+                        bgColor: HackRUColors.blue,
+                        textColor: HackRUColors.off_white_blue,
+                        label: "Login"),
+                  ),
                 Expanded(
                   child: DashboardButton(
-                      onPressed: _onLogin,
-                      bgColor: HackRUColors.blue,
-                      textColor: HackRUColors.blue_grey,
-                      label: "Login"),
+                      onPressed: _onHelp,
+                      bgColor: Colors.black26,
+                      textColor: HackRUColors.off_white_blue,
+                      label: "Help"),
+                )
+              ],
+            ),
+            if (credManager!.getAuthorization()) ...[
+              const SizedBox(height: 5),
+              DashboardButton(
+                  onPressed: _onScanner,
+                  bgColor: Colors.black26,
+                  textColor: HackRUColors.off_white_blue,
+                  label: "QR Scanner")
+            ],
+            if (credManager!.getAuthorization()) ...[
+              const SizedBox(height: 5),
+              DashboardButton(
+                  onPressed: () => _onGetAttending(context),
+                  bgColor: Colors.black26,
+                  textColor: HackRUColors.off_white_blue,
+                  label: "Get Attending")
+            ],
+            if (_hasAuthToken) ...[
+              const SizedBox(height: 5),
+              DashboardButton(
+                  onPressed: _onLogout,
+                  bgColor: Colors.black26,
+                  textColor: HackRUColors.off_white_blue,
+                  label: "Logout")
+            ],
+            Expanded(child: Container()),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
+                  iconData: FontAwesomeIcons.link,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
                 ),
-              Expanded(
-                child: DashboardButton(
-                    onPressed: _onHelp,
-                    bgColor: Colors.black12,
-                    textColor: HackRUColors.blue_grey,
-                    label: "Help"),
-              )
-            ],
-          ),
-          if (credManager!.getAuthorization()) ...[
-            const SizedBox(height: 5),
-            DashboardButton(
-                onPressed: _onScanner,
-                bgColor: Colors.black12,
-                textColor: HackRUColors.blue_grey,
-                label: "QR Scanner")
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(REPOSITORY_URL),
+                  iconData: FontAwesomeIcons.github,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
+                ),
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(FACEBOOK_PAGE_URL),
+                  iconData: FontAwesomeIcons.squareFacebook,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
+                ),
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(INSTAGRAM_PAGE_URL),
+                  iconData: FontAwesomeIcons.instagram,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
+                ),
+              ],
+            ),
           ],
-          if (credManager!.getAuthorization()) ...[
-            const SizedBox(height: 5),
-            DashboardButton(
-                onPressed: _onGetAttending,
-                bgColor: Colors.black12,
-                textColor: HackRUColors.blue_grey,
-                label: "Get Attending")
-          ],
-          if (_hasAuthToken) ...[
-            const SizedBox(height: 5),
-            DashboardButton(
-                onPressed: _onLogout,
-                bgColor: Colors.black12,
-                textColor: HackRUColors.blue_grey,
-                label: "Logout")
-          ],
-          Expanded(child: Container()),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SocialMediaCard(
-                onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
-                iconData: FontAwesomeIcons.link,
-                iconColor: HackRUColors.blue_grey,
-                bgColor: Colors.transparent,
-              ),
-              SocialMediaCard(
-                onPressed: () => url_launcher.launch(REPOSITORY_URL),
-                iconData: FontAwesomeIcons.github,
-                iconColor: HackRUColors.blue_grey,
-                bgColor: Colors.transparent,
-              ),
-              SocialMediaCard(
-                onPressed: () => url_launcher.launch(FACEBOOK_PAGE_URL),
-                iconData: FontAwesomeIcons.squareFacebook,
-                iconColor: HackRUColors.blue_grey,
-                bgColor: Colors.transparent,
-              ),
-              SocialMediaCard(
-                onPressed: () => url_launcher.launch(INSTAGRAM_PAGE_URL),
-                iconData: FontAwesomeIcons.instagram,
-                iconColor: HackRUColors.blue_grey,
-                bgColor: Colors.transparent,
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

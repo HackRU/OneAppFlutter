@@ -195,7 +195,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         message == 'DAY-OF QR LINKED!') {
       _scanDialogSuccess(message);
     } else {
-      await await _scanDialogWarning(message);
+      await await _warningDialog(message);
     }
   }
 
@@ -245,7 +245,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future _scanDialogWarning(String body) async {
+  Future _warningDialog(String body) async {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -552,7 +552,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           // var prev = numUserScanned;
           // debugPrint('already ' + userEmailOrId);
           result = 'ALREADY SCANNED';
-          var rescan = await _scanDialogWarning('ALREADY SCANNED!');
+          var rescan = await _warningDialog('ALREADY SCANNED!');
           // if (rescan) {
           //   return notScanned;
           // }

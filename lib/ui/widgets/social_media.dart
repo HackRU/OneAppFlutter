@@ -19,7 +19,7 @@ class SocialMediaCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        elevation: 2.0,
+        elevation: 0,
         color: bgColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),

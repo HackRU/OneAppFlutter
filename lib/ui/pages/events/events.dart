@@ -39,16 +39,20 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
                 child: CircularProgressIndicator(),
               );
             default:
-              print('==== hasSnapshotError: ${snapshot.hasError}');
               var events = snapshot.data;
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: ListView(children: <Widget>[
-                  titleCard("Saturday"),
-                  ...getEventsForDay('Sunday', events!),
-                  titleCard("Sunday"),
-                  ...getEventsForDay('Monday', events),
-                ]),
+                child: ListView(
+                  padding: EdgeInsets.all(0),
+                  children: <Widget>[
+                    titleCard("Saturday", Colors.transparent,
+                        HackRUColors.off_white_blue),
+                    ...getEventsForDay('Sunday', events!),
+                    titleCard("Sunday", Colors.transparent,
+                        HackRUColors.off_white_blue),
+                    ...getEventsForDay('Monday', events),
+                  ],
+                ),
               );
           }
         },
@@ -56,10 +60,11 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
     );
   }
 
-  Card titleCard(String title) {
+  Card titleCard(String title, Color bgColor, Color textColor) {
     return Card(
+      color: bgColor,
       elevation: 0,
-      child: Text(title, style: TextStyle(fontSize: 30)),
+      child: Text(title, style: TextStyle(fontSize: 30, color: textColor)),
     );
   }
 
@@ -68,9 +73,11 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
         .where((event) => DateFormat("EEEE").format(event.start!) == day)
         .toList()
         .map((event) => EventCard(
-              day: day,
-              resource: event,
-            ))
+            day: day,
+            resource: event,
+            titleColor: HackRUColors.off_white_blue,
+            bgColor: Colors.black26,
+            tsColor: Colors.blueGrey))
         .toList();
   }
 }
