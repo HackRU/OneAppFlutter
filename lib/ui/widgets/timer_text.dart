@@ -43,7 +43,7 @@ Widget timerTitle(Color textColor) {
       return Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          'Hacking Begins In',
+          'Hacking Starts In',
           style: TextStyle(
               fontSize: 28, fontWeight: FontWeight.bold, color: textColor),
         ),
@@ -98,7 +98,6 @@ class _TimerTextState extends State<TimerText> {
 
   void _updateTime() {
     if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-      //current time
       DateTime today =
           DateTime(currentDate.year, currentDate.month, currentDate.day);
       setState(() {

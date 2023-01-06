@@ -6,6 +6,10 @@ import 'package:hackru/ui/pages/annoucements/announcements.dart';
 import 'package:hackru/ui/pages/dashboard/dashboard.dart';
 import 'package:hackru/ui/pages/events/events.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'help/help.dart';
+import 'login/login_page.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
@@ -16,18 +20,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentBottomNavItemIndex = 1;
-  CredManager? credManager;
+  bool showHelp = false;
+  bool showLogin = false;
 
   final PageController _pageController = PageController(initialPage: 1);
 
-  ///===========================================================
-  ///                     BOTTOM NAV PAGES
-  ///===========================================================
-  final _kBottomNavPages = <Widget>[
-    Announcements(),
-    Dashboard(),
-    Events(),
-  ];
+  void setHelp(bool val) => setState(() => showHelp = val);
+  void setLogin(bool val) => setState(() => showLogin = val);
+
   final _bottomNavNames = [
     "Announcements",
     "DashBoard",
@@ -39,9 +39,6 @@ class _HomeState extends State<Home> {
     Icons.calendar_month,
   ];
 
-  ///===========================================================
-  ///                      BOTTOM APP BAR
-  ///===========================================================
   BottomAppBar _buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
@@ -56,31 +53,52 @@ class _HomeState extends State<Home> {
     );
   }
 
-  ///===========================================================
-  ///                     BUILD FUNCTION
-  ///===========================================================
-
   @override
   Widget build(BuildContext context) {
+    final _kBottomNavPages = <Widget>[
+      Announcements(),
+      Dashboard(
+        goToHelp: () => setHelp(true),
+        goToLogin: () => setLogin(true),
+      ),
+      Events(),
+    ];
+
     return Stack(children: [
       WeatherBg(
           weatherType: WeatherType.sunnyNight,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height),
-      Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Padding(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          child: PageView(
-            controller: _pageController,
-            children: _kBottomNavPages,
-            onPageChanged: (value) => setState(() {
-              _currentBottomNavItemIndex = value;
-            }),
-          ),
-        ),
-        bottomNavigationBar: _buildBottomAppBar(context),
-      )
+      showHelp
+          ? Help(
+              () => setHelp(false),
+              HackRUColors.transparent,
+              HackRUColors.off_white_blue,
+              Colors.black26,
+              HackRUColors.blue_grey)
+          : Container(),
+      showLogin
+          ? Provider.value(
+              value: Provider.of<CredManager>(context),
+              child: LoginPage(goToDashboard: () => setLogin(false)))
+          : Container(),
+      !(showLogin || showHelp)
+          ? Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top * 1.5),
+                child: PageView(
+                  controller: _pageController,
+                  children: _kBottomNavPages,
+                  onPageChanged: (value) => setState(() {
+                    _currentBottomNavItemIndex = value;
+                  }),
+                ),
+              ),
+              bottomNavigationBar: _buildBottomAppBar(context),
+            )
+          : Container()
     ]);
   }
 
