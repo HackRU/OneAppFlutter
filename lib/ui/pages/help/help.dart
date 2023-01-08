@@ -31,76 +31,64 @@ const helpResources = [
     "url":
         "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=704cc129a9&e=c9b098417d"
   }
-  // {
-  //   "name": "Food Menu",
-  //   "desc": "breakfast, lunch, and dinner",
-  //   "url": "https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf"
-  // }
 ];
 
 class Help extends StatelessWidget {
+  Help(this.toggleHelp, this.bgColor, this.textColor, this.buttonColor,
+      this.splashColor);
+  VoidCallback toggleHelp;
+  Color bgColor;
+  Color textColor;
+  Color buttonColor;
+  Color splashColor;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: ListView.builder(
-        controller: ScrollController(),
-        itemCount: helpResources.length,
-        itemBuilder: (BuildContext context, int index) {
-          HelpResource helpResource =
-              HelpResource.fromJson(helpResources[index]);
-          return HelpButton(
-            resource: helpResource,
-          );
-        },
+      backgroundColor: bgColor,
+      body: Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+              onPressed: toggleHelp,
+              icon: Icon(Icons.close),
+              color: textColor,
+            ),
+            ListView.builder(
+              padding: EdgeInsets.all(0),
+              shrinkWrap: true,
+              controller: ScrollController(),
+              itemCount: helpResources.length,
+              itemBuilder: (BuildContext context, int index) {
+                HelpResource helpResource =
+                    HelpResource.fromJson(helpResources[index]);
+                return HelpButton(
+                  resource: helpResource,
+                  bgColor: buttonColor,
+                  splashColor: splashColor,
+                  textColor: textColor,
+                );
+              },
+            ),
+          ],
+        ),
       ),
-//       body: FutureBuilder<List<HelpResource>>(
-//         future: helpResources(MISC_URL),
-//         builder:
-//             (BuildContext context, AsyncSnapshot<List<HelpResource>> snapshot) {
-//           switch (snapshot.connectionState) {
-//             case ConnectionState.none:
-//             case ConnectionState.waiting:
-//               return const Center(
-//                 child: CircularProgressIndicator(),
-//                 // child: Container(
-//                 //   color: HackRUColors.transparent,
-//                 //   height: 400.0,
-//                 //   width: 400.0,
-//                 //   child: const RiveAnimation.asset(
-//                 //     'assets/flare/loading_indicator.flr',
-//                 //     alignment: Alignment.center,
-//                 //     fit: BoxFit.contain,
-//                 //     animations: ['idle'],
-//                 //   ),
-//                 // ),
-//               );
-//             default:
-//               print(snapshot.hasError);
-//               var resources = snapshot.data;
-// //              print(resources);
-//               return !snapshot.hasError
-//                   ? ListView.builder(
-//                       itemCount: resources?.length,
-//                       itemBuilder: (BuildContext context, int index) {
-//                         return HelpButton(resource: resources![index]);
-//                       },
-//                     )
-//                   : const Center(
-//                       child: Text(
-//                         'An error occurred while fetching help resources!',
-//                       ),
-//                     );
-//           }
-//         },
-//       ),
     );
   }
 }
 
 class HelpButton extends StatelessWidget {
-  HelpButton({required this.resource});
+  HelpButton(
+      {required this.resource,
+      required this.bgColor,
+      required this.splashColor,
+      required this.textColor});
   final HelpResource resource;
+  final Color bgColor;
+  final Color splashColor;
+  final Color textColor;
 
   void _open() async {
     if (await canLaunchUrlString(resource.url)) {
@@ -111,52 +99,54 @@ class HelpButton extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Card(
-        color: Theme.of(context).primaryColor,
-        margin: EdgeInsets.all(10.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-        elevation: 0.0,
-        child: Container(
-          height: 120.0,
-          child: InkWell(
-            splashColor: HackRUColors.yellow,
-            onTap: _open,
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        resource.name.toUpperCase(),
+  Widget build(BuildContext context) {
+    return Card(
+      color: bgColor,
+      margin: EdgeInsets.all(10.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+      ),
+      elevation: 0.0,
+      child: Container(
+        height: 120.0,
+        child: InkWell(
+          splashColor: splashColor,
+          onTap: _open,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      resource.name.toUpperCase(),
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3.0),
+                      child: Text(
+                        resource.description,
                         style: TextStyle(
-                          color: HackRUColors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 3.0),
-                        child: Text(
-                          resource.description,
-                          style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }

@@ -6,11 +6,10 @@ import 'package:hackru/defaults.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/exceptions.dart';
 import 'package:hackru/models/models.dart';
-import 'package:hackru/ui/pages/qr_scanner/QRScanner.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
 
 var popup = true;
 const notScanned = 'NOT SCANNED';
@@ -27,15 +26,35 @@ class Scanner extends StatefulWidget {
 
 class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   var scanned = '';
-  // late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   AnimationController? _animationController;
   bool isPlaying = false;
   late MobileScannerController cameraController;
   final TextEditingController _textFieldController = TextEditingController();
+  CredManager? credManager;
+
+  String _selectedEvent = "check-in";
+  static const qrEvents = [
+    "check-in",
+    "delayed-check-in",
+    "lunch-saturday",
+    "dinner-saturday",
+    "ws-react",
+    "ws-cogsci_club",
+    "ws-wics",
+    "engg-lab-ctf",
+    "mlh-cup-stacking",
+    "breakfast-sunday",
+    "lunch-sunday",
+    "t-shirt",
+    "swag",
+    "extra-1",
+    "extra-2"
+  ];
 
   @override
   void initState() {
+    credManager = Provider.of<CredManager>(context, listen: false);
     super.initState();
     cameraController = MobileScannerController();
     _animationController = AnimationController(
@@ -44,23 +63,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     );
   }
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  // @override
-  // void reassemble() {
-  //   super.reassemble();
-  //   if (Platform.isAndroid) {
-  //     // controller.pauseCamera();
-  //   } else if (Platform.isIOS) {
-  //     // controller.resumeCamera();
-  //   } else if (kIsWeb) {
-  //     cameraController.stop();
-  //   }
-  // }
-
   @override
   void dispose() {
-    // controller.dispose();
     super.dispose();
     _animationController?.dispose();
     cameraController.dispose();
@@ -68,132 +72,121 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: HackRUColors.black,
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: Center(
-              child: MobileScanner(
-                allowDuplicates: false,
-                controller: cameraController,
-                onDetect: (barcode, args) {
-                  final String code = barcode.rawValue!;
-                  //debugPrint('qr_code found: $code');
-                  _qrRequest(code); // to call backend API
-                },
-              ),
+    return SafeArea(
+      top: false,
+      right: false,
+      left: false,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.close, size: 30),
+            onPressed: () => Navigator.pop(context),
+            color: Colors.white,
+          ),
+          title: Theme(
+            data: ThemeData.dark(),
+            child: DropdownButton(
+              value: _selectedEvent,
+              items: qrEvents
+                  .map(
+                      (e) => DropdownMenuItem<String>(value: e, child: Text(e)))
+                  .toList(),
+              onChanged: (value) =>
+                  setState(() => _selectedEvent = value as String),
             ),
           ),
-          Flexible(
-            flex: 1,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    CardExpansion.event!,
-                    style: const TextStyle(
-                      fontSize: 14.0,
-                      color: HackRUColors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  // Text(
-                  //   scanned,
-                  //   style: const TextStyle(
-                  //     fontSize: 16.0,
-                  //     color: HackRUColors.pink_light,
-                  //     fontWeight: FontWeight.w500,
-                  //   ),
-                  // ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                        iconSize: 80,
-                        icon: Icon(
-                          isPlaying
-                              ? FontAwesomeIcons.playCircle
-                              : FontAwesomeIcons.pauseCircle,
-                          color: isPlaying
-                              ? HackRUColors.yellow
-                              : HackRUColors.pink_light,
-                        ),
-                        onPressed: () => _handleOnPressed(),
-                      ),
-                      IconButton(
-                        iconSize: 80,
-                        icon: ValueListenableBuilder(
-                          valueListenable: cameraController.cameraFacingState,
-                          builder: (context, state, child) {
-                            switch (state as CameraFacing) {
-                              case CameraFacing.front:
-                                return const Icon(
-                                  Icons.flip_camera_ios_outlined,
-                                  color: HackRUColors.off_white,
-                                  // size: 50,
-                                );
-                              case CameraFacing.back:
-                                return const Icon(
-                                  Icons.flip_camera_ios_rounded,
-                                  color: HackRUColors.off_white,
-                                  // size: 50,
-                                );
-                            }
-                          },
-                        ),
-                        onPressed: () => cameraController.switchCamera(),
-                      ),
-                    ],
-                  ),
-                ],
+        ),
+        backgroundColor: HackRUColors.black,
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: Center(
+                child: MobileScanner(
+                  allowDuplicates: false,
+                  controller: cameraController,
+                  onDetect: (barcode, args) {
+                    final String code = barcode.rawValue!;
+                    //debugPrint('qr_code found: $code');
+                    _qrRequest(code); // to call backend API
+                  },
+                ),
               ),
             ),
-          )
-        ],
+            Flexible(
+              flex: 1,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          iconSize: 80,
+                          icon: Icon(
+                            isPlaying
+                                ? FontAwesomeIcons.circlePlay
+                                : FontAwesomeIcons.circlePause,
+                            color: isPlaying
+                                ? HackRUColors.yellow
+                                : HackRUColors.pink_light,
+                          ),
+                          onPressed: () => _handleOnPressed(),
+                        ),
+                        IconButton(
+                          iconSize: 80,
+                          icon: ValueListenableBuilder(
+                            valueListenable: cameraController.cameraFacingState,
+                            builder: (context, state, child) {
+                              switch (state as CameraFacing) {
+                                case CameraFacing.front:
+                                  return const Icon(
+                                    Icons.flip_camera_ios_outlined,
+                                    color: HackRUColors.off_white,
+                                    // size: 50,
+                                  );
+                                case CameraFacing.back:
+                                  return const Icon(
+                                    Icons.flip_camera_ios_rounded,
+                                    color: HackRUColors.off_white,
+                                    // size: 50,
+                                  );
+                              }
+                            },
+                          ),
+                          onPressed: () => cameraController.switchCamera(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
-
-//   void _onQRViewCreated(QRViewController controller) {
-//     var defaultCode = 'xxx@xxx.com';
-//     this.controller = controller;
-//     controller.scannedDataStream.listen((scanData) {
-//       print(
-//           '======= SCANDATA: {code: ${scanData.code}, barcodeType: ${scanData.format.formatName}\n');
-//       setState(() {
-//         if (scanData.code != defaultCode) {
-//           defaultCode = scanData.code!;
-//           scanned = '';
-//           // _qrRequest(scanData.code!);  // TODO: uncomment this later
-//         } else {
-// //          scanned = 'ALREADY SCANNED!';
-//         }
-//       });
-//     });
-//   }
 
   void _handleOnPressed() {
     setState(() {
       isPlaying = !isPlaying;
       if (isPlaying) {
         _animationController?.forward();
-        // controller.pauseCamera();
         cameraController.stop();
       } else {
         _animationController?.reverse();
-        // controller.resumeCamera();
         cameraController.start();
       }
     });
   }
 
   void _qrRequest(String scanData) async {
-    // print('************* qrRequest made ***********');
     var message;
     message = await _lcsHandle(scanData);
     debugPrint(message);
@@ -202,7 +195,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         message == 'DAY-OF QR LINKED!') {
       _scanDialogSuccess(message);
     } else {
-      await await _scanDialogWarning(message);
+      await await _warningDialog(message);
     }
   }
 
@@ -252,7 +245,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
     }
   }
 
-  Future _scanDialogWarning(String body) async {
+  Future _warningDialog(String body) async {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -385,39 +378,15 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   }
 
   Future<String> _lcsHandle(String userEmailOrId) async {
-    var _storedEmail = await getEmail();
-    var _authToken = await getAuthToken();
+    // userEmailOrId is the scandata which comes from the qrcode
+    var _storedEmail = credManager!.getEmail();
+    var _authToken = credManager!.getAuthToken();
     var result = 'NULL';
-
-    // print('***** Called `lcsHandle` with qr:' + userEmailOrId);
-    // debugPrint('${QRScanner.cred}');
     var user;
     var numUserScanned;
     try {
       if (userEmailOrId != '') {
-        var event = CardExpansion.event;
-
-        // if (event == 'check-in' || event == 'check-in-no-delayed') {
-        //   if (_isEmailAddress(userEmailOrId)) {
-        //     user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
-        //     if (event == 'check-in') {
-        //       if (user.isDelayedEntry()) {
-        //         return notScanned;
-        //         // *** TODO: FIX THIS LOGIC
-        //         // if (_scanDialogWarning(
-        //         //     'HACKER IS DELAYED ENTRY! SCAN ANYWAY?')) {
-        //         //   return notScanned;
-        //         // }
-        //       }
-        //       event = 'extra-1';
-        //     }
-        //     Scanner.userEmail = userEmailOrId;
-        //   }
-
-        //   // print('****** User: $user');
-        //   result = 'EMAIL SCANNED!';
-        // }
-
+        var event = _selectedEvent;
         /* ================= HANDLE CHECK_IN EVENT, potentially link ===============
 
         Logic 
@@ -435,7 +404,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
 
         if (event == 'check-in') {
           if (_isEmailAddress(userEmailOrId)) {
-            user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
+            user = await getUser(_authToken, _storedEmail, userEmailOrId);
             if (user.isDelayedEntry()) {
               return "EMAIL ON WAITLIST, NOT SCANNED.";
             } else {
@@ -499,7 +468,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           }
         } else if (event == 'delayed-check-in') {
           if (_isEmailAddress(userEmailOrId)) {
-            user = await getUser(_authToken!, _storedEmail!, userEmailOrId);
+            user = await getUser(_authToken, _storedEmail, userEmailOrId);
             if (user.registrationStatus == 'registered') {
               await updateStatus(BASE_URL, _storedEmail, _authToken,
                   userEmailOrId, 'confirmation');
@@ -569,11 +538,11 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           // debugPrint('${Scanner.userEmail}');
           numUserScanned = await attendEvent(
             BASE_URL,
-            _storedEmail!,
-            _authToken!,
+            _storedEmail,
+            _authToken,
             userEmailOrId,
-            event!,
-            true,
+            event,
+            false,
           );
           // updateStatus(
           //     BASE_URL, _storedEmail, _authToken, userEmailOrId, "checked-in");
@@ -583,28 +552,28 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
           // var prev = numUserScanned;
           // debugPrint('already ' + userEmailOrId);
           result = 'ALREADY SCANNED';
-          var rescan = await _scanDialogWarning('ALREADY SCANNED!');
-          if (rescan) {
-            return notScanned;
-          }
-          // // debugPrint('$rescan');
+          var rescan = await _warningDialog('ALREADY SCANNED!');
           // if (rescan) {
-          //   numUserScanned = await attendEvent(
-          //     BASE_URL,
-          //     _storedEmail!,
-          //     _authToken!,
-          //     userEmailOrId,
-          //     event!,
-          //     true,
-          //   );
-          //   // int test = numUserScanned as int;
-          //   // debugPrint('********** user event count: $test');
-          //   // if (prev > numUserScanned) {
-          //   result = 'SCANNED!';
-          //   // }
-          // } else {
           //   return notScanned;
           // }
+          // // debugPrint('$rescan');
+          if (rescan) {
+            numUserScanned = await attendEvent(
+              BASE_URL,
+              _storedEmail,
+              _authToken,
+              userEmailOrId,
+              event,
+              true,
+            );
+            // int test = numUserScanned as int;
+            // debugPrint('********** user event count: $test');
+            // if (prev > numUserScanned) {
+            result = 'SCANNED!';
+            // }
+          } else {
+            return notScanned;
+          }
         } on UserNotFound {
           // debugPrint('hashqr:' + userEmailOrId);
           if (!_isEmailAddress(userEmailOrId)) {
@@ -622,8 +591,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
               try {
                 linkQR(
                   BASE_URL,
-                  _storedEmail!,
-                  _authToken!,
+                  _storedEmail,
+                  _authToken,
                   linkToUser,
                   userEmailOrId,
                 );

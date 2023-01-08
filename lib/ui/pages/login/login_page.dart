@@ -2,38 +2,28 @@ import 'package:hackru/styles.dart';
 import 'package:hackru/ui/pages/login/login_form.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class LoginPage extends StatelessWidget {
+  final VoidCallback goToDashboard;
+  const LoginPage({Key? key, required this.goToDashboard}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: HackRUColors.transparent,
         elevation: 0.0,
-        iconTheme: IconThemeData(
-          color: Theme.of(context).primaryColor,
+        leading: IconButton(
+          onPressed: goToDashboard,
+          icon: const Icon(
+            Icons.close,
+            color: HackRUColors.off_white_blue,
+          ),
         ),
       ),
-      body: const Center(
-        child: LoginForm(),
+      body: Center(
+        child: LoginForm(goToDashboard: goToDashboard),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

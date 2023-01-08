@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hackru/defaults.dart';
+import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/models/models.dart';
-import 'package:hackru/ui/hackru_app.dart';
+import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:hackru/ui/widgets/page_not_found.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'styles.dart';
+import 'package:provider/provider.dart';
 
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -24,6 +27,8 @@ import 'styles.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  CredManager credManager = CredManager(await Hive.openBox("prefs"));
 
   // ====== TODO: update following configs
   // notificationAppLaunchDetails = await flutterLocalNotificationsPlugin
@@ -62,7 +67,9 @@ void main() async {
   );
 
   setPathUrlStrategy();
-  runApp(const MainApp());
+  runApp(MainApp(
+    credManager: credManager,
+  ));
 }
 
 /// =======================================================
@@ -85,21 +92,17 @@ void main() async {
 
 class MainApp extends StatelessWidget {
   final LcsCredential? lcsCredential;
-  const MainApp({Key? key, this.lcsCredential}) : super(key: key);
+  final CredManager credManager;
+  const MainApp({Key? key, this.lcsCredential, required this.credManager})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: kAppTitle,
       debugShowCheckedModeBanner: false,
-      theme: kLightTheme,
-      darkTheme: kDarkTheme,
-      home: HackRUApp(),
-      routes: <String, WidgetBuilder>{
-        '/login': (BuildContext context) => const LoginPage(),
-        '/home': (BuildContext context) => HackRUApp(),
-        // '/floorMap': (BuildContext context) => HackRUMap(),
-      },
+      theme: kTheme,
+      home: Provider.value(value: credManager, child: Home()),
       onUnknownRoute: (RouteSettings setting) {
         var unknownRoute = setting.name;
         return MaterialPageRoute(

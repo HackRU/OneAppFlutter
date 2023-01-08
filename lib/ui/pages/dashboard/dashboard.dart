@@ -1,693 +1,374 @@
 import 'dart:async';
-// import 'dart:html';
-
-// import 'package:flutter_countdown_timer/countdown.dart';
-// import 'package:flutter_countdown_timer/index.dart';
-// import 'package:hackru/main.dart';
+import 'dart:ui';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hackru/ui/widgets/social_media.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
+import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
-// import 'package:hackru/ui/hackru_app.dart';
-import 'package:hackru/ui/pages/dashboard/announcement_card.dart';
-// import 'package:hackru/ui/widgets/dialog/notification_onclick.dart';
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:hackru/ui/pages/home.dart';
-// import 'package:intl/intl.dart';
-
-// import '../../widgets/flip_panel.dart';
-
-// import 'package:hackru/main.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-final hackRUStart = DateTime(2022, DateTime.october, 2, 11, 00, 00);
-final hackRUEnd = DateTime(2022, DateTime.october, 3, 12, 00, 00);
-final currentDate = DateTime.now();
-DateTime today = DateTime(currentDate.year, currentDate.month, currentDate.day);
+import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shimmer/shimmer.dart';
+import '../../widgets/dashboard_button.dart';
+import '../../widgets/dialog/warning_dialog.dart';
+import '../../widgets/timer_text.dart';
+import '../help/help.dart';
+import '../home.dart';
+import '../login/login_page.dart';
+import '../qr_scanner/Scanner.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({required this.goToHelp, required this.goToLogin});
+  final VoidCallback goToHelp;
+  final VoidCallback goToLogin;
 
   @override
   DashboardState createState() => DashboardState();
 }
 
 class DashboardState extends State<Dashboard> {
+  String _storedEmail = "";
   String username = "";
   String userStatus = "";
   bool _hasAuthToken = false;
-  var _displayTimerBanner = true;
-
-  // late final FirebaseMessaging _firebaseMessaging;
+  String registrationStatus = "checked in";
+  bool checkedin = false;
+  String tempStatus = "";
+  CredManager? credManager;
+  bool _isLoading = true;
 
   @override
   void initState() {
+    credManager = Provider.of<CredManager>(context, listen: false);
     super.initState();
     _hasToken();
     _getUserName();
-    // setupPushNotifications();
-    // _requestIOSPermissions();
-    // _configureDidReceiveLocalNotificationSubject();
-    // _configureSelectNotificationSubject();
-  }
-
-  @override
-  void dispose() {
-    // controller.dispose();
-    super.dispose();
   }
 
   void _hasToken() async {
-    var hasToken = await hasCredentials();
-    if (hasToken) {
-      setState(() {
-        _hasAuthToken = true;
-      });
-    } else {
-      setState(() {
-        _hasAuthToken = false;
-      });
-    }
-  }
-
-  void _getUserName() async {
-    var _storedEmail = await getEmail();
-    if (_storedEmail != "") {
-      var _authToken = await getAuthToken();
-      var userProfile = await getUser(_authToken!, _storedEmail!);
-      setState(() {
-        username =
-            "Welcome, " + userProfile.firstName + " " + userProfile.lastName;
-        userStatus = "Current status: " + userProfile.registrationStatus;
-      });
-    }
-  }
-
-  /// ===========================================================
-  ///                     PUSH NOTIFICATIONS
-  /// ===========================================================
-
-  // void _requestIOSPermissions() {
-  //   flutterLocalNotificationsPlugin
-  //       .resolvePlatformSpecificImplementation<
-  //           IOSFlutterLocalNotificationsPlugin>()
-  //       ?.requestPermissions(
-  //         alert: true,
-  //         badge: true,
-  //         sound: true,
-  //       );
-  // }
-
-  // void _configureDidReceiveLocalNotificationSubject() {
-  //   didReceiveLocalNotificationSubject.stream
-  //       .listen((ReceivedNotification receivedNotification) async {
-  //     await showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) => CupertinoAlertDialog(
-  //         title: receivedNotification.title != null
-  //             ? Text(receivedNotification.title)
-  //             : null,
-  //         content: receivedNotification.body != null
-  //             ? Text(receivedNotification.body)
-  //             : null,
-  //         actions: [
-  //           CupertinoDialogAction(
-  //             isDefaultAction: true,
-  //             child: Text('Ok'),
-  //             onPressed: () async {
-  //               print('Not implemented Yet');
-  //             },
-  //           )
-  //         ],
-  //       ),
-  //     );
-  //   });
-  // }
-
-  // void _configureSelectNotificationSubject() {
-  //   selectNotificationSubject.stream.listen((String payload) async {
-  //     print('Payload: $payload');
-  //     Map<String, dynamic> message = json.decode(payload);
-  //     String title = message['data']['title'];
-  //     String body = message['data']['body'];
-  //     onPushNotificationClick(title, body);
-  //   });
-  // }
-
-  // void setupPushNotifications() async {
-  //   if (Platform.isIOS) {
-  //     await _firebaseMessaging.requestPermission(
-  //         sound: true, badge: true, alert: true);
-  //     // TODO: complete implementation as of new docs
-  //   }
-
-  //   _firebaseMessaging. configure(
-  //     onMessage: (Map<String, dynamic> message) async {
-  //       print('on message $message');
-
-  //       //TODO Configure notification channel
-  //       var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-  //           'silent channel id',
-  //           'silent channel name',
-  //           'silent channel description',
-  //           playSound: false,
-  //           styleInformation: DefaultStyleInformation(true, true));
-  //       var iOSPlatformChannelSpecifics =
-  //           IOSNotificationDetails(presentSound: false);
-  //       var platformChannelSpecifics = NotificationDetails(
-  //           androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  //       await flutterLocalNotificationsPlugin.show(
-  //           0,
-  //           message['notification']['title'],
-  //           message['notification']['body'],
-  //           platformChannelSpecifics,
-  //           payload: json.encode(message));
-  //     },
-  //     onResume: (Map<String, dynamic> message) async {
-  //       print('on resume $message');
-  //       String title = message['data']['title'];
-  //       String body = message['data']['body'];
-  //       onPushNotificationClick(title, body);
-  //     },
-  //     onLaunch: (Map<String, dynamic> message) async {
-  //       print('on launch $message');
-  //       String title = message['data']['title'];
-  //       String body = message['data']['body'];
-  //       onPushNotificationClick(title, body);
-  //     },
-  //   );
-
-  //   await _firebaseMessaging.subscribeToTopic('announcements');
-  // }
-
-  // void onPushNotificationClick(String title, String body) async {
-  //   await showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return NotificationOnClickDialog(
-  //           title: title,
-  //           body: body,
-  //         );
-  //       });
-  // }
-
-  /// =================================================
-  ///                SHOW TIMER BANNER
-  /// =================================================
-
-  Widget timerTitle() {
-    if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Current Time',
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-        ),
-      );
-    } else {
-      if (hackRUStart.isAfter(DateTime.now())) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Hacking Begins In',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ),
-        );
-      } else if (hackRUStart.isBefore(DateTime.now()) &&
-          hackRUEnd.isAfter(DateTime.now())) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Hacking Ends In',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ),
-        );
+    var hasToken = credManager!.hasCredentials();
+    if (mounted) {
+      if (hasToken) {
+        setState(() {
+          _hasAuthToken = true;
+        });
       } else {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Current Time',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ),
-        );
+        setState(() {
+          _hasAuthToken = false;
+        });
       }
     }
   }
 
-  Widget _timerBanner() {
-    // debugPrint('====== day: ${DateTime.now().day}');
-    return MaterialBanner(
-      padding: const EdgeInsets.all(10.0),
-      leadingPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-      leading: const Icon(
-        Icons.timer,
-        color: HackRUColors.white,
-        size: 50.0,
+  void _getUserName() async {
+    _storedEmail = credManager!.getEmail();
+    if (_storedEmail != "") {
+      var _authToken = credManager!.getAuthToken();
+      var userProfile = await getUser(_authToken, _storedEmail);
+      if (mounted) {
+        setState(() {
+          username = userProfile.firstName + " " + userProfile.lastName;
+          tempStatus = userProfile.registrationStatus;
+          if (userProfile.registrationStatus == "checked-in") {
+            checkedin = true;
+            userStatus = "You're checked-in!";
+          } else {
+            checkedin = false;
+            userStatus = "You're not checked in yet.";
+          }
+        });
+      }
+    }
+    _isLoading = false;
+  }
+
+  void _onLogin() async {
+    if (!credManager!.hasCredentials()) widget.goToLogin();
+  }
+
+  void _onLogout() async {
+    credManager!.deleteCredentials();
+    setState(() {
+      _hasAuthToken = false;
+    });
+    await Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (BuildContext context) =>
+            Provider.value(value: credManager!, child: Home()),
+        maintainState: false,
       ),
-      content: const Padding(
-        padding: EdgeInsets.only(left: 15.0),
-        child: TimerText(),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            setState(() {
-              _displayTimerBanner = false;
-            });
-          },
-          child: const Text(
-            'Dismiss',
-            style: TextStyle(
-              color: HackRUColors.white,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ],
-      backgroundColor: HackRUColors.transparent,
+      ModalRoute.withName('/main'),
     );
   }
 
-  /// =================================================
-  ///                GET SLACK MESSAGES
-  /// =================================================
-  static List<Announcement>? cachedMsgs;
-
-  Future<List<Announcement>> _getSlacks() async {
-    // var streamCtrl = StreamController<List<Announcement>>();
-    // if (cachedMsgs != null) {
-    //   streamCtrl.sink.add(cachedMsgs!);
-    // }
-    var slackMessages = List<Announcement>.empty();
+  void _onGetAttending(BuildContext context) async {
+    var _storedEmail = credManager!.getEmail();
+    var _authToken = credManager!.getAuthToken();
+    var count = 0;
     try {
-      await slackResources().then((slackMsgs) {
-        // debugPrint('======= slacks: $slackMsgs');
-        slackMessages = slackMsgs;
-      });
-      // if (cacheTTL.isBefore(DateTime.now())) {
-      //   slackResources().then((slackMsgs) {
-      //     streamCtrl.sink.add(slackMsgs);
-      //     persistSlackAnnouncements(slackMsgs);
-      //     cacheTTL = DateTime.now().add(Duration(minutes: 5));
-      //     streamCtrl.close();
-      //   });
-      // }
-    } catch (e) {
-      print('***********************\nSlack data stream ctrl error: ' +
-          e.toString());
+      count = await getAttending(_authToken);
+      warningDialog(context, "Total = " + count.toString(), HackRUColors.blue,
+          HackRUColors.off_white_blue, HackRUColors.blue_grey);
+    } on LcsError {
+      var result = "Error Fetching Result.";
+      warningDialog(context, result, HackRUColors.blue,
+          HackRUColors.off_white_blue, HackRUColors.blue_grey);
     }
-    return slackMessages;
+  }
+
+  void _onHelp() => widget.goToHelp();
+
+  void _onScanner() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) =>
+              Provider.value(value: credManager, child: const Scanner())));
+
+  ///===========================================================
+  ///                      SHOW QR-CODE
+  ///===========================================================
+  void _showQrCode() async {
+    var userEmail = credManager!.getEmail();
+    switch (await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: <Widget>[
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15.0),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    HackRUColors.white,
+                    HackRUColors.white,
+                  ],
+                ),
+              ),
+              width: MediaQuery.of(context).size.width * 0.75,
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+              child: Center(
+                child: QrImage(
+                  version: 4,
+                  data: userEmail,
+                  gapless: true,
+                  embeddedImage: const AssetImage(
+                      'assets/hackru-logos/appIconImageWhite.png'),
+                  embeddedImageStyle: QrEmbeddedImageStyle(
+                    size: const Size(50, 50),
+                  ),
+                  foregroundColor: HackRUColors.charcoal,
+                ),
+              ),
+            ),
+          ],
+          backgroundColor: Colors.transparent,
+        );
+      },
+    )) {
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(),
+      backgroundColor: Colors.transparent,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
+            timerBanner(Colors.black26, HackRUColors.off_white_blue),
+            const SizedBox(height: 5),
             if (_hasAuthToken) ...[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    username,
-                    style: Theme.of(context).textTheme.subtitle1,
+              Container(
+                decoration: ShapeDecoration(
+                  color: Colors.black26,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    userStatus,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                ),
-              ),
-            ],
-            if (_displayTimerBanner) ...[
-              timerTitle(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: HackRUColors.green,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15.0),
-                    ),
-                  ),
-                  child: _timerBanner(),
-                ),
-              ),
-            ],
-            if (!_displayTimerBanner)
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-                title: Text(
-                  'Timer',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                trailing: !_displayTimerBanner
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.timer,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _displayTimerBanner = true;
-                          });
-                        },
-                      )
-                    : null,
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Announcements:',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ),
-            ),
-            FutureBuilder<List<Announcement>?>(
-              future: _getSlacks(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Announcement>?> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: const [
-                          Center(
-                            child: Text("Fetching Announcements from Slack..."),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Center(
-                              child: CircularProgressIndicator(),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _isLoading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Shimmer(
+                                    gradient: HackRUColors.loading_gradient,
+                                    child: Container(
+                                        color: HackRUColors.black,
+                                        height: 33.33,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6)),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Shimmer(
+                                    gradient: HackRUColors.loading_gradient,
+                                    child: Container(
+                                        color: HackRUColors.black,
+                                        height: 24,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5))
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  default:
-                    if (snapshot.hasError) {
-                      debugPrint('ERROR-->DASHBOARD: ${snapshot.hasError}');
-                    }
-
-                    var resources = [];
-                    resources = snapshot.data!;
-                    debugPrint(resources.length.toString());
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                      ),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(
-                          bottom: 25.0,
+                            Shimmer(
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                color: HackRUColors.black,
+                              ),
+                              gradient: HackRUColors.loading_gradient,
+                            )
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  username,
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    color: HackRUColors.off_white_blue,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        userStatus,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: HackRUColors.off_white_blue,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          IconData(checkedin ? 0xe157 : 0xf68b,
+                                              fontFamily: 'MaterialIcons'),
+                                          color: checkedin
+                                              ? Colors.green
+                                              : Colors.red,
+                                          size: 30.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  _showQrCode();
+                                },
+                                color: HackRUColors.off_white_blue,
+                                icon: const Icon(
+                                  Icons.qr_code,
+                                  size: 24,
+                                ))
+                          ],
                         ),
-                        // itemCount: resources.length+1,
-                        controller: ScrollController(),
-                        itemCount: resources.length,
-                        itemBuilder: (context, index) {
-                          return AnnouncementCard(
-                            resource: resources[index],
-                          );
-                        },
-                      ),
-                    );
-                }
-              },
+                ),
+              ),
+              const SizedBox(height: 5),
+            ],
+            Row(
+              children: [
+                if (!_hasAuthToken)
+                  Expanded(
+                    child: DashboardButton(
+                        onPressed: _onLogin,
+                        bgColor: HackRUColors.blue,
+                        textColor: HackRUColors.off_white_blue,
+                        label: "Login"),
+                  ),
+                Expanded(
+                  child: DashboardButton(
+                      onPressed: _onHelp,
+                      bgColor: Colors.black26,
+                      textColor: HackRUColors.off_white_blue,
+                      label: "Help"),
+                )
+              ],
+            ),
+            if (credManager!.getAuthorization()) ...[
+              const SizedBox(height: 5),
+              DashboardButton(
+                  onPressed: _onScanner,
+                  bgColor: Colors.black26,
+                  textColor: HackRUColors.off_white_blue,
+                  label: "QR Scanner")
+            ],
+            if (credManager!.getAuthorization()) ...[
+              const SizedBox(height: 5),
+              DashboardButton(
+                  onPressed: () => _onGetAttending(context),
+                  bgColor: Colors.black26,
+                  textColor: HackRUColors.off_white_blue,
+                  label: "Get Attending")
+            ],
+            if (_hasAuthToken) ...[
+              const SizedBox(height: 5),
+              DashboardButton(
+                  onPressed: _onLogout,
+                  bgColor: Colors.black26,
+                  textColor: HackRUColors.off_white_blue,
+                  label: "Logout")
+            ],
+            Expanded(child: Container()),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
+                  iconData: FontAwesomeIcons.link,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
+                ),
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(REPOSITORY_URL),
+                  iconData: FontAwesomeIcons.github,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
+                ),
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(FACEBOOK_PAGE_URL),
+                  iconData: FontAwesomeIcons.squareFacebook,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
+                ),
+                SocialMediaCard(
+                  onPressed: () => url_launcher.launch(INSTAGRAM_PAGE_URL),
+                  iconData: FontAwesomeIcons.instagram,
+                  iconColor: HackRUColors.off_white_blue,
+                  bgColor: Colors.black26,
+                ),
+              ],
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// ===============================================
-///                   TIMER TEXT
-/// ===============================================
-
-class TimerText extends StatefulWidget {
-  const TimerText({Key? key}) : super(key: key);
-
-  @override
-  _TimerTextState createState() => _TimerTextState();
-}
-
-class _TimerTextState extends State<TimerText> {
-  var displayTime = ['00', '00', '00'];
-  Duration _dateTime = today.difference(DateTime.now());
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateTime();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
-  }
-
-  void _updateTime() {
-    if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-      //current time
-      DateTime today =
-          DateTime(currentDate.year, currentDate.month, currentDate.day);
-      setState(() {
-        _dateTime = today.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    } else if (hackRUStart.isAfter(DateTime.now())) {
-      //24 hours to start timer
-      setState(() {
-        _dateTime = hackRUStart.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    } else if (hackRUStart.isBefore(DateTime.now()) &&
-        hackRUEnd.isAfter(DateTime.now())) {
-      // timer during the event
-      setState(() {
-        _dateTime = hackRUEnd.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    } else {
-      // timer after the event
-      DateTime today =
-          DateTime(currentDate.year, currentDate.month, currentDate.day);
-      setState(() {
-        _dateTime = today.difference(DateTime.now());
-        displayTime = formatDuration(_dateTime).split(':');
-        _timer = Timer(
-          const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
-          _updateTime,
-        );
-      });
-    }
-  }
-
-  String formatDuration(Duration d) {
-    var seconds = d.inSeconds;
-    final hours = seconds ~/ Duration.secondsPerHour;
-    seconds -= hours * Duration.secondsPerHour;
-    final minutes = seconds ~/ Duration.secondsPerMinute;
-    seconds -= minutes * Duration.secondsPerMinute;
-
-    final List<String> tokens = [];
-
-    if (hours != 0) {
-      if (-10 < hours && hours < 10) {
-        tokens.add('0${hours.abs()}');
-      } else {
-        tokens.add('${hours.abs()}');
-      }
-    } else {
-      tokens.add('00');
-    }
-    if (minutes != 0) {
-      if (-10 < minutes && minutes < 10) {
-        tokens.add('0${minutes.abs()}');
-      } else {
-        tokens.add('${minutes.abs()}');
-      }
-    } else {
-      tokens.add('00');
-    }
-    if (seconds != 0) {
-      if (-10 < seconds && seconds < 10) {
-        tokens.add('0${seconds.abs()}');
-      } else {
-        tokens.add('${seconds.abs()}');
-      }
-    } else {
-      tokens.add('00');
-    }
-    return tokens.join(':');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              // width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                // color: HackRUColors.white,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      // '00',
-                      displayTime[0],
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      'Hours',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              // width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                // color: HackRUColors.white,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      // '00',
-                      displayTime[1],
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      'Mins',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              // width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                // color: HackRUColors.white,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      // '00',
-                      displayTime[2],
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    child: Text(
-                      'Secs',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: HackRUColors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

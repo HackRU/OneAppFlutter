@@ -14,9 +14,15 @@ class LinkTextSpan extends TextSpan {
 }
 
 class StringParser extends StatelessWidget {
-  final String? text;
+  final String text;
+  final TextStyle textStyle;
+  final TextStyle linkStyle;
 
-  StringParser({@required this.text});
+  StringParser({
+    required this.text,
+    required this.textStyle,
+    required this.linkStyle,
+  });
 
   bool _isTag(String input) {
     final matcher = RegExp(r'<!everyone>|<!channel>|<!here>|<!>');
@@ -69,51 +75,23 @@ class StringParser extends StatelessWidget {
   Widget build(BuildContext context) {
     var _brightnessValue = MediaQuery.of(context).platformBrightness;
 
-    final _style = TextStyle(
-      fontSize: 18.0,
-      color: _brightnessValue == Brightness.light
-          ? HackRUColors.charcoal_light
-          : HackRUColors.white,
-      fontWeight: FontWeight.w700,
-    );
-    final _boldStyle = TextStyle(
-      fontSize: 18.0,
-      color: _brightnessValue == Brightness.light
-          ? HackRUColors.charcoal_light
-          : HackRUColors.white,
-      fontWeight: FontWeight.bold,
-    );
-    final _italicsStyle = TextStyle(
-      fontSize: 18.0,
-      color: _brightnessValue == Brightness.light
-          ? HackRUColors.charcoal_light
-          : HackRUColors.white,
-      fontWeight: FontWeight.w700,
-      fontStyle: FontStyle.italic,
-    );
-    final _strikeThroughStyle = TextStyle(
-      fontSize: 18.0,
-      color: _brightnessValue == Brightness.light
-          ? HackRUColors.charcoal_light
-          : HackRUColors.white,
-      fontWeight: FontWeight.w400,
-      decoration: TextDecoration.lineThrough,
-    );
+    final _style = textStyle;
 
-    final words = text?.split(' ');
+    final _boldStyle = textStyle.copyWith(fontWeight: FontWeight.bold);
+
+    final _italicsStyle = textStyle.copyWith(fontStyle: FontStyle.italic);
+
+    final _strikeThroughStyle =
+        textStyle.copyWith(decoration: TextDecoration.lineThrough);
+
+    final words = text.split(' ');
     var span = <TextSpan>[];
 
-    words?.forEach((word) {
+    for (String word in words) {
       if (_isLink(word)) {
         var eWord = word.replaceAll(RegExp(r'[<>]'), '');
         span.add(LinkTextSpan(
-          style: _style.copyWith(
-            color: _brightnessValue == Brightness.light
-                ? HackRUColors.pink
-                : HackRUColors.yellow,
-            fontWeight: FontWeight.w700,
-            decoration: TextDecoration.underline,
-          ),
+          style: linkStyle,
           url: eWord,
           text: '$eWord ',
         ));
@@ -139,23 +117,18 @@ class StringParser extends StatelessWidget {
       } else {
         span.add(TextSpan(text: '$word ', style: _style));
       }
-    });
+    }
     if (span.isNotEmpty) {
       return RichText(
         text: TextSpan(
           children: span,
-          style: DefaultTextStyle.of(context).style,
+          style: TextStyle(),
         ),
       );
     } else {
       return Text(
-        text!,
-        style: TextStyle(
-          fontSize: 15.0,
-          color: _brightnessValue == Brightness.light
-              ? HackRUColors.pink_dark
-              : HackRUColors.yellow,
-        ),
+        text,
+        style: textStyle,
       );
     }
   }

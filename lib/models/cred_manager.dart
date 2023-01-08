@@ -2,78 +2,71 @@ import 'dart:convert';
 
 import 'package:hackru/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+class CredManager {
+  CredManager(this.prefs);
+  Box prefs;
 
-Future<void> deleteCredentials() async {
-  final prefs = await _prefs;
-  await prefs.remove('AUTH_TOKEN');
-  await prefs.remove('EMAIL');
-  await Future.delayed(Duration(seconds: 1));
-  return;
-}
-
-Future<void> persistCredentials(String kAuthToken, String kEmail) async {
-  final prefs = await _prefs;
-  await prefs.setString('AUTH_TOKEN', kAuthToken);
-  await prefs.setString('EMAIL', kEmail);
-  await Future.delayed(Duration(seconds: 1));
-  return;
-}
-
-Future<bool> hasCredentials() async {
-  final prefs = await _prefs;
-  if (prefs.containsKey('AUTH_TOKEN')) {
-    return true;
+  void deleteCredentials() {
+    prefs.delete('AUTH_TOKEN');
+    prefs.delete('EMAIL');
+    prefs.delete('AUTHORIZATION');
   }
-  await Future.delayed(Duration(seconds: 1));
-  return false;
-}
 
-Future<String?> getAuthToken() async {
-  final prefs = await _prefs;
-  if (prefs.containsKey('AUTH_TOKEN')) {
-    return prefs.getString('AUTH_TOKEN');
+  void persistCredentials(
+      String kAuthToken, String kEmail, String kAuthorization) {
+    prefs.put('AUTH_TOKEN', kAuthToken);
+    prefs.put('EMAIL', kEmail);
+    prefs.put('AUTHORIZATION', kAuthorization);
   }
-  await Future.delayed(Duration(seconds: 1));
-  return '';
-}
 
-Future<String?> getEmail() async {
-  final prefs = await _prefs;
-  if (prefs.containsKey('EMAIL')) {
-    return prefs.getString('EMAIL');
+  bool hasCredentials() {
+    if (prefs.containsKey('AUTH_TOKEN')) {
+      return true;
+    }
+    return false;
   }
-  await Future.delayed(Duration(seconds: 1));
-  return '';
-}
 
-Future<void> persistSlackAnnouncements(List<Announcement> slacks) async {
-  var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
-
-  final prefs = await _prefs;
-  var slacksMsgs = slacks.length > 1
-      ? jsonEncode(slacks)
-      : '[{"text": "Error: Unable to retrieve messages!", "ts": "$tsNow"}]';
-  await prefs.setString('SLACK_ANNOUNCEMENTS', slacksMsgs);
-  await Future.delayed(Duration(seconds: 1));
-}
-
-Future<List<Announcement>> getSlackAnnouncements() async {
-  final prefs = await _prefs;
-  var messages = List<Announcement>.empty();
-  if (prefs.containsKey('SLACK_ANNOUNCEMENTS')) {
-    var decoded = json.decode(prefs.getString('SLACK_ANNOUNCEMENTS')!);
-    messages = decoded
-        .map<Announcement>((slack) => Announcement.fromJson(slack))
-        .toList();
+  String getAuthToken() {
+    if (prefs.containsKey('AUTH_TOKEN')) {
+      return prefs.get('AUTH_TOKEN');
+    }
+    return '';
   }
-  return messages;
-}
 
-Future<void> deleteSlackAnnouncements() async {
-  final prefs = await _prefs;
-  await prefs.remove('SLACK_ANNOUNCEMENTS');
-  await Future.delayed(Duration(seconds: 1));
-  return;
+  String getEmail() {
+    if (prefs.containsKey('EMAIL')) {
+      return prefs.get('EMAIL');
+    }
+    return '';
+  }
+
+  bool getAuthorization() {
+    return prefs.get('AUTHORIZATION') == "TRUE" ? true : false;
+  }
+
+  void persistSlackAnnouncements(List<Announcement> slacks) {
+    var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
+
+    var slacksMsgs = slacks.length > 1
+        ? jsonEncode(slacks)
+        : '[{"text": "Error: Unable to retrieve messages!", "ts": "$tsNow"}]';
+    prefs.put('SLACK_ANNOUNCEMENTS', slacksMsgs);
+  }
+
+  List<Announcement> getSlackAnnouncements() {
+    var messages = List<Announcement>.empty();
+    if (prefs.containsKey('SLACK_ANNOUNCEMENTS')) {
+      var decoded = json.decode(prefs.get('SLACK_ANNOUNCEMENTS')!);
+      messages = decoded
+          .map<Announcement>((slack) => Announcement.fromJson(slack))
+          .toList();
+    }
+    return messages;
+  }
+
+  void deleteSlackAnnouncements() {
+    prefs.delete('SLACK_ANNOUNCEMENTS');
+  }
 }
