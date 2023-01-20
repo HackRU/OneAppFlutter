@@ -19,26 +19,26 @@ class WeatherNightStarBg extends StatefulWidget {
 
 class _WeatherNightStarBgState extends State<WeatherNightStarBg>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  AnimationController? _controller;
   List<_StarParam> _starParams = [];
   List<_MeteorParam> _meteorParams = [];
   WeatherDataState _state = WeatherDataState.init;
-  late double width;
-  late double height;
-  late double widthRatio;
+  double? width;
+  double? height;
+  double? widthRatio;
 
   /// 准备星星的参数信息
   void fetchData() async {
     Size? size = SizeInherited.of(context)?.size;
     width = size?.width ?? double.infinity;
     height = size?.height ?? double.infinity;
-    widthRatio = (height * 2) / width;
+    widthRatio = (height! * 2) / width!;
     print("width ratio $widthRatio");
     weatherPrint("开始准备星星参数");
     _state = WeatherDataState.loading;
     initStarParams();
     setState(() {
-      _controller.repeat();
+      _controller!.repeat();
     });
     _state = WeatherDataState.finish;
   }
@@ -63,7 +63,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
     /// 初始化动画信息
     _controller =
         AnimationController(duration: Duration(seconds: 5), vsync: this);
-    _controller.addListener(() {
+    _controller!.addListener(() {
       setState(() {});
     });
     super.initState();
@@ -71,7 +71,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -150,10 +150,10 @@ class _StarPainter extends CustomPainter {
       <Color>[const Color(0xFFFFFFFF), const Color(0x00FFFFFF)],
     );
     _meteorPaint.shader = gradient;
-    canvas.rotate(pi * param.radians);
+    canvas.rotate(pi * param.radians!);
     canvas.scale(widthRatio);
     canvas.translate(
-        param.translateX, tan(pi * 0.1) * _meteorWidth + param.translateY);
+        param.translateX!, tan(pi * 0.1) * _meteorWidth + param.translateY!);
     canvas.drawRRect(
         RRect.fromLTRBAndCorners(0, 0, _meteorWidth, _meteorHeight,
             topLeft: _radius,
@@ -191,8 +191,8 @@ class _StarPainter extends CustomPainter {
       0,
     ]);
     _paint.colorFilter = identity;
-    canvas.scale(param.scale);
-    canvas.drawCircle(Offset(param.x, param.y), 0.8, _paint);
+    canvas.scale(param.scale!);
+    canvas.drawCircle(Offset(param.x!, param.y!), 0.8, _paint);
     canvas.restore();
     param.move();
   }
@@ -204,11 +204,11 @@ class _StarPainter extends CustomPainter {
 }
 
 class _MeteorParam {
-  late double translateX;
-  late double translateY;
-  late double radians;
+  double? translateX;
+  double? translateY;
+  double? radians;
 
-  late double width, height, widthRatio;
+  double? width, height, widthRatio;
 
   /// 初始化数据
   void init(width, height, widthRatio) {
@@ -220,15 +220,15 @@ class _MeteorParam {
 
   /// 重置数据
   void reset() {
-    translateX = width + Random().nextDouble() * 20.0 * width;
+    translateX = width! + Random().nextDouble() * 20.0 * width!;
     radians = -Random().nextDouble() * 0.07 - 0.05;
-    translateY = Random().nextDouble() * 0.5 * height * widthRatio;
+    translateY = Random().nextDouble() * 0.5 * height! * widthRatio!;
   }
 
   /// 移动
   void move() {
-    translateX -= 20;
-    if (translateX <= -1.0 * width / widthRatio) {
+    translateX = translateX! + 20;
+    if (translateX! <= -1.0 * width! / widthRatio!) {
       reset();
     }
   }
@@ -236,16 +236,16 @@ class _MeteorParam {
 
 class _StarParam {
   /// x 坐标
-  late double x;
+  double? x;
 
   /// y 坐标
-  late double y;
+  double? y;
 
   /// 透明度值，默认为 0
   double alpha = 0.0;
 
   /// 缩放
-  late double scale;
+  double? scale;
 
   /// 是否反向动画
   bool reverse = false;
@@ -253,20 +253,20 @@ class _StarParam {
   /// 当前下标值
   int index;
 
-  late double width;
+  double? width;
 
-  late double height;
+  double? height;
 
-  late double widthRatio;
+  double? widthRatio;
 
   _StarParam(this.index);
 
   void reset() {
     alpha = 0;
     double baseScale = index == 0 ? 0.7 : 0.5;
-    scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio;
-    x = Random().nextDouble() * 1 * width / scale;
-    y = Random().nextDouble() * max(0.3 * height, 150);
+    scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio!;
+    x = Random().nextDouble() * 1 * width! / scale!;
+    y = Random().nextDouble() * max(0.3 * height!, 150);
     reverse = false;
   }
 
@@ -278,7 +278,7 @@ class _StarParam {
     alpha = Random().nextDouble();
     double baseScale = index == 0 ? 0.7 : 0.5;
     scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio;
-    x = Random().nextDouble() * 1 * width / scale;
+    x = Random().nextDouble() * 1 * width / scale!;
     y = Random().nextDouble() * max(0.3 * height, 150);
     reverse = false;
   }

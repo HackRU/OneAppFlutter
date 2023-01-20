@@ -29,7 +29,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   AnimationController? _animationController;
   bool isPlaying = false;
-  late MobileScannerController cameraController;
+  MobileScannerController? cameraController;
   final TextEditingController _textFieldController = TextEditingController();
   CredManager? credManager;
 
@@ -67,7 +67,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   void dispose() {
     super.dispose();
     _animationController?.dispose();
-    cameraController.dispose();
+    cameraController!.dispose();
   }
 
   @override
@@ -141,7 +141,8 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                         IconButton(
                           iconSize: 80,
                           icon: ValueListenableBuilder(
-                            valueListenable: cameraController.cameraFacingState,
+                            valueListenable:
+                                cameraController!.cameraFacingState,
                             builder: (context, state, child) {
                               switch (state as CameraFacing) {
                                 case CameraFacing.front:
@@ -159,7 +160,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                               }
                             },
                           ),
-                          onPressed: () => cameraController.switchCamera(),
+                          onPressed: () => cameraController!.switchCamera(),
                         ),
                       ],
                     ),
@@ -178,10 +179,10 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
       isPlaying = !isPlaying;
       if (isPlaying) {
         _animationController?.forward();
-        cameraController.stop();
+        cameraController!.stop();
       } else {
         _animationController?.reverse();
-        cameraController.start();
+        cameraController!.start();
       }
     });
   }
