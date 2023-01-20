@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackru/weather/bg/weather_color_bg.dart';
 import 'package:hackru/weather/bg/weather_night_star_bg.dart';
-import 'package:hackru/weather/bg/weather_rain_snow_bg.dart';
-import 'package:hackru/weather/bg/weather_thunder_bg.dart';
 
 import '../utils/weather_type.dart';
 
@@ -103,28 +101,6 @@ class WeatherItemBg extends StatelessWidget {
     return Container();
   }
 
-  /// 构建雷暴效果
-  Widget _buildThunderBg() {
-    if (weatherType == WeatherType.thunder) {
-      return WeatherThunderBg(
-        weatherType: weatherType,
-      );
-    }
-    return Container();
-  }
-
-  /// 构建雨雪背景效果
-  Widget _buildRainSnowBg() {
-    if (WeatherUtil.isSnowRain(weatherType)) {
-      return WeatherRainSnowBg(
-        weatherType: weatherType,
-        viewWidth: width,
-        viewHeight: height,
-      );
-    }
-    return Container();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -136,8 +112,6 @@ class WeatherItemBg extends StatelessWidget {
             WeatherColorBg(
               weatherType: weatherType,
             ),
-            _buildRainSnowBg(),
-            _buildThunderBg(),
             _buildNightStarBg(),
           ],
         ),
