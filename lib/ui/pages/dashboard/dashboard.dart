@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hackru/ui/pages/dashboard/social_media.dart';
+import 'package:hackru/ui/widgets/social_media.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
