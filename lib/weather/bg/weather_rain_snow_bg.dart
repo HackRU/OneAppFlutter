@@ -28,7 +28,7 @@ class WeatherRainSnowBg extends StatefulWidget {
 class _WeatherRainSnowBgState extends State<WeatherRainSnowBg>
     with SingleTickerProviderStateMixin {
   List<ui.Image> _images = [];
-  late AnimationController _controller;
+  AnimationController? _controller;
   List<RainSnowParams> _rainSnows = [];
   int count = 0;
   WeatherDataState? _state;
@@ -81,7 +81,7 @@ class _WeatherRainSnowBgState extends State<WeatherRainSnowBg>
         weatherPrint("初始化雨参数成功 ${_rainSnows.length}");
       }
     }
-    _controller.forward();
+    _controller!.forward();
     _state = WeatherDataState.finish;
   }
 
@@ -100,13 +100,13 @@ class _WeatherRainSnowBgState extends State<WeatherRainSnowBg>
   void initState() {
     _controller =
         AnimationController(duration: Duration(minutes: 1), vsync: this);
-    CurvedAnimation(parent: _controller, curve: Curves.linear);
-    _controller.addListener(() {
+    CurvedAnimation(parent: _controller!, curve: Curves.linear);
+    _controller!.addListener(() {
       setState(() {});
     });
-    _controller.addStatusListener((status) {
+    _controller!.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _controller.repeat();
+        _controller!.repeat();
       }
     });
     fetchImages();
@@ -115,7 +115,7 @@ class _WeatherRainSnowBgState extends State<WeatherRainSnowBg>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -153,9 +153,9 @@ class RainSnowPainter extends CustomPainter {
       if (_state._rainSnows.isNotEmpty) {
         _state._rainSnows.forEach((element) {
           move(element);
-          ui.Offset offset = ui.Offset(element.x, element.y);
+          ui.Offset offset = ui.Offset(element.x!, element.y!);
           canvas.save();
-          canvas.scale(element.scale);
+          canvas.scale(element.scale!);
           var identity = ColorFilter.matrix(<double>[
             1,
             0,
@@ -175,7 +175,7 @@ class RainSnowPainter extends CustomPainter {
             0,
             0,
             0,
-            element.alpha,
+            element.alpha!,
             0,
           ]);
           _paint.colorFilter = identity;
@@ -187,15 +187,15 @@ class RainSnowPainter extends CustomPainter {
   }
 
   void move(RainSnowParams params) {
-    params.y = params.y + params.speed;
+    params.y = params.y! + params.speed!;
     if (WeatherUtil.isSnow(_state.widget.weatherType)) {
-      double offsetX = sin(params.y / (300 + 50 * params.alpha)) *
-          (1 + 0.5 * params.alpha) *
-          params.widthRatio;
-      params.x += offsetX;
+      double offsetX = sin(params.y! / (300 + 50 * params.alpha!)) *
+          (1 + 0.5 * params.alpha!) *
+          params.widthRatio!;
+      params.x = params.x! + offsetX;
     }
-    if (params.y > params.height / params.scale) {
-      params.y = -params.height * params.scale;
+    if (params.y! > params.height / params.scale!) {
+      params.y = -params.height * params.scale!;
       if (WeatherUtil.isRainy(_state.widget.weatherType) &&
           _state._images.isNotEmpty) {
         params.y = -_state._images[0].height.toDouble();
@@ -210,9 +210,9 @@ class RainSnowPainter extends CustomPainter {
       if (_state._rainSnows.isNotEmpty) {
         _state._rainSnows.forEach((element) {
           move(element);
-          ui.Offset offset = ui.Offset(element.x, element.y);
+          ui.Offset offset = ui.Offset(element.x!, element.y!);
           canvas.save();
-          canvas.scale(element.scale, element.scale);
+          canvas.scale(element.scale!, element.scale);
           var identity = ColorFilter.matrix(<double>[
             1,
             0,
@@ -232,7 +232,7 @@ class RainSnowPainter extends CustomPainter {
             0,
             0,
             0,
-            element.alpha,
+            element.alpha!,
             0,
           ]);
           _paint.colorFilter = identity;
@@ -251,16 +251,16 @@ class RainSnowPainter extends CustomPainter {
 
 class RainSnowParams {
   /// x 坐标
-  late double x;
+  double? x;
 
   /// y 坐标
-  late double y;
+  double? y;
 
   /// 下落速度
-  late double speed;
+  double? speed;
 
   /// 绘制的缩放
-  late double scale;
+  double? scale;
 
   /// 宽度
   double width;
@@ -269,13 +269,13 @@ class RainSnowParams {
   double height;
 
   /// 透明度
-  late double alpha;
+  double? alpha;
 
   /// 天气类型
   WeatherType weatherType;
 
-  late double widthRatio;
-  late double heightRatio;
+  double? widthRatio;
+  double? heightRatio;
 
   RainSnowParams(this.width, this.height, this.weatherType);
 
@@ -285,7 +285,7 @@ class RainSnowParams {
 
     /// 雨 0.1 雪 0.5
     reset();
-    y = Random().nextInt(800 ~/ scale).toDouble();
+    y = Random().nextInt(800 ~/ scale!).toDouble();
   }
 
   /// 当雪花移出屏幕时，需要重置参数
@@ -309,17 +309,17 @@ class RainSnowParams {
     if (WeatherUtil.isRainy(weatherType)) {
       double random = 0.4 + 0.12 * Random().nextDouble() * 5;
       this.scale = random * 1.2;
-      this.speed = 30 * random * ratio * heightRatio;
+      this.speed = 30 * random * ratio * heightRatio!;
       this.alpha = random * 0.6;
-      x = Random().nextInt(width * 1.2 ~/ scale).toDouble() -
-          width * 0.1 ~/ scale;
+      x = Random().nextInt(width * 1.2 ~/ scale!).toDouble() -
+          width * 0.1 ~/ scale!;
     } else {
       double random = 0.4 + 0.12 * Random().nextDouble() * 5;
-      this.scale = random * 0.8 * heightRatio;
-      this.speed = 8 * random * ratio * heightRatio;
+      this.scale = random * 0.8 * heightRatio!;
+      this.speed = 8 * random * ratio * heightRatio!;
       this.alpha = random;
-      x = Random().nextInt(width * 1.2 ~/ scale).toDouble() -
-          width * 0.1 ~/ scale;
+      x = Random().nextInt(width * 1.2 ~/ scale!).toDouble() -
+          width * 0.1 ~/ scale!;
     }
   }
 }
