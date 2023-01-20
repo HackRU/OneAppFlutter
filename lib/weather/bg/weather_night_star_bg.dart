@@ -19,7 +19,7 @@ class WeatherNightStarBg extends StatefulWidget {
 
 class _WeatherNightStarBgState extends State<WeatherNightStarBg>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  AnimationController? _controller;
   List<_StarParam> _starParams = [];
   List<_MeteorParam> _meteorParams = [];
   WeatherDataState _state = WeatherDataState.init;
@@ -38,7 +38,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
     _state = WeatherDataState.loading;
     initStarParams();
     setState(() {
-      _controller.repeat();
+      _controller!.repeat();
     });
     _state = WeatherDataState.finish;
   }
@@ -63,7 +63,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
     /// 初始化动画信息
     _controller =
         AnimationController(duration: Duration(seconds: 5), vsync: this);
-    _controller.addListener(() {
+    _controller!.addListener(() {
       setState(() {});
     });
     super.initState();
@@ -71,7 +71,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
