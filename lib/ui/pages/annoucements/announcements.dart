@@ -5,7 +5,6 @@ import 'package:hackru/models/models.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Announcements extends StatefulWidget {
   @override
@@ -44,62 +43,57 @@ class AnnouncementsState extends State {
           }
           var resources = snapshot.data ?? [];
           debugPrint(resources.length.toString());
-          return Container(
-            padding: EdgeInsets.symmetric(
-                horizontal:
-                    kIsWeb ? MediaQuery.of(context).size.width * 0.125 : 5.0),
-            child: RefreshIndicator(
-              color: Colors.white,
-              backgroundColor: HackRUColors.pink,
-              strokeWidth: 4,
-              onRefresh: () async {
-                var refreshedResources = await _getSlacks();
-                if (mounted) {
-                  setState(() {
-                    resources = refreshedResources;
-                  });
-                }
-              },
-              child: resources.length == 0
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: const [
-                              Center(
-                                child: Text(
-                                  "Fetching Announcements from Slack...",
-                                  style: TextStyle(
-                                      color: HackRUColors.off_white_blue),
-                                ),
+          return RefreshIndicator(
+            color: Colors.white,
+            backgroundColor: HackRUColors.pink,
+            strokeWidth: 4,
+            onRefresh: () async {
+              var refreshedResources = await _getSlacks();
+              if (mounted) {
+                setState(() {
+                  resources = refreshedResources;
+                });
+              }
+            },
+            child: resources.length == 0
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: const [
+                            Center(
+                              child: Text(
+                                "Fetching Announcements from Slack...",
+                                style: TextStyle(
+                                    color: HackRUColors.off_white_blue),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Center(
+                                child: CircularProgressIndicator(),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    )
-                  : ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.only(
-                        bottom: 25.0,
                       ),
-                      controller: ScrollController(),
-                      itemCount: resources.length,
-                      itemBuilder: (context, index) {
-                        return AnnouncementCard(
-                          resource: resources[index],
-                        );
-                      },
+                    ],
+                  )
+                : ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(
+                      bottom: 25.0,
                     ),
-            ),
+                    controller: ScrollController(),
+                    itemCount: resources.length,
+                    itemBuilder: (context, index) {
+                      return AnnouncementCard(
+                        resource: resources[index],
+                      );
+                    },
+                  ),
           );
         },
       ),

@@ -19,7 +19,6 @@ import '../help/help.dart';
 import '../home.dart';
 import '../login/login_page.dart';
 import '../qr_scanner/Scanner.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Dashboard extends StatefulWidget {
   const Dashboard({required this.goToHelp, required this.goToLogin});
@@ -181,169 +180,162 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width /
-                        MediaQuery.of(context).size.height >
-                    0.9
-                ? MediaQuery.of(context).size.width * 0.25
-                : 10),
-        child: Column(
-          children: [
-            timerBanner(Colors.black26, HackRUColors.off_white_blue),
-            const SizedBox(height: 5),
-            if (_hasAuthToken) ...[
-              Container(
-                decoration: ShapeDecoration(
-                  color: Colors.black26,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _isLoading
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Shimmer(
-                                    gradient: HackRUColors.loading_gradient,
-                                    child: Container(
-                                        color: HackRUColors.black,
-                                        height: 33.33,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6)),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Shimmer(
-                                    gradient: HackRUColors.loading_gradient,
-                                    child: Container(
-                                        color: HackRUColors.black,
-                                        height: 24,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.5))
-                              ],
-                            ),
-                            Shimmer(
-                              child: Container(
-                                height: 35,
-                                width: 35,
-                                color: HackRUColors.black,
-                              ),
-                              gradient: HackRUColors.loading_gradient,
-                            )
-                          ],
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  username,
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                    color: HackRUColors.off_white_blue,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        userStatus,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: HackRUColors.off_white_blue,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          IconData(checkedin ? 0xe157 : 0xf68b,
-                                              fontFamily: 'MaterialIcons'),
-                                          color: checkedin
-                                              ? Colors.green
-                                              : Colors.red,
-                                          size: 30.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  _showQrCode();
-                                },
-                                color: HackRUColors.off_white_blue,
-                                icon: const Icon(
-                                  Icons.qr_code,
-                                  size: 24,
-                                ))
-                          ],
-                        ),
+      body: Column(
+        children: [
+          timerBanner(Colors.black26, HackRUColors.off_white_blue),
+          const SizedBox(height: 7.5),
+          if (_hasAuthToken) ...[
+            Container(
+              decoration: ShapeDecoration(
+                color: Colors.black26,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              const SizedBox(height: 5),
-            ],
-            Row(
-              children: [
-                if (!_hasAuthToken)
-                  Expanded(
-                    child: DashboardButton(
-                        onPressed: _onLogin,
-                        bgColor: HackRUColors.blue,
-                        textColor: HackRUColors.off_white_blue,
-                        label: "Login"),
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _isLoading
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Shimmer(
+                                  gradient: HackRUColors.loading_gradient,
+                                  child: Container(
+                                      color: HackRUColors.black,
+                                      height: 33.33,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6)),
+                              const SizedBox(
+                                height: 7.5,
+                              ),
+                              Shimmer(
+                                  gradient: HackRUColors.loading_gradient,
+                                  child: Container(
+                                      color: HackRUColors.black,
+                                      height: 24,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5))
+                            ],
+                          ),
+                          Shimmer(
+                            child: Container(
+                              height: 35,
+                              width: 35,
+                              color: HackRUColors.black,
+                            ),
+                            gradient: HackRUColors.loading_gradient,
+                          )
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                username,
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: HackRUColors.off_white_blue,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      userStatus,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: HackRUColors.off_white_blue,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        IconData(checkedin ? 0xe157 : 0xf68b,
+                                            fontFamily: 'MaterialIcons'),
+                                        color: checkedin
+                                            ? Colors.green
+                                            : Colors.red,
+                                        size: 30.0,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                _showQrCode();
+                              },
+                              color: HackRUColors.off_white_blue,
+                              icon: const Icon(
+                                Icons.qr_code,
+                                size: 24,
+                              ))
+                        ],
+                      ),
+              ),
+            ),
+            const SizedBox(height: 7.5),
+          ],
+          Row(
+            children: [
+              if (!_hasAuthToken)
                 Expanded(
                   child: DashboardButton(
-                      onPressed: _onHelp,
-                      bgColor: Colors.black26,
+                      onPressed: _onLogin,
+                      bgColor: HackRUColors.blue,
                       textColor: HackRUColors.off_white_blue,
-                      label: "Help"),
-                )
-              ],
-            ),
-            if (credManager!.getAuthorization()) ...[
-              const SizedBox(height: 5),
-              DashboardButton(
-                  onPressed: _onScanner,
-                  bgColor: Colors.black26,
-                  textColor: HackRUColors.off_white_blue,
-                  label: "QR Scanner")
+                      label: "Login"),
+                ),
+              Expanded(
+                child: DashboardButton(
+                    onPressed: _onHelp,
+                    bgColor: Colors.black26,
+                    textColor: HackRUColors.off_white_blue,
+                    label: "Help"),
+              )
             ],
-            if (credManager!.getAuthorization()) ...[
-              const SizedBox(height: 5),
-              DashboardButton(
-                  onPressed: () => _onGetAttending(context),
-                  bgColor: Colors.black26,
-                  textColor: HackRUColors.off_white_blue,
-                  label: "Get Attending")
-            ],
-            if (_hasAuthToken) ...[
-              const SizedBox(height: 5),
-              DashboardButton(
-                  onPressed: _onLogout,
-                  bgColor: Colors.black26,
-                  textColor: HackRUColors.off_white_blue,
-                  label: "Logout")
-            ],
-            Expanded(child: Container()),
-            Row(
+          ),
+          if (credManager!.getAuthorization()) ...[
+            const SizedBox(height: 7.5),
+            DashboardButton(
+                onPressed: _onScanner,
+                bgColor: Colors.black26,
+                textColor: HackRUColors.off_white_blue,
+                label: "QR Scanner")
+          ],
+          if (credManager!.getAuthorization()) ...[
+            const SizedBox(height: 7.5),
+            DashboardButton(
+                onPressed: () => _onGetAttending(context),
+                bgColor: Colors.black26,
+                textColor: HackRUColors.off_white_blue,
+                label: "Get Attending")
+          ],
+          if (_hasAuthToken) ...[
+            const SizedBox(height: 7.5),
+            DashboardButton(
+                onPressed: _onLogout,
+                bgColor: Colors.black26,
+                textColor: HackRUColors.off_white_blue,
+                label: "Logout")
+          ],
+          Expanded(child: Container()),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -374,8 +366,8 @@ class DashboardState extends State<Dashboard> {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
