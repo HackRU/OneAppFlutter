@@ -42,7 +42,6 @@ class _HomeState extends State<Home> {
   BottomAppBar _buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
-      elevation: 25.0,
       notchMargin: 6.0,
       color: Colors.transparent,
       child: Row(

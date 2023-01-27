@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Announcements extends StatefulWidget {
   @override
@@ -42,7 +45,9 @@ class AnnouncementsState extends State {
           var resources = snapshot.data ?? [];
           debugPrint(resources.length.toString());
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            padding: EdgeInsets.symmetric(
+                horizontal:
+                    kIsWeb ? MediaQuery.of(context).size.width * 0.125 : 5.0),
             child: RefreshIndicator(
               color: Colors.white,
               backgroundColor: HackRUColors.pink,

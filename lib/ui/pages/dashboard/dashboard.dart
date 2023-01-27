@@ -19,6 +19,7 @@ import '../help/help.dart';
 import '../home.dart';
 import '../login/login_page.dart';
 import '../qr_scanner/Scanner.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Dashboard extends StatefulWidget {
   const Dashboard({required this.goToHelp, required this.goToLogin});
@@ -172,6 +173,7 @@ class DashboardState extends State<Dashboard> {
         );
       },
     )) {
+      
     }
   }
 
@@ -180,7 +182,12 @@ class DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width /
+                        MediaQuery.of(context).size.height >
+                    0.9
+                ? MediaQuery.of(context).size.width * 0.25
+                : 10),
         child: Column(
           children: [
             timerBanner(Colors.black26, HackRUColors.off_white_blue),
