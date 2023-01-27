@@ -82,8 +82,14 @@ class _HomeState extends State<Home> {
           : Container(),
       if (!(showLogin || showHelp))
         Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width /
+          padding: EdgeInsets.only(
+              top: 10,
+              right: MediaQuery.of(context).size.width /
+                          MediaQuery.of(context).size.height >
+                      1
+                  ? MediaQuery.of(context).size.width * 0.25
+                  : 10,
+              left: MediaQuery.of(context).size.width /
                           MediaQuery.of(context).size.height >
                       1
                   ? MediaQuery.of(context).size.width * 0.25
