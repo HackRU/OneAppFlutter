@@ -243,6 +243,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         );
       },
     )) {
+      
     }
   }
 
