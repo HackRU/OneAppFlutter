@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -27,7 +28,6 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
   double? height;
   double? widthRatio;
 
-  /// 准备星星的参数信息
   void fetchData() async {
     Size? size = SizeInherited.of(context)?.size;
     width = size?.width ?? double.infinity;
@@ -61,8 +61,8 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
   @override
   void initState() {
     /// 初始化动画信息
-    _controller =
-        AnimationController(duration: Duration(seconds: 5), vsync: this);
+    _controller = AnimationController(
+        duration: Duration(milliseconds: 5000), vsync: this);
     _controller!.addListener(() {
       setState(() {});
     });
@@ -264,9 +264,9 @@ class _StarParam {
   void reset() {
     alpha = 0;
     double baseScale = index == 0 ? 0.7 : 0.5;
-    scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio!;
+    scale = (Random().nextDouble() * 0.1) + 1.95;
     x = Random().nextDouble() * 1 * width! / scale!;
-    y = Random().nextDouble() * max(0.3 * height!, 150);
+    y = Random().nextDouble() * height!;
     reverse = false;
   }
 

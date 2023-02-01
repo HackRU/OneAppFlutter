@@ -41,10 +41,8 @@ class _HomeState extends State<Home> {
 
   BottomAppBar _buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      elevation: 25.0,
-      notchMargin: 6.0,
       color: Colors.transparent,
+      elevation: 0,
       child: Row(
           children: [0, 1, 2]
               .map((idx) => bottNavBarIcon(
@@ -82,23 +80,38 @@ class _HomeState extends State<Home> {
               value: Provider.of<CredManager>(context),
               child: LoginPage(goToDashboard: () => setLogin(false)))
           : Container(),
-      !(showLogin || showHelp)
-          ? Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top * 1.5),
-                child: PageView(
-                  controller: _pageController,
-                  children: _kBottomNavPages,
-                  onPageChanged: (value) => setState(() {
-                    _currentBottomNavItemIndex = value;
-                  }),
-                ),
+      if (!(showLogin || showHelp))
+        Padding(
+          padding: EdgeInsets.only(
+              top: 10,
+              right: MediaQuery.of(context).size.width /
+                          MediaQuery.of(context).size.height >
+                      1
+                  ? MediaQuery.of(context).size.width * 0.25
+                  : 10,
+              left: MediaQuery.of(context).size.width /
+                          MediaQuery.of(context).size.height >
+                      1
+                  ? MediaQuery.of(context).size.width * 0.25
+                  : 10),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top * 1.5),
+              child: PageView(
+                controller: _pageController,
+                children: _kBottomNavPages,
+                onPageChanged: (value) => setState(() {
+                  _currentBottomNavItemIndex = value;
+                }),
               ),
-              bottomNavigationBar: _buildBottomAppBar(context),
-            )
-          : Container()
+            ),
+            bottomNavigationBar: _buildBottomAppBar(context),
+          ),
+        )
+      else
+        Container()
     ]);
   }
 
