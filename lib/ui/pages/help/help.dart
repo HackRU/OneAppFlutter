@@ -18,19 +18,19 @@ const helpResources = [
     "desc": "Talk to friends, mentors, and organizers at HackRU",
     "url": SLACK_PAGE_URL
   },
-  {"name": "Devpost", "desc": "Submit your projects", "url": DEVPOST_URL},
+  // {"name": "Devpost", "desc": "Submit your projects", "url": DEVPOST_URL},
   {
     "name": "Rutgers Campus Map",
     "desc": "Rutgers University - College Ave Campus",
     "url":
         "https://maps.rutgers.edu/#/?bus=true&dining=true&healthCare=true&lat=40.503942&lng=-74.450773&parking=true&sidebar=true&zoom=17"
   },
-  {
-    "name": "Register Your Vehicle",
-    "desc": "Register for free parking permit",
-    "url":
-        "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=704cc129a9&e=c9b098417d"
-  }
+  // {
+  //   "name": "Register Your Vehicle",
+  //   "desc": "Register for free parking permit",
+  //   "url":
+  //       "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=704cc129a9&e=c9b098417d"
+  // }
 ];
 
 class Help extends StatelessWidget {
@@ -46,33 +46,31 @@ class Help extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor,
-      body: Container(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconButton(
-              onPressed: toggleHelp,
-              icon: Icon(Icons.close),
-              color: textColor,
-            ),
-            ListView.builder(
-              padding: EdgeInsets.all(0),
-              shrinkWrap: true,
-              itemCount: helpResources.length,
-              itemBuilder: (BuildContext context, int index) {
-                HelpResource helpResource =
-                    HelpResource.fromJson(helpResources[index]);
-                return HelpButton(
-                  resource: helpResource,
-                  bgColor: buttonColor,
-                  splashColor: splashColor,
-                  textColor: textColor,
-                );
-              },
-            ),
-          ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: AppBar(
+          foregroundColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: toggleHelp,
+            icon: Icon(Icons.close),
+            color: textColor,
+          ),
         ),
+      ),
+      body: ListView.builder(
+        itemCount: helpResources.length,
+        itemBuilder: (BuildContext context, int index) {
+          HelpResource helpResource =
+              HelpResource.fromJson(helpResources[index]);
+          return HelpButton(
+            resource: helpResource,
+            bgColor: buttonColor,
+            splashColor: splashColor,
+            textColor: textColor,
+          );
+        },
       ),
     );
   }
