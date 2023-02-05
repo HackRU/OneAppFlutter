@@ -27,7 +27,7 @@ dependencies:
   qr_flutter: ^4.0.0
   # qr_code_scanner: ^0.7.0
   http: ^0.13.4
-  intl: ^0.17.0
+  intl: ^0.18.0
   json_annotation: ^4.4.0
   meta: ^1.7.0
   mobile_scanner: ^2.0.0
