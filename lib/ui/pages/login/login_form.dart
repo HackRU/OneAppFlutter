@@ -299,10 +299,13 @@ class LoginFormState extends State<LoginForm> {
                     padding: const EdgeInsets.only(top: 5.0, bottom: 25.0),
                     child: Column(
                       children: <Widget>[
-                        RichText(
-                          text: TextSpan(
-                            children: span,
-                            style: DefaultTextStyle.of(context).style,
+                        FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: RichText(
+                            text: TextSpan(
+                              children: span,
+                              style: DefaultTextStyle.of(context).style,
+                            ),
                           ),
                         ),
                         Text(
