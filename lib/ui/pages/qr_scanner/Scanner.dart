@@ -188,7 +188,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   }
 
   void _qrRequest(String scanData) async {
-    var message;
+    String message;
     message = await _lcsHandle(scanData);
     debugPrint(message);
     if (message == 'SCANNED!' ||
@@ -196,7 +196,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         message == 'DAY-OF QR LINKED!') {
       _scanDialogSuccess(message);
     } else {
-      await await _warningDialog(message);
+      await _warningDialog(message);
     }
   }
 

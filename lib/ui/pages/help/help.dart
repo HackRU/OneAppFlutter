@@ -59,7 +59,6 @@ class Help extends StatelessWidget {
             ListView.builder(
               padding: EdgeInsets.all(0),
               shrinkWrap: true,
-              controller: ScrollController(),
               itemCount: helpResources.length,
               itemBuilder: (BuildContext context, int index) {
                 HelpResource helpResource =
