@@ -243,7 +243,6 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         );
       },
     )) {
-      
     }
   }
 
@@ -267,21 +266,21 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
                   const TextStyle(fontSize: 25, color: HackRUColors.off_white),
               textAlign: TextAlign.center),
           actions: <Widget>[
-            // TextButton(
-            //   style: ButtonStyle(
-            //     padding: MaterialStateProperty.all(
-            //       const EdgeInsets.all(15.0),
-            //     ),
-            //   ),
-            //   onPressed: () {
-            //     Navigator.pop(context, false);
-            //   },
-            //   child: const Text(
-            //     'CANCEL',
-            //     style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
-            //     textAlign: TextAlign.center,
-            //   ),
-            // ),
+            TextButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  const EdgeInsets.all(15.0),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text(
+                'CANCEL',
+                style: TextStyle(fontSize: 20, color: HackRUColors.pink_dark),
+                textAlign: TextAlign.center,
+              ),
+            ),
             MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
