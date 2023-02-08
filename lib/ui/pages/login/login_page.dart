@@ -10,14 +10,17 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: HackRUColors.transparent,
-        elevation: 0.0,
-        leading: IconButton(
-          onPressed: goToDashboard,
-          icon: const Icon(
-            Icons.close,
-            color: HackRUColors.off_white_blue,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: AppBar(
+          backgroundColor: HackRUColors.transparent,
+          elevation: 0.0,
+          leading: IconButton(
+            onPressed: goToDashboard,
+            icon: const Icon(
+              Icons.close,
+              color: HackRUColors.off_white_blue,
+            ),
           ),
         ),
       ),
