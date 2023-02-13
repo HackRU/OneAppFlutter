@@ -30,7 +30,7 @@ dependencies:
   intl: ^0.17.0
   json_annotation: ^4.4.0
   meta: ^1.7.0
-  mobile_scanner: ^2.0.0
+  mobile_scanner: ^3.0.0
   # mobile_scanner:
   #   path: depend/mobile_scanner-more_fixes
   # path_provider: ^2.0.9
