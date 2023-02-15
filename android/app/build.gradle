@@ -54,7 +54,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.hackru.oneapp.hackru"
+        applicationId "org.hackru.oneapp.android"
         minSdkVersion 24
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()

@@ -1,4 +1,4 @@
-package org.hackru.oneapp.hackru
+package org.hackru.oneapp.android
 
 import io.flutter.embedding.android.FlutterActivity;
 
