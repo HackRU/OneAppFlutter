@@ -29,8 +29,9 @@ class _EventCardState extends State<EventCard> {
     var time = DateFormat('hh:mm a').format(widget.resource.start!.toLocal());
     var date = DateFormat.d().format(widget.resource.start!.toLocal());
     var today = DateTime.now().toString();
-    print(DateFormat("MMMd").format(widget.resource.start!));
-    if (DateFormat("EEEE").format(widget.resource.start!) == widget.day) {
+    print(DateFormat("MMMd").format(widget.resource.start!.toLocal()));
+    if (DateFormat("EEEE").format(widget.resource.start!.toLocal()) ==
+        widget.day) {
       return Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

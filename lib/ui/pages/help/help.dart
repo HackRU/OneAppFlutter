@@ -25,12 +25,12 @@ const helpResources = [
     "url":
         "https://maps.rutgers.edu/#/?bus=true&dining=true&healthCare=true&lat=40.503942&lng=-74.450773&parking=true&sidebar=true&zoom=17"
   },
-  // {
-  //   "name": "Register Your Vehicle",
-  //   "desc": "Register for free parking permit",
-  //   "url":
-  //       "https://hackru.us3.list-manage.com/track/click?u=457c42db47ebf530a0fc733fb&id=704cc129a9&e=c9b098417d"
-  // }
+  {
+    "name": "Register Your Vehicle",
+    "desc": "Register for free parking permit",
+    "url":
+        "https://rudots.nupark.com/v2/portal/eventregister/e205e56c-4a65-4055-804f-16cbc270bf21#/events/registration/"
+  }
 ];
 
 class Help extends StatelessWidget {

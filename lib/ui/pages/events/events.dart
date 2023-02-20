@@ -47,10 +47,10 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
                   children: <Widget>[
                     titleCard("Saturday", Colors.transparent,
                         HackRUColors.off_white_blue),
-                    ...getEventsForDay('Sunday', events!),
+                    ...getEventsForDay('Saturday', events!),
                     titleCard("Sunday", Colors.transparent,
                         HackRUColors.off_white_blue),
-                    ...getEventsForDay('Monday', events),
+                    ...getEventsForDay('Sunday', events),
                   ],
                 ),
               );
@@ -70,7 +70,8 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
 
   List<EventCard> getEventsForDay(String day, List<Event> events) {
     return events
-        .where((event) => DateFormat("EEEE").format(event.start!) == day)
+        .where(
+            (event) => DateFormat("EEEE").format(event.start!.toLocal()) == day)
         .toList()
         .map((event) => EventCard(
             day: day,
