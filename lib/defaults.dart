@@ -7,9 +7,10 @@ const BASE_URL = 'https://api.hackru.org/prod';
 const MISC_URL = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 const WAIVER_URL = 'https://hackru.org/resources/waiver.pdf';
 
+const DEVPOST_URL = 'https://hackru-s23.devpost.com';
+
 /*
 Waiting on updated links for these
-const DEVPOST_URL = 'https://hackru-s22.devpost.com';
 const FOOD_MENU_URL = 'https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf';
 */
 const SLACK_PAGE_URL = 'https://hackruspring2023.slack.com/';

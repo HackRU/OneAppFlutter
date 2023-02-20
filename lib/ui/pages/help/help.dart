@@ -18,7 +18,11 @@ const helpResources = [
     "desc": "Talk to friends, mentors, and organizers at HackRU",
     "url": SLACK_PAGE_URL
   },
-  // {"name": "Devpost", "desc": "Submit your projects", "url": DEVPOST_URL},
+  {
+    "name": "Devpost",
+    "desc": "Submit your projects",
+    "url": DEVPOST_URL,
+  },
   {
     "name": "Rutgers Campus Map",
     "desc": "Rutgers University - College Ave Campus",
