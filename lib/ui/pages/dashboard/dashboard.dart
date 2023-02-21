@@ -151,7 +151,11 @@ class DashboardState extends State<Dashboard> {
                   ],
                 ),
               ),
-              width: MediaQuery.of(context).size.width * 0.75,
+              width: (MediaQuery.of(context).size.width /
+                          MediaQuery.of(context).size.height <
+                      1)
+                  ? MediaQuery.of(context).size.width * 0.75
+                  : MediaQuery.of(context).size.height * 0.75,
               padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
               child: Center(
                 child: QrImage(
