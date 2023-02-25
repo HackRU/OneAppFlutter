@@ -37,19 +37,19 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
   static const qrEvents = [
     "check-in",
     "delayed-check-in",
-    "lunch-saturday",
+    "team-building",
+    "ite-ethitech",
+    "WiCS",
     "dinner-saturday",
-    "ws-react",
-    "ws-cogsci_club",
-    "ws-wics",
-    "engg-lab-ctf",
-    "mlh-cup-stacking",
     "breakfast-sunday",
+    "android-rumad",
     "lunch-sunday",
+    "dinner-sunday",
     "t-shirt",
     "swag",
     "extra-1",
-    "extra-2"
+    "extra-2",
+    "extra-3",
   ];
 
   @override
@@ -243,6 +243,7 @@ class _ScannerState extends State<Scanner> with SingleTickerProviderStateMixin {
         );
       },
     )) {
+      
     }
   }
 
