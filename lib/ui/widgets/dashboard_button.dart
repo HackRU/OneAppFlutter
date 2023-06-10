@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import '../../styles.dart';
 
 class DashboardButton extends StatelessWidget {
-  DashboardButton(
-      {required this.onPressed,
-      required this.bgColor,
-      required this.textColor,
-      required this.label});
+  DashboardButton({
+    required this.onPressed,
+    required this.bgColor,
+    required this.textColor,
+    required this.label,
+  });
+
   VoidCallback onPressed;
   Color bgColor;
   Color textColor;

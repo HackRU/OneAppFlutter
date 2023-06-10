@@ -94,7 +94,7 @@ var qrEvents = json.encode(events);
 ///                     GET REQUESTS
 ///========================================================
 
-Future<List<Announcement>> slackResources() async {
+Future<List<Map>> slackResources() async {
   var resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 
@@ -105,33 +105,33 @@ Future<List<Announcement>> slackResources() async {
     // print('======== res: ' + response.body);
   } on TimeoutException catch (_) {
     return [
-      Announcement(
-        text: 'Sorry, request timedout! [Error 408]',
-        ts: tsNow,
-      )
+      <String, String>{
+        'text': 'Sorry, request timedout! [Error 408]',
+        'ts': tsNow,
+      }
     ];
   }
   if (resources['body'].length == 0) {
     if (resources['statusCode'] == 400) {
       return [
-        Announcement(
-          text: 'Error: Unable to retrieve messages!',
-          ts: tsNow,
-        )
+        <String, String>{
+          'text': 'Error: Unable to retrieve messages!',
+          'ts': tsNow,
+        }
       ];
     }
     if (resources['statusCode'] == 200) {
       return [
-        Announcement(
-          text: 'Nothing to show at the moment, please stay tuned!',
-          ts: tsNow,
-        )
+        <String, String>{
+          'text': 'Nothing to show at the moment, please stay tuned!',
+          'ts': tsNow,
+        }
       ];
     }
   }
   return resources['body']
       .where((resource) => resource['text'] != null)
-      .map<Announcement>((resource) => Announcement.fromJson(resource))
+      // .map<Announcement>((resource) => Announcement.fromJson(resource))
       .toList();
 }
 
