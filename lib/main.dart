@@ -4,7 +4,6 @@ import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/ui/pages/home.dart';
-import 'package:hackru/ui/pages/login/login_page.dart';
 import 'package:hackru/ui/widgets/page_not_found.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -13,9 +12,14 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter();
+
+  Hive.registerAdapter(AnnouncementAdapter());
+
   CredManager credManager = CredManager(await Hive.openBox("prefs"));
-  Box cachedAnnouncements = await Hive.openBox("cachedAnnouncements");
+  Box cachedAnnouncements = await Hive.openBox<Announcement>("announcements");
+  await Hive.openBox("loading");
 
   /*  ======================================================== *
    *  SYSTEM UI OVERLAY STYLING (ANDROID)                      *

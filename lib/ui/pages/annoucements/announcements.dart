@@ -5,6 +5,7 @@ import 'package:hackru/models/models.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
+import 'package:hackru/utils/value_listenable2.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class Announcements extends StatefulWidget {
@@ -21,23 +22,31 @@ class AnnouncementsState extends State {
     /*
     Just to update the Hive cache.
     */
-    Box announcementsBox = Hive.box('cachedAnnouncements');
+    Box<Announcement> announcementsBox =
+        Hive.box<Announcement>('announcements');
+    Box loadingBox = Hive.box('loading');
+    loadingBox.put('announcements', true);
 
     try {
-      slackResources().then((slackMsgs) {
-        announcementsBox.put('announcements', slackMsgs);
+      slackResources().then((announcementJsons) {
+        announcementJsons.forEach((announcementJson) {
+          announcementsBox.add(
+              Announcement.fromJson(announcementJson as Map<String, dynamic>));
+        });
       });
     } catch (e) {
       // TODO handle error
       debugPrint('Slack data stream ctrl error: ' + e.toString());
     }
+
+    loadingBox.put('announcements', false);
   }
 
   /*
-  Immediately load in cached announcments
-  - For this we need to put this in a list
-  Do the future to update cached announcements
-  Then we display the new thing
+  Have some announcements in cache and loading
+  have no announcemtns in cachte and loading
+  have some announcements in cache and not loading
+  have no announcements in cache and not loading
   */
   @override
   Widget build(BuildContext context) {
@@ -45,16 +54,23 @@ class AnnouncementsState extends State {
 
     return Scaffold(
         backgroundColor: Colors.transparent,
-        body: ValueListenableBuilder<Box>(
-          valueListenable: Hive.box('announcements').listenable(),
-          builder: (context, announcementBox, _) {
-            List<Map<String, String>> announcementJsons =
-                announcementBox.get('announcements');
-            List<Announcement> announcements = announcementJsons
-                .map((announcement) => Announcement.fromJson(announcement))
-                .toList();
+        body: ValueListenableBuilder2<Box, Box>(
+          first: Hive.box<Announcement>('announcements').listenable(),
+          second: Hive.box('loading').listenable(),
+          builder: (context, ___, loadingBox, _) {
+            Box<Announcement> announcementsBox =
+                Hive.box<Announcement>('announcements');
+            Iterable<Announcement> announcements = announcementsBox.values;
+            if (!announcements.iterator.moveNext())
+              debugPrint("Announcements Empty");
+
             // now depending on what's in these variables, generate a UI
-            return Container();
+
+            bool isLoading = loadingBox.get('announcements');
+            Widget announcementsUI = isLoading
+                ? const Center(child: Text("loading"))
+                : const Center(child: Text("not loading"));
+            return announcementsUI;
           },
         ));
 

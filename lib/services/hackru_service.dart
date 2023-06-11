@@ -111,40 +111,36 @@ Future<List<Map>> slackResources() async {
       }
     ];
   }
-  if (resources['body'].length == 0) {
-    if (resources['statusCode'] == 400) {
-      return [
-        <String, String>{
-          'text': 'Error: Unable to retrieve messages!',
-          'ts': tsNow,
-        }
-      ];
-    }
-    if (resources['statusCode'] == 200) {
-      return [
-        <String, String>{
-          'text': 'Nothing to show at the moment, please stay tuned!',
-          'ts': tsNow,
-        }
-      ];
-    }
+  if (resources['body'] == null ||
+      (resources['body'].length == 0 && resources['statusCode'] == 400)) {
+    return [
+      <String, String>{
+        'text': 'Error: Unable to retrieve messages!',
+        'ts': tsNow,
+      }
+    ];
+  }
+  if (resources['body'].length == 0 && resources['statusCode'] == 200) {
+    return [
+      <String, String>{
+        'text': 'Nothing to show at the moment, please stay tuned!',
+        'ts': tsNow,
+      }
+    ];
   }
   return resources['body']
       .where((resource) => resource['text'] != null)
-      // .map<Announcement>((resource) => Announcement.fromJson(resource))
       .toList();
 }
 
 Future<List<Event>> dayofEventsResources() async {
   var response = await getLcs('/dayof-events');
   var resources = json.decode(response.body);
-//  print(resources);
   if (resources['body'] == null || (resources['body'] as List).isEmpty) {
     return [
       Event(
         summary: 'Coming Soon',
         start: DateTime.now(),
-        //location: 'hackru_logo',
       )
     ];
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 
@@ -55,9 +56,12 @@ class HelpResource {
 /// @param text announcement description
 /// @param ts time stamp when an announcement was made
 
+@HiveType(typeId: 0)
 @JsonSerializable()
 class Announcement {
+  @HiveField(0)
   final String? text;
+  @HiveField(1)
   final String? ts;
 
   Announcement({this.text, this.ts});
