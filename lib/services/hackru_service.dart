@@ -107,7 +107,7 @@ Future<List<Map>> slackResources() async {
     return [
       <String, String>{
         'text': 'Sorry, request timedout! [Error 408]',
-        'ts': tsNow,
+        'ts': '0.0',
       }
     ];
   }
@@ -116,7 +116,7 @@ Future<List<Map>> slackResources() async {
     return [
       <String, String>{
         'text': 'Error: Unable to retrieve messages!',
-        'ts': tsNow,
+        'ts': '0.0',
       }
     ];
   }
@@ -124,7 +124,7 @@ Future<List<Map>> slackResources() async {
     return [
       <String, String>{
         'text': 'Nothing to show at the moment, please stay tuned!',
-        'ts': tsNow,
+        'ts': '0.0',
       }
     ];
   }

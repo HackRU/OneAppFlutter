@@ -1,8 +1,8 @@
 ///=======================================
 ///             ENDPOINTS
 ///=======================================
-// const BASE_URL = 'https://api.hackru.org/dev';  DEV URL
-const BASE_URL = 'https://api.hackru.org/prod';
+const BASE_URL = 'https://api.hackru.org/dev';
+// const BASE_URL = 'https://api.hackru.org/prod';
 
 const MISC_URL = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 const WAIVER_URL = 'https://hackru.org/resources/waiver.pdf';

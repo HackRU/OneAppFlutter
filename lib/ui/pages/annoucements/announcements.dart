@@ -1,14 +1,16 @@
-import 'dart:io';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:hackru/models/models.dart';
 import 'package:hackru/services/hackru_service.dart';
-import 'package:hackru/styles.dart';
-import 'package:hackru/ui/pages/annoucements/announcement_card.dart';
 import 'package:hackru/utils/value_listenable2.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'announcement_card.dart';
+
 class Announcements extends StatefulWidget {
+  const Announcements({super.key});
+
   @override
   State<StatefulWidget> createState() => AnnouncementsState();
 }
@@ -29,38 +31,26 @@ class AnnouncementsState extends State {
 
     try {
       slackResources().then((announcementJsons) {
-        announcementJsons.forEach((announcementJson) {
-          Announcement announcment =
+        Map<int, Announcement> announcements = HashMap();
+
+        for (var announcementJson in announcementJsons) {
+          Announcement announcement =
               Announcement.fromJson(announcementJson as Map<String, dynamic>);
-          announcementsBox.put(announcment.hashCode, announcment);
-        });
+
+          announcements.putIfAbsent(announcement.hashCode, () => announcement);
+
+          announcementsBox.put(announcement.hashCode, announcement);
+        }
+
+        List<Announcement> presentAnnouncements =
+            announcementsBox.values.toList();
+
+        for (Announcement inBoxAnnouncement in presentAnnouncements) {
+          if (!announcements.containsKey(inBoxAnnouncement.hashCode)) {
+            announcements.remove(inBoxAnnouncement.hashCode);
+          }
+        }
       });
-    } catch (e) {
-      // TODO handle error
-      debugPrint('Slack data stream ctrl error: ' + e.toString());
-    }
-
-    loadingBox.put('announcements', false);
-  }
-
-  Future<void> _getSlacksTest() async {
-    Box<Announcement> announcementsBox =
-        Hive.box<Announcement>('announcements');
-    Box loadingBox = Hive.box('loading');
-    loadingBox.put('announcements', true);
-
-    Announcement announcement1 =
-        Announcement(ts: "1571878519.113700", text: "Some text here");
-    Announcement announcement2 =
-        Announcement(ts: "1571878519.113700", text: "No text here");
-    Announcement announcement3 =
-        Announcement(ts: "1571888519.113700", text: "Some text here");
-
-    try {
-      announcementsBox.put(announcement1.hashCode, announcement1);
-      announcementsBox.put(announcement1.hashCode, announcement1);
-      announcementsBox.put(announcement2.hashCode, announcement2);
-      announcementsBox.put(announcement3.hashCode, announcement3);
     } catch (e) {
       // TODO handle error
       debugPrint('Slack data stream ctrl error: ' + e.toString());
@@ -77,7 +67,7 @@ class AnnouncementsState extends State {
   */
   @override
   Widget build(BuildContext context) {
-    _getSlacksTest().then((_) => {}); // handle errors/cleanup in here if needed
+    _getSlacks().then((_) => {}); // handle errors/cleanup in here if needed
 
     return Scaffold(
         backgroundColor: Colors.transparent,
@@ -95,7 +85,19 @@ class AnnouncementsState extends State {
             Widget announcementsUI = isLoading
                 ? const Center(child: Text("loading"))
                 : announcements.isNotEmpty
-                    ? const Center(child: Text("Has stuff"))
+                    ? ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(
+                          bottom: 25.0,
+                        ),
+                        controller: ScrollController(),
+                        itemCount: announcements.length,
+                        itemBuilder: (context, index) {
+                          return AnnouncementCard(
+                            resource: announcements[index],
+                          );
+                        },
+                      )
                     : const Center(child: Text("Has nothing"));
 
             return announcementsUI;
