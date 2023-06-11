@@ -30,10 +30,37 @@ class AnnouncementsState extends State {
     try {
       slackResources().then((announcementJsons) {
         announcementJsons.forEach((announcementJson) {
-          announcementsBox.add(
-              Announcement.fromJson(announcementJson as Map<String, dynamic>));
+          Announcement announcment =
+              Announcement.fromJson(announcementJson as Map<String, dynamic>);
+          announcementsBox.put(announcment.hashCode, announcment);
         });
       });
+    } catch (e) {
+      // TODO handle error
+      debugPrint('Slack data stream ctrl error: ' + e.toString());
+    }
+
+    loadingBox.put('announcements', false);
+  }
+
+  Future<void> _getSlacksTest() async {
+    Box<Announcement> announcementsBox =
+        Hive.box<Announcement>('announcements');
+    Box loadingBox = Hive.box('loading');
+    loadingBox.put('announcements', true);
+
+    Announcement announcement1 =
+        Announcement(ts: "1571878519.113700", text: "Some text here");
+    Announcement announcement2 =
+        Announcement(ts: "1571878519.113700", text: "No text here");
+    Announcement announcement3 =
+        Announcement(ts: "1571888519.113700", text: "Some text here");
+
+    try {
+      announcementsBox.put(announcement1.hashCode, announcement1);
+      announcementsBox.put(announcement1.hashCode, announcement1);
+      announcementsBox.put(announcement2.hashCode, announcement2);
+      announcementsBox.put(announcement3.hashCode, announcement3);
     } catch (e) {
       // TODO handle error
       debugPrint('Slack data stream ctrl error: ' + e.toString());
@@ -50,7 +77,7 @@ class AnnouncementsState extends State {
   */
   @override
   Widget build(BuildContext context) {
-    _getSlacks().then((_) => {}); // handle errors/cleanup in here if needed
+    _getSlacksTest().then((_) => {}); // handle errors/cleanup in here if needed
 
     return Scaffold(
         backgroundColor: Colors.transparent,
@@ -60,16 +87,17 @@ class AnnouncementsState extends State {
           builder: (context, ___, loadingBox, _) {
             Box<Announcement> announcementsBox =
                 Hive.box<Announcement>('announcements');
-            Iterable<Announcement> announcements = announcementsBox.values;
-            if (!announcements.iterator.moveNext())
-              debugPrint("Announcements Empty");
+            List<Announcement> announcements = announcementsBox.values.toList();
 
             // now depending on what's in these variables, generate a UI
 
             bool isLoading = loadingBox.get('announcements');
             Widget announcementsUI = isLoading
                 ? const Center(child: Text("loading"))
-                : const Center(child: Text("not loading"));
+                : announcements.isNotEmpty
+                    ? const Center(child: Text("Has stuff"))
+                    : const Center(child: Text("Has nothing"));
+
             return announcementsUI;
           },
         ));

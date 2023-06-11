@@ -69,6 +69,14 @@ class Announcement {
   factory Announcement.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementFromJson(json);
   Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
+
+  @override
+  int get hashCode => '${text}${ts}'.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Announcement && other.text == text && other.ts == ts;
+  }
 }
 
 /// User Profile
