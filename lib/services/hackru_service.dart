@@ -98,6 +98,7 @@ Future<List<Map>> slackResources() async {
   var resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 
+  // await Future.delayed(Duration(seconds: 3));
   // return [
   //   <String, String>{
   //     'text': "Testing announcements out",
@@ -105,7 +106,6 @@ Future<List<Map>> slackResources() async {
   //   }
   // ];
 
-  ///TODO: check all requests for TimeOutException
   try {
     var response = await getLcs('/dayof-slack');
     resources = json.decode(response.body);

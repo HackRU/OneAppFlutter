@@ -36,31 +36,24 @@ class AnnouncementsState extends State {
       }
     }
 
-    try {
-      slackResources().then((announcementJsons) {
-        Map<int, Announcement> announcements = HashMap();
+    List<Map> announcementJsons = await slackResources();
+    Map<int, Announcement> announcements = HashMap();
 
-        for (var announcementJson in announcementJsons) {
-          Announcement announcement =
-              Announcement.fromJson(announcementJson as Map<String, dynamic>);
+    for (var announcementJson in announcementJsons) {
+      Announcement announcement =
+          Announcement.fromJson(announcementJson as Map<String, dynamic>);
 
-          announcements.putIfAbsent(announcement.hashCode, () => announcement);
+      announcements.putIfAbsent(announcement.hashCode, () => announcement);
 
-          announcementsBox.put(announcement.hashCode, announcement);
-        }
+      announcementsBox.put(announcement.hashCode, announcement);
+    }
 
-        List<Announcement> presentAnnouncements =
-            announcementsBox.values.toList();
+    List<Announcement> presentAnnouncements = announcementsBox.values.toList();
 
-        for (Announcement inBoxAnnouncement in presentAnnouncements) {
-          if (!announcements.containsKey(inBoxAnnouncement.hashCode)) {
-            announcements.remove(inBoxAnnouncement.hashCode);
-          }
-        }
-      });
-    } catch (e) {
-      // TODO handle error
-      debugPrint('Slack data stream ctrl error: ' + e.toString());
+    for (Announcement inBoxAnnouncement in presentAnnouncements) {
+      if (!announcements.containsKey(inBoxAnnouncement.hashCode)) {
+        announcementsBox.delete(inBoxAnnouncement.hashCode);
+      }
     }
 
     loadingBox.put('announcements', false);
@@ -99,7 +92,7 @@ class AnnouncementsState extends State {
                       );
               },
             ),
-            onRefresh: slackResources));
+            onRefresh: _getSlacks));
 
     // return Scaffold(
     //   backgroundColor: Colors.transparent,
