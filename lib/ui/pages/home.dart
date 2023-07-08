@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final _kBottomNavPages = <Widget>[
-      Announcements(),
+      const Announcements(),
       Dashboard(
         goToHelp: () => setHelp(true),
         goToLogin: () => setLogin(true),

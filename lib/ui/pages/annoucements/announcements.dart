@@ -29,6 +29,13 @@ class AnnouncementsState extends State {
     Box loadingBox = Hive.box('loading');
     loadingBox.put('announcements', true);
 
+    List<Announcement> pastAnnouncements = announcementsBox.values.toList();
+    for (Announcement announcement in pastAnnouncements) {
+      if (announcement.text!.startsWith("Error")) {
+        announcementsBox.delete(announcement.hashCode);
+      }
+    }
+
     try {
       slackResources().then((announcementJsons) {
         Map<int, Announcement> announcements = HashMap();
@@ -59,33 +66,25 @@ class AnnouncementsState extends State {
     loadingBox.put('announcements', false);
   }
 
-  /*
-  Have some announcements in cache and loading
-  have no announcemtns in cachte and loading
-  have some announcements in cache and not loading
-  have no announcements in cache and not loading
-  */
   @override
   Widget build(BuildContext context) {
     _getSlacks().then((_) => {}); // handle errors/cleanup in here if needed
 
     return Scaffold(
         backgroundColor: Colors.transparent,
-        body: ValueListenableBuilder2<Box, Box>(
-          first: Hive.box<Announcement>('announcements').listenable(),
-          second: Hive.box('loading').listenable(),
-          builder: (context, ___, loadingBox, _) {
-            Box<Announcement> announcementsBox =
-                Hive.box<Announcement>('announcements');
-            List<Announcement> announcements = announcementsBox.values.toList();
+        body: RefreshIndicator(
+            child: ValueListenableBuilder2<Box, Box>(
+              first: Hive.box<Announcement>('announcements').listenable(),
+              second: Hive.box('loading').listenable(),
+              builder: (context, ___, loadingBox, _) {
+                Box<Announcement> announcementsBox =
+                    Hive.box<Announcement>('announcements');
+                List<Announcement> announcements =
+                    announcementsBox.values.toList();
 
-            // now depending on what's in these variables, generate a UI
-
-            bool isLoading = loadingBox.get('announcements');
-            Widget announcementsUI = isLoading
-                ? const Center(child: Text("loading"))
-                : announcements.isNotEmpty
-                    ? ListView.builder(
+                return announcements.isEmpty
+                    ? const Center(child: Text("Nothing to see here..."))
+                    : ListView.builder(
                         physics: const AlwaysScrollableScrollPhysics(),
                         padding: const EdgeInsets.only(
                           bottom: 25.0,
@@ -97,12 +96,10 @@ class AnnouncementsState extends State {
                             resource: announcements[index],
                           );
                         },
-                      )
-                    : const Center(child: Text("Has nothing"));
-
-            return announcementsUI;
-          },
-        ));
+                      );
+              },
+            ),
+            onRefresh: slackResources));
 
     // return Scaffold(
     //   backgroundColor: Colors.transparent,

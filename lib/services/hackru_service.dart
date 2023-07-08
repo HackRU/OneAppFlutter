@@ -98,6 +98,13 @@ Future<List<Map>> slackResources() async {
   var resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 
+  // return [
+  //   <String, String>{
+  //     'text': "Testing announcements out",
+  //     'ts': (DateTime.now().millisecondsSinceEpoch / 1000).toString(),
+  //   }
+  // ];
+
   ///TODO: check all requests for TimeOutException
   try {
     var response = await getLcs('/dayof-slack');
@@ -106,24 +113,23 @@ Future<List<Map>> slackResources() async {
   } on TimeoutException catch (_) {
     return [
       <String, String>{
-        'text': 'Sorry, request timedout! [Error 408]',
+        'text': 'Error: Request time out.',
+        'ts': '0.0',
+      }
+    ];
+  } on Exception catch (_) {
+    return [
+      <String, String>{
+        'text': 'Error: Unable to retrieve messages.',
         'ts': '0.0',
       }
     ];
   }
-  if (resources['body'] == null ||
-      (resources['body'].length == 0 && resources['statusCode'] == 400)) {
+
+  if (resources['statusCode'] != 400) {
     return [
       <String, String>{
-        'text': 'Error: Unable to retrieve messages!',
-        'ts': '0.0',
-      }
-    ];
-  }
-  if (resources['body'].length == 0 && resources['statusCode'] == 200) {
-    return [
-      <String, String>{
-        'text': 'Nothing to show at the moment, please stay tuned!',
+        'text': 'Error: Unable to retrieve messages.',
         'ts': '0.0',
       }
     ];
