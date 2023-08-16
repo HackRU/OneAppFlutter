@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hackru/weather/utils/weather_type.dart';
 import 'package:hackru/weather/bg/weather_bg.dart';
 import 'package:hackru/models/cred_manager.dart';
@@ -11,6 +13,27 @@ import 'package:provider/provider.dart';
 import 'help/help.dart';
 import 'login/login_page.dart';
 
+class ParallaxBackgroundDelegate extends SingleChildLayoutDelegate {
+  final BuildContext childContext;
+  ParallaxBackgroundDelegate(this.childContext);
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
+    return BoxConstraints(
+        minHeight: constraints.maxHeight, minWidth: constraints.maxHeight);
+  }
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    return Offset(0, 0);
+  }
+
+  @override
+  bool shouldRelayout(covariant SingleChildLayoutDelegate oldDelegate) {
+    return false;
+  }
+}
+
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
   static String? userEmail;
@@ -23,6 +46,7 @@ class _HomeState extends State<Home> {
   bool showHelp = false;
   bool showLogin = false;
 
+  double pageOffset = 0;
   final PageController _pageController = PageController(initialPage: 1);
 
   void setHelp(bool val) => setState(() => showHelp = val);
@@ -52,6 +76,14 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      setState(() => pageOffset = _pageController.page!);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _kBottomNavPages = <Widget>[
       const Announcements(),
@@ -63,10 +95,12 @@ class _HomeState extends State<Home> {
     ];
 
     return Stack(children: [
-      WeatherBg(
-          weatherType: WeatherType.sunnyNight,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height),
+      SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Image.asset("assets/forest_backround.jpg",
+            alignment: Alignment(-1 + pageOffset.abs() * 0.5 + 0.5, 0),
+            fit: BoxFit.fitHeight),
+      ),
       showHelp
           ? Help(
               () => setHelp(false),
