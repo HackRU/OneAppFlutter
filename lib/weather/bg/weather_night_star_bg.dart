@@ -28,13 +28,11 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
   double? height;
   double? widthRatio;
 
-  void fetchData() async {
+  void fetchData() {
     Size? size = SizeInherited.of(context)?.size;
     width = size?.width ?? double.infinity;
     height = size?.height ?? double.infinity;
-    widthRatio = (height! * 2) / width!;
-    print("width ratio $widthRatio");
-    weatherPrint("开始准备星星参数");
+    widthRatio = (height!) / width!;
     _state = WeatherDataState.loading;
     initStarParams();
     setState(() {
@@ -45,15 +43,15 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
 
   /// 初始化星星参数
   void initStarParams() {
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 90; i++) {
       var index = Random().nextInt(2);
       _StarParam _starParam = _StarParam(index);
       _starParam.init(width, height, widthRatio);
       _starParams.add(_starParam);
     }
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 2; i++) {
       _MeteorParam param = _MeteorParam();
-      param.init(width, height, widthRatio);
+      param.init(width, height);
       _meteorParams.add(param);
     }
   }
@@ -116,9 +114,6 @@ class _StarPainter extends CustomPainter {
   /// 流星的长度
   final double _meteorHeight = 2;
 
-  /// 流星的高度
-  final Radius _radius = Radius.circular(10);
-
   /// 流星的圆角半径
   _StarPainter(this._starParams, this._meteorParams, this.width, this.height,
       this.widthRatio) {
@@ -147,19 +142,21 @@ class _StarPainter extends CustomPainter {
     var gradient = ui.Gradient.linear(
       const Offset(0, 0),
       Offset(_meteorWidth, 0),
-      <Color>[const Color(0xFFFFFFFF), const Color(0x00FFFFFF)],
+      <Color>[
+        const Color(0xFFFFFFFF).withOpacity(0),
+        const Color(0xFFFFFFFF).withOpacity(0.2)
+      ],
     );
     _meteorPaint.shader = gradient;
-    canvas.rotate(pi * param.radians!);
-    canvas.scale(widthRatio);
-    canvas.translate(
-        param.translateX!, tan(pi * 0.1) * _meteorWidth + param.translateY!);
+    canvas.rotate(param.radians!);
+    // canvas.scale(widthRatio);
+    canvas.translate(param.translateX!, param.translateY!);
     canvas.drawRRect(
         RRect.fromLTRBAndCorners(0, 0, _meteorWidth, _meteorHeight,
-            topLeft: _radius,
-            topRight: _radius,
-            bottomRight: _radius,
-            bottomLeft: _radius),
+            topLeft: Radius.circular(10),
+            topRight: Radius.zero,
+            bottomRight: Radius.zero,
+            bottomLeft: Radius.circular(10)),
         _meteorPaint);
     param.move();
     canvas.restore();
@@ -208,29 +205,29 @@ class _MeteorParam {
   double? translateY;
   double? radians;
 
-  double? width, height, widthRatio;
+  double? width, height;
 
   /// 初始化数据
-  void init(width, height, widthRatio) {
+  void init(width, height) {
     this.width = width;
     this.height = height;
-    this.widthRatio = widthRatio;
     reset();
   }
 
   /// 重置数据
   void reset() {
-    translateX = width! + Random().nextDouble() * 20.0 * width!;
-    radians = -Random().nextDouble() * 0.07 - 0.05;
-    translateY = Random().nextDouble() * 0.5 * height! * widthRatio!;
+    translateX = -200 + Random().nextDouble() * 100;
+    radians = (pi / 16) + Random().nextDouble() * pi / 8;
+    translateY = Random().nextDouble() * height! * 0.66;
   }
 
   /// 移动
   void move() {
-    translateX = translateX! + 20;
-    if (translateX! <= -1.0 * width! / widthRatio!) {
+    if (translateX! > width! * 4) {
       reset();
+      return;
     }
+    translateX = translateX! + 10;
   }
 }
 
@@ -265,7 +262,7 @@ class _StarParam {
     alpha = 0;
     double baseScale = index == 0 ? 0.7 : 0.5;
     scale = (Random().nextDouble() * 0.1) + 1.95;
-    x = Random().nextDouble() * 1 * width! / scale!;
+    x = Random().nextDouble() * width!;
     y = Random().nextDouble() * height!;
     reverse = false;
   }
@@ -278,8 +275,8 @@ class _StarParam {
     alpha = Random().nextDouble();
     double baseScale = index == 0 ? 0.7 : 0.5;
     scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio;
-    x = Random().nextDouble() * 1 * width / scale!;
-    y = Random().nextDouble() * max(0.3 * height, 150);
+    x = Random().nextDouble() * width;
+    y = Random().nextDouble() * height;
     reverse = false;
   }
 

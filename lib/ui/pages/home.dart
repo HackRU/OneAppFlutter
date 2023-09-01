@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:hackru/ui/widgets/floating_island.dart';
+import 'package:hackru/ui/widgets/sunrays.dart';
 import 'package:hackru/weather/utils/weather_type.dart';
 import 'package:hackru/weather/bg/weather_bg.dart';
 import 'package:hackru/models/cred_manager.dart';
@@ -81,11 +82,6 @@ class _HomeState extends State<Home> {
       //       alignment: Alignment(-1 + pageOffset.abs() * 0.5 + 0.5, 0),
       //       fit: BoxFit.fitHeight),
       // ),
-      // TODO make random square objects and make a test parallax thing with it
-      /*
-      * blue squares in backgound
-      * green squares in foreground
-      */
       Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -103,6 +99,8 @@ class _HomeState extends State<Home> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height),
 
+      Sunrays(),
+
       FloatingIsland(
         floatDistance: 0.02,
         floatDuration: 2000,
@@ -119,7 +117,7 @@ class _HomeState extends State<Home> {
         top: 0.55,
         left: 0.05,
         pageController: _pageController,
-        speed: 0.075,
+        speed: 0.05,
         size: 0.4,
         imageName: "assets/assets-png/rabbit_island.png",
       ),
