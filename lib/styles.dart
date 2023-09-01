@@ -37,13 +37,14 @@ import 'package:flutter/material.dart';
 
 abstract class HackRUColors {
   static const Color blue = Color(0xff1f6aa0);
-  static const Color off_white_blue = Color(0xffd1e9ef);
+  static const Color pale_yellow = Color(0xfff1e192);
   static const Color blue_grey = Colors.blueGrey;
   static const LinearGradient loading_gradient = LinearGradient(colors: [
     Colors.black26,
     Colors.transparent,
   ]);
 
+  static const Color dark_green = Color(0xFF1E3427);
   static const Color pink_light = Color(0xFFe06969);
   static const Color pink = Color(0xFFC85151);
   static const Color web_link = Color(0xFF732d2d);
@@ -124,83 +125,83 @@ ThemeData _buildTheme() {
     textTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: 100.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w600,
       ),
       headline2: TextStyle(
         fontSize: 90.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.bold,
       ),
       headline3: TextStyle(
         fontSize: 45.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
       headline4: TextStyle(
         fontSize: 35.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
       headline5: TextStyle(
         fontSize: 25.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w700,
       ),
       headline6: TextStyle(
         fontSize: 20.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w700,
       ),
       subtitle1: TextStyle(
         fontSize: 18.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w700,
       ),
       bodyText1: TextStyle(
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
       bodyText2: TextStyle(
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
     ),
     primaryTextTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: 100.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w600,
       ),
       headline2: TextStyle(
         fontSize: 90.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.bold,
       ),
       headline3: TextStyle(
         fontSize: 45.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
       headline4: TextStyle(
         fontSize: 35.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
       headline5: TextStyle(
         fontSize: 25.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w700,
       ),
       headline6: TextStyle(
         fontSize: 20.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w700,
       ),
       subtitle1: TextStyle(
         fontSize: 18.0,
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
         fontWeight: FontWeight.w700,
       ),
       bodyText1: TextStyle(
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
       bodyText2: TextStyle(
-        color: HackRUColors.off_white_blue,
+        color: HackRUColors.pale_yellow,
       ),
     ),
     accentTextTheme: const TextTheme(

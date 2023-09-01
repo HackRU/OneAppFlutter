@@ -55,7 +55,7 @@ class AnnouncementCard extends StatelessWidget {
                           ),
                           textStyle: const TextStyle(
                               fontSize: 15,
-                              color: HackRUColors.off_white_blue,
+                              color: HackRUColors.pale_yellow,
                               fontFamily: "TitilliumWeb")),
                     ),
             ],

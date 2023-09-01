@@ -131,7 +131,7 @@ class AnnouncementsState extends State {
     //                           child: Text(
     //                             "Fetching Announcements from Slack...",
     //                             style: TextStyle(
-    //                                 color: HackRUColors.off_white_blue),
+    //                                 color: HackRUColors.pale_yellow),
     //                           ),
     //                         ),
     //                         Padding(

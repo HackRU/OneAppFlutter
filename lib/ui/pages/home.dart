@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:hackru/ui/widgets/floating_island.dart';
 import 'package:hackru/weather/utils/weather_type.dart';
 import 'package:hackru/weather/bg/weather_bg.dart';
 import 'package:hackru/models/cred_manager.dart';
@@ -12,27 +13,6 @@ import 'package:provider/provider.dart';
 
 import 'help/help.dart';
 import 'login/login_page.dart';
-
-class ParallaxBackgroundDelegate extends SingleChildLayoutDelegate {
-  final BuildContext childContext;
-  ParallaxBackgroundDelegate(this.childContext);
-
-  @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    return BoxConstraints(
-        minHeight: constraints.maxHeight, minWidth: constraints.maxHeight);
-  }
-
-  @override
-  Offset getPositionForChild(Size size, Size childSize) {
-    return Offset(0, 0);
-  }
-
-  @override
-  bool shouldRelayout(covariant SingleChildLayoutDelegate oldDelegate) {
-    return false;
-  }
-}
 
 class Home extends StatefulWidget {
   static const String routeName = '/material/bottom_navigation';
@@ -95,19 +75,58 @@ class _HomeState extends State<Home> {
     ];
 
     return Stack(children: [
-      SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Image.asset("assets/forest_backround.jpg",
-            alignment: Alignment(-1 + pageOffset.abs() * 0.5 + 0.5, 0),
-            fit: BoxFit.fitHeight),
+      // SizedBox(
+      //   height: MediaQuery.of(context).size.height,
+      //   child: Image.asset("assets/forest_backround.jpg",
+      //       alignment: Alignment(-1 + pageOffset.abs() * 0.5 + 0.5, 0),
+      //       fit: BoxFit.fitHeight),
+      // ),
+      // TODO make random square objects and make a test parallax thing with it
+      /*
+      * blue squares in backgound
+      * green squares in foreground
+      */
+      Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xff73bb67),
+            Color(0xff1e3427),
+          ],
+        )),
       ),
+
+      WeatherBg(
+          weatherType: WeatherType.sunnyNight,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height),
+
+      FloatingIsland(
+        floatDistance: 0.02,
+        floatDuration: 2000,
+        top: 0.225,
+        left: 0.3,
+        pageController: _pageController,
+        speed: 0.15,
+        size: 0.7,
+        imageName: "assets/assets-png/frog_island.png",
+      ),
+      FloatingIsland(
+        floatDistance: 0.01,
+        floatDuration: 2000,
+        top: 0.55,
+        left: 0.05,
+        pageController: _pageController,
+        speed: 0.075,
+        size: 0.4,
+        imageName: "assets/assets-png/rabbit_island.png",
+      ),
+
       showHelp
-          ? Help(
-              () => setHelp(false),
-              HackRUColors.transparent,
-              HackRUColors.off_white_blue,
-              Colors.black26,
-              HackRUColors.blue_grey)
+          ? Help(() => setHelp(false), HackRUColors.transparent,
+              HackRUColors.pale_yellow, Colors.black26, HackRUColors.blue_grey)
           : Container(),
       showLogin
           ? Provider.value(
