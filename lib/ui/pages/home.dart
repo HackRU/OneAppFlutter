@@ -12,6 +12,7 @@ import 'package:hackru/ui/pages/events/events.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/clouds.dart';
 import 'help/help.dart';
 import 'login/login_page.dart';
 
@@ -100,6 +101,8 @@ class _HomeState extends State<Home> {
           height: MediaQuery.of(context).size.height),
 
       Sunrays(),
+
+      Clouds(MediaQuery.of(context).size.height),
 
       FloatingIsland(
         floatDistance: 0.02,

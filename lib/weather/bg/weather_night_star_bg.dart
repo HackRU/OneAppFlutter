@@ -216,7 +216,7 @@ class _MeteorParam {
 
   /// 重置数据
   void reset() {
-    translateX = -200 + Random().nextDouble() * 100;
+    translateX = -1000 + Random().nextDouble() * 700;
     radians = (pi / 16) + Random().nextDouble() * pi / 8;
     translateY = Random().nextDouble() * height! * 0.66;
   }
@@ -261,7 +261,7 @@ class _StarParam {
   void reset() {
     alpha = 0;
     double baseScale = index == 0 ? 0.7 : 0.5;
-    scale = (Random().nextDouble() * 0.1) + 1.95;
+    scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio!;
     x = Random().nextDouble() * width!;
     y = Random().nextDouble() * height!;
     reverse = false;
