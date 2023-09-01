@@ -109,6 +109,8 @@ Future<List<Map>> slackResources() async {
   try {
     var response = await getLcs('/dayof-slack');
     resources = json.decode(response.body);
+
+    print(response.body);
     // print('======== res: ' + response.body);
   } on TimeoutException catch (_) {
     return [
@@ -126,7 +128,7 @@ Future<List<Map>> slackResources() async {
     ];
   }
 
-  if (resources['statusCode'] != 400) {
+  if (resources['statusCode'] == 400) {
     return [
       <String, String>{
         'text': 'Error: Unable to retrieve messages.',
@@ -142,11 +144,13 @@ Future<List<Map>> slackResources() async {
 Future<List<Event>> dayofEventsResources() async {
   var response = await getLcs('/dayof-events');
   var resources = json.decode(response.body);
+  print(response.body);
   if (resources['body'] == null || (resources['body'] as List).isEmpty) {
+    print("hello");
     return [
       Event(
         summary: 'Coming Soon',
-        start: DateTime.now(),
+        start: DateTime.fromMillisecondsSinceEpoch(1693692194000),
       )
     ];
   }
