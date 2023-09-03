@@ -13,11 +13,11 @@ const helpResources = [
     "desc": "Get matched with a mentor for help!",
     "url": HELP_Q_URL
   },
-  // {
-  //   "name": "Slack",
-  //   "desc": "Talk to friends, mentors, and organizers at HackRU",
-  //   "url": SLACK_PAGE_URL
-  // },
+  {
+    "name": "Slack",
+    "desc": "Talk to friends, mentors, and organizers at HackRU",
+    "url": SLACK_PAGE_URL
+  },
   // {
   //   "name": "Devpost",
   //   "desc": "Submit your projects",
@@ -38,8 +38,13 @@ const helpResources = [
 ];
 
 class Help extends StatelessWidget {
-  Help(this.toggleHelp, this.bgColor, this.textColor, this.buttonColor,
-      this.splashColor);
+  Help(
+    this.toggleHelp,
+    this.bgColor,
+    this.textColor,
+    this.buttonColor,
+    this.splashColor,
+  );
   VoidCallback toggleHelp;
   Color bgColor;
   Color textColor;

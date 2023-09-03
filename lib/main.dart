@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:hackru/defaults.dart';
 import 'package:hackru/models/cred_manager.dart';
 import 'package:hackru/models/models.dart';
-import 'package:hackru/ui/pages/SplashScreen.dart';
 import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/widgets/page_not_found.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -51,30 +50,22 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Future.delayed(Duration(milliseconds: 1500)),
-        builder: (context, asyncSnapshot) {
-          Widget page = SplashScreen();
-          if (asyncSnapshot.connectionState == ConnectionState.done) {
-            page = MultiProvider(providers: [
-              Provider.value(value: credManager),
-              Provider.value(value: cachedAnnouncements),
-            ], child: Home());
-          }
-          return MaterialApp(
-            title: kAppTitle,
-            debugShowCheckedModeBanner: false,
-            theme: kTheme,
-            home: page,
-            onUnknownRoute: (RouteSettings setting) {
-              var unknownRoute = setting.name;
-              return MaterialPageRoute(
-                builder: (context) => PageNotFound(
-                  title: unknownRoute,
-                ),
-              );
-            },
-          );
-        });
+    return MaterialApp(
+      title: kAppTitle,
+      debugShowCheckedModeBanner: false,
+      theme: kTheme,
+      home: MultiProvider(providers: [
+        Provider.value(value: credManager),
+        Provider.value(value: cachedAnnouncements),
+      ], child: Home()),
+      onUnknownRoute: (RouteSettings setting) {
+        var unknownRoute = setting.name;
+        return MaterialPageRoute(
+          builder: (context) => PageNotFound(
+            title: unknownRoute,
+          ),
+        );
+      },
+    );
   }
 }

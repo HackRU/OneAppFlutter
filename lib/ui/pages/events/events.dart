@@ -78,7 +78,7 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
             resource: event,
             titleColor: HackRUColors.pale_yellow,
             bgColor: Colors.black26,
-            tsColor: Colors.blueGrey))
+            tsColor: Colors.white))
         .toList();
   }
 }

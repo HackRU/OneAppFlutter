@@ -110,8 +110,12 @@ class DashboardState extends State<Dashboard> {
     var count = 0;
     try {
       count = await getAttending(_authToken);
-      warningDialog(context, "Total = " + count.toString(), HackRUColors.blue,
-          HackRUColors.pale_yellow, HackRUColors.blue_grey);
+      warningDialog(
+          context,
+          "Total = " + count.toString(),
+          Color.fromARGB(255, 19, 61, 53),
+          HackRUColors.pale_yellow,
+          HackRUColors.white);
     } on LcsError {
       var result = "Error Fetching Result.";
       warningDialog(context, result, HackRUColors.blue,

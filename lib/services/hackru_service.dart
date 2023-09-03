@@ -95,7 +95,7 @@ var qrEvents = json.encode(events);
 ///========================================================
 
 Future<List<Map>> slackResources() async {
-  var resources;
+  Map resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 
   // await Future.delayed(Duration(seconds: 3));
@@ -109,8 +109,6 @@ Future<List<Map>> slackResources() async {
   try {
     var response = await getLcs('/dayof-slack');
     resources = json.decode(response.body);
-
-    print(response.body);
     // print('======== res: ' + response.body);
   } on TimeoutException catch (_) {
     return [
@@ -137,20 +135,21 @@ Future<List<Map>> slackResources() async {
     ];
   }
   return resources['body'] is List
-      ? resources['body'].where((resource) => resource['text'] != null).toList()
+      ? (resources['body'] as List)
+          .where((resource) => resource['text'] != null)
+          .map((resource) => resource as Map)
+          .toList()
       : [];
 }
 
 Future<List<Event>> dayofEventsResources() async {
   var response = await getLcs('/dayof-events');
   var resources = json.decode(response.body);
-  print(response.body);
   if (resources['body'] == null || (resources['body'] as List).isEmpty) {
-    print("hello");
     return [
       Event(
         summary: 'Coming Soon',
-        start: DateTime.fromMillisecondsSinceEpoch(1693692194000),
+        start: DateTime.now(),
       )
     ];
   }

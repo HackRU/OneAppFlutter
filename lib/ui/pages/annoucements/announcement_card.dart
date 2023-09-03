@@ -43,7 +43,7 @@ class AnnouncementCard extends StatelessWidget {
                         formattedTime,
                         style: const TextStyle(
                           fontSize: 18.0,
-                          color: HackRUColors.blue_grey,
+                          color: Colors.white,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

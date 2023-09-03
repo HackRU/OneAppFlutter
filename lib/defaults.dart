@@ -13,7 +13,7 @@ const DEVPOST_URL = 'https://hackru-s23.devpost.com';
 Waiting on updated links for these
 const FOOD_MENU_URL = 'https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf';
 */
-const SLACK_PAGE_URL = 'https://hackruspring2023.slack.com/';
+const SLACK_PAGE_URL = 'https://hackrufall2023.slack.com/';
 const HELP_Q_URL = 'http://mentorq.hackru.org/';
 const HACKRU_SIGN_UP = 'https://hackru.org/signup';
 
