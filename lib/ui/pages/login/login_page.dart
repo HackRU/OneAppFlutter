@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
           onPressed: goToDashboard,
           icon: const Icon(
             Icons.close,
-            color: HackRUColors.off_white_blue,
+            color: HackRUColors.pale_yellow,
           ),
         ),
       ),

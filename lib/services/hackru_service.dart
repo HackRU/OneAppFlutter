@@ -94,57 +94,62 @@ var qrEvents = json.encode(events);
 ///                     GET REQUESTS
 ///========================================================
 
-Future<List<Announcement>> slackResources() async {
-  var resources;
+Future<List<Map>> slackResources() async {
+  Map resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 
-  ///TODO: check all requests for TimeOutException
+  // await Future.delayed(Duration(seconds: 3));
+  // return [
+  //   <String, String>{
+  //     'text': "Testing announcements out",
+  //     'ts': (DateTime.now().millisecondsSinceEpoch / 1000).toString(),
+  //   }
+  // ];
+
   try {
     var response = await getLcs('/dayof-slack');
     resources = json.decode(response.body);
     // print('======== res: ' + response.body);
   } on TimeoutException catch (_) {
     return [
-      Announcement(
-        text: 'Sorry, request timedout! [Error 408]',
-        ts: tsNow,
-      )
+      <String, String>{
+        'text': 'Error: Request time out.',
+        'ts': '0.0',
+      }
+    ];
+  } on Exception catch (_) {
+    return [
+      <String, String>{
+        'text': 'Error: Unable to retrieve messages.',
+        'ts': '0.0',
+      }
     ];
   }
-  if (resources['body'].length == 0) {
-    if (resources['statusCode'] == 400) {
-      return [
-        Announcement(
-          text: 'Error: Unable to retrieve messages!',
-          ts: tsNow,
-        )
-      ];
-    }
-    if (resources['statusCode'] == 200) {
-      return [
-        Announcement(
-          text: 'Nothing to show at the moment, please stay tuned!',
-          ts: tsNow,
-        )
-      ];
-    }
+
+  if (resources['statusCode'] == 400) {
+    return [
+      <String, String>{
+        'text': 'Error: Unable to retrieve messages.',
+        'ts': '0.0',
+      }
+    ];
   }
-  return resources['body']
-      .where((resource) => resource['text'] != null)
-      .map<Announcement>((resource) => Announcement.fromJson(resource))
-      .toList();
+  return resources['body'] is List
+      ? (resources['body'] as List)
+          .where((resource) => resource['text'] != null)
+          .map((resource) => resource as Map)
+          .toList()
+      : [];
 }
 
 Future<List<Event>> dayofEventsResources() async {
   var response = await getLcs('/dayof-events');
   var resources = json.decode(response.body);
-//  print(resources);
   if (resources['body'] == null || (resources['body'] as List).isEmpty) {
     return [
       Event(
         summary: 'Coming Soon',
         start: DateTime.now(),
-        //location: 'hackru_logo',
       )
     ];
   }

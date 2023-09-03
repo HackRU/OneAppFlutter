@@ -64,6 +64,7 @@ class LoginFormState extends State<LoginForm> {
           return ErrorDialog(body: body);
         },
       )) {
+        
       }
     }
 
@@ -136,16 +137,16 @@ class LoginFormState extends State<LoginForm> {
           barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
-              backgroundColor: HackRUColors.blue,
+              backgroundColor: Color(0xff3e8169),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
               title: const Text(
                 'Enter valid email for password reset',
-                style: TextStyle(color: HackRUColors.off_white_blue),
+                style: TextStyle(color: HackRUColors.pale_yellow),
               ),
               content: TextField(
-                style: const TextStyle(color: HackRUColors.off_white_blue),
+                style: const TextStyle(color: HackRUColors.pale_yellow),
                 onChanged: (value) {
                   setState(() {
                     valueText = value;
@@ -155,10 +156,15 @@ class LoginFormState extends State<LoginForm> {
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(color: Colors.blueGrey)),
+                        borderSide:
+                            const BorderSide(color: HackRUColors.pale_yellow)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide:
+                            const BorderSide(color: HackRUColors.pale_yellow)),
                     hintText: "john.smith@email.com",
-                    hintStyle:
-                        const TextStyle(color: HackRUColors.off_white_blue)),
+                    hintStyle: TextStyle(
+                        color: HackRUColors.pale_yellow.withAlpha(50))),
               ),
               actions: <Widget>[
                 TextButton(
@@ -168,7 +174,8 @@ class LoginFormState extends State<LoginForm> {
                   ),
                   child: Text(
                     'CANCEL',
-                    style: TextStyle(fontSize: 20, color: Colors.blueGrey[50]),
+                    style: TextStyle(
+                        fontSize: 20, color: HackRUColors.pale_yellow),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
@@ -183,13 +190,13 @@ class LoginFormState extends State<LoginForm> {
                   ),
                   splashColor: HackRUColors.yellow,
                   height: 40.0,
-                  color: HackRUColors.off_white,
+                  color: Color.fromARGB(255, 19, 61, 53),
                   padding: const EdgeInsets.all(15.0),
                   child: const Text(
                     'OK',
                     style: TextStyle(
                       fontSize: 20,
-                      color: HackRUColors.blue,
+                      color: HackRUColors.pale_yellow,
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -249,6 +256,7 @@ class LoginFormState extends State<LoginForm> {
           );
         },
       )) {
+        
       }
     }
 
@@ -266,7 +274,7 @@ class LoginFormState extends State<LoginForm> {
         } on LcsError {
           var result = "Invalid email.";
           warningDialog(context, result, HackRUColors.blue,
-              HackRUColors.off_white_blue, HackRUColors.blue_grey);
+              HackRUColors.pale_yellow, HackRUColors.blue_grey);
         }
       }
     }
@@ -321,7 +329,7 @@ class LoginFormState extends State<LoginForm> {
                       keyboardType: TextInputType.emailAddress,
                       style: const TextStyle(
                         fontSize: 20,
-                        color: HackRUColors.off_white_blue,
+                        color: HackRUColors.pale_yellow,
                       ),
                       controller: _emailController,
                       onChanged: (value) {
@@ -338,7 +346,7 @@ class LoginFormState extends State<LoginForm> {
                         filled: true,
                         fillColor: Colors.black12,
                         labelStyle:
-                            const TextStyle(color: HackRUColors.off_white_blue),
+                            const TextStyle(color: HackRUColors.pale_yellow),
                         labelText: 'Email Address',
                         errorText: isInputValid
                             ? null
@@ -370,7 +378,7 @@ class LoginFormState extends State<LoginForm> {
                         filled: true,
                         fillColor: Colors.black12,
                         labelStyle:
-                            const TextStyle(color: HackRUColors.off_white_blue),
+                            const TextStyle(color: HackRUColors.pale_yellow),
                         labelText: 'Password',
                         errorText:
                             isInputValid ? null : 'Please enter valid password',
@@ -401,14 +409,14 @@ class LoginFormState extends State<LoginForm> {
                           ),
                         ),
                         backgroundColor: MaterialStateProperty.all(
-                          HackRUColors.blue_grey,
+                          Color.fromARGB(255, 19, 61, 53),
                         ),
                       ),
                       child: Text(
                         'Login',
                         style: TextStyle(
                           fontSize: 25,
-                          color: Theme.of(context).backgroundColor,
+                          color: HackRUColors.pale_yellow,
                           fontWeight: FontWeight.w700,
                         ),
                         textAlign: TextAlign.center,

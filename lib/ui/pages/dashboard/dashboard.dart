@@ -110,12 +110,16 @@ class DashboardState extends State<Dashboard> {
     var count = 0;
     try {
       count = await getAttending(_authToken);
-      warningDialog(context, "Total = " + count.toString(), HackRUColors.blue,
-          HackRUColors.off_white_blue, HackRUColors.blue_grey);
+      warningDialog(
+          context,
+          "Total = " + count.toString(),
+          Color.fromARGB(255, 19, 61, 53),
+          HackRUColors.pale_yellow,
+          HackRUColors.white);
     } on LcsError {
       var result = "Error Fetching Result.";
       warningDialog(context, result, HackRUColors.blue,
-          HackRUColors.off_white_blue, HackRUColors.blue_grey);
+          HackRUColors.pale_yellow, HackRUColors.blue_grey);
     }
   }
 
@@ -186,7 +190,7 @@ class DashboardState extends State<Dashboard> {
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
-          timerBanner(Colors.black26, HackRUColors.off_white_blue),
+          timerBanner(Colors.black26, HackRUColors.pale_yellow),
           const SizedBox(height: 7.5),
           if (_hasAuthToken) ...[
             Container(
@@ -244,7 +248,7 @@ class DashboardState extends State<Dashboard> {
                                 username,
                                 style: const TextStyle(
                                   fontSize: 25,
-                                  color: HackRUColors.off_white_blue,
+                                  color: HackRUColors.pale_yellow,
                                 ),
                               ),
                               Row(
@@ -256,7 +260,7 @@ class DashboardState extends State<Dashboard> {
                                       userStatus,
                                       style: TextStyle(
                                         fontSize: 18,
-                                        color: HackRUColors.off_white_blue,
+                                        color: HackRUColors.pale_yellow,
                                       ),
                                     ),
                                   ),
@@ -282,7 +286,7 @@ class DashboardState extends State<Dashboard> {
                               onPressed: () {
                                 _showQrCode();
                               },
-                              color: HackRUColors.off_white_blue,
+                              color: HackRUColors.pale_yellow,
                               icon: const Icon(
                                 Icons.qr_code,
                                 size: 24,
@@ -299,15 +303,15 @@ class DashboardState extends State<Dashboard> {
                 Expanded(
                   child: DashboardButton(
                       onPressed: _onLogin,
-                      bgColor: HackRUColors.blue,
-                      textColor: HackRUColors.off_white_blue,
+                      bgColor: Color.fromARGB(255, 19, 61, 53),
+                      textColor: HackRUColors.pale_yellow,
                       label: "Login"),
                 ),
               Expanded(
                 child: DashboardButton(
                     onPressed: _onHelp,
                     bgColor: Colors.black26,
-                    textColor: HackRUColors.off_white_blue,
+                    textColor: HackRUColors.pale_yellow,
                     label: "Help"),
               )
             ],
@@ -317,7 +321,7 @@ class DashboardState extends State<Dashboard> {
             DashboardButton(
                 onPressed: _onScanner,
                 bgColor: Colors.black26,
-                textColor: HackRUColors.off_white_blue,
+                textColor: HackRUColors.pale_yellow,
                 label: "QR Scanner")
           ],
           if (credManager!.getAuthorization()) ...[
@@ -325,7 +329,7 @@ class DashboardState extends State<Dashboard> {
             DashboardButton(
                 onPressed: () => _onGetAttending(context),
                 bgColor: Colors.black26,
-                textColor: HackRUColors.off_white_blue,
+                textColor: HackRUColors.pale_yellow,
                 label: "Get Attending")
           ],
           if (_hasAuthToken) ...[
@@ -333,7 +337,7 @@ class DashboardState extends State<Dashboard> {
             DashboardButton(
                 onPressed: _onLogout,
                 bgColor: Colors.black26,
-                textColor: HackRUColors.off_white_blue,
+                textColor: HackRUColors.pale_yellow,
                 label: "Logout")
           ],
           Expanded(child: Container()),
@@ -347,25 +351,25 @@ class DashboardState extends State<Dashboard> {
                 SocialMediaCard(
                   onPressed: () => url_launcher.launch(HACK_RU_WEBSITE_URL),
                   iconData: FontAwesomeIcons.link,
-                  iconColor: HackRUColors.off_white_blue,
+                  iconColor: HackRUColors.pale_yellow,
                   bgColor: Colors.black26,
                 ),
                 SocialMediaCard(
                   onPressed: () => url_launcher.launch(REPOSITORY_URL),
                   iconData: FontAwesomeIcons.github,
-                  iconColor: HackRUColors.off_white_blue,
+                  iconColor: HackRUColors.pale_yellow,
                   bgColor: Colors.black26,
                 ),
                 SocialMediaCard(
                   onPressed: () => url_launcher.launch(FACEBOOK_PAGE_URL),
                   iconData: FontAwesomeIcons.squareFacebook,
-                  iconColor: HackRUColors.off_white_blue,
+                  iconColor: HackRUColors.pale_yellow,
                   bgColor: Colors.black26,
                 ),
                 SocialMediaCard(
                   onPressed: () => url_launcher.launch(INSTAGRAM_PAGE_URL),
                   iconData: FontAwesomeIcons.instagram,
-                  iconColor: HackRUColors.off_white_blue,
+                  iconColor: HackRUColors.pale_yellow,
                   bgColor: Colors.black26,
                 ),
               ],

@@ -46,10 +46,10 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
                   padding: EdgeInsets.all(0),
                   children: <Widget>[
                     titleCard("Saturday", Colors.transparent,
-                        HackRUColors.off_white_blue),
+                        HackRUColors.pale_yellow),
                     ...getEventsForDay('Saturday', events!),
-                    titleCard("Sunday", Colors.transparent,
-                        HackRUColors.off_white_blue),
+                    titleCard(
+                        "Sunday", Colors.transparent, HackRUColors.pale_yellow),
                     ...getEventsForDay('Sunday', events),
                   ],
                 ),
@@ -76,9 +76,9 @@ class EventsState extends State<Events> with SingleTickerProviderStateMixin {
         .map((event) => EventCard(
             day: day,
             resource: event,
-            titleColor: HackRUColors.off_white_blue,
+            titleColor: HackRUColors.pale_yellow,
             bgColor: Colors.black26,
-            tsColor: Colors.blueGrey))
+            tsColor: Colors.white))
         .toList();
   }
 }

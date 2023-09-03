@@ -18,28 +18,33 @@ const helpResources = [
     "desc": "Talk to friends, mentors, and organizers at HackRU",
     "url": SLACK_PAGE_URL
   },
-  {
-    "name": "Devpost",
-    "desc": "Submit your projects",
-    "url": DEVPOST_URL,
-  },
+  // {
+  //   "name": "Devpost",
+  //   "desc": "Submit your projects",
+  //   "url": DEVPOST_URL,
+  // },
   {
     "name": "Rutgers Campus Map",
     "desc": "Rutgers University - College Ave Campus",
     "url":
         "https://maps.rutgers.edu/#/?bus=true&dining=true&healthCare=true&lat=40.503942&lng=-74.450773&parking=true&sidebar=true&zoom=17"
   },
-  {
-    "name": "Register Your Vehicle",
-    "desc": "Register for free parking permit",
-    "url":
-        "https://rudots.nupark.com/v2/portal/eventregister/e205e56c-4a65-4055-804f-16cbc270bf21#/events/registration/"
-  }
+  // {
+  //   "name": "Register Your Vehicle",
+  //   "desc": "Register for free parking permit",
+  //   "url":
+  //       "https://rudots.nupark.com/v2/portal/eventregister/e205e56c-4a65-4055-804f-16cbc270bf21#/events/registration/"
+  // }
 ];
 
 class Help extends StatelessWidget {
-  Help(this.toggleHelp, this.bgColor, this.textColor, this.buttonColor,
-      this.splashColor);
+  Help(
+    this.toggleHelp,
+    this.bgColor,
+    this.textColor,
+    this.buttonColor,
+    this.splashColor,
+  );
   VoidCallback toggleHelp;
   Color bgColor;
   Color textColor;

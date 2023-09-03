@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:hackru/ui/widgets/floating_island.dart';
+import 'package:hackru/ui/widgets/sunrays.dart';
 import 'package:hackru/weather/utils/weather_type.dart';
 import 'package:hackru/weather/bg/weather_bg.dart';
 import 'package:hackru/models/cred_manager.dart';
@@ -8,6 +12,7 @@ import 'package:hackru/ui/pages/events/events.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/clouds.dart';
 import 'help/help.dart';
 import 'login/login_page.dart';
 
@@ -23,6 +28,7 @@ class _HomeState extends State<Home> {
   bool showHelp = false;
   bool showLogin = false;
 
+  double pageOffset = 0;
   final PageController _pageController = PageController(initialPage: 1);
 
   void setHelp(bool val) => setState(() => showHelp = val);
@@ -52,9 +58,17 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      setState(() => pageOffset = _pageController.page!);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _kBottomNavPages = <Widget>[
-      Announcements(),
+      const Announcements(),
       Dashboard(
         goToHelp: () => setHelp(true),
         goToLogin: () => setLogin(true),
@@ -63,17 +77,46 @@ class _HomeState extends State<Home> {
     ];
 
     return Stack(children: [
+      Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xff73bb67),
+            Color(0xff1e3427),
+          ],
+        )),
+      ),
       WeatherBg(
           weatherType: WeatherType.sunnyNight,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height),
+      const Sunrays(),
+      Clouds(MediaQuery.of(context).size.height),
+      FloatingIsland(
+        floatDistance: 0.02,
+        floatDuration: 2000,
+        top: 0.225,
+        left: 0.3,
+        pageController: _pageController,
+        speed: 0.15,
+        size: 0.7,
+        imageName: "assets/assets-png/frog_island.png",
+      ),
+      FloatingIsland(
+        floatDistance: 0.01,
+        floatDuration: 2000,
+        top: 0.55,
+        left: 0.05,
+        pageController: _pageController,
+        speed: 0.05,
+        size: 0.4,
+        imageName: "assets/assets-png/rabbit_island.png",
+      ),
       showHelp
-          ? Help(
-              () => setHelp(false),
-              HackRUColors.transparent,
-              HackRUColors.off_white_blue,
-              Colors.black26,
-              HackRUColors.blue_grey)
+          ? Help(() => setHelp(false), HackRUColors.transparent,
+              HackRUColors.pale_yellow, Colors.black26, HackRUColors.blue_grey)
           : Container(),
       showLogin
           ? Provider.value(

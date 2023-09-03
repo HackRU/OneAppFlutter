@@ -12,7 +12,6 @@ class AnnouncementCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _errorLoadingDataText = 'Error: Unable to retrieve messages!';
     var secs = resource.ts?.split('.')[0];
     var timeStr =
         DateTime.fromMillisecondsSinceEpoch(int.parse(secs!) * 1000).toLocal();
@@ -22,9 +21,7 @@ class AnnouncementCard extends StatelessWidget {
       key: Key(resource.ts!),
       child: Card(
         elevation: 0.0,
-        color: resource.text == _errorLoadingDataText
-            ? Colors.red
-            : Colors.black26,
+        color: resource.text!.startsWith('Error') ? Colors.red : Colors.black26,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
@@ -32,11 +29,11 @@ class AnnouncementCard extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              resource.text == _errorLoadingDataText
-                  ? const Center(
+              resource.text!.startsWith('Error')
+                  ? Center(
                       child: Text(
-                        _errorLoadingDataText,
-                        style: TextStyle(
+                        resource.text!,
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
@@ -46,7 +43,7 @@ class AnnouncementCard extends StatelessWidget {
                         formattedTime,
                         style: const TextStyle(
                           fontSize: 18.0,
-                          color: HackRUColors.blue_grey,
+                          color: Colors.white,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -58,7 +55,7 @@ class AnnouncementCard extends StatelessWidget {
                           ),
                           textStyle: const TextStyle(
                               fontSize: 15,
-                              color: HackRUColors.off_white_blue,
+                              color: HackRUColors.pale_yellow,
                               fontFamily: "TitilliumWeb")),
                     ),
             ],

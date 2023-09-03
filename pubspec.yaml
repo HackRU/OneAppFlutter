@@ -38,7 +38,6 @@ dependencies:
   # rive: ^0.8.4
   rubber: ^1.0.1
   # rxdart: ^0.27.3
-  shared_preferences: ^2.0.13
   url_launcher: ^6.0.20
   url_strategy: ^0.2.0
   webview_flutter: ^3.0.1
@@ -46,6 +45,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   shimmer: ^2.0.0
+  hive_generator: ^2.0.0
 
 dev_dependencies:
   test: ^1.20.2
