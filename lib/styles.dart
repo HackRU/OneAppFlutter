@@ -207,12 +207,12 @@ ThemeData _buildTheme() {
     accentTextTheme: const TextTheme(
       headline1: TextStyle(
         fontSize: 100.0,
-        color: HackRUColors.blue_grey,
+        color: Color.fromARGB(255, 19, 61, 53),
         fontWeight: FontWeight.w600,
       ),
       headline2: TextStyle(
         fontSize: 90.0,
-        color: HackRUColors.blue_grey,
+        color: Color.fromARGB(255, 19, 61, 53),
         fontWeight: FontWeight.bold,
       ),
       headline3: TextStyle(

@@ -77,12 +77,6 @@ class _HomeState extends State<Home> {
     ];
 
     return Stack(children: [
-      // SizedBox(
-      //   height: MediaQuery.of(context).size.height,
-      //   child: Image.asset("assets/forest_backround.jpg",
-      //       alignment: Alignment(-1 + pageOffset.abs() * 0.5 + 0.5, 0),
-      //       fit: BoxFit.fitHeight),
-      // ),
       Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -94,16 +88,12 @@ class _HomeState extends State<Home> {
           ],
         )),
       ),
-
       WeatherBg(
           weatherType: WeatherType.sunnyNight,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height),
-
-      Sunrays(),
-
+      const Sunrays(),
       Clouds(MediaQuery.of(context).size.height),
-
       FloatingIsland(
         floatDistance: 0.02,
         floatDuration: 2000,
@@ -124,7 +114,6 @@ class _HomeState extends State<Home> {
         size: 0.4,
         imageName: "assets/assets-png/rabbit_island.png",
       ),
-
       showHelp
           ? Help(() => setHelp(false), HackRUColors.transparent,
               HackRUColors.pale_yellow, Colors.black26, HackRUColors.blue_grey)

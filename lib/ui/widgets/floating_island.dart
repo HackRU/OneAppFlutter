@@ -39,6 +39,12 @@ class _FloatingIslandState extends State<FloatingIsland>
   double dx = 0;
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
 

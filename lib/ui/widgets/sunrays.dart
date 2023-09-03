@@ -19,6 +19,12 @@ class _SunraysState extends State<Sunrays> with SingleTickerProviderStateMixin {
   double currentAngle = 0;
 
   @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     animationController =
@@ -61,23 +67,52 @@ class SunEffectPainter extends CustomPainter {
 
     Offset center = Offset(size.width / 2, size.height / 2);
     double radius = screenWidth;
-    List<Color> colors = [
-      Colors.white.withOpacity(0.05 + angle),
-      Colors.white.withOpacity(0),
-    ];
 
-    Paint rays = Paint()
+    Paint frontRays = Paint()
       ..shader = ui.Gradient.radial(
         center,
         radius,
-        colors,
+        [
+          Colors.white.withOpacity(0.1 + angle),
+          Colors.white.withOpacity(0),
+        ],
       );
 
-    int numRays = 5;
+    Paint backRays = Paint()
+      ..shader = ui.Gradient.radial(
+        center,
+        radius,
+        [
+          Colors.white.withOpacity(0.05 + angle),
+          Colors.white.withOpacity(0),
+        ],
+      );
+
+    canvas.drawPath(
+        Path()
+          ..moveTo(center.dx, center.dy)
+          ..addArc(
+              Rect.fromCircle(center: center, radius: radius / 2.5), 0, 2 * pi),
+        Paint()
+          ..shader = ui.Gradient.radial(center, radius / 2.5, [
+            Colors.white.withOpacity(0.03),
+            Colors.white.withOpacity(0.09)
+          ]));
+
+    canvas.drawPath(
+        Path()
+          ..moveTo(center.dx, center.dy)
+          ..addArc(
+              Rect.fromCircle(center: center, radius: radius / 3.5), 0, 2 * pi),
+        Paint()
+          ..shader = ui.Gradient.radial(center, radius / 3.5,
+              [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.08)]));
+
+    int numRays = 3;
 
     double arc = pi / 4 / numRays;
 
-    double emptySpaceSum = pi / 16;
+    double emptySpaceSum = pi / 8;
     double raySpaceSum = 0;
 
     for (int i = 0; i < numRays; i++) {
@@ -92,11 +127,35 @@ class SunEffectPainter extends CustomPainter {
                   center: center,
                   radius: radius,
                 ),
-                emptySpaceSum + raySpaceSum,
-                raySpace,
+                emptySpaceSum + raySpaceSum - angle,
+                raySpace + angle / 2,
                 false)
             ..close(),
-          rays);
+          frontRays);
+
+      emptySpaceSum += emptySapce;
+      raySpaceSum += raySpace;
+    }
+    arc = pi / 4 / numRays;
+    emptySpaceSum = pi / 8;
+    raySpaceSum = 0;
+    for (int i = 0; i < numRays; i++) {
+      double emptySapce = arc - angle;
+      double raySpace = arc + angle;
+
+      canvas.drawPath(
+          Path()
+            ..moveTo(center.dx, center.dy)
+            ..arcTo(
+                Rect.fromCircle(
+                  center: center,
+                  radius: radius,
+                ),
+                emptySpaceSum + raySpaceSum - pi * 0.02 - angle,
+                raySpace + pi * 0.04 + angle / 2,
+                false)
+            ..close(),
+          backRays);
 
       emptySpaceSum += emptySapce;
       raySpaceSum += raySpace;

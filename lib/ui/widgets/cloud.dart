@@ -50,6 +50,12 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     animationController = AnimationController(vsync: this);
     animationController.addListener(() {

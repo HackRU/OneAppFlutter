@@ -137,7 +137,7 @@ class LoginFormState extends State<LoginForm> {
           barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
-              backgroundColor: HackRUColors.blue,
+              backgroundColor: Color(0xff3e8169),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -156,10 +156,15 @@ class LoginFormState extends State<LoginForm> {
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide: const BorderSide(color: Colors.blueGrey)),
+                        borderSide:
+                            const BorderSide(color: HackRUColors.pale_yellow)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide:
+                            const BorderSide(color: HackRUColors.pale_yellow)),
                     hintText: "john.smith@email.com",
-                    hintStyle:
-                        const TextStyle(color: HackRUColors.pale_yellow)),
+                    hintStyle: TextStyle(
+                        color: HackRUColors.pale_yellow.withAlpha(50))),
               ),
               actions: <Widget>[
                 TextButton(
@@ -169,7 +174,8 @@ class LoginFormState extends State<LoginForm> {
                   ),
                   child: Text(
                     'CANCEL',
-                    style: TextStyle(fontSize: 20, color: Colors.blueGrey[50]),
+                    style: TextStyle(
+                        fontSize: 20, color: HackRUColors.pale_yellow),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
@@ -184,13 +190,13 @@ class LoginFormState extends State<LoginForm> {
                   ),
                   splashColor: HackRUColors.yellow,
                   height: 40.0,
-                  color: HackRUColors.off_white,
+                  color: Color.fromARGB(255, 19, 61, 53),
                   padding: const EdgeInsets.all(15.0),
                   child: const Text(
                     'OK',
                     style: TextStyle(
                       fontSize: 20,
-                      color: HackRUColors.blue,
+                      color: HackRUColors.pale_yellow,
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -403,14 +409,14 @@ class LoginFormState extends State<LoginForm> {
                           ),
                         ),
                         backgroundColor: MaterialStateProperty.all(
-                          HackRUColors.blue_grey,
+                          Color.fromARGB(255, 19, 61, 53),
                         ),
                       ),
                       child: Text(
                         'Login',
                         style: TextStyle(
                           fontSize: 25,
-                          color: Theme.of(context).backgroundColor,
+                          color: HackRUColors.pale_yellow,
                           fontWeight: FontWeight.w700,
                         ),
                         textAlign: TextAlign.center,

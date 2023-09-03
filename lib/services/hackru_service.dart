@@ -136,9 +136,9 @@ Future<List<Map>> slackResources() async {
       }
     ];
   }
-  return resources['body']
-      .where((resource) => resource['text'] != null)
-      .toList();
+  return resources['body'] is List
+      ? resources['body'].where((resource) => resource['text'] != null).toList()
+      : [];
 }
 
 Future<List<Event>> dayofEventsResources() async {
