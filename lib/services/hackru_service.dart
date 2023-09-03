@@ -149,7 +149,7 @@ Future<List<Event>> dayofEventsResources() async {
     return [
       Event(
         summary: 'Coming Soon',
-        start: DateTime.now(),
+        start: DateTime.fromMillisecondsSinceEpoch(1693716897931),
       )
     ];
   }
@@ -247,7 +247,7 @@ void updateUserDayOf(
       '\$set': {'day_of.$event': true}
     },
     'user_email': user.email,
-    'auth_email': user.email,
+    'aut_email': user.email,
     'token': credential.token,
   });
 
