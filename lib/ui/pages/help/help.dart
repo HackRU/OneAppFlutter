@@ -8,11 +8,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 const helpResources = [
-  {
-    "name": "MentorQ",
-    "desc": "Get matched with a mentor for help!",
-    "url": HELP_Q_URL
-  },
+  // {
+  //   "name": "MentorQ",
+  //   "desc": "Get matched with a mentor for help!",
+  //   "url": HELP_Q_URL
+  // },
   {
     "name": "Slack",
     "desc": "Talk to friends, mentors, and organizers at HackRU",

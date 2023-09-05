@@ -295,11 +295,11 @@ class DashboardState extends State<Dashboard> {
                       ),
               ),
             ),
-            const SizedBox(height: 7.5),
+            // const SizedBox(height: 7.5),
           ],
           Row(
             children: [
-              if (!_hasAuthToken)
+              if (!_hasAuthToken) ...[
                 Expanded(
                   child: DashboardButton(
                       onPressed: _onLogin,
@@ -307,13 +307,14 @@ class DashboardState extends State<Dashboard> {
                       textColor: HackRUColors.pale_yellow,
                       label: "Login"),
                 ),
-              Expanded(
-                child: DashboardButton(
-                    onPressed: _onHelp,
-                    bgColor: Colors.black26,
-                    textColor: HackRUColors.pale_yellow,
-                    label: "Help"),
-              )
+                Expanded(
+                  child: DashboardButton(
+                      onPressed: _onHelp,
+                      bgColor: Colors.black26,
+                      textColor: HackRUColors.pale_yellow,
+                      label: "Helpful Links"),
+                )
+              ]
             ],
           ),
           if (credManager!.getAuthorization()) ...[
@@ -322,9 +323,7 @@ class DashboardState extends State<Dashboard> {
                 onPressed: _onScanner,
                 bgColor: Colors.black26,
                 textColor: HackRUColors.pale_yellow,
-                label: "QR Scanner")
-          ],
-          if (credManager!.getAuthorization()) ...[
+                label: "QR Scanner"),
             const SizedBox(height: 7.5),
             DashboardButton(
                 onPressed: () => _onGetAttending(context),
@@ -335,6 +334,12 @@ class DashboardState extends State<Dashboard> {
           if (_hasAuthToken) ...[
             const SizedBox(height: 7.5),
             DashboardButton(
+                onPressed: _onHelp,
+                bgColor: Colors.black26,
+                textColor: HackRUColors.pale_yellow,
+                label: "Helpful Links"),
+            const SizedBox(height: 7.5),
+            DashboardButton(
                 onPressed: _onLogout,
                 bgColor: Colors.black26,
                 textColor: HackRUColors.pale_yellow,
@@ -342,7 +347,7 @@ class DashboardState extends State<Dashboard> {
           ],
           Expanded(child: Container()),
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.only(bottom: 20.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

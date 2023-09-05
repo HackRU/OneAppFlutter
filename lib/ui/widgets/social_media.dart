@@ -31,7 +31,7 @@ class SocialMediaCard extends StatelessWidget {
             child: Icon(
               iconData,
               color: iconColor,
-              size: 30.0,
+              size: 25.0,
             ),
           ),
         ),

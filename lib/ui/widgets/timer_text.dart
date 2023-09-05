@@ -7,8 +7,8 @@ import '../../styles.dart';
 final hackRUStart = DateTime(2023, DateTime.february, 25, 16, 00, 00);
 final hackRUEnd = DateTime(2023, DateTime.february, 26, 17, 30, 00);
 
-final currentDate = DateTime.now();
-DateTime today = DateTime(currentDate.year, currentDate.month, currentDate.day);
+DateTime today =
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
 Widget timerBanner(Color bgColor, Color textColor) {
   return Container(
@@ -99,14 +99,14 @@ class _TimerTextState extends State<TimerText> {
 
   void _updateTime() {
     if (hackRUStart.difference(DateTime.now()).inDays > 0) {
-      DateTime today =
-          DateTime(currentDate.year, currentDate.month, currentDate.day);
+      DateTime today = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
       setState(() {
         _dateTime = today.difference(DateTime.now());
         displayTime = formatDuration(_dateTime).split(':');
         _timer = Timer(
           const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
+              Duration(milliseconds: DateTime.now().millisecond),
           _updateTime,
         );
       });
@@ -117,7 +117,7 @@ class _TimerTextState extends State<TimerText> {
         displayTime = formatDuration(_dateTime).split(':');
         _timer = Timer(
           const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
+              Duration(milliseconds: DateTime.now().millisecond),
           _updateTime,
         );
       });
@@ -129,20 +129,20 @@ class _TimerTextState extends State<TimerText> {
         displayTime = formatDuration(_dateTime).split(':');
         _timer = Timer(
           const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
+              Duration(milliseconds: DateTime.now().millisecond),
           _updateTime,
         );
       });
     } else {
       // timer after the event
-      DateTime today =
-          DateTime(currentDate.year, currentDate.month, currentDate.day);
+      DateTime today = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
       setState(() {
         _dateTime = today.difference(DateTime.now());
         displayTime = formatDuration(_dateTime).split(':');
         _timer = Timer(
           const Duration(seconds: 1) -
-              Duration(milliseconds: currentDate.millisecond),
+              Duration(milliseconds: DateTime.now().millisecond),
           _updateTime,
         );
       });
@@ -197,7 +197,7 @@ class _TimerTextState extends State<TimerText> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
+            padding: EdgeInsets.only(top: 5, bottom: 2, left: 3, right: 3),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -209,6 +209,7 @@ class _TimerTextState extends State<TimerText> {
                     child: Text(
                       displayTime[0],
                       style: TextStyle(
+                        height: 1,
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                         color: widget.textColor,
@@ -220,6 +221,7 @@ class _TimerTextState extends State<TimerText> {
                     child: Text(
                       'Hours',
                       style: TextStyle(
+                        height: 1,
                         fontSize: 10.0,
                         color: widget.textColor,
                       ),
@@ -230,7 +232,7 @@ class _TimerTextState extends State<TimerText> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
+            padding: EdgeInsets.only(top: 5, bottom: 2, left: 3, right: 3),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -242,6 +244,7 @@ class _TimerTextState extends State<TimerText> {
                     child: Text(
                       displayTime[1],
                       style: TextStyle(
+                        height: 1,
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                         color: widget.textColor,
@@ -253,6 +256,7 @@ class _TimerTextState extends State<TimerText> {
                     child: Text(
                       'Mins',
                       style: TextStyle(
+                        height: 1,
                         fontSize: 10.0,
                         color: widget.textColor,
                       ),
@@ -263,7 +267,8 @@ class _TimerTextState extends State<TimerText> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
+            padding:
+                const EdgeInsets.only(top: 5, left: 3, right: 3, bottom: 2),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -271,11 +276,14 @@ class _TimerTextState extends State<TimerText> {
               child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 3,
+                    ),
                     child: Text(
                       // '00',
                       displayTime[2],
                       style: TextStyle(
+                        height: 1,
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                         color: widget.textColor,
@@ -287,6 +295,7 @@ class _TimerTextState extends State<TimerText> {
                     child: Text(
                       'Secs',
                       style: TextStyle(
+                        height: 1,
                         fontSize: 10.0,
                         color: widget.textColor,
                       ),

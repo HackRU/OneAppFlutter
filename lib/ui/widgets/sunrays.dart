@@ -88,6 +88,7 @@ class SunEffectPainter extends CustomPainter {
         ],
       );
 
+    // TODO remove shado between circles
     canvas.drawPath(
         Path()
           ..moveTo(center.dx, center.dy)
@@ -95,8 +96,8 @@ class SunEffectPainter extends CustomPainter {
               Rect.fromCircle(center: center, radius: radius / 2.5), 0, 2 * pi),
         Paint()
           ..shader = ui.Gradient.radial(center, radius / 2.5, [
-            Colors.white.withOpacity(0.03),
-            Colors.white.withOpacity(0.09)
+            Colors.white.withOpacity(0.06),
+            Colors.white.withOpacity(0.09),
           ]));
 
     canvas.drawPath(
@@ -105,8 +106,10 @@ class SunEffectPainter extends CustomPainter {
           ..addArc(
               Rect.fromCircle(center: center, radius: radius / 3.5), 0, 2 * pi),
         Paint()
-          ..shader = ui.Gradient.radial(center, radius / 3.5,
-              [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.08)]));
+          ..shader = ui.Gradient.radial(center, radius / 3.5, [
+            Colors.white.withOpacity(0.3),
+            Colors.white.withOpacity(0.08),
+          ]));
 
     int numRays = 3;
 
