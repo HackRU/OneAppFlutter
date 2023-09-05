@@ -15,7 +15,9 @@ class AnnouncementCard extends StatelessWidget {
     var secs = resource.ts?.split('.')[0];
     var timeStr =
         DateTime.fromMillisecondsSinceEpoch(int.parse(secs!) * 1000).toLocal();
-    var formattedTime = DateFormat('hh:mm a').format(timeStr);
+    String formattedTime = DateFormat.yMd().format(timeStr) +
+        ' • ' +
+        DateFormat.jm().format(timeStr);
 
     return Container(
       key: Key(resource.ts!),

@@ -197,7 +197,7 @@ class _TimerTextState extends State<TimerText> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 5, bottom: 2, left: 3, right: 3),
+            padding: EdgeInsets.only(top: 7, bottom: 2, left: 3, right: 3),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -232,7 +232,7 @@ class _TimerTextState extends State<TimerText> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 5, bottom: 2, left: 3, right: 3),
+            padding: EdgeInsets.only(top: 7, bottom: 2, left: 3, right: 3),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -268,7 +268,7 @@ class _TimerTextState extends State<TimerText> {
           ),
           Padding(
             padding:
-                const EdgeInsets.only(top: 5, left: 3, right: 3, bottom: 2),
+                const EdgeInsets.only(top: 7, left: 3, right: 3, bottom: 2),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),

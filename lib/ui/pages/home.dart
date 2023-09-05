@@ -80,13 +80,16 @@ class _HomeState extends State<Home> {
       Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xff73bb67),
-            Color(0xff1e3427),
-          ],
-        )),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Color(0xff73bb67),
+              Color(0xff497847),
+            ],
+                stops: [
+              0.3,
+              0.7
+            ])),
       ),
       WeatherBg(
           weatherType: WeatherType.sunnyNight,
@@ -94,26 +97,80 @@ class _HomeState extends State<Home> {
           height: MediaQuery.of(context).size.height),
       const Sunrays(),
       Clouds(MediaQuery.of(context).size.height),
+      // whale island group
       FloatingIsland(
-        floatDistance: 0.02,
+        floatDistance: 0.005,
         floatDuration: 2000,
         top: 0.225,
-        left: 0.3,
+        left: 0.05,
         pageController: _pageController,
-        speed: 0.15,
-        size: 0.7,
-        imageName: "assets/assets-png/frog_island.png",
+        speed: 0.05,
+        size: 1,
+        imageName: "assets/assets-png/whale_clouds.png",
       ),
       FloatingIsland(
         floatDistance: 0.01,
         floatDuration: 2000,
-        top: 0.55,
-        left: 0.05,
+        top: 0.15,
+        left: 0.2,
+        pageController: _pageController,
+        speed: 0.15,
+        size: 1,
+        imageName: "assets/assets-png/whale_island.PNG",
+      ),
+      FloatingIsland(
+        floatDistance: 0.015,
+        floatDuration: 2000,
+        top: 0.475,
+        left: 0.7,
+        pageController: _pageController,
+        speed: 0.15,
+        size: 0.3,
+        imageName: "assets/assets-png/small_island4.png",
+      ),
+      FloatingIsland(
+        floatDistance: 0.0175,
+        floatDuration: 2000,
+        top: 0.465,
+        left: 0.77,
+        pageController: _pageController,
+        speed: 0.15,
+        size: 0.3,
+        imageName: "assets/assets-png/small_island4.png",
+      ),
+
+      // side island group
+      FloatingIsland(
+        floatDistance: 0.01,
+        floatDuration: 2000,
+        top: 0.5,
+        left: -0.075,
         pageController: _pageController,
         speed: 0.05,
-        size: 0.4,
-        imageName: "assets/assets-png/rabbit_island.png",
+        size: 0.6,
+        imageName: "assets/assets-png/side_island.png",
       ),
+      FloatingIsland(
+        floatDistance: 0.015,
+        floatDuration: 2000,
+        top: 0.68,
+        left: 0,
+        pageController: _pageController,
+        speed: 0.075,
+        size: 0.4,
+        imageName: "assets/assets-png/small_island1.png",
+      ),
+      FloatingIsland(
+        floatDistance: 0.015,
+        floatDuration: 2000,
+        top: 0.7125,
+        left: -0.095,
+        pageController: _pageController,
+        speed: 0.075,
+        size: 0.4,
+        imageName: "assets/assets-png/small_island2.png",
+      ),
+
       showHelp
           ? Help(() => setHelp(false), HackRUColors.transparent,
               HackRUColors.pale_yellow, Colors.black26, HackRUColors.blue_grey)

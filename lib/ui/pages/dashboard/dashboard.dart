@@ -113,7 +113,7 @@ class DashboardState extends State<Dashboard> {
       warningDialog(
           context,
           "Total = " + count.toString(),
-          Color.fromARGB(255, 19, 61, 53),
+          const Color.fromARGB(255, 19, 61, 53),
           HackRUColors.pale_yellow,
           HackRUColors.white);
     } on LcsError {
@@ -258,7 +258,7 @@ class DashboardState extends State<Dashboard> {
                                     alignment: Alignment.center,
                                     child: Text(
                                       userStatus,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 18,
                                         color: HackRUColors.pale_yellow,
                                       ),
@@ -282,15 +282,29 @@ class DashboardState extends State<Dashboard> {
                               ),
                             ],
                           ),
-                          IconButton(
-                              onPressed: () {
-                                _showQrCode();
-                              },
-                              color: HackRUColors.pale_yellow,
-                              icon: const Icon(
-                                Icons.qr_code,
-                                size: 24,
-                              ))
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        _showQrCode();
+                                      },
+                                      color: HackRUColors.pale_yellow,
+                                      icon: const Icon(
+                                        Icons.qr_code,
+                                        size: 40,
+                                      )),
+                                  const SizedBox(
+                                    width: 5,
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 7,
+                              )
+                            ],
+                          )
                         ],
                       ),
               ),
@@ -303,7 +317,7 @@ class DashboardState extends State<Dashboard> {
                 Expanded(
                   child: DashboardButton(
                       onPressed: _onLogin,
-                      bgColor: Color.fromARGB(255, 19, 61, 53),
+                      bgColor: const Color.fromARGB(255, 19, 61, 53),
                       textColor: HackRUColors.pale_yellow,
                       label: "Login"),
                 ),

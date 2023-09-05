@@ -25,18 +25,31 @@ class _CloudsState extends State<Clouds> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: getAnimatedClouds(context),
-    );
-  }
-
-  List<Widget> getAnimatedClouds(BuildContext context) {
-    List<Cloud> animatedClouds = [];
-    for (int i = 0; i < cloudFrequency; i++) {
-      animatedClouds.add(Cloud(MediaQuery.of(context).size.height,
-          MediaQuery.of(context).size.width, cloudImages));
-    }
-
-    return animatedClouds;
+    return Stack(children: [
+      Cloud(
+          cloudImage: cloudImages[1],
+          top: 0.025,
+          left: -1.75,
+          screenHeight: MediaQuery.of(context).size.height,
+          screenWidth: MediaQuery.of(context).size.width,
+          size: 0.75,
+          speed: 0.02),
+      Cloud(
+          cloudImage: cloudImages[4],
+          top: 0.1,
+          left: -0.75,
+          screenHeight: MediaQuery.of(context).size.height,
+          screenWidth: MediaQuery.of(context).size.width,
+          size: 0.75,
+          speed: 0.02),
+      Cloud(
+          cloudImage: cloudImages[1],
+          top: 0.6,
+          left: -1.25,
+          screenHeight: MediaQuery.of(context).size.height,
+          screenWidth: MediaQuery.of(context).size.width,
+          size: 0.75,
+          speed: 0.02),
+    ]);
   }
 }

@@ -7,9 +7,24 @@ import 'package:flutter/src/widgets/placeholder.dart';
 class Cloud extends StatefulWidget {
   double screenWidth;
   double screenHeight;
-  List<Image> cloudImages;
+  Image cloudImage;
 
-  Cloud(this.screenHeight, this.screenWidth, this.cloudImages, {super.key});
+  double top;
+  double left;
+
+  double size;
+  double speed;
+
+  Cloud({
+    required this.screenHeight,
+    required this.screenWidth,
+    required this.cloudImage,
+    required this.top,
+    required this.left,
+    required this.size,
+    required this.speed,
+    super.key,
+  });
 
   @override
   State<Cloud> createState() => _CloudState();
@@ -20,30 +35,29 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
   late Animation cloudTranslation;
 
   late double x;
-  late double y;
-  late double size;
-  late double speed;
-  late double startX;
-  late double endX;
-  late Image cloudImage;
 
   void reset(AnimationController animationController) {
     setState(() {
-      size = 200 - Random().nextDouble() * 100;
-      speed = ((size - 200) / -100) * 50 + 30;
+      int durationms = 100000;
+      double totalDistanceToTravel =
+          widget.speed * durationms / 1000 * widget.screenWidth;
 
-      animationController.duration =
-          Duration(milliseconds: (1000 * speed).toInt());
+      x = widget.left * widget.screenWidth;
+      double end =
+          widget.screenWidth + (totalDistanceToTravel - widget.screenWidth + x);
 
-      startX = -2000 + Random().nextDouble() * 1800;
-      endX = widget.screenWidth + 200 - Random().nextDouble() * 100;
-      x = startX;
-      y = Random().nextDouble() * widget.screenHeight * 0.66 + 100;
+      if ((totalDistanceToTravel - widget.screenWidth + x) < 0) {
+        durationms += 1000 *
+            (totalDistanceToTravel - widget.screenWidth + x).abs() ~/
+            (widget.speed * widget.screenWidth);
 
-      cloudImage =
-          widget.cloudImages[Random().nextInt(widget.cloudImages.length - 1)];
+        end = widget.screenWidth;
+      }
+
+      animationController.duration = Duration(milliseconds: durationms);
+
       cloudTranslation =
-          Tween<double>(begin: startX, end: endX).animate(animationController);
+          Tween<double>(begin: x, end: end).animate(animationController);
     });
 
     animationController.forward();
@@ -59,7 +73,7 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
   void initState() {
     animationController = AnimationController(vsync: this);
     animationController.addListener(() {
-      if (cloudTranslation.value > widget.screenWidth + 100) {
+      if (cloudTranslation.value > widget.screenWidth) {
         animationController.reset();
         reset(animationController);
         return;
@@ -76,11 +90,11 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: y,
+      top: widget.top * widget.screenHeight,
       left: x,
       child: SizedBox(
-        height: size,
-        child: cloudImage,
+        width: widget.size * widget.screenWidth,
+        child: widget.cloudImage,
       ),
     );
   }
