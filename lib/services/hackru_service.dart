@@ -95,7 +95,6 @@ var qrEvents = json.encode(events);
 ///========================================================
 
 Future<List<Map>> slackResources() async {
-  print("noo");
   Map resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 

@@ -25,6 +25,9 @@ class _CloudsState extends State<Clouds> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Stack(children: [
       Cloud(
           cloudImage: cloudImages[1],
@@ -32,24 +35,24 @@ class _CloudsState extends State<Clouds> {
           left: -1.75,
           screenHeight: MediaQuery.of(context).size.height,
           screenWidth: MediaQuery.of(context).size.width,
-          size: 0.75,
-          speed: 0.02),
+          size: 0.25,
+          speed: 0.01),
       Cloud(
           cloudImage: cloudImages[4],
           top: 0.1,
           left: -0.75,
           screenHeight: MediaQuery.of(context).size.height,
           screenWidth: MediaQuery.of(context).size.width,
-          size: 0.75,
-          speed: 0.02),
+          size: 0.25,
+          speed: 0.01),
       Cloud(
           cloudImage: cloudImages[1],
           top: 0.6,
           left: -1.25,
           screenHeight: MediaQuery.of(context).size.height,
           screenWidth: MediaQuery.of(context).size.width,
-          size: 0.75,
-          speed: 0.02),
+          size: 0.25,
+          speed: 0.01),
     ]);
   }
 }

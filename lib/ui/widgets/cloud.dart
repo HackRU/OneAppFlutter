@@ -93,7 +93,7 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
       top: widget.top * widget.screenHeight,
       left: x,
       child: SizedBox(
-        width: widget.size * widget.screenWidth,
+        height: widget.size * widget.screenHeight,
         child: widget.cloudImage,
       ),
     );

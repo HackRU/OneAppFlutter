@@ -24,14 +24,16 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
   List<_StarParam> _starParams = [];
   List<_MeteorParam> _meteorParams = [];
   WeatherDataState _state = WeatherDataState.init;
-  double? width;
-  double? height;
-  double? widthRatio;
+  late double width;
+  late double height;
+  late double widthRatio;
 
-  void fetchData() {
-    Size? size = SizeInherited.of(context)?.size;
-    width = size?.width ?? double.infinity;
-    height = size?.height ?? double.infinity;
+  void fetchData(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+
+    print("size: $width, $height");
+
     widthRatio = (height!) / width!;
     _state = WeatherDataState.loading;
     initStarParams();
@@ -43,7 +45,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
 
   /// 初始化星星参数
   void initStarParams() {
-    for (int i = 0; i < 90; i++) {
+    for (int i = 0; i < 60; i++) {
       var index = Random().nextInt(2);
       _StarParam _starParam = _StarParam(index);
       _starParam.init(width, height, widthRatio);
@@ -88,7 +90,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
   @override
   Widget build(BuildContext context) {
     if (_state == WeatherDataState.init) {
-      fetchData();
+      fetchData(context);
     } else if (_state == WeatherDataState.finish) {
       return _buildWidget();
     }
@@ -188,8 +190,7 @@ class _StarPainter extends CustomPainter {
       0,
     ]);
     _paint.colorFilter = identity;
-    canvas.scale(param.scale!);
-    canvas.drawCircle(Offset(param.x!, param.y!), 0.8, _paint);
+    canvas.drawCircle(Offset(param.x!, param.y!), 2, _paint);
     canvas.restore();
     param.move();
   }
@@ -261,7 +262,6 @@ class _StarParam {
   void reset() {
     alpha = 0;
     double baseScale = index == 0 ? 0.7 : 0.5;
-    scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio!;
     x = Random().nextDouble() * width!;
     y = Random().nextDouble() * height!;
     reverse = false;
@@ -277,6 +277,7 @@ class _StarParam {
     scale = (Random().nextDouble() * 0.1 + baseScale) * widthRatio;
     x = Random().nextDouble() * width;
     y = Random().nextDouble() * height;
+
     reverse = false;
   }
 
