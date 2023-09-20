@@ -95,6 +95,7 @@ var qrEvents = json.encode(events);
 ///========================================================
 
 Future<List<Map>> slackResources() async {
+  print("noo");
   Map resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
 
@@ -317,6 +318,21 @@ Future<bool> isAuthorizedForQRScanner(String token, String email) async {
     return true;
   } else {
     return false;
+  }
+}
+
+Future<int> getRegistered(String _token) async {
+  var result = await postLcs('/read', {
+    'token': _token,
+    'query': {'registration_status': 'registered'},
+    'aggregate': false
+  });
+
+  if (result.statusCode == 200) {
+    var users = jsonDecode(result.body)['body'];
+    return users.length;
+  } else {
+    throw LcsError(result);
   }
 }
 

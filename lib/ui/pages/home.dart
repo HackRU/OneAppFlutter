@@ -67,6 +67,15 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double widthToHeight = width / height;
+
+    bool sm = widthToHeight < 0.6;
+    bool md = widthToHeight >= 0.6 && widthToHeight < 1;
+    bool lg = widthToHeight >= 1 && widthToHeight < 1.5;
+    bool xl = widthToHeight >= 1.5;
+
     final _kBottomNavPages = <Widget>[
       const Announcements(),
       Dashboard(
@@ -92,50 +101,92 @@ class _HomeState extends State<Home> {
             ])),
       ),
       WeatherBg(
-          weatherType: WeatherType.sunnyNight,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height),
+          weatherType: WeatherType.sunnyNight, width: width, height: height),
       const Sunrays(),
       Clouds(MediaQuery.of(context).size.height),
       // whale island group
       FloatingIsland(
         floatDistance: 0.005,
         floatDuration: 2000,
-        top: 0.225,
-        left: 0.05,
+        top: .225,
+        left: lg || xl ? 0.35 : 0.05,
         pageController: _pageController,
         speed: 0.05,
-        size: 1,
+        size: lg || xl ? 0.7 : 1,
         imageName: "assets/assets-png/whale_clouds.png",
       ),
       FloatingIsland(
         floatDistance: 0.01,
         floatDuration: 2000,
-        top: 0.15,
-        left: 0.2,
+        top: xl
+            ? 0.065
+            : lg
+                ? 0.125
+                : 0.15,
+        left: sm
+            ? 0.2
+            : md
+                ? 0.35
+                : lg
+                    ? 0.5
+                    : 0.55,
         pageController: _pageController,
         speed: 0.15,
-        size: 1,
+        size: sm
+            ? 1
+            : md
+                ? 0.8
+                : lg
+                    ? 0.6
+                    : 0.525,
         imageName: "assets/assets-png/whale_island.PNG",
       ),
       FloatingIsland(
         floatDistance: 0.015,
         floatDuration: 2000,
-        top: 0.475,
-        left: 0.7,
+        top: sm
+            ? 0.525 + 0.85 * (widthToHeight - 0.462)
+            : md
+                ? 0.81 + 0.675 * (widthToHeight - 1)
+                : lg
+                    ? 0.87 + 0.5 * (widthToHeight - 1.5)
+                    : 0.845 + 1 * (widthToHeight - 1.8),
+        left: sm
+            ? 0.83
+            : md
+                ? 0.86
+                : 0.88,
         pageController: _pageController,
         speed: 0.15,
-        size: 0.3,
+        size: sm
+            ? 0.02
+            : md
+                ? 0.015
+                : 0.0125,
         imageName: "assets/assets-png/small_island4.png",
       ),
       FloatingIsland(
         floatDistance: 0.0175,
         floatDuration: 2000,
-        top: 0.465,
-        left: 0.77,
+        top: sm
+            ? 0.5325 + 0.85 * (widthToHeight - 0.462)
+            : md
+                ? 0.82 + 0.675 * (widthToHeight - 1)
+                : lg
+                    ? 0.865 + 0.5 * (widthToHeight - 1.5)
+                    : 0.85 + 1 * (widthToHeight - 1.8),
+        left: xl
+            ? 0.914
+            : lg
+                ? 0.9125
+                : 0.9,
         pageController: _pageController,
         speed: 0.15,
-        size: 0.3,
+        size: sm
+            ? 0.02
+            : md
+                ? 0.015
+                : 0.0125,
         imageName: "assets/assets-png/small_island4.png",
       ),
 
@@ -143,31 +194,59 @@ class _HomeState extends State<Home> {
       FloatingIsland(
         floatDistance: 0.01,
         floatDuration: 2000,
-        top: 0.5,
-        left: -0.075,
+        top: sm
+            ? 0.575
+            : md
+                ? 0.45
+                : 0.3,
+        left: -0.05,
         pageController: _pageController,
         speed: 0.05,
-        size: 0.6,
+        size: sm
+            ? 0.25
+            : md
+                ? 0.2
+                : 0.15,
         imageName: "assets/assets-png/side_island.png",
       ),
       FloatingIsland(
         floatDistance: 0.015,
         floatDuration: 2000,
-        top: 0.68,
-        left: 0,
+        top: sm
+            ? 0.685 + 0.3 * (widthToHeight - 0.462)
+            : md
+                ? 0.65 + 0.25 * (widthToHeight - 1)
+                : 0.525 + 0.2 * (widthToHeight - 1.5),
+        left: sm
+            ? 0.1825
+            : md
+                ? 0.15
+                : 0.1,
         pageController: _pageController,
         speed: 0.075,
-        size: 0.4,
+        size: sm
+            ? 0.12
+            : md
+                ? 0.1
+                : 0.07,
         imageName: "assets/assets-png/small_island1.png",
       ),
       FloatingIsland(
         floatDistance: 0.015,
         floatDuration: 2000,
-        top: 0.7125,
-        left: -0.095,
+        top: sm
+            ? 0.725 + 0.3 * (widthToHeight - 0.462)
+            : md
+                ? 0.71 + 0.25 * (widthToHeight - 1)
+                : 0.575 + 0.2 * (widthToHeight - 1.5),
+        left: sm ? 0.075 : 0.04,
         pageController: _pageController,
         speed: 0.075,
-        size: 0.4,
+        size: sm
+            ? 0.085
+            : md
+                ? 0.07
+                : 0.05,
         imageName: "assets/assets-png/small_island2.png",
       ),
 

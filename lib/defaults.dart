@@ -1,8 +1,8 @@
 ///=======================================
 ///             ENDPOINTS
 ///=======================================
-const BASE_URL = 'https://api.hackru.org/dev';
-// const BASE_URL = 'https://api.hackru.org/prod';
+// const BASE_URL = 'https://api.hackru.org/dev';
+const BASE_URL = 'https://api.hackru.org/prod';
 
 const MISC_URL = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 const WAIVER_URL = 'https://hackru.org/resources/waiver.pdf';
@@ -49,7 +49,7 @@ final String kSplashScreen = 'assets/splashScreen.png';
 ///=======================================
 
 const String kAppTitle = 'HackRU';
-const String kSeasonTitle = 'Spring 2023';
+const String kSeasonTitle = 'Fall 2023';
 const kAboutHackRU =
     'HackRU is a 24-hour hackathon at Rutgers University. We welcome hundreds of students to join us in building awesome tech projects. Industry experts and mentors help foster an atmosphere of learning through tech-talks and one-on-one guidance. We encourage all students, no matter their experience level or educational background, to challenge themselves and expand their creative, technical, and collaboration skills at HackRU.';
 const kAboutApp =

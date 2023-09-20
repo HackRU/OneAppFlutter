@@ -77,6 +77,7 @@ class _FloatingIslandState extends State<FloatingIsland>
       top: (widget.top + dy) * screenHeight,
       left: (widget.left + dx) * screenWidth,
       child: Container(
+        // width: widget.size * screenWidth,
         width: widget.size * screenWidth,
         child: Image.asset(widget.imageName),
       ),
