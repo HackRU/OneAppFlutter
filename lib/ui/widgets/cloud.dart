@@ -41,7 +41,6 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
       int durationms = 100000;
       double totalDistanceToTravel =
           widget.speed * durationms / 1000 * widget.screenWidth;
-
       x = widget.left * widget.screenWidth;
       double end =
           widget.screenWidth + (totalDistanceToTravel - widget.screenWidth + x);
@@ -93,7 +92,8 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
       top: widget.top * widget.screenHeight,
       left: x,
       child: SizedBox(
-        height: widget.size * widget.screenHeight,
+        // height: widget.size * widget.screenHeight,
+        width: widget.size * widget.screenWidth,
         child: widget.cloudImage,
       ),
     );

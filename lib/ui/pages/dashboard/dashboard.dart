@@ -345,7 +345,7 @@ class DashboardState extends State<Dashboard> {
                       onPressed: _onHelp,
                       bgColor: Colors.black26,
                       textColor: HackRUColors.pale_yellow,
-                      label: "Helpful Links"),
+                      label: "Help"),
                 )
               ]
             ],

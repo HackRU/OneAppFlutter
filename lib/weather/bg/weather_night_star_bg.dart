@@ -32,8 +32,6 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    print("size: $width, $height");
-
     widthToHeight = (height!) / width!;
     _state = WeatherDataState.loading;
     initStarParams();
@@ -45,12 +43,13 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
 
   /// 初始化星星参数
   void initStarParams() {
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 45; i++) {
       var index = Random().nextInt(2);
       _StarParam _starParam = _StarParam(index);
       _starParam.init(width, height, widthToHeight);
       _starParams.add(_starParam);
     }
+
     for (int i = 0; i < 2; i++) {
       _MeteorParam param = _MeteorParam();
       param.init(width, height);
@@ -65,7 +64,6 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
         width = MediaQuery.of(context).size.width;
         height = MediaQuery.of(context).size.height;
       });
-      print("new dimensions: ($width, $height)");
     });
 
     _controller = AnimationController(

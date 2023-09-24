@@ -251,28 +251,36 @@ class _HomeState extends State<Home> {
       ),
 
       showHelp
-          ? Help(() => setHelp(false), HackRUColors.transparent,
-              HackRUColors.pale_yellow, Colors.black26, HackRUColors.blue_grey)
+          ? Padding(
+              padding: EdgeInsets.only(
+                  top: 10,
+                  right: widthToHeight > 1 ? width * 0.25 : 10,
+                  left: widthToHeight > 1 ? width * 0.25 : 10),
+              child: Help(
+                  () => setHelp(false),
+                  HackRUColors.transparent,
+                  HackRUColors.pale_yellow,
+                  Colors.black26,
+                  HackRUColors.blue_grey),
+            )
           : Container(),
       showLogin
-          ? Provider.value(
-              value: Provider.of<CredManager>(context),
-              child: LoginPage(goToDashboard: () => setLogin(false)))
+          ? Padding(
+              padding: EdgeInsets.only(
+                  top: 10,
+                  right: widthToHeight > 1 ? width * 0.25 : 10,
+                  left: widthToHeight > 1 ? width * 0.25 : 10),
+              child: Provider.value(
+                  value: Provider.of<CredManager>(context),
+                  child: LoginPage(goToDashboard: () => setLogin(false))),
+            )
           : Container(),
       if (!(showLogin || showHelp))
         Padding(
           padding: EdgeInsets.only(
               top: 10,
-              right: MediaQuery.of(context).size.width /
-                          MediaQuery.of(context).size.height >
-                      1
-                  ? MediaQuery.of(context).size.width * 0.25
-                  : 10,
-              left: MediaQuery.of(context).size.width /
-                          MediaQuery.of(context).size.height >
-                      1
-                  ? MediaQuery.of(context).size.width * 0.25
-                  : 10),
+              right: widthToHeight > 1 ? width * 0.25 : 10,
+              left: widthToHeight > 1 ? width * 0.25 : 10),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Padding(
