@@ -24,6 +24,7 @@ void main() async {
   Box cachedEvents = await Hive.openBox<Event>("events");
   await Hive.openBox("loading");
   getSlacks();
+  getEvents();
 
   /*  ======================================================== *
    *  SYSTEM UI OVERLAY STYLING (ANDROID)                      *
