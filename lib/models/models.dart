@@ -232,9 +232,13 @@ class LcsError implements Exception {
 /// @param start event time
 
 @JsonSerializable()
+@HiveType(typeId: 1)
 class Event {
+  @HiveField(0)
   final String? summary;
+  @HiveField(1)
   final String? location;
+  @HiveField(2)
   final DateTime? start;
 
   Event({this.summary, this.location, this.start});
@@ -243,4 +247,7 @@ class Event {
       : summary = json['summary'],
         location = json['location'],
         start = DateTime.parse(json['start']['dateTime']);
+
+  @override
+  int get hashCode => '$summary$location$start'.hashCode;
 }

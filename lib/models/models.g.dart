@@ -43,6 +43,46 @@ class AnnouncementAdapter extends TypeAdapter<Announcement> {
           typeId == other.typeId;
 }
 
+class EventAdapter extends TypeAdapter<Event> {
+  @override
+  final int typeId = 1;
+
+  @override
+  Event read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Event(
+      summary: fields[0] as String?,
+      location: fields[1] as String?,
+      start: fields[2] as DateTime?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Event obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.summary)
+      ..writeByte(1)
+      ..write(obj.location)
+      ..writeByte(2)
+      ..write(obj.start);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EventAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************

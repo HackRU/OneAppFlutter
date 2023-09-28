@@ -15,7 +15,8 @@ dependencies:
   # App Dependencies from (https://pub.dev/)
   cupertino_icons: ^1.0.4
   equatable: ^2.0.3
-  
+  liquid_pull_to_refresh: ^3.0.1
+ 
   flutter_launcher_icons: ^0.10.0
   flutter_linkify: ^5.0.2
   font_awesome_flutter: ^10.1.0

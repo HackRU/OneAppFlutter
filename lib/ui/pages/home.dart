@@ -82,7 +82,7 @@ class _HomeState extends State<Home> {
         goToHelp: () => setHelp(true),
         goToLogin: () => setLogin(true),
       ),
-      Events(),
+      Events(_pageController),
     ];
 
     return Stack(children: [
