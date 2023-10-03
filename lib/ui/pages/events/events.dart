@@ -5,7 +5,7 @@ import 'package:hackru/services/cache_service.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/models/models.dart';
-import 'package:hackru/ui/pages/events/events_for_day.dart';
+import 'package:hackru/ui/pages/events/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hackru/utils/value_listenable2.dart';
 import 'package:intl/intl.dart';

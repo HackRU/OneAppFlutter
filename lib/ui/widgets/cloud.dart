@@ -38,25 +38,24 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
 
   void reset(AnimationController animationController) {
     setState(() {
-      int durationms = 100000;
-      double totalDistanceToTravel =
-          widget.speed * durationms / 1000 * widget.screenWidth;
-      x = widget.left * widget.screenWidth;
-      double end =
-          widget.screenWidth + (totalDistanceToTravel - widget.screenWidth + x);
+      // int durationms = 100000;
+      // double totalDistanceToTravel = widget.speed * durationms / 1000;
+      // x = widget.left;
+      // double end = (totalDistanceToTravel - 1 + x);
 
-      if ((totalDistanceToTravel - widget.screenWidth + x) < 0) {
-        durationms += 1000 *
-            (totalDistanceToTravel - widget.screenWidth + x).abs() ~/
-            (widget.speed * widget.screenWidth);
+      // if ((totalDistanceToTravel - 1 + x) < 0) {
+      //   durationms +=
+      //       1000 * (totalDistanceToTravel - 1 + x).abs() ~/ widget.speed;
+      // }
 
-        end = widget.screenWidth;
-      }
+      x = widget.left;
+      double totalDistanceToTravel = 1 + x.abs();
+      int durationms = (1000 * totalDistanceToTravel / widget.speed).toInt();
 
       animationController.duration = Duration(milliseconds: durationms);
 
       cloudTranslation =
-          Tween<double>(begin: x, end: end).animate(animationController);
+          Tween<double>(begin: x, end: 1).animate(animationController);
     });
 
     animationController.forward();
@@ -72,7 +71,7 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
   void initState() {
     animationController = AnimationController(vsync: this);
     animationController.addListener(() {
-      if (cloudTranslation.value > widget.screenWidth) {
+      if (cloudTranslation.value > 1) {
         animationController.reset();
         reset(animationController);
         return;
@@ -90,10 +89,10 @@ class _CloudState extends State<Cloud> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Positioned(
       top: widget.top * widget.screenHeight,
-      left: x,
+      left: x * widget.screenWidth,
       child: SizedBox(
-        // height: widget.size * widget.screenHeight,
-        width: widget.size * widget.screenWidth,
+        height: widget.size * widget.screenHeight,
+        // width: widget.size * widget.screenWidth,
         child: widget.cloudImage,
       ),
     );

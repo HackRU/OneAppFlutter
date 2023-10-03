@@ -38,27 +38,27 @@ class _CloudsState extends State<Clouds> {
       Cloud(
           cloudImage: cloudImages[1],
           top: 0.05,
-          left: -1.75,
+          left: -0.875,
           screenHeight: MediaQuery.of(context).size.height,
           screenWidth: MediaQuery.of(context).size.width,
-          size: 0.8,
-          speed: 0.03),
+          size: 0.2,
+          speed: 0.01),
       Cloud(
           cloudImage: cloudImages[4],
-          top: 0.375,
-          left: -1,
+          top: 0.6,
+          left: -0.5,
           screenHeight: MediaQuery.of(context).size.height,
           screenWidth: MediaQuery.of(context).size.width,
-          size: 0.75,
-          speed: 0.03),
+          size: 0.1,
+          speed: 0.01),
       Cloud(
           cloudImage: cloudImages[3],
           top: 0.3,
-          left: -2.25,
+          left: -1.125,
           screenHeight: MediaQuery.of(context).size.height,
           screenWidth: MediaQuery.of(context).size.width,
-          size: 0.5,
-          speed: 0.03),
+          size: 0.1,
+          speed: 0.01),
     ]);
   }
 }

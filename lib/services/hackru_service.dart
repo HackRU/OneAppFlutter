@@ -69,26 +69,7 @@ Future<List<HelpResource>> helpResources(String miscUrl) async {
       .toList();
 }
 
-// List<String> qrEvents(String miscUrl) async {
-// var response = await getMisc('/events.json');
-// var events = [
-//   "check-in",
-//   "check-in-no-delayed",
-//   "lunch-1",
-//   "dinner",
-//   "t-shirts",
-//   "midnight-meal",
-//   "midnight-surprise",
-//   "breakfast",
-//   "lunch-2",
-//   "raffle",
-//   "ctf-1",
-//   "ctf-2"
-// ];
 var qrEvents = json.encode(events);
-// var qrEvents = List<String>.from(resources);
-// return qrEvents;
-// }
 
 ///========================================================
 ///                     GET REQUESTS
@@ -97,14 +78,6 @@ var qrEvents = json.encode(events);
 Future<List<Map>> slackResources() async {
   Map resources;
   var tsNow = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
-
-  // await Future.delayed(Duration(seconds: 3));
-  // return [
-  //   <String, String>{
-  //     'text': "Testing announcements out",
-  //     'ts': (DateTime.now().millisecondsSinceEpoch / 1000).toString(),
-  //   }
-  // ];
 
   try {
     var response = await getLcs('/dayof-slack');

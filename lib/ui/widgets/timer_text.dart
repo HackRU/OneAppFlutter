@@ -4,8 +4,8 @@ import "package:flutter/material.dart";
 
 import '../../styles.dart';
 
-final hackRUStart = DateTime(2023, DateTime.october, 7, 10, 00, 00);
-final hackRUEnd = DateTime(2023, DateTime.october, 8, 15, 30, 00);
+final hackRUStart = DateTime(2023, DateTime.october, 7, 12, 00, 00);
+final hackRUEnd = DateTime(2023, DateTime.october, 8, 12, 00, 00);
 
 DateTime today =
     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);

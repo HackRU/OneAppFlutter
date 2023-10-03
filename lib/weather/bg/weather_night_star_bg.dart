@@ -27,6 +27,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
   late double width;
   late double height;
   late double widthToHeight;
+  late Timer dimUpdateTimer;
 
   void fetchData(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -59,7 +60,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
 
   @override
   void initState() {
-    Timer.periodic(Duration(seconds: 3), (timer) {
+    dimUpdateTimer = Timer.periodic(Duration(seconds: 3), (timer) {
       setState(() {
         width = MediaQuery.of(context).size.width;
         height = MediaQuery.of(context).size.height;
@@ -76,6 +77,7 @@ class _WeatherNightStarBgState extends State<WeatherNightStarBg>
 
   @override
   void dispose() {
+    dimUpdateTimer.cancel();
     _controller!.dispose();
     super.dispose();
   }

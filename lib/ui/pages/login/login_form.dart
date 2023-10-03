@@ -3,10 +3,9 @@ import 'package:hackru/models/exceptions.dart';
 import 'package:hackru/services/hackru_service.dart';
 import 'package:hackru/styles.dart';
 import 'package:hackru/defaults.dart';
-import 'package:hackru/ui/pages/home.dart';
 import 'package:hackru/ui/widgets/dialog/error_dialog.dart';
-import 'package:hackru/ui/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:hackru/ui/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hackru/ui/widgets/dialog/warning_dialog.dart';
@@ -202,9 +201,22 @@ class LoginFormState extends State<LoginForm> {
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
+                    if (valueText == null || valueText!.isEmpty) {
+                      Navigator.pop(context);
+                      _errorDialog("Please enter an email.");
+                    }
+                    bool emailValid = RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(valueText!);
+
+                    if (!emailValid) {
+                      Navigator.pop(context);
+                      _errorDialog("Invalid email format.");
+                    }
                     setState(() {
                       codeDialog = valueText;
                       Navigator.pop(context);
+                      valueText = "";
                     });
                   },
                 ),
@@ -213,23 +225,57 @@ class LoginFormState extends State<LoginForm> {
           });
     }
 
-    void _scanDialogSuccess(String body) async {
+    void _loadingDialog(String body, Color bgColor, Color titleColor,
+        Color progressColor) async {
+      switch (await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            backgroundColor: bgColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: Text(body, style: TextStyle(color: titleColor)),
+            children: [
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
+                      child: CircularProgressIndicator(
+                        color: progressColor,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          );
+        },
+      )) {
+        
+      }
+    }
+
+    void _scanDialogSuccess(
+        String body, Color bgColor, Color titleColor, Color textColor) async {
       switch (await showDialog(
         context: context,
         builder: (BuildContext context, {barrierDismissible = false}) {
           return AlertDialog(
-            backgroundColor: HackRUColors.pink,
+            backgroundColor: bgColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            title: const Icon(
+            title: Icon(
               Icons.check_circle_outline,
-              color: HackRUColors.off_white,
+              color: titleColor,
               size: 80.0,
             ),
             content: Text(body,
-                style: const TextStyle(
-                    fontSize: 25, color: HackRUColors.off_white),
+                style: TextStyle(fontSize: 25, color: textColor),
                 textAlign: TextAlign.center),
             actions: <Widget>[
               MaterialButton(
@@ -243,11 +289,11 @@ class LoginFormState extends State<LoginForm> {
                   Navigator.pop(context, true);
                 },
                 padding: const EdgeInsets.all(15.0),
-                child: const Text(
+                child: Text(
                   'OK',
                   style: TextStyle(
                       fontSize: 20,
-                      color: HackRUColors.pink,
+                      color: bgColor,
                       fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
@@ -265,16 +311,23 @@ class LoginFormState extends State<LoginForm> {
       await _displayTextInputDialog(context);
       if (codeDialog != "") {
         try {
-          debugPrint(codeDialog);
+          _loadingDialog("Loading", Color(0xff3e8169), HackRUColors.pale_yellow,
+              HackRUColors.pale_yellow);
           var res = await forgotPassword(codeDialog!);
+          Navigator.pop(context);
           if (res == 200) {
             var result = "A link has been sent to your email.";
-            _scanDialogSuccess(result);
+            _scanDialogSuccess(
+              "A link has been sent to your email.",
+              Color(0xff3e8169),
+              HackRUColors.white,
+              HackRUColors.pale_yellow,
+            );
           }
         } on LcsError {
           var result = "Invalid email.";
-          warningDialog(context, result, HackRUColors.blue,
-              HackRUColors.pale_yellow, HackRUColors.blue_grey);
+          warningDialog(context, result, Color(0xff3e8169),
+              HackRUColors.pale_yellow, HackRUColors.pale_yellow);
         }
       }
     }
@@ -412,7 +465,7 @@ class LoginFormState extends State<LoginForm> {
                           Color.fromARGB(255, 19, 61, 53),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'Login',
                         style: TextStyle(
                           fontSize: 25,
@@ -445,10 +498,6 @@ class LoginFormState extends State<LoginForm> {
             );
     }
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.transparent,
-      body: kForm(),
-    );
+    return kForm();
   }
 }
