@@ -293,25 +293,10 @@ Future<bool> isAuthorizedForQRScanner(String token, String email) async {
   }
 }
 
-Future<int> getRegistered(String _token) async {
+Future<int> getRegistrationStat(String _token, String status) async {
   var result = await postLcs('/read', {
     'token': _token,
-    'query': {'registration_status': 'registered'},
-    'aggregate': false
-  });
-
-  if (result.statusCode == 200) {
-    var users = jsonDecode(result.body)['body'];
-    return users.length;
-  } else {
-    throw LcsError(result);
-  }
-}
-
-Future<int> getAttending(String _token) async {
-  var result = await postLcs('/read', {
-    'token': _token,
-    'query': {'registration_status': 'checked-in'},
+    'query': {'registration_status': status},
     'aggregate': false
   });
 

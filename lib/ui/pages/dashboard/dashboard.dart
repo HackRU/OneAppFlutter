@@ -104,31 +104,12 @@ class DashboardState extends State<Dashboard> {
     );
   }
 
-  void _onGetRegistered(BuildContext context) async {
-    var _storedEmail = credManager!.getEmail();
-    var _authToken = credManager!.getAuthToken();
-    var count = 0;
-    try {
-      count = await getRegistered(_authToken);
-      warningDialog(
-          context,
-          "Total = " + count.toString(),
-          const Color.fromARGB(255, 19, 61, 53),
-          HackRUColors.pale_yellow,
-          HackRUColors.white);
-    } on LcsError {
-      var result = "Error Fetching Result.";
-      warningDialog(context, result, HackRUColors.blue,
-          HackRUColors.pale_yellow, HackRUColors.blue_grey);
-    }
-  }
-
   void _onGetAttending(BuildContext context) async {
     var _storedEmail = credManager!.getEmail();
     var _authToken = credManager!.getAuthToken();
     var count = 0;
     try {
-      count = await getAttending(_authToken);
+      count = await getRegistrationStat(_authToken, 'checked-in');
       warningDialog(
           context,
           "Total = " + count.toString(),
