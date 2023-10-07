@@ -6,5 +6,6 @@
         "qrcode",
         "streamctl",
         "vsync"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

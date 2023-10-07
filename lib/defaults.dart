@@ -7,12 +7,13 @@ const BASE_URL = 'https://api.hackru.org/prod';
 const MISC_URL = 'http://hackru-misc.s3-website-us-west-2.amazonaws.com';
 const WAIVER_URL = 'https://hackru.org/resources/waiver.pdf';
 
-const DEVPOST_URL = 'https://hackru-s23.devpost.com';
+const DEVPOST_URL = 'https://hackru-f23.devpost.com';
 
 /*
 Waiting on updated links for these
 const FOOD_MENU_URL = 'https://s3-us-west-2.amazonaws.com/hackru-misc/menu.pdf';
 */
+
 const SLACK_PAGE_URL =
     'https://join.slack.com/t/hackru-fall-2023/shared_invite/zt-2381frcuc-hmZkjXmhXSo29aQwWE~0SQ';
 const HELP_Q_URL = 'http://mentorq.hackru.org/';
